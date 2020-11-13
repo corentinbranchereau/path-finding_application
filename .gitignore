@@ -52,3 +52,6 @@ buildNumber.properties
 .classpath
 settings.json
 .project
+
+# MacOS files
+*.DS_Store
