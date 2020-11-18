@@ -56,6 +56,12 @@ settings.json
 # MacOS files
 *.DS_Store
 
+#XML files
+fichiersXML2020
+
+#Algo TSP
+TSP.jar
+
 #JetBrains for reverse engineering
 # User-specific stuff
 .idea/**/workspace.xml
