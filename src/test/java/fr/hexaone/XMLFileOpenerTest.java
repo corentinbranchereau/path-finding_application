@@ -1,9 +1,12 @@
 package fr.hexaone;
 
 import fr.hexaone.utils.XMLFileOpener;
+import fr.hexaone.utils.exception.FileBadExtensionException;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,8 +26,18 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenThrowFileNotFoundException()
     {
-        Exception exception = assertThrows(XMLFileOpener.class, () ->
-                XMLFileOpener.getInstance().open("fileDoesntExist.txt"));
-        assertEquals("/ by zero", exception.getMessage());
+        assertThrows(FileNotFoundException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileDoesntExist.xml"));
     }
+
+    /**
+     * Test l'ouverture d'un fichier dont le chemin est incorrecte (fichier manquant).
+     * Une FileNotFoundException est levée
+     */
+    @Test
+    public void shouldOpenThrowBadExtensionException()
+    {
+        assertThrows(FileBadExtensionException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileFormatText.txt"));
+    }
+
+
 }

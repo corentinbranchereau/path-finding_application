@@ -1,5 +1,12 @@
 package fr.hexaone.utils;
 
+import fr.hexaone.utils.exception.FileBadExtensionException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 /**
@@ -32,13 +39,26 @@ public class XMLFileOpener implements FileFilter {
     }
 
     /**
-     * Ouverture d'un fichier dont l'URI est spécifié en paramètre
-     * @param path L'URI du fichier
-     * @throws FileNotFoundException Lorsque l'URI spécifié n'existe pas
-     * @return Le flux vers le fichier ouvert
+     * Ouverture d'un fichier XML dont l'URI est est spécifié en paramètre
+     * @param path L'URI vers le fichier à ouvrir
+     * @throws IOException Lorsque le fichier spécifié n'existe pas
+     * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas XML
+     * @throws SAXException Lors que le fichier possède des erreurs de formatage
+     * @return Le document XML correspondant au format org.w3c.dom.Document
      */
-    public BufferedReader open(String path) throws FileNotFoundException {
-        return new BufferedReader(new FileReader(new File(path)));
+    public Document open(String path) throws IOException, FileBadExtensionException, SAXException {
+        File file = new File(path);
+        if(!accept(file)) throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        Document doc = null;
+        try {
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            doc = documentBuilder.parse(file);
+            doc.getDocumentElement().normalize();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        return doc;
     }
 
     /**

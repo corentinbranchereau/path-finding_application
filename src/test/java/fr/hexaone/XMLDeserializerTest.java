@@ -1,15 +1,13 @@
 package fr.hexaone;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-
-import org.junit.Test;
-Plaimport org.w3c.dom.Document;
-
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Planning;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit test for simple App.
@@ -20,11 +18,11 @@ public class XMLDeserializerTest {
     public void shouldLoadCarte() {
         try {
             Carte carte = new Carte();
-            XMLFileOpener xmlFileOpener = new XMLFileOpener();
-            Document xml = xmlFileOpener.open("path/to/xml");
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/smallMap.xml");
             XMLDeserializer.loadCarte(carte, xml);
         } catch (Exception e) {
-            assertTrue(false);
+            fail();
         }
     }
 
@@ -32,11 +30,11 @@ public class XMLDeserializerTest {
     public void shouldLoadRequete() {
         try {
             Planning planning = new Planning();
-            XMLFileOpener xmlFileOpener = new XMLFileOpener();
-            Document xml = xmlFileOpener.open("path/to/xml");
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsSmall1.xml");
             XMLDeserializer.loadRequete(planning, xml);
         } catch (Exception e) {
-            assertTrue(false);
+            fail();
         }
     }
 }
