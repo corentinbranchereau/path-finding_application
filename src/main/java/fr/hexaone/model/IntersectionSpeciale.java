@@ -26,14 +26,11 @@ public class IntersectionSpeciale extends Intersection {
      * @param latitude
      * @param longitude
      * @param id
-     * @param segmentsArrivants
-     * @param segmentsPartants
      * @param duree
      * @param typeIntersection
      */
-    public IntersectionSpeciale(double latitude, double longitude, int id, List<Segment> segmentsArrivants,
-            List<Segment> segmentsPartants, double duree, EnumIntersection typeIntersection) {
-        super(latitude, longitude, id, segmentsArrivants, segmentsPartants);
+    public IntersectionSpeciale(double latitude, double longitude, int id, double duree, EnumIntersection typeIntersection) {
+        super(latitude, longitude, id);
         this.duree = duree;
         this.typeIntersection = typeIntersection;
     }

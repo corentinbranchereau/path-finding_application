@@ -1,6 +1,7 @@
 
 package fr.hexaone.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class Carte {
     protected Map<Integer, Intersection> intersections;
 
     /**
-     * constructeur de Carte
+     * Constructeur de Carte
      *
      * @param intersections
      */
@@ -25,38 +26,10 @@ public class Carte {
     }
 
     /**
-     * constructeur par défaut de Carte
+     * Constructeur par défaut de Carte
      */
     public Carte() {
-    }
-
-    /**
-     * Créer une intersection
-     *
-     * @param longitude
-     * @param latitude
-     * @return
-     */
-    public Intersection creerIntersection(double longitude, double latitude) {
-
-        return null;
-        // TODO
-    }
-
-    /**
-     * Créer une intersection spéciale
-     *
-     * @param longitude
-     * @param latitude
-     * @param duree
-     * @param enumIntersection
-     * @return
-     */
-    public IntersectionSpeciale creerIntersectionSpeciale(double longitude, double latitude, double duree,
-            EnumIntersection enumIntersection) {
-        return null;
-        // TODO
-
+        intersections = new HashMap<>();
     }
 
     /**
@@ -81,4 +54,19 @@ public class Carte {
 
     }
 
+    /**
+     * Getter
+     * @return Les plus courts chemins
+     */
+    public List<Trajet> getCheminsLesPlusCourts() {
+        return cheminsLesPlusCourts;
+    }
+
+    /**
+     * Getter
+     * @return Les intersections
+     */
+    public Map<Integer, Intersection> getIntersections() {
+        return intersections;
+    }
 }

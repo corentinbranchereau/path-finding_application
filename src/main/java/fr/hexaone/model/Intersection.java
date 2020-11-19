@@ -1,6 +1,9 @@
 package fr.hexaone.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Objet contenant les structures de données relatives à une intersection"
@@ -11,9 +14,13 @@ import java.util.List;
 public class Intersection {
 
     /**
-     * latitude et longitude de l'intersection
+     * latitude de l'intersection
      */
     protected double latitude;
+
+    /**
+     * longitude de l'intersection
+     */
     protected double longitude;
 
     /**
@@ -22,18 +29,16 @@ public class Intersection {
     protected int id;
 
     /**
-     * liste des segments arrivants sur l'intersection : utile pour le calcul de
+     * Set des segments arrivants sur l'intersection : utile pour le calcul de
      * tournée
      */
-
-    protected List<Segment> segmentsArrivants;
+    protected Set<Segment> segmentsArrivants;
 
     /**
-     * liste des segments partants depuis l'intersection : utile pour le calcul de
+     * Set des segments partants depuis l'intersection : utile pour le calcul de
      * tournée
      */
-
-    protected List<Segment> segmentsPartants;
+    protected Set<Segment> segmentsPartants;
 
     /**
      * constructeur d'Intersection
@@ -41,16 +46,44 @@ public class Intersection {
      * @param latitude
      * @param longitude
      * @param id
-     * @param segmentsArrivants
-     * @param segmentsPartants
      */
-    public Intersection(double latitude, double longitude, int id, List<Segment> segmentsArrivants,
-            List<Segment> segmentsPartants) {
+    public Intersection(double latitude, double longitude, int id) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.id = id;
-        this.segmentsArrivants = segmentsArrivants;
-        this.segmentsPartants = segmentsPartants;
+        this.segmentsArrivants = new HashSet<>();
+        this.segmentsPartants = new HashSet<>();
     }
 
+    /**
+     * Getter
+     * @return La latitude de l'intersection
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Getter
+     * @return La longitude de l'intersection
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Getter
+     * @return Le set des segments arrivant sur l'intersection
+     */
+    public Set<Segment> getSegmentsArrivants() {
+        return segmentsArrivants;
+    }
+
+    /**
+     * Getter
+     * @return Le set des segments partants sur l'intersection
+     */
+    public Set<Segment> getSegmentsPartants() {
+        return segmentsPartants;
+    }
 }

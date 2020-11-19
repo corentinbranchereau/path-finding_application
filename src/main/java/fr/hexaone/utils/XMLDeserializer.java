@@ -1,7 +1,15 @@
 package fr.hexaone.utils;
 
+import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Carte;
+
+import fr.hexaone.model.Segment;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import java.util.Map;
 
 /**
  * Permet de déserialiser un fichier au format XML.
@@ -9,9 +17,6 @@ import fr.hexaone.model.Carte;
  * @author HexaOne
  * @version 1.0
  */
-
-import org.w3c.dom.Document;
-
 public class XMLDeserializer {
 
     /**
@@ -19,10 +24,38 @@ public class XMLDeserializer {
      * des segments formant la carte
      * 
      * @param carte La carte où charger les données.
-     * @param file  Le fichier XML bien formé contenant les données.
+     * @param xml  Le document XML bien formé contenant les données.
      */
     public static void loadCarte(Carte carte, Document xml) {
-        // TODO
+        // TODO : THIBAUT --> Carte Intersections déjà instancié
+        Map<Integer, Intersection> intersections = carte.getIntersections();
+
+        //Charger les intersections
+        NodeList ns = xml.getElementsByTagName("intersection");
+        System.out.println(ns.getLength());
+        for(int i = 0; i<ns.getLength(); i++){
+            System.out.println(ns.item(i));
+            Element element = (Element)ns.item(i);
+            System.out.println(element);
+            int id = Integer.parseInt(element.getAttribute("id"));
+            double latitude = Double.parseDouble(element.getAttribute("latitude"));
+            double longitude = Double.parseDouble(element.getAttribute("longitude"));
+            intersections.put(id,new Intersection(latitude,longitude,id));
+        }
+
+        //Charger les segments
+        ns = xml.getElementsByTagName("segment");
+        for(int i = 0; i<ns.getLength(); i++){
+            Element element = (Element)ns.item(i);
+            System.out.println(element);
+            int depart = Integer.parseInt(element.getAttribute("depart"));
+            int destination = Integer.parseInt(element.getAttribute("destination"));
+            double longueur = Double.parseDouble(element.getAttribute("length"));
+            String nom = element.getAttribute("name");
+            Segment segment = new Segment(longueur,nom,intersections.get(depart),intersections.get(destination));
+            intersections.get(depart).getSegmentsPartants().add(segment);
+            intersections.get(destination).getSegmentsArrivants().add(segment);
+        }
     }
 
     /**
@@ -30,10 +63,10 @@ public class XMLDeserializer {
      * le planning
      * 
      * @param planning Le planning où charger les données.
-     * @param file     Le fichier XML bien formé contenant les données.
+     * @param xml Le document XML bien formé contenant les données.
      */
     public static void loadRequete(Planning planning, Document xml) {
-        // TODO
+        // TODO :
     }
 
 }
