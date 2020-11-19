@@ -10,26 +10,30 @@ import fr.hexaone.model.Carte;
  * @version 1.0
  */
 
-import java.io.File;
+import org.w3c.dom.Document;
 
 public class XMLDeserializer {
 
     /**
-     * Charge les données d'un fichier XML bien formé contenant des intersections et des segments formant la carte
+     * Charge les données d'un fichier XML bien formé contenant des intersections et
+     * des segments formant la carte
+     * 
      * @param carte La carte où charger les données.
-     * @param file Le fichier XML bien formé contenant les données.
+     * @param file  Le fichier XML bien formé contenant les données.
      */
-    public static void loadMap(Carte carte, File file){
-        //TODO
+    public static void loadCarte(Carte carte, Document xml) {
+        // TODO
     }
 
     /**
-     * Charge les données d'un fichier XML bien formé contenant les requêtes formant le planning
+     * Charge les données d'un fichier XML bien formé contenant les requêtes formant
+     * le planning
+     * 
      * @param planning Le planning où charger les données.
-     * @param file Le fichier XML bien formé contenant les données.
+     * @param file     Le fichier XML bien formé contenant les données.
      */
-    public static void loadRequete(Planning planning, File file){
-        //TODO
+    public static void loadRequete(Planning planning, Document xml) {
+        // TODO
     }
 
 }
