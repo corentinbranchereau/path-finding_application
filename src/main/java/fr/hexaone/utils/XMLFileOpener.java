@@ -1,8 +1,6 @@
 package fr.hexaone.utils;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 /**
  * Permet d'ouvrir un fichier et de version type (XML).
@@ -28,7 +26,7 @@ public class XMLFileOpener implements FileFilter {
      * en gardant un comportement static pour la classe
      * @return l'unique instance de la classe XMLFileOpener. Si elle n'existe pas, l'instancie.
      */
-    protected static XMLFileOpener getInstance(){
+    public static XMLFileOpener getInstance(){
         if(instance == null) instance = new XMLFileOpener();
         return instance;
     }
@@ -37,11 +35,10 @@ public class XMLFileOpener implements FileFilter {
      * Ouverture d'un fichier dont l'URI est spécifié en paramètre
      * @param path L'URI du fichier
      * @throws FileNotFoundException Lorsque l'URI spécifié n'existe pas
-     * @return Le fichier ouvert
+     * @return Le flux vers le fichier ouvert
      */
-    public File open(String path) throws FileNotFoundException {
-        //TODO
-        return null;
+    public BufferedReader open(String path) throws FileNotFoundException {
+        return new BufferedReader(new FileReader(new File(path)));
     }
 
     /**
