@@ -12,10 +12,10 @@ import javafx.stage.Stage;
  */
 public class Controleur {
 
-    protected Fenetre fenetre; 
+    protected Fenetre fenetre;
 
-    public Controleur(Stage stage){
-        this.fenetre = new Fenetre(stage,this);
+    public Controleur(Stage stage) {
+        this.fenetre = new Fenetre(stage, this);
         this.fenetre.dessinerFenetre();
     }
 
