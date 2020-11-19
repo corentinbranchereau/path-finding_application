@@ -1,8 +1,6 @@
 package fr.hexaone.model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Objet contenant toutes les informations relatives au planning d'une tournée "
@@ -42,38 +40,28 @@ public class Planning {
      *
      * @param dureeTotale
      * @param dateDebut
-     * @param requetes
      * @param depot
      * @param tournee
-     * @param datesPassage
      */
-    public Planning(double dureeTotale, Date dateDebut, List<Requete> requetes, Intersection depot, Tournee tournee,
-            Map<Intersection, Date> datesPassage) {
+    public Planning(double dureeTotale, Date dateDebut, Intersection depot, Tournee tournee) {
         this.dureeTotale = dureeTotale;
         this.dateDebut = dateDebut;
-        this.requetes = requetes;
+        this.requetes = new ArrayList<>();
         this.depot = depot;
         this.tournee = tournee;
-        this.datesPassage = datesPassage;
+        this.datesPassage = new HashMap<>();
     }
 
     /**
      * constructeur de Planning
      *
      * @param dateDebut
-     * @param requetes
      * @param depot
      */
-    public Planning(Date dateDebut, List<Requete> requetes, Intersection depot) {
+    public Planning(Date dateDebut, Intersection depot) {
         this.dateDebut = dateDebut;
-        this.requetes = requetes;
+        this.requetes = new ArrayList<>();
         this.depot = depot;
-    }
-
-    /**
-     * constructeur par défaut de Planning
-     */
-    public Planning() {
     }
 
     public List<Requete> getRequetes() {

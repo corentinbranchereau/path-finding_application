@@ -29,7 +29,7 @@ public class XMLDeserializerTest {
     private Planning planning;
 
     /**
-     * Instancie une carte avec une liste d'intersections vide
+     * Instancie une carte et une intersection avec une liste d'intersections vide
      */
     @BeforeEach
     void init(){
@@ -114,6 +114,7 @@ public class XMLDeserializerTest {
     /**
      * Test le chargement des requêtes avec un fichier XML correct sans exception levée.
      */
+    /*
     @Test
     @Disabled
     public void shouldLoadRequete() {
@@ -129,6 +130,7 @@ public class XMLDeserializerTest {
             fail();
         }
     }
+     */
 
     @AfterEach
     public void clear(){
