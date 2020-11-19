@@ -29,7 +29,7 @@ public class IntersectionSpeciale extends Intersection {
      * @param duree
      * @param typeIntersection
      */
-    public IntersectionSpeciale(int id, double latitude, double longitude, double duree, EnumIntersection typeIntersection) {
+    public IntersectionSpeciale(long id, double latitude, double longitude, double duree, EnumIntersection typeIntersection) {
         super(id, latitude, longitude);
         this.duree = duree;
         this.typeIntersection = typeIntersection;

@@ -27,17 +27,14 @@ public class XMLDeserializer {
      * @param xml  Le document XML bien formé contenant les données.
      */
     public static void loadCarte(Carte carte, Document xml) {
-        // TODO : THIBAUT --> Carte Intersections déjà instancié
         Map<Integer, Intersection> intersections = carte.getIntersections();
 
         //Charger les intersections
         NodeList ns = xml.getElementsByTagName("intersection");
         System.out.println(ns.getLength());
         for(int i = 0; i<ns.getLength(); i++){
-            System.out.println(ns.item(i));
             Element element = (Element)ns.item(i);
-            System.out.println(element);
-            int id = Integer.parseInt(element.getAttribute("id"));
+            long id = Long.parseLong(element.getAttribute("id"));
             double latitude = Double.parseDouble(element.getAttribute("latitude"));
             double longitude = Double.parseDouble(element.getAttribute("longitude"));
             intersections.put(id,new Intersection(id,latitude,longitude));

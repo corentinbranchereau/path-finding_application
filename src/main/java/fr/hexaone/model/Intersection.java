@@ -15,7 +15,7 @@ public class Intersection {
     /**
      * identifiant unique
      */
-    protected int id;
+    protected long id;
 
     /**
      * latitude de l'intersection
@@ -46,7 +46,7 @@ public class Intersection {
      * @param latitude
      * @param longitude
      */
-    public Intersection(int id, double latitude, double longitude) {
+    public Intersection(long id, double latitude, double longitude) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
