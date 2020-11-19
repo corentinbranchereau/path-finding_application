@@ -70,7 +70,7 @@ public class XMLDeserializerTest {
     public void shouldLoadCarteContainsExactKey() throws FileBadExtensionException, SAXException, IOException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte,xml);
-        assertTrue(carte.getIntersections().containsKey(54803122));
+        assertTrue(carte.getIntersections().containsKey(54803122L));
     }
 
     /**
@@ -80,7 +80,7 @@ public class XMLDeserializerTest {
     public void shouldLoadCarteContainsExactIntersection() throws FileBadExtensionException, SAXException, IOException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte,xml);
-        Intersection intersection = carte.getIntersections().get(26086124);
+        Intersection intersection = carte.getIntersections().get(26086124L);
         assertAll("IntersectionProperties",
                 () -> assertEquals(45.759098, intersection.getLatitude()),
                 () -> assertEquals(4.8629594, intersection.getLongitude()),
@@ -96,7 +96,7 @@ public class XMLDeserializerTest {
     public void shouldLoadCarteContainsExactNumberOfSegmentsArrivant() throws FileBadExtensionException, SAXException, IOException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte,xml);
-        Set<Segment> segmentsArrivants = carte.getIntersections().get(26086128).getSegmentsArrivants();
+        Set<Segment> segmentsArrivants = carte.getIntersections().get(26086128L).getSegmentsArrivants();
         assertEquals(4,segmentsArrivants.size());
     }
 
@@ -107,7 +107,7 @@ public class XMLDeserializerTest {
     public void shouldLoadCarteContainsExactNumberOfSegmentsPartants() throws FileBadExtensionException, SAXException, IOException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte,xml);
-        Set<Segment> segmentsPartants = carte.getIntersections().get(459797866).getSegmentsPartants();
+        Set<Segment> segmentsPartants = carte.getIntersections().get(459797866L).getSegmentsPartants();
         assertEquals(1,segmentsPartants.size());
     }
 
