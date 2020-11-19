@@ -40,7 +40,7 @@ public class XMLDeserializer {
             int id = Integer.parseInt(element.getAttribute("id"));
             double latitude = Double.parseDouble(element.getAttribute("latitude"));
             double longitude = Double.parseDouble(element.getAttribute("longitude"));
-            intersections.put(id,new Intersection(latitude,longitude,id));
+            intersections.put(id,new Intersection(id,latitude,longitude));
         }
 
         //Charger les segments

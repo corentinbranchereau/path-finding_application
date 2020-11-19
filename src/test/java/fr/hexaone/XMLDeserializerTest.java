@@ -15,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import java.io.IOException;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test for simple App.
@@ -131,6 +133,6 @@ public class XMLDeserializerTest {
     @AfterEach
     public void clear(){
         carte.getIntersections().clear();
-        planning.
+        planning.getRequetes().clear();
     }
 }
