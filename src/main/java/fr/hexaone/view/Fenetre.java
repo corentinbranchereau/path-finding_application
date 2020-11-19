@@ -31,14 +31,28 @@ public class Fenetre {
      * Vue textuelle de la fenêtre
      */
     protected VueTextuelle vueTextuelle;
+
+    /**
+     * Controleur JavaFX servant à récupérer les références des éléments du fichier
+     * FXML
+     */
     protected FenetreControleurFXML fenetreControleur;
+
+    /**
+     * Conteneur principal des éléments graphiques
+     */
     protected Stage stage;
+
+    /**
+     * Controleur gérant la logique de l'application
+     */
     protected Controleur controleur;
 
     /**
      * Constructeur de Fenetre
      * 
-     * @param stage      le premier niveau de la fenêtre affiché
+     * @param stage      le conteneur principal des éléments graphiques de
+     *                   l'application
      * @param controleur le controleur de l'application
      */
     public Fenetre(Stage stage, Controleur controleur) {
@@ -47,7 +61,7 @@ public class Fenetre {
     }
 
     /**
-     * Méthode qui permet d'afficher une fenêtre dans l'OS à l'aide de javaFX
+     * Méthode qui permet d'afficher une fenêtre dans l'OS à l'aide de JavaFX
      */
     public void dessinerFenetre() {
         try {
@@ -86,5 +100,4 @@ public class Fenetre {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
         }
     }
-
 }

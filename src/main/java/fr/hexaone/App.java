@@ -16,8 +16,7 @@ public class App extends Application {
     /**
      * Cette méthode démarre l'application et instancie le controleur.
      * 
-     * @param stage Variable propre à JavaFX permettant d'afficher les éléments à
-     *              l'écran
+     * @param stage Conteneur principal des éléments graphiques de l'application
      */
     @Override
     public void start(Stage stage) {
