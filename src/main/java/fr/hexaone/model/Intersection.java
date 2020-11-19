@@ -1,6 +1,5 @@
 package fr.hexaone.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +13,11 @@ import java.util.Set;
 public class Intersection {
 
     /**
+     * identifiant unique
+     */
+    protected int id;
+
+    /**
      * latitude de l'intersection
      */
     protected double latitude;
@@ -22,11 +26,6 @@ public class Intersection {
      * longitude de l'intersection
      */
     protected double longitude;
-
-    /**
-     * identifiant unique
-     */
-    protected int id;
 
     /**
      * Set des segments arrivants sur l'intersection : utile pour le calcul de
@@ -43,14 +42,14 @@ public class Intersection {
     /**
      * constructeur d'Intersection
      *
+     * @param id
      * @param latitude
      * @param longitude
-     * @param id
      */
-    public Intersection(double latitude, double longitude, int id) {
+    public Intersection(int id, double latitude, double longitude) {
+        this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.id = id;
         this.segmentsArrivants = new HashSet<>();
         this.segmentsPartants = new HashSet<>();
     }

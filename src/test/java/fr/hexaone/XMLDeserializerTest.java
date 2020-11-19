@@ -1,6 +1,7 @@
 package fr.hexaone;
 
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Depot;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Segment;
@@ -14,10 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit test for simple App.
@@ -25,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class XMLDeserializerTest {
 
     private Carte carte;
+    private Planning planning;
 
     /**
      * Instancie une carte avec une liste d'intersections vide
@@ -32,6 +32,7 @@ public class XMLDeserializerTest {
     @BeforeEach
     void init(){
         carte = new Carte();
+        planning = new Planning();
     }
 
 
@@ -115,10 +116,13 @@ public class XMLDeserializerTest {
     @Disabled
     public void shouldLoadRequete() {
         try {
-            Planning planning = new Planning();
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsSmall1.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsSmall2.xml");
             XMLDeserializer.loadRequete(planning, xml);
+            // On s'assure de la valeur des attributs du planning
+            Intersection depotTest = new Depot("2835339774", "8:0:0");
+            assertEquals(depotTest, planning.getDepot());
+            assertEquals(2, planning.getRequetes().size());
         } catch (Exception e) {
             fail();
         }
@@ -127,5 +131,6 @@ public class XMLDeserializerTest {
     @AfterEach
     public void clear(){
         carte.getIntersections().clear();
+        planning.
     }
 }

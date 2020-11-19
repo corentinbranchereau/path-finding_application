@@ -9,10 +9,10 @@ import java.util.List;
  * @version 1.0
  */
 public class IntersectionSpeciale extends Intersection {
+
     /**
      * duréee de la tâche à l'intersection spéciale
      */
-
     protected double duree;
 
     /**
@@ -29,8 +29,8 @@ public class IntersectionSpeciale extends Intersection {
      * @param duree
      * @param typeIntersection
      */
-    public IntersectionSpeciale(double latitude, double longitude, int id, double duree, EnumIntersection typeIntersection) {
-        super(latitude, longitude, id);
+    public IntersectionSpeciale(int id, double latitude, double longitude, double duree, EnumIntersection typeIntersection) {
+        super(id, latitude, longitude);
         this.duree = duree;
         this.typeIntersection = typeIntersection;
     }
