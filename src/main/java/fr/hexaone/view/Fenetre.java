@@ -7,16 +7,12 @@ import fr.hexaone.App;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
-import fr.hexaone.view.ButtonListener;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 /**
@@ -26,19 +22,25 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 
-public class Fenetre{
+public class Fenetre {
 
+    /**
+     * Vue graphique de la fenêtre
+     */
     protected VueGraphique vueGraphique;
+
+    /**
+     * Vue textuelle de la fenêtre
+     */
     protected VueTextuelle vueTextuelle;
     protected FenetreControleurFXML fenetreControleur;
     protected Stage stage;
     protected Controleur controleur;
 
-    public Fenetre(Stage stage,Controleur controleur) {
-        this.stage=stage;
+    public Fenetre(Stage stage, Controleur controleur) {
+        this.stage = stage;
         this.controleur = controleur;
     }
-
 
     /**
      * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
