@@ -31,7 +31,6 @@ public class XMLDeserializer {
 
         //Charger les intersections
         NodeList ns = xml.getElementsByTagName("intersection");
-        System.out.println(ns.getLength());
         for(int i = 0; i<ns.getLength(); i++){
             Element element = (Element)ns.item(i);
             long id = Long.parseLong(element.getAttribute("id"));
