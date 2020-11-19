@@ -75,4 +75,20 @@ public class Planning {
      */
     public Planning() {
     }
+
+    public List<Requete> getRequetes() {
+        return this.requetes;
+    }
+
+    public Intersection getDepot() {
+        return this.depot;
+    }
+
+    public void setDepot(Depot newDepot) {
+        this.depot = newDepot;
+    }
+
+    public void setRequetes(List<Requete> newRequetes) {
+        this.requetes = newRequetes;
+    }
 }
