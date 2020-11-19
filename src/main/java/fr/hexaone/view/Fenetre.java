@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import fr.hexaone.App;
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
 import fr.hexaone.view.ButtonListener;
@@ -25,14 +26,24 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 
-public class Fenetre extends Application {
+public class Fenetre{
 
     protected VueGraphique vueGraphique;
     protected VueTextuelle vueTextuelle;
-    protected FenetreControleurFXML controleur;
+    protected FenetreControleurFXML fenetreControleur;
+    protected Stage stage;
+    protected Controleur controleur;
 
-    @Override
-    public void start(Stage stage) {
+    public Fenetre(Stage stage,Controleur controleur) {
+        this.stage=stage;
+        this.controleur = controleur;
+    }
+
+
+    /**
+     * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
+     */
+    public void dessinerFenetre(Stage stage) {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
@@ -40,7 +51,7 @@ public class Fenetre extends Application {
             Parent root = (Parent) loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
-            controleur = (FenetreControleurFXML) loader.getController();
+            fenetreControleur = (FenetreControleurFXML) loader.getController();
 
             // Affichage de la scène
             Scene scene = new Scene(root);
@@ -48,49 +59,26 @@ public class Fenetre extends Application {
             stage.show();
 
             // Définition des handlers sur les éléments du menu
-            controleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    handleClicChargerCarte();
+                    controleur.handleClicChargerCarte();
                 }
             });
 
-            controleur.chargerRequetesItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.chargerRequetesItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    handleClicChargerRequetes();
+                    controleur.handleClicChargerRequetes();
                 }
             });
 
-            controleur.quitterItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.quitterItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    handleClicQuitter();
+                    controleur.handleClicQuitter();
                 }
             });
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
         }
-    }
-
-    public Fenetre() {
-
-    }
-
-    protected void handleClicChargerCarte() {
-        System.out.println("Charger carte");
-    }
-
-    protected void handleClicChargerRequetes() {
-        System.out.println("Charger requêtes");
-    }
-
-    protected void handleClicQuitter() {
-        System.out.println("Quitter");
-    }
-
-    /**
-     * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
-     */
-    public void dessinerFenetre(String[] args) {
-        launch(Fenetre.class, args);
     }
 
 }
