@@ -61,7 +61,16 @@ public class Planning {
     public Planning(Date dateDebut, Intersection depot) {
         this.dateDebut = dateDebut;
         this.requetes = new ArrayList<>();
+        this.datesPassage = new HashMap<>();
         this.depot = depot;
+    }
+
+    /**
+     * Constructeur par défaut de Planning
+     */
+    public Planning(){
+        this.requetes = new ArrayList<>();
+        this.datesPassage = new HashMap<>();
     }
 
     public List<Requete> getRequetes() {
