@@ -3,19 +3,14 @@ package fr.hexaone.view;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import fr.hexaone.App;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
-import fr.hexaone.view.ButtonListener;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 /**
@@ -27,10 +22,29 @@ import javafx.stage.Stage;
 
 public class Fenetre extends Application {
 
+    /**
+     * Vue graphique de la fenêtre
+     */
     protected VueGraphique vueGraphique;
-    protected VueTextuelle vueTextuelle;
-    protected FenetreControleurFXML controleur;
 
+    /**
+     * Vue textuelle de la fenêtre
+     */
+    protected VueTextuelle vueTextuelle;
+
+    /**
+     * Controleur nécessaire pour le fonctionnement de JavaFX
+     */
+    protected FenetreControleurFXML fxControleur;
+
+    /**
+     * Cette méthode charge le fichier FXML (JavaFX) contenant les différents objets
+     * graphiques, ajoute les handlers à ces derniers puis affiche la fenêtre de
+     * l'application
+     * 
+     * @param stage Variable propre à JavaFX permettant d'afficher les éléments à
+     *              l'écran
+     */
     @Override
     public void start(Stage stage) {
         try {
@@ -40,7 +54,7 @@ public class Fenetre extends Application {
             Parent root = (Parent) loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
-            controleur = (FenetreControleurFXML) loader.getController();
+            fxControleur = (FenetreControleurFXML) loader.getController();
 
             // Affichage de la scène
             Scene scene = new Scene(root);
@@ -48,19 +62,19 @@ public class Fenetre extends Application {
             stage.show();
 
             // Définition des handlers sur les éléments du menu
-            controleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
+            fxControleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     handleClicChargerCarte();
                 }
             });
 
-            controleur.chargerRequetesItem.setOnAction(new EventHandler<ActionEvent>() {
+            fxControleur.chargerRequetesItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     handleClicChargerRequetes();
                 }
             });
 
-            controleur.quitterItem.setOnAction(new EventHandler<ActionEvent>() {
+            fxControleur.quitterItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     handleClicQuitter();
                 }
@@ -70,24 +84,42 @@ public class Fenetre extends Application {
         }
     }
 
+    /**
+     * Constructeur de la classe Fenetre
+     */
     public Fenetre() {
 
     }
 
+    /**
+     * Cette méthode est le handler permettant de gérer les clics sur l'élément du
+     * menu "Charger une carte"
+     */
     protected void handleClicChargerCarte() {
         System.out.println("Charger carte");
     }
 
+    /**
+     * Cette méthode est le handler permettant de gérer les clics sur l'élément du
+     * menu "Charger des requêtes"
+     */
     protected void handleClicChargerRequetes() {
         System.out.println("Charger requêtes");
     }
 
+    /**
+     * Cette méthode est le handler permettant de gérer les clics sur l'élément du
+     * menu "Quitter"
+     */
     protected void handleClicQuitter() {
         System.out.println("Quitter");
     }
 
     /**
-     * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
+     * Méthode qui permet d'afficher la fenêtre JavaFX en exécutant la méthode start
+     * (via l'appel à launch de JavaFX)
+     * 
+     * @param args Arguments obtenus lors de l'exécution de la méthode main
      */
     public void dessinerFenetre(String[] args) {
         launch(Fenetre.class, args);
