@@ -25,6 +25,12 @@ public class Carte {
     }
 
     /**
+     * constructeur par défaut de Carte
+     */
+    public Carte() {
+    }
+
+    /**
      * Créer une intersection
      *
      * @param longitude
