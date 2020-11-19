@@ -9,10 +9,16 @@ import java.util.List;
  * @version 1.0
  */
 public class IntersectionSpeciale extends Intersection {
+
+    /**
+     * latitude et longitude de l'intersection spéciale
+     */
+    protected double latitude;
+    protected double longitude;
+
     /**
      * duréee de la tâche à l'intersection spéciale
      */
-
     protected double duree;
 
     /**
@@ -31,9 +37,29 @@ public class IntersectionSpeciale extends Intersection {
      * @param duree
      * @param typeIntersection
      */
-    public IntersectionSpeciale(double latitude, double longitude, int id, List<Segment> segmentsArrivants,
-            List<Segment> segmentsPartants, double duree, EnumIntersection typeIntersection) {
-        super(latitude, longitude, id, segmentsArrivants, segmentsPartants);
+    public IntersectionSpeciale(int id, List<Segment> segmentsArrivants, List<Segment> segmentsPartants,
+            double latitude, double longitude, double duree, EnumIntersection typeIntersection) {
+        super(id, segmentsArrivants, segmentsPartants);
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.duree = duree;
+        this.typeIntersection = typeIntersection;
+    }
+
+    /**
+     * constructeur d'intersectionSpeciale
+     *
+     * @param latitude
+     * @param longitude
+     * @param id
+     * @param duree
+     * @param typeIntersection
+     */
+    public IntersectionSpeciale(int id, double latitude, double longitude, double duree,
+            EnumIntersection typeIntersection) {
+        super(id);
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.duree = duree;
         this.typeIntersection = typeIntersection;
     }
