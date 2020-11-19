@@ -3,11 +3,9 @@ package fr.hexaone.view;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import fr.hexaone.App;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -37,13 +35,19 @@ public class Fenetre {
     protected Stage stage;
     protected Controleur controleur;
 
+    /**
+     * Constructeur de Fenetre
+     * 
+     * @param stage      le premier niveau de la fenêtre affiché
+     * @param controleur le controleur de l'application
+     */
     public Fenetre(Stage stage, Controleur controleur) {
         this.stage = stage;
         this.controleur = controleur;
     }
 
     /**
-     * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
+     * Méthode qui permet d'afficher une fenêtre dans l'OS à l'aide de javaFX
      */
     public void dessinerFenetre() {
         try {
