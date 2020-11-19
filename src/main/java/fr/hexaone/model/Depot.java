@@ -24,8 +24,8 @@ public class Depot extends Intersection {
      * @param departureTime
      * @throws ParseException
      */
-    public Depot(String id, String departureTime) throws ParseException {
-        super(Integer.parseInt(id));
-        this.departureTime = new SimpleDateFormat("H:m:s").parse(departureTime); // 24 hours format
+    public Depot(String id, String departureTime, double latitude, double longitude) throws ParseException {
+        super(Integer.parseInt(id), latitude, longitude);
+        this.departureTime = new SimpleDateFormat("H:m:s").parse(departureTime); // 24 hours format - hh:m:s
     }
 }
