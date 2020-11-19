@@ -70,4 +70,9 @@ public class Planning {
         this.depot = depot;
     }
 
+    /**
+     * constructeur par défaut de Planning
+     */
+    public Planning() {
+    }
 }
