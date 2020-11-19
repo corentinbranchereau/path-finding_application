@@ -16,7 +16,7 @@ public class Controleur {
 
     public Controleur(Stage stage){
         this.fenetre = new Fenetre(stage,this);
-        this.fenetre.dessinerFenetre(stage);
+        this.fenetre.dessinerFenetre();
     }
 
     public void handleClicChargerCarte() {

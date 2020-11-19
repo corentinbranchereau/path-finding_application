@@ -46,7 +46,7 @@ public class Fenetre{
     /**
      * Méthode qui permet d'afficher une fenêtre dans l'os à l'aide de javaFX
      */
-    public void dessinerFenetre(Stage stage) {
+    public void dessinerFenetre() {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
@@ -58,8 +58,8 @@ public class Fenetre{
 
             // Affichage de la scène
             Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            this.stage.setScene(scene);
+            this.stage.show();
 
             // Définition des handlers sur les éléments du menu
             fenetreControleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
