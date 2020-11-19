@@ -27,7 +27,7 @@ public class XMLDeserializer {
      * @param xml  Le document XML bien formé contenant les données.
      */
     public static void loadCarte(Carte carte, Document xml) {
-        Map<Integer, Intersection> intersections = carte.getIntersections();
+        Map<Long, Intersection> intersections = carte.getIntersections();
 
         //Charger les intersections
         NodeList ns = xml.getElementsByTagName("intersection");

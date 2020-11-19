@@ -14,16 +14,7 @@ import java.util.Map;
 public class Carte {
 
     protected List<Trajet> cheminsLesPlusCourts;
-    protected Map<Integer, Intersection> intersections;
-
-    /**
-     * Constructeur de Carte
-     *
-     * @param intersections
-     */
-    public Carte(Map<Integer, Intersection> intersections) {
-        this.intersections = intersections;
-    }
+    protected Map<Long, Intersection> intersections;
 
     /**
      * Constructeur par défaut de Carte
@@ -66,7 +57,7 @@ public class Carte {
      * Getter
      * @return Les intersections
      */
-    public Map<Integer, Intersection> getIntersections() {
+    public Map<Long, Intersection> getIntersections() {
         return intersections;
     }
 }
