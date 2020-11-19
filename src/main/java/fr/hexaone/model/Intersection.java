@@ -16,6 +16,12 @@ public class Intersection {
     protected int id;
 
     /**
+     * latitude et longitude de l'intersection
+     */
+    protected double latitude;
+    protected double longitude;
+
+    /**
      * liste des segments arrivants sur l'intersection : utile pour le calcul de
      * tournée
      */
@@ -33,11 +39,16 @@ public class Intersection {
      * constructeur d'Intersection
      *
      * @param id
+     * @param latitude
+     * @param longitude
      * @param segmentsArrivants
      * @param segmentsPartants
      */
-    public Intersection(int id, List<Segment> segmentsArrivants, List<Segment> segmentsPartants) {
+    public Intersection(int id, double latitude, double longitude, List<Segment> segmentsArrivants,
+            List<Segment> segmentsPartants) {
         this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.segmentsArrivants = segmentsArrivants;
         this.segmentsPartants = segmentsPartants;
     }
@@ -46,8 +57,12 @@ public class Intersection {
      * constructeur d'Intersection
      *
      * @param id
+     * @param latitude
+     * @param longitude
      */
-    public Intersection(int id) {
+    public Intersection(int id, double latitude, double longitude) {
         this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

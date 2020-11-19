@@ -11,12 +11,6 @@ import java.util.List;
 public class IntersectionSpeciale extends Intersection {
 
     /**
-     * latitude et longitude de l'intersection spéciale
-     */
-    protected double latitude;
-    protected double longitude;
-
-    /**
      * duréee de la tâche à l'intersection spéciale
      */
     protected double duree;
@@ -37,9 +31,9 @@ public class IntersectionSpeciale extends Intersection {
      * @param duree
      * @param typeIntersection
      */
-    public IntersectionSpeciale(int id, List<Segment> segmentsArrivants, List<Segment> segmentsPartants,
-            double latitude, double longitude, double duree, EnumIntersection typeIntersection) {
-        super(id, segmentsArrivants, segmentsPartants);
+    public IntersectionSpeciale(int id, double latitude, double longitude, List<Segment> segmentsArrivants,
+            List<Segment> segmentsPartants, double duree, EnumIntersection typeIntersection) {
+        super(id, latitude, longitude, segmentsArrivants, segmentsPartants);
         this.latitude = latitude;
         this.longitude = longitude;
         this.duree = duree;
@@ -57,7 +51,7 @@ public class IntersectionSpeciale extends Intersection {
      */
     public IntersectionSpeciale(int id, double latitude, double longitude, double duree,
             EnumIntersection typeIntersection) {
-        super(id);
+        super(id, latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;
         this.duree = duree;
