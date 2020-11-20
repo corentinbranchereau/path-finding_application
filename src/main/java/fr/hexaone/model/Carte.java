@@ -44,6 +44,37 @@ public class Carte {
         // TODO
 
     }
+    
+    public Boolean verifierPop(List<Intersection> chromosome, List<Requete> requetes) {
+
+        for (int i = 0; i < requetes.size(); i++) {
+            Boolean livraison = false;
+            Boolean collecte = false;
+            for (int j = 0; j < chromosome.size(); j++) {
+                if (chromosome.get(j).id == requetes.get(0).collecte.id) {
+                    collecte = true;
+                    if (livraison == false) {
+                        continue;
+                    } else {
+                        return false;
+                    }
+                }
+
+                if (chromosome.get(j).id == requetes.get(0).livraison.id) {
+                    livraison = true;
+
+                    if (collecte == false) {
+                        return false;
+                    } else {
+                        continue;
+                    }
+                }
+
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Getter
