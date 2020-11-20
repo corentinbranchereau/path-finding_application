@@ -4,6 +4,7 @@ import fr.hexaone.model.Carte;
 import fr.hexaone.model.Depot;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
@@ -16,6 +17,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,22 +122,74 @@ public class XMLDeserializerTest {
      * Test le chargement des requêtes avec un fichier XML correct sans exception
      * levée.
      */
+    @Test
+    public void shouldLoadRequete() {
+        try {
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsSmall2.xml");
+            XMLDeserializer.loadRequete(xml, carte, planning);
+        } catch (Exception e) {
+            fail();
+        }
+    }
 
-    // @Test
-    // @Disabled
-    // public void shouldLoadRequete() {
-    // try {
-    // XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-    // Document xml = xmlFileOpener.open("./src/test/resources/requestsSmall2.xml");
-    // XMLDeserializer.loadRequete(planning, xml);
-    // // On s'assure de la valeur des attributs du planning
-    // // Intersection depotTest = new Depot("2835339774", "8:0:0");
-    // // assertEquals(depotTest, planning.getDepot());
-    // assertEquals(2, planning.getRequetes().size());
-    // } catch (Exception e) {
-    // fail();
-    // }
-    // }
+    /**
+     * Test le chargement des requêtes avec un fichier XML correct en vérifiant les
+     * propriétés du depot.
+     */
+    @Test
+    public void shouldLoadRequeteDepot() {
+        try {
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            XMLDeserializer.loadRequete(xml, carte, planning);
+            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()),
+                    () -> assertEquals(new SimpleDateFormat("H:m:s").parse("8:0:0"), planning.getDateDebut()));
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    /**
+     * Test le chargement des requêtes avec un fichier XML correct en vérifiant le
+     * nombre de requete.
+     */
+    @Test
+    public void shouldLoadRequeteWithGoodNuberOfRequete() {
+        try {
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            XMLDeserializer.loadRequete(xml, carte, planning);
+            assertEquals(5, planning.getRequetes().size());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    /**
+     * Test le chargement des requêtes avec un fichier XML correct en vérifiant les
+     * propriétés requete précise.
+     */
+    @Test
+    public void shouldLoadRequeteWithExactRequete() {
+        try {
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            XMLDeserializer.loadRequete(xml, carte, planning);
+            boolean testPresence = false;
+            Long idPickupTest = 1400900990L, idDeliveryTest = 208769083L;
+            int pickupDurationTest = 180, deliveryDurationTest = 240;
+            for (Requete requete : planning.getRequetes()) {
+                if (requete.getIdPickup() == idPickupTest && requete.getIdDelivery() == idDeliveryTest
+                        && requete.getDureePickup() == pickupDurationTest
+                        && requete.getDureeDelivery() == deliveryDurationTest)
+                    testPresence = true;
+            }
+            assertTrue(testPresence);
+        } catch (Exception e) {
+            fail();
+        }
+    }
 
     @AfterEach
     public void clear() {
