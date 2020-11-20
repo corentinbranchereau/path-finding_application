@@ -11,64 +11,48 @@ import java.util.*;
 public class Planning {
 
     /**
-     * duree totale de la duree
+     * L'id du Dépôt associé au planning
      */
-    protected double dureeTotale;
+    protected Long idDepot;
     /**
-     * date de début de la tournée
+     * Date de début de la tournée
      */
     protected Date dateDebut;
     /**
-     * liste des requêtes en rapport avec la demande client
+     * Liste des requêtes en rapport avec la demande client
      */
     protected List<Requete> requetes;
     /**
-     * intersection spéciale de type dépôt
-     */
-    protected Intersection depot;
-    /**
-     * tournée relative au planning
+     * Tournée relative au planning
      */
     protected Tournee tournee;
     /**
-     * dates des passages des points spéciaux
+     * Dates des passages des points spéciaux
      */
     protected Map<Intersection, Date> datesPassage;
+    /**
+     * Duree totale de la duree
+     */
+    protected double dureeTotale;
 
     /**
-     * constructeur de Planning
+     * Constructeur de Planning
      *
-     * @param dureeTotale
+     * @param idDepot
      * @param dateDebut
-     * @param depot
-     * @param tournee
+     * @param requetes
      */
-    public Planning(double dureeTotale, Date dateDebut, Intersection depot, Tournee tournee) {
-        this.dureeTotale = dureeTotale;
+    public Planning(Long idDepot, Date dateDebut, List<Requete> requetes) {
+        this.idDepot = idDepot;
         this.dateDebut = dateDebut;
-        this.requetes = new ArrayList<>();
-        this.depot = depot;
-        this.tournee = tournee;
+        this.requetes = requetes;
         this.datesPassage = new HashMap<>();
-    }
-
-    /**
-     * constructeur de Planning
-     *
-     * @param dateDebut
-     * @param depot
-     */
-    public Planning(Date dateDebut, Intersection depot) {
-        this.dateDebut = dateDebut;
-        this.requetes = new ArrayList<>();
-        this.datesPassage = new HashMap<>();
-        this.depot = depot;
     }
 
     /**
      * Constructeur par défaut de Planning
      */
-    public Planning(){
+    public Planning() {
         this.requetes = new ArrayList<>();
         this.datesPassage = new HashMap<>();
     }
