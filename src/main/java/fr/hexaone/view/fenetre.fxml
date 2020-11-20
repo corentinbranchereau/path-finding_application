@@ -14,7 +14,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="Fichier">
           <items>
-            <MenuItem fx:id="chargerMapItem" mnemonicParsing="false" text="Charger une carte" />
+            <MenuItem fx:id="chargerCarteItem" mnemonicParsing="false" text="Charger une carte" />
             <MenuItem fx:id="chargerRequetesItem" mnemonicParsing="false" text="Charger des requêtes" />
             <MenuItem fx:id="quitterItem" mnemonicParsing="false" text="Quitter" />
           </items>

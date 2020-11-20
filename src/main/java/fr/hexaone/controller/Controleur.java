@@ -48,4 +48,13 @@ public class Controleur {
     public void handleClicQuitter() {
         System.out.println("Quitter");
     }
+
+    /**
+     * Renvoie la fenêtre de l'application.
+     * 
+     * @return La fenêtre de l'application
+     */
+    public Fenetre getFenetre() {
+        return fenetre;
+    }
 }
