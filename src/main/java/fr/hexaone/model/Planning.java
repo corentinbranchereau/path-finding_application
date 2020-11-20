@@ -15,7 +15,7 @@ public class Planning {
      */
     protected Long idDepot;
     /**
-     * Date de début de la tournée
+     * Date de début de la tournée. 24 hours format - H:m:s
      */
     protected Date dateDebut;
     /**
@@ -61,12 +61,16 @@ public class Planning {
         return this.requetes;
     }
 
-    public Intersection getDepot() {
-        return this.depot;
+    public Long getIdDepot() {
+        return this.idDepot;
     }
 
-    public void setDepot(Depot newDepot) {
-        this.depot = newDepot;
+    public void setDepot(Long newIdDepot) {
+        this.idDepot = newIdDepot;
+    }
+
+    public Date getDateDebut() {
+        return this.getDateDebut();
     }
 
     public void setRequetes(List<Requete> newRequetes) {
