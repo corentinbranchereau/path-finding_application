@@ -14,9 +14,19 @@ public class Requete {
     protected long idPickup;
 
     /**
+     * Durée du pickup
+     */
+    protected Integer dureePickup;
+
+    /**
      * Id l'intersection spéciale de type point de livraison
      */
     protected long idDelivery;
+
+    /**
+     * Durée du delivery
+     */
+    protected Integer dureeDelivery;
 
     /**
      * Constructeur de Requete
@@ -24,9 +34,11 @@ public class Requete {
      * @param idPickup
      * @param idDelivery
      */
-    public Requete(long idPickup, long idDelivery) {
+    public Requete(long idPickup, int dureePickup, long idDelivery, int dureeDelivery) {
         this.idPickup = idPickup;
+        this.dureePickup = dureePickup;
         this.idDelivery = idDelivery;
+        this.dureeDelivery = dureeDelivery;
     }
 
 }
