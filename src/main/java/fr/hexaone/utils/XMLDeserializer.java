@@ -47,9 +47,9 @@ public class XMLDeserializer {
             long destination = Long.parseLong(element.getAttribute("destination"));
             double longueur = Double.parseDouble(element.getAttribute("length"));
             String nom = element.getAttribute("name");
-            Segment segment = new Segment(longueur,nom,intersections.get(depart),intersections.get(destination));
+            Segment segment = new Segment(longueur,nom,depart,destination);
             intersections.get(depart).getSegmentsPartants().add(segment);
-            intersections.get(destination).getSegmentsArrivants().add(segment);
+            intersections.get(destination).getSegmentsArrivants().add(segment); //TODO : A vérifier
         }
     }
 
