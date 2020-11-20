@@ -1,8 +1,6 @@
 package fr.hexaone.model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Objet contenant toutes les informations relatives au planning d'une tournée "
@@ -13,61 +11,73 @@ import java.util.Map;
 public class Planning {
 
     /**
-     * duree totale de la duree
+     * L'id du Dépôt associé au planning
      */
-    protected double dureeTotale;
+    protected Long idDepot;
     /**
-     * date de début de la tournée
+     * Date de début de la tournée. 24 hours format - H:m:s
      */
     protected Date dateDebut;
     /**
-     * liste des requêtes en rapport avec la demande client
+     * Liste des requêtes en rapport avec la demande client
      */
     protected List<Requete> requetes;
     /**
-     * intersection spéciale de type dépôt
-     */
-    protected Intersection depot;
-    /**
-     * tournée relative au planning
+     * Tournée relative au planning
      */
     protected Tournee tournee;
     /**
-     * dates des passages des points spéciaux
+     * Dates des passages des points spéciaux
      */
     protected Map<Intersection, Date> datesPassage;
+    /**
+     * Duree totale de la duree
+     */
+    protected double dureeTotale;
 
     /**
-     * constructeur de Planning
+     * Constructeur de Planning
      *
-     * @param dureeTotale
+     * @param idDepot
      * @param dateDebut
      * @param requetes
-     * @param depot
-     * @param tournee
-     * @param datesPassage
      */
-    public Planning(double dureeTotale, Date dateDebut, List<Requete> requetes, Intersection depot, Tournee tournee,
-            Map<Intersection, Date> datesPassage) {
-        this.dureeTotale = dureeTotale;
+    public Planning(Long idDepot, Date dateDebut, List<Requete> requetes) {
+        this.idDepot = idDepot;
         this.dateDebut = dateDebut;
         this.requetes = requetes;
-        this.depot = depot;
-        this.tournee = tournee;
-        this.datesPassage = datesPassage;
+        this.datesPassage = new HashMap<>();
     }
 
     /**
-     * constructeur de Planning
-     *
-     * @param dateDebut
-     * @param requetes
-     * @param depot
+     * Constructeur par défaut de Planning
      */
-    public Planning(Date dateDebut, List<Requete> requetes, Intersection depot) {
-        this.dateDebut = dateDebut;
-        this.requetes = requetes;
-        this.depot = depot;
+    public Planning() {
+        this.requetes = new ArrayList<>();
+        this.datesPassage = new HashMap<>();
     }
 
+    public List<Requete> getRequetes() {
+        return this.requetes;
+    }
+
+    public Long getIdDepot() {
+        return this.idDepot;
+    }
+
+    public void setIdDepot(Long newIdDepot) {
+        this.idDepot = newIdDepot;
+    }
+
+    public Date getDateDebut() {
+        return this.getDateDebut();
+    }
+
+    public void setDateDebut(Date newDateDebut) {
+        this.dateDebut = newDateDebut;
+    }
+
+    public void setRequetes(List<Requete> newRequetes) {
+        this.requetes = newRequetes;
+    }
 }
