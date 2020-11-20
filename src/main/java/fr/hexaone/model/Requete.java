@@ -11,22 +11,22 @@ public class Requete {
     /**
      * intersection spécaiale de type collecte
      */
-    protected IntersectionSpeciale collecte;
+    protected long idPickup;
 
     /**
      * intersection spéciale de type point de livraison
      */
-    protected IntersectionSpeciale livraison;
+    protected long idDelivery;
 
     /**
      * constructeur de Requete
      *
-     * @param collecte
-     * @param livraison
+     * @param idPickup
+     * @param idDelivery
      */
-    public Requete(IntersectionSpeciale collecte, IntersectionSpeciale livraison) {
-        this.collecte = collecte;
-        this.livraison = livraison;
+    public Requete(long idPickup, long idDelivery) {
+        this.idPickup = idPickup;
+        this.idDelivery = idDelivery;
     }
 
 }
