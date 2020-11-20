@@ -8,6 +8,7 @@ package fr.hexaone.model;
  * @version 1.0
  */
 public class Requete {
+
     /**
      * Id de l'intersection spéciale de type collecte
      */
@@ -32,7 +33,9 @@ public class Requete {
      * Constructeur de Requete
      *
      * @param idPickup
+     * @param dureePickup
      * @param idDelivery
+     * @param dureeDelivery
      */
     public Requete(long idPickup, int dureePickup, long idDelivery, int dureeDelivery) {
         this.idPickup = idPickup;
@@ -43,6 +46,7 @@ public class Requete {
 
     /**
      * Getter
+     * 
      * @return L'id de l'intersection de Pickup
      */
     public long getIdPickup() {
@@ -51,6 +55,7 @@ public class Requete {
 
     /**
      * Getter
+     * 
      * @return Durée du pickup
      */
     public Integer getDureePickup() {
@@ -59,6 +64,7 @@ public class Requete {
 
     /**
      * Getter
+     * 
      * @return L'id de l'intersection de delivery
      */
     public long getIdDelivery() {
@@ -67,6 +73,7 @@ public class Requete {
 
     /**
      * Getter
+     * 
      * @return Durée du delivery
      */
     public Integer getDureeDelivery() {
