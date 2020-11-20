@@ -65,12 +65,16 @@ public class Planning {
         return this.idDepot;
     }
 
-    public void setDepot(Long newIdDepot) {
+    public void setIdDepot(Long newIdDepot) {
         this.idDepot = newIdDepot;
     }
 
     public Date getDateDebut() {
         return this.getDateDebut();
+    }
+
+    public void setDateDebut(Date newDateDebut) {
+        this.dateDebut = newDateDebut;
     }
 
     public void setRequetes(List<Requete> newRequetes) {
