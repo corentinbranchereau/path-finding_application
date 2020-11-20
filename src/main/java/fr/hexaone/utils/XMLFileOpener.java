@@ -50,15 +50,15 @@ public class XMLFileOpener implements FileFilter {
         File file = new File(path);
         if(!accept(file)) throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        Document doc = null;
+        Document xml = null;
         try {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            doc = documentBuilder.parse(file);
-            doc.getDocumentElement().normalize();
+            xml = documentBuilder.parse(file);
+            xml.getDocumentElement().normalize();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        return doc;
+        return xml;
     }
 
     /**

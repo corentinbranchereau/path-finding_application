@@ -15,30 +15,62 @@ public class Segment {
     /**
      * nom du segment
      */
-    protected double nom;
+    protected String nom;
 
     /**
-     * intersection de départ
+     * Id de l'intersection de départ
      */
-    protected Intersection depart;
+    protected Long idDepart;
+
     /**
-     * intersection d'arrivée
+     * Id de l'intersection d'arrivée
      */
-    protected Intersection arrivee;
+    protected Long idArrivee;
 
     /**
      * constructeur de Segment
      *
      * @param longueur
      * @param nom
-     * @param depart
-     * @param arrivee
+     * @param idDepart
+     * @param idArrivee
      */
-    public Segment(double longueur, double nom, Intersection depart, Intersection arrivee) {
+    public Segment(double longueur, String nom, long idDepart, long idArrivee) {
         this.longueur = longueur;
         this.nom = nom;
-        this.depart = depart;
-        this.arrivee = arrivee;
+        this.idDepart = idDepart;
+        this.idArrivee = idArrivee;
     }
 
+    /**
+     * Getter
+     * @return La longeur du segment
+     */
+    public double getLongueur() {
+        return longueur;
+    }
+
+    /**
+     * Getter
+     * @return Le nom du segment
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Getter
+     * @return L'id de l'intersection au départ du segment
+     */
+    public long getDepart() {
+        return idDepart;
+    }
+
+    /**
+     * Getter
+     * @return L'id de l'intersection à l'arrivée du segment
+     */
+    public long getArrivee() {
+        return idArrivee;
+    }
 }
