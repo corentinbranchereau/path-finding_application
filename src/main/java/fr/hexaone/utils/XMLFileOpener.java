@@ -1,8 +1,13 @@
 package fr.hexaone.utils;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
+import fr.hexaone.utils.exception.FileBadExtensionException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 
 /**
  * Permet d'ouvrir un fichier et de version type (XML).
@@ -28,20 +33,32 @@ public class XMLFileOpener implements FileFilter {
      * en gardant un comportement static pour la classe
      * @return l'unique instance de la classe XMLFileOpener. Si elle n'existe pas, l'instancie.
      */
-    protected static XMLFileOpener getInstance(){
+    public static XMLFileOpener getInstance(){
         if(instance == null) instance = new XMLFileOpener();
         return instance;
     }
 
     /**
-     * Ouverture d'un fichier dont l'URI est spécifié en paramètre
-     * @param path L'URI du fichier
-     * @throws FileNotFoundException Lorsque l'URI spécifié n'existe pas
-     * @return Le fichier ouvert
+     * Ouverture d'un fichier XML dont l'URI est est spécifié en paramètre
+     * @param path L'URI vers le fichier à ouvrir
+     * @throws IOException Lorsque le fichier spécifié n'existe pas
+     * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas XML
+     * @throws SAXException Lors que le fichier possède des erreurs de formatage
+     * @return Le document XML correspondant au format org.w3c.dom.Document
      */
-    public File open(String path) throws FileNotFoundException {
-        //TODO
-        return null;
+    public Document open(String path) throws IOException, FileBadExtensionException, SAXException {
+        File file = new File(path);
+        if(!accept(file)) throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        Document xml = null;
+        try {
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            xml = documentBuilder.parse(file);
+            xml.getDocumentElement().normalize();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        return xml;
     }
 
     /**
