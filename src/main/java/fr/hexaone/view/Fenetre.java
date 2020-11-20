@@ -79,19 +79,19 @@ public class Fenetre {
             this.stage.show();
 
             // Définition des handlers sur les éléments du menu
-            fenetreControleur.chargerMapItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.getChargerCarteItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.handleClicChargerCarte();
                 }
             });
 
-            fenetreControleur.chargerRequetesItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.getChargerRequetesItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.handleClicChargerRequetes();
                 }
             });
 
-            fenetreControleur.quitterItem.setOnAction(new EventHandler<ActionEvent>() {
+            fenetreControleur.getQuitterItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.handleClicQuitter();
                 }
@@ -99,5 +99,23 @@ public class Fenetre {
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
         }
+    }
+
+    /**
+     * Renvoie le controleur JavaFX de la fenêtre
+     * 
+     * @return Le controleur JavaFX de la fenêtre
+     */
+    public FenetreControleurFXML getFenetreControleur() {
+        return fenetreControleur;
+    }
+
+    /**
+     * Renvoie le conteneur principal des éléments graphiques de la fenêtre
+     * 
+     * @return Le conteneur graphique principal
+     */
+    public Stage getStage() {
+        return stage;
     }
 }
