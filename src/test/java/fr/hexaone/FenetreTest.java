@@ -88,19 +88,19 @@ public class FenetreTest {
      */
     @Test
     public void shouldLoadMap() {
-        // On déclenche le bouton pour charger une carte
-        App.controleur.getFenetre().getFenetreControleur().getChargerCarteItem().fire();
-
-        // On récupère le string affiché
-        String outString = outContent.toString().replace("\n", "").replace("\r", "");
-
-        // On vide la sortie pour les autres tests
+        // On vide la sortie avant le test
         try {
             outContent.flush();
             outContent.reset();
         } catch (IOException e) {
             originalErr.println("Erreur dans le test shouldLoadMap : " + e);
         }
+
+        // On déclenche le bouton pour charger une carte
+        App.controleur.getFenetre().getFenetreControleur().getChargerCarteItem().fire();
+
+        // On récupère le string affiché
+        String outString = outContent.toString().replace("\n", "").replace("\r", "");
 
         assertTrue(outString.equals("Charger carte"));
     }
@@ -110,19 +110,19 @@ public class FenetreTest {
      */
     @Test
     public void shouldLoadRequetes() {
-        // On déclenche le bouton pour charger des requêtes
-        App.controleur.getFenetre().getFenetreControleur().getChargerRequetesItem().fire();
-
-        // On récupère le string affiché
-        String outString = outContent.toString().replace("\n", "").replace("\r", "");
-
-        // On vide la sortie pour les autres tests
+        // On vide la sortie avant le test
         try {
             outContent.flush();
             outContent.reset();
         } catch (IOException e) {
             originalErr.println("Erreur dans le test shouldLoadRequetes : " + e);
         }
+
+        // On déclenche le bouton pour charger des requêtes
+        App.controleur.getFenetre().getFenetreControleur().getChargerRequetesItem().fire();
+
+        // On récupère le string affiché
+        String outString = outContent.toString().replace("\n", "").replace("\r", "");
 
         assertTrue(outString.equals("Charger requêtes"));
     }
@@ -132,13 +132,7 @@ public class FenetreTest {
      */
     @Test
     public void shouldQuitApp() {
-        // On déclenche le bouton pour quitter l'application
-        App.controleur.getFenetre().getFenetreControleur().getQuitterItem().fire();
-
-        // On récupère le string affiché
-        String outString = outContent.toString().replace("\n", "").replace("\r", "");
-
-        // On vide la sortie pour les autres tests
+        // On vide la sortie avant le test
         try {
             outContent.flush();
             outContent.reset();
@@ -146,6 +140,33 @@ public class FenetreTest {
             originalErr.println("Erreur dans le test shouldQuitApp : " + e);
         }
 
+        // On déclenche le bouton pour quitter l'application
+        App.controleur.getFenetre().getFenetreControleur().getQuitterItem().fire();
+
+        // On récupère le string affiché
+        String outString = outContent.toString().replace("\n", "").replace("\r", "");
+
         assertTrue(outString.equals("Quitter"));
+    }
+
+    /**
+     * Test le clic sur le bouton lançant le calcul du planning
+     */
+    @Test
+    public void shouldCalculatePlanning() {
+        // On vide la sortie pour les autres tests
+        try {
+            outContent.flush();
+            outContent.reset();
+        } catch (IOException e) {
+            originalErr.println("Erreur dans le test shouldCalculatePlanning : " + e);
+        }
+
+        // On déclenche le bouton pour lancer le calcul du planning
+        App.controleur.getFenetre().getFenetreControleur().getBoutonLancer().fire();
+
+        // On récupère le string affiché
+        String outString = outContent.toString().replace("\n", "").replace("\r", "");
+        assertTrue(outString.equals("Lancement du calcul"));
     }
 }
