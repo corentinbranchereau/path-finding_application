@@ -41,4 +41,35 @@ public class Requete {
         this.dureeDelivery = dureeDelivery;
     }
 
+    /**
+     * Getter
+     * @return L'id de l'intersection de Pickup
+     */
+    public long getIdPickup() {
+        return idPickup;
+    }
+
+    /**
+     * Getter
+     * @return Durée du pickup
+     */
+    public Integer getDureePickup() {
+        return dureePickup;
+    }
+
+    /**
+     * Getter
+     * @return L'id de l'intersection de delivery
+     */
+    public long getIdDelivery() {
+        return idDelivery;
+    }
+
+    /**
+     * Getter
+     * @return Durée du delivery
+     */
+    public Integer getDureeDelivery() {
+        return dureeDelivery;
+    }
 }
