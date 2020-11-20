@@ -6,7 +6,9 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.Carte;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import fr.hexaone.model.Segment;
@@ -65,28 +67,27 @@ public class XMLDeserializer {
      * @param planning Le planning où charger les données.
      * @param xml      Le fichier XML bien formé contenant les données.
      */
-    public static void loadRequete(Planning planning, Document xml) {
+    public static void loadRequete(Document xml, Carte carte, Planning planning) {
         try {
-            // On récupère le depot
-            Element depotTag = (Element) xml.getElementsByTagName("depot");
-            // !planning.setDepot(new Depot(depotTag.getAttribute("address"),
-            // depotTag.getAttribute("departureTime")));
-            // On construit la liste des requetes
-            List<Requete> listRequetes = new ArrayList<>();
+            // Récupèrer le depot
+            Element depotTag = (Element) xml.getElementsByTagName("depot").item(0);
+            Long idDepot = Long.parseLong(depotTag.getAttribute("address"));
+            Date dateDebut = new SimpleDateFormat("H:m:s").parse(depotTag.getAttribute("departureTime"));
+            // Construire la liste des requetes
+            List<Requete> listeRequetes = new ArrayList<>();
             NodeList requetesNode = xml.getElementsByTagName("request");
             for (int i = 0; i < requetesNode.getLength(); ++i) {
                 Element requeteTag = (Element) requetesNode.item(i);
-                // ! Problème : Quand on récupère une requete, on a l'id du pickup et du
-                // delivery. Ils correspondent à des intersections existant déjà par ailleurs en
-                // mémoire. Mais on y a pas accès (à moins de passer la Map en param) et si on y
-                // a accès comment les modifier en intersectionSpeciale ? De plus on ne peut pas
-                // créer les intersectionsSpeciales directement car on ne connait pas lat et
-                // long et ça ferait des doublons d'id ...
-
-                // listRequetes.add(new Requete(...));
+                Long idPickup = Long.parseLong(requeteTag.getAttribute("pickupAddress")),
+                        idDelivery = Long.parseLong(requeteTag.getAttribute("deliveryAddress"));
+                int pickupDuration = Integer.parseInt(requeteTag.getAttribute("pickupDuration")),
+                        deliveryDuration = Integer.parseInt(requeteTag.getAttribute("deliveryDuration"));
+                listeRequetes.add(new Requete(idPickup, pickupDuration, idDelivery, deliveryDuration));
             }
-            planning.setRequetes(listRequetes);
-        } catch (ParseException e) {
+            planning.setIdDepot(idDepot);
+            planning.setDateDebut(dateDebut);
+            planning.setRequetes(listeRequetes);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
