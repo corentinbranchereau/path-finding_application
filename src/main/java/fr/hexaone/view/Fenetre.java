@@ -58,6 +58,7 @@ public class Fenetre {
     public Fenetre(Stage stage, Controleur controleur) {
         this.stage = stage;
         this.controleur = controleur;
+        this.vueGraphique = new VueGraphique();
     }
 
     /**
@@ -72,6 +73,9 @@ public class Fenetre {
 
             // Récupération du controleur FXML
             fenetreControleur = (FenetreControleurFXML) loader.getController();
+
+            // On donne le canvas à la vue graphique
+            this.vueGraphique.setCanvas(this.fenetreControleur.getCanvas());
 
             // Affichage de la scène
             Scene scene = new Scene(root);
@@ -127,5 +131,14 @@ public class Fenetre {
      */
     public Stage getStage() {
         return stage;
+    }
+
+    /**
+     * Renvoie la vue graphique de l'application.
+     * 
+     * @return La vue graphique
+     */
+    public VueGraphique getVueGraphique() {
+        return vueGraphique;
     }
 }

@@ -1,6 +1,17 @@
 package fr.hexaone.controller;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import fr.hexaone.model.Carte;
+import fr.hexaone.utils.XMLDeserializer;
+import fr.hexaone.utils.XMLFileOpener;
+import fr.hexaone.utils.exception.FileBadExtensionException;
 import fr.hexaone.view.Fenetre;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -29,10 +40,32 @@ public class Controleur {
     }
 
     /**
-     * Méthode gérant le clic sur l'item "Charger une carte" du menu
+     * Méthode gérant le clic sur l'item "Charger une carte" du menu. La méthode
+     * permet de choisir un fichier carte au format XML et l'affiche dans la vue
+     * graphique de l'application
      */
     public void handleClicChargerCarte() {
-        System.out.println("Charger carte");
+        FileChooser fChooser = new FileChooser();
+        File fichier = fChooser.showOpenDialog(this.fenetre.getStage());
+        if (fichier != null) {
+            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
+            try {
+                Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
+                Carte carte = new Carte();
+                XMLDeserializer.loadCarte(carte, xmlCarte);
+
+                this.fenetre.getVueGraphique().afficherCarte(carte);
+            } catch (IOException e) {
+                System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
+            } catch (FileBadExtensionException e) {
+                System.out.println("Le fichier sélectionné n'est pas de type XML");
+            } catch (SAXException e) {
+                System.out.println("Erreur liée au fichier XML : " + e);
+            }
+        } else {
+            System.out.println("Aucun fichier n'a été sélectionné");
+        }
+
     }
 
     /**
