@@ -76,6 +76,9 @@ public class Fenetre {
             // Affichage de la scène
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
+            this.stage.setResizable(false);
+            this.stage.setTitle("TITRE A DEFINIR");
+
             this.stage.show();
 
             // Définition des handlers sur les éléments du menu
@@ -96,6 +99,13 @@ public class Fenetre {
                     controleur.handleClicQuitter();
                 }
             });
+
+            fenetreControleur.getBoutonLancer().setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    controleur.handleClicBoutonCalcul();
+                }
+            });
+
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
         }

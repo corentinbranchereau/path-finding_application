@@ -50,6 +50,13 @@ public class Controleur {
     }
 
     /**
+     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     */
+    public void handleClicBoutonCalcul() {
+        System.out.println("Lancement du calcul");
+    }
+
+    /**
      * Renvoie la fenêtre de l'application.
      * 
      * @return La fenêtre de l'application
