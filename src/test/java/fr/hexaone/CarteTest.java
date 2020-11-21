@@ -3,10 +3,10 @@ package fr.hexaone;
 import fr.hexaone.model.Carte;
 
 import fr.hexaone.model.Intersection;
-import fr.hexaone.model.IntersectionSpeciale;
 import fr.hexaone.model.Requete;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.javatuples.Pair;
@@ -26,7 +26,7 @@ public class CarteTest {
      */
     @BeforeEach
     void init() {
-        carte = new Carte(null);
+        carte = new Carte();
 
     }
     
@@ -38,20 +38,20 @@ public class CarteTest {
     @Test
     public void verifierPopTest() {
 
-        List<Intersection> listIntersections = new ArrayList<Intersection>();
+        List<Long> listIntersections = new ArrayList<Long>();
         for (int i = 0; i < 10; i++) {
-            listIntersections.add(new Intersection(0, 0, i, null, null));
+            listIntersections.add((long)i);
         }
 
         List<Requete> requetes = new ArrayList<Requete>();
-
-        requetes.add(new Requete(new IntersectionSpeciale(0, 0, 8, null, null, 0, null),
-                new IntersectionSpeciale(0, 0, 3, null, null, 0, null)));
-
         List<Requete> requetes2 = new ArrayList<Requete>();
-
-        requetes.add(new Requete(new IntersectionSpeciale(0, 0, 3, null, null, 0, null),
-                new IntersectionSpeciale(0, 0, 4, null, null, 0, null)));
+        
+        long huit=(long) 8;
+        
+        long trois=(long) 3;
+        
+        requetes.add(new Requete(huit,0,trois,0));
+        requetes2.add(new Requete(trois,0,huit,0));
 
         assert (carte.verifierPop(listIntersections, requetes) == false);
 
@@ -63,21 +63,20 @@ public class CarteTest {
      * Test de vérification de l'espacement minimum des coûts pour une population
      */
 
-    
     @Test
     public void espacePopulationTest() {
 
-        List<Intersection> listIntersections1 = new ArrayList<Intersection>();
-        List<Intersection> listIntersections2 = new ArrayList<Intersection>();
-        List<Intersection> listIntersections3 = new ArrayList<Intersection>();
+    	List<Long> listIntersections1 = new ArrayList<Long>();
+        List<Long> listIntersections2 = new ArrayList<Long>();
+        List<Long> listIntersections3 = new ArrayList<Long>();
 
         for (int i = 0; i < 10; i++) {
-            listIntersections1.add(new Intersection(0, 0, i, null, null));
-            listIntersections2.add(new Intersection(0, 0, 10 - i, null, null));
-            listIntersections3.add(new Intersection(0, 0, i * i, null, null));
+            listIntersections1.add((long)i);
+            listIntersections2.add((long)i*i);
+            listIntersections3.add((long)i*i*i);
         }
 
-        List<Pair<List<Intersection>, Double>> pop = new ArrayList<Pair<List<Intersection>, Double>>();
+        List<Pair<List<Long>, Double>> pop = new ArrayList<Pair<List<Long>, Double>>();
 
         pop.add(new Pair<>(listIntersections1, 1.0));
 
@@ -90,6 +89,6 @@ public class CarteTest {
         assert (carte.espacePopulation(pop, 1) == true);
 
     }
-
+    
 
 }

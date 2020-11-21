@@ -53,18 +53,153 @@ public class Carte {
     }
 
     /**
+     * Comparateur afin de classer les chromosomes au sein d'une population
+     * dans l'ordre croissant des coûts
+     * @param depot 
+     * @param requetes
+     */
+    public static Comparator<Pair<List<Long>, Double>> ComparatorChromosome = new Comparator<Pair<List<Long>, Double>>() {
+
+        @Override
+        public int compare(Pair<List<Long>, Double> e1, Pair<List<Long>, Double> e2) {
+            return (int) (e1.getValue1() - e2.getValue1());
+        }
+    };
+
+    /**
+     * Algorithme génétique permettant de trouver le melleure tournée
+     * @param depot 
+     * @param requetes
+     */
+    private void trouverMeilleureTournee(Intersection depot, List<Requete> requetes) {
+    	//TO DO
+
+        int sigma = 10; // Nb chromosomes
+        double delta = 1;// Minimum d'ecart entre les valeurs
+        double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
+        int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
+        int alphamax = 30000;// Nb max de crossovers productifs
+        int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
+
+        long depotId = depot.getId();
+
+        List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
+
+        int k = 0;
+        int nbEssais = 0;
+
+        while (k <= sigma && nbEssais <= nMax) {
+            k++;
+
+            nbEssais = 0;
+            while (nbEssais <= nMax) {
+                nbEssais++;
+                population.add(new Pair<>(genererChromosomeAleatoire(depotId, requetes), 10.0));
+
+            }
+
+        }
+        if (nbEssais > nMax) {
+            sigma = k - 1;
+        }
+
+        Collections.sort(population, ComparatorChromosome);
+
+        int alpha = 0;
+        int beta = 0;
+
+        // main loop GA
+        while (alpha < alphamax && beta < BetaMax) {
+            Random rand = new Random();
+
+            int indexP1 = 0;
+            int indexP2 = 0;
+
+            int i1;
+            int i2;
+
+            for (int i = 0; i < 2; i++) {
+
+                i1 = rand.nextInt(population.size());
+                i2 = rand.nextInt(population.size());
+
+                if (i == 0) {
+                    indexP1 = i2;
+                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
+                        indexP1 = i1;
+                    }
+                } else {
+                    indexP2 = i2;
+                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
+                        indexP2 = i1;
+                    }
+
+                }
+
+            }
+
+            List<Long> C1 = crossoverOX(population.get(indexP1).getValue0(),
+                    population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
+                    rand.nextInt(population.get(0).getValue0().size()));
+
+            List<Long> C2 = crossoverOX(population.get(indexP2).getValue0(),
+                    population.get(indexP1).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
+                    rand.nextInt(population.get(0).getValue0().size()));
+
+            int choiceChild = rand.nextInt(2);
+
+            List<Long> child = C2;
+
+            if (choiceChild == 0) {
+                child = C1;
+            }
+
+            int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
+
+            if (Math.random() < p) {
+                // mutation with LS to improve C
+                continue;
+            }
+
+            double costChild = 10; // to compute
+
+            List<Pair<List<Long>, Double>> copiePopulation = population;
+
+            population.remove(kRand);
+
+            if (this.espacePopulation(population, delta, costChild)) {
+                // productive iteration
+                population.add(new Pair<>(child, costChild));
+                alpha++;
+
+                if (costChild < population.get(0).getValue1()) {
+                    beta++;
+                }
+
+                Collections.sort(population, ComparatorChromosome);
+
+            }
+
+            else {
+                population = copiePopulation;
+            }
+        }
+
+    }
+    
+    /**
      * Renvoie true si toutes les contraintes de précédences sont respectées, faux sinon
      * @param chromosome que l'on teste
      * @param requetes liste des requêtes
      */
 
-    public Boolean verifierPop(List<Intersection> chromosome, List<Requete> requetes) {
+    public Boolean verifierPop(List<Long> chromosome, List<Requete> requetes) {
 
         for (int i = 0; i < requetes.size(); i++) {
             Boolean livraison = false;
             Boolean collecte = false;
             for (int j = 0; j < chromosome.size(); j++) {
-                if (chromosome.get(j).id == requetes.get(0).collecte.id) {
+                if (chromosome.get(j) == requetes.get(0).getIdPickup()) {
                     collecte = true;
                     if (livraison == false) {
                         continue;
@@ -73,7 +208,7 @@ public class Carte {
                     }
                 }
 
-                if (chromosome.get(j).id == requetes.get(0).livraison.id) {
+                if (chromosome.get(j) == requetes.get(0).getIdDelivery()) {
                     livraison = true;
 
                     if (collecte == false) {
@@ -94,7 +229,7 @@ public class Carte {
      * @param ecart maximum
      */
 
-    public Boolean espacePopulation(List<Pair<List<Intersection>, Double>> population, double ecart) {
+    public Boolean espacePopulation(List<Pair<List<Long>, Double>> population, double ecart) {
 
         for (int i = 1; i < population.size(); i++) {
 
@@ -114,7 +249,7 @@ public class Carte {
      * @param valeurEnfant
      */
 
-    public Boolean espacePopulation(List<Pair<List<Intersection>, Double>> population, double ecart, double valeurEnfant) {
+    public Boolean espacePopulation(List<Pair<List<Long>, Double>> population, double ecart, double valeurEnfant) {
 
         for (int i = 0; i < population.size(); i++) {
 
@@ -126,6 +261,110 @@ public class Carte {
         return true;
 
     }
+    
+    
+    /**
+     * Renvoie une liste de chromosomes aléatoires (donc une liste d'intersections) 
+     * @param depot 
+     * @param requetes 
+     */
+
+    private List<Long> genererChromosomeAleatoire(Long idDepot, List<Requete> requetes) {
+        List<Long> shuffleList;
+
+        do {
+            shuffleList = new ArrayList<Long>();
+
+            for (int i = 0; i < requetes.size(); i++) {
+                shuffleList.add(requetes.get(i).getIdPickup());
+                shuffleList.add(requetes.get(i).getIdDelivery());
+            }
+
+            Collections.shuffle(shuffleList);
+        } while (!verifierPop(shuffleList, requetes));
+
+        shuffleList.add(0, idDepot);
+        shuffleList.add(idDepot);
+
+        return shuffleList;
+
+    }
+
+    
+    /**
+     * Réalise le crossover de chromosomes afin d'obtenir un enfant
+     * @param depot 
+     * @param requetes 
+     */
+    private List<Long> crossoverOX(List<Long> P1, List<Long> P2, int i, int j) {
+
+        List<Long> child = new ArrayList<Long>(P1.size());
+
+        int max = max(i, j);
+        int min = min(i, j);
+
+        List<Long> intersectionsVus = new ArrayList<Long>();
+
+        for (int k = min; k <= max; k++) {
+            child.set(k, P1.get(k));
+            intersectionsVus.add(P1.get(k));
+        }
+
+        int k = max + 1;
+        int p = max + 1;
+
+        // use some set or map to improve (unique values)
+
+        int c = 0;
+        while (c < P1.size()) {
+            c++;
+            if (k > P1.size()) {
+                k = 0;
+            }
+            if (p > P1.size()) {
+                p = 0;
+            }
+            if (intersectionsVus.contains(P2.get(k))) {
+                k++;
+                continue;
+            }
+            child.set(p, P2.get(k));
+            p++;
+            k++;
+        }
+
+        return child;
+
+    }
+    
+    
+    /**
+     * Retourne le max entre a et b
+     * @param a	
+     * @param b
+     */
+    private int max(int a, int b) {
+
+        if (a > b) {
+            return a;
+        }
+        return b;
+
+    }
+
+    /**
+     * Retourne le min entre a et b
+     * @param a	
+     * @param b
+     */
+    private int min(int a, int b) {
+
+        if (a < b) {
+            return a;
+        }
+        return b;
+    }
+
 
 
     /**
