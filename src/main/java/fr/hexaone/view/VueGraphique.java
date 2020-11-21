@@ -58,6 +58,9 @@ public class VueGraphique {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setLineWidth(1.0);
 
+        // On efface le canvas au cas où une carte est déjà affichée.
+        gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+
         // Tout d'abord, on recherche le min et le max des longitudes et latitudes pour
         // pouvoir adapter l'affichage en conséquence
         double minLongitude = Double.MAX_VALUE;
@@ -92,9 +95,9 @@ public class VueGraphique {
                         / (maxLongitude - minLongitude);
                 double yPos2 = (arrivee.getLatitude() - minLatitude) * this.canvas.getHeight()
                         / (maxLatitude - minLatitude);
-                gc.moveTo(xPos, yPos);
-                gc.lineTo(xPos2, yPos2);
-                gc.stroke();
+
+                // On dessine le segment
+                gc.strokeLine(xPos, yPos, xPos2, yPos2);
             }
         }
     }
