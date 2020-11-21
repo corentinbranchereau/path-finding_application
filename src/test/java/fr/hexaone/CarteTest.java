@@ -181,4 +181,41 @@ public class CarteTest {
         
     }
     
+    /**
+     * Test de la mutation avec recherche locale
+     */
+
+    @Test
+    public void MutationLocalSearchTest() {
+
+    	List<Requete> requetes = new ArrayList<Requete>();
+
+	    requetes.add(new Requete((long)1,0,(long)5,0));
+	    requetes.add(new Requete((long)4,0,(long)2,0));
+	    requetes.add(new Requete((long)8,0,(long)6,0));
+	    requetes.add(new Requete((long)100,0,(long)3,0));
+	    
+	    List<Long> P1 = new ArrayList<Long>();
+
+    	P1.add((long)0);
+    	P1.add((long)1);
+    	P1.add((long)8);
+    	P1.add((long)6);
+    	P1.add((long)4);
+    	P1.add((long)2);
+    	P1.add((long)3);
+    	P1.add((long)0);
+    	P1.add((long)100);
+    	P1.add((long)3);
+    	
+	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
+	    
+	    for(int i=0;i<mutation.size();i++) {
+	    	System.out.println(mutation.get(i));
+	    }
+	    
+	    assert(carte.cout(mutation)<=carte.cout(P1));
+        
+    }
+    
 }

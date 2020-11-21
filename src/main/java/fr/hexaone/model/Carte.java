@@ -203,6 +203,74 @@ public class Carte {
         return population.get(0).getValue0();
     }
     
+    
+    /**
+     * Calcule le cout d'un chromsomome (une solution à la tournée)
+     * @param chromosome que l'on teste
+     */
+    public double cout(List<Long> chromosome) {
+    	
+    	double somme=0;
+    	
+    	for(int i=0;i<chromosome.size();i++) {
+    		somme+=chromosome.get(i)*i*i*i;
+    	}
+    	
+    	return somme;
+    }
+    
+    /**
+     * Mutation d'un chromosme grâce à un algorithme de recherche locale
+     * @param chromosome que l'on teste
+     * @param requetes liste des requêtes
+     */
+
+    public List<Long> mutationLocalSearch(List<Long> chromosome, double coutIni, List<Requete> requetes) {
+    	
+    	Boolean amelioration=true;
+    	double coutMin=coutIni;
+    	
+    	while(amelioration==true)
+    	{
+    		amelioration=false;
+    		
+    		for(int i=1;i<chromosome.size()-2;i++) {
+    			for(int j=1;j<chromosome.size()-2;j++) {
+    				if(i!=j) {
+    					
+    					long u=chromosome.get(i);
+    					long v=chromosome.get(j);
+    					long x=chromosome.get(i+1);
+    					long y=chromosome.get(j+1);
+    					
+    					chromosome.set(i+1,v);
+    					chromosome.set(j,x);
+    					
+    					if(this.verifierPop(chromosome, requetes))
+    					{
+    						double cout=cout(chromosome);
+    						
+        					if(cout<coutMin) {
+        						coutMin=cout;
+        						amelioration=true;
+        						break;
+        					}
+    					}
+    					
+    					chromosome.set(i+1,x);
+    					chromosome.set(j,v);	
+    				}
+    			}
+    			if(amelioration==true) {
+    				break;
+    			}
+    		}
+    	}
+    	return chromosome;
+    }
+    
+    
+    
     /**
      * Renvoie true si toutes les contraintes de précédences sont respectées, faux sinon
      * @param chromosome que l'on teste
