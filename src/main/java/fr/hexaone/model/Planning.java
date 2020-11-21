@@ -36,20 +36,6 @@ public class Planning {
     protected double dureeTotale;
 
     /**
-     * Constructeur de Planning
-     *
-     * @param idDepot
-     * @param dateDebut
-     * @param requetes
-     */
-    public Planning(Long idDepot, Date dateDebut, List<Requete> requetes) {
-        this.idDepot = idDepot;
-        this.dateDebut = dateDebut;
-        this.requetes = requetes;
-        this.datesPassage = new HashMap<>();
-    }
-
-    /**
      * Constructeur par défaut de Planning
      */
     public Planning() {
