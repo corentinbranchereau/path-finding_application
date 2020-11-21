@@ -4,7 +4,6 @@ package fr.hexaone.model;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -72,33 +71,44 @@ public class Carte {
      * @param depot 
      * @param requetes
      */
-    private void trouverMeilleureTournee(Intersection depot, List<Requete> requetes) {
+    public List<Long> trouverMeilleureTournee(long idDepot , List<Requete> requetes) {
     	//TO DO
 
-        int sigma = 10; // Nb chromosomes
+        /*int sigma = 10; // Nb chromosomes
         double delta = 1;// Minimum d'ecart entre les valeurs
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
         int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
-
-        long depotId = depot.getId();
+        */
+    	
+    	int sigma = 6; // Nb chromosomes
+        double delta = 1;// Minimum d'ecart entre les valeurs
+        double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
+        int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
+        int alphamax = 3000;// Nb max de crossovers productifs
+        int BetaMax = 1000;// Nb max de crossosovers sans améliorer la solution
 
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
 
         int k = 0;
         int nbEssais = 0;
+        Random rand = new Random();
 
         while (k <= sigma && nbEssais <= nMax) {
+        
             k++;
-
             nbEssais = 0;
-            while (nbEssais <= nMax) {
-                nbEssais++;
-                population.add(new Pair<>(genererChromosomeAleatoire(depotId, requetes), 10.0));
-
+            Pair<List<Long>, Double> chrom;
+            
+            do {
+            	 nbEssais++;
+            	 chrom=  new Pair<>(genererChromosomeAleatoire(idDepot, requetes), (double)(rand.nextInt(100)+10));
             }
-
+            while (nbEssais <= nMax && !espacePopulation(population, delta)) ;
+            if(nbEssais<=nMax) {
+            	population.add(chrom);
+            }    
         }
         if (nbEssais > nMax) {
             sigma = k - 1;
@@ -111,8 +121,7 @@ public class Carte {
 
         // main loop GA
         while (alpha < alphamax && beta < BetaMax) {
-            Random rand = new Random();
-
+          
             int indexP1 = 0;
             int indexP2 = 0;
 
@@ -134,19 +143,17 @@ public class Carte {
                     if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
                         indexP2 = i1;
                     }
-
                 }
-
             }
 
             List<Long> C1 = crossoverOX(population.get(indexP1).getValue0(),
                     population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
                     rand.nextInt(population.get(0).getValue0().size()));
-
+           
             List<Long> C2 = crossoverOX(population.get(indexP2).getValue0(),
                     population.get(indexP1).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
                     rand.nextInt(population.get(0).getValue0().size()));
-
+          
             int choiceChild = rand.nextInt(2);
 
             List<Long> child = C2;
@@ -154,18 +161,26 @@ public class Carte {
             if (choiceChild == 0) {
                 child = C1;
             }
+            
+            child=correctionCrossover(child,requetes);
 
             int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
 
-            if (Math.random() < p) {
+           /* if (Math.random() < p) {
                 // mutation with LS to improve C
                 continue;
             }
+            */
 
-            double costChild = 10; // to compute
-
-            List<Pair<List<Long>, Double>> copiePopulation = population;
-
+            double costChild = (double)(rand.nextInt(100)+10); // to compute
+            
+            List<Pair<List<Long>, Double>> copiePopulation=new ArrayList<Pair<List<Long>, Double>>();
+            
+            for(int i=0;i<population.size();i++) {
+            	
+            	copiePopulation.add(population.get(i));
+            }
+            
             population.remove(kRand);
 
             if (this.espacePopulation(population, delta, costChild)) {
@@ -178,14 +193,14 @@ public class Carte {
                 }
 
                 Collections.sort(population, ComparatorChromosome);
-
             }
 
             else {
                 population = copiePopulation;
             }
         }
-
+        
+        return population.get(0).getValue0();
     }
     
     /**
@@ -200,6 +215,10 @@ public class Carte {
             Boolean livraison = false;
             Boolean collecte = false;
             for (int j = 0; j < chromosome.size(); j++) {
+            	
+            	if(livraison==true && collecte==true) {
+            		break;
+            	}
                 if (chromosome.get(j) == requetes.get(i).getIdPickup()) {
                     collecte = true;
                     if (livraison == false) {
@@ -254,7 +273,7 @@ public class Carte {
 
         for (int i = 0; i < population.size(); i++) {
 
-            if (Math.abs(population.get(i).getValue1() - valeurEnfant) > ecart) {
+            if (Math.abs(population.get(i).getValue1() - valeurEnfant) < ecart) {
                 return false;
             }
 
@@ -338,8 +357,34 @@ public class Carte {
             p++;
             k++;
         }
-
+        
         return child;
+
+    }
+    
+
+	/**
+	 * Permet la correction d'un chromosome en intégrant les conditions de précédence des requêtes
+	 * Echange la place des couples <pickup,delivery> quand ils sont inversés
+	 * @param requetes 
+	 * @param chromosome
+	 */
+    public List<Long> correctionCrossover(List<Long> chromosome, List<Requete> requetes) {
+    	
+        for (int i = 0; i < requetes.size(); i++) {
+        	
+        	int indiceCollecte=chromosome.indexOf(requetes.get(i).getIdPickup());
+        	int indiceLivraison=chromosome.indexOf(requetes.get(i).getIdDelivery());
+        	
+        	if(indiceLivraison<indiceCollecte) {
+        		
+        		long id=chromosome.get(indiceCollecte);
+        		chromosome.set(indiceCollecte,requetes.get(i).getIdDelivery());
+            	chromosome.set(indiceLivraison,id);
+        	}
+        }
+        
+        return chromosome;   	
 
     }
 

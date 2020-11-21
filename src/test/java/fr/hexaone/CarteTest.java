@@ -1,15 +1,10 @@
 package fr.hexaone;
 
 import fr.hexaone.model.Carte;
-import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Requete;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import fr.hexaone.model.Requete;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.javatuples.Pair;
@@ -35,7 +30,7 @@ public class CarteTest {
     
 
     /**
-     * Test de vérification de contraintes des requêtes  sur une solution de tournée
+     * Test de vérification de contraintes des requêtes sur une solution de tournée
      */
 
     @Test
@@ -60,25 +55,20 @@ public class CarteTest {
         List<Requete> requetes3 = new ArrayList<Requete>();
         
         requetes3.add(new Requete((long)1,0,(long)3,0));
-	    
 	    requetes3.add(new Requete((long)4,0,(long)9,0));
-	    
 	    requetes3.add(new Requete((long)5,0,(long)7,0));
-	    
-        
-        
-        long huit=(long) 8;
-        
-        long trois=(long) 3;
-        
-        requetes.add(new Requete(huit,0,trois,0));
-        requetes2.add(new Requete(trois,0,huit,0));
+        requetes.add(new Requete((long) 8,0,(long) 3,0));
+        requetes2.add(new Requete((long) 3,0,(long) 8,0));
         
         assert (carte.verifierPop(listIntersections, requetes) == false);
 
         assert (carte.verifierPop(listIntersections, requetes2) == true);
         
         assert (carte.verifierPop(listIntersections2, requetes3) == false);
+        
+        assert(carte.verifierPop(carte.correctionCrossover(listIntersections2, requetes3),requetes3)==true);
+        
+        
     }
 
     /**
@@ -169,6 +159,25 @@ public class CarteTest {
         List<Long> chromosome=carte.genererChromosomeAleatoire((long)0, requetes) ;
         
         assert (carte.verifierPop(chromosome, requetes) == true);
+        
+    }
+    
+    /**
+     * Test de la boucle principale de l'algorithme génétique
+     */
+
+    @Test
+    public void GaTest() {
+
+    	List<Requete> requetes = new ArrayList<Requete>();
+
+	    requetes.add(new Requete((long)1,0,(long)3,0));
+	    requetes.add(new Requete((long)4,0,(long)9,0));
+	    requetes.add(new Requete((long)5,0,(long)7,0));
+	    
+	    List<Long> bestSolution=carte.trouverMeilleureTournee(0, requetes);
+
+	    assert (carte.verifierPop(bestSolution, requetes) == true);  
         
     }
     
