@@ -42,12 +42,30 @@ public class CarteTest {
     public void verifierPopTest() {
 
         List<Long> listIntersections = new ArrayList<Long>();
+        List<Long> listIntersections2 = new ArrayList<Long>();
         for (int i = 0; i < 10; i++) {
             listIntersections.add((long)i);
         }
+        
+        listIntersections2.add((long)1);
+        listIntersections2.add((long)7);
+        listIntersections2.add((long)9);
+        listIntersections2.add((long)3);
+        listIntersections2.add((long)4);
+        listIntersections2.add((long)5);
+
 
         List<Requete> requetes = new ArrayList<Requete>();
         List<Requete> requetes2 = new ArrayList<Requete>();
+        List<Requete> requetes3 = new ArrayList<Requete>();
+        
+        requetes3.add(new Requete((long)1,0,(long)3,0));
+	    
+	    requetes3.add(new Requete((long)4,0,(long)9,0));
+	    
+	    requetes3.add(new Requete((long)5,0,(long)7,0));
+	    
+        
         
         long huit=(long) 8;
         
@@ -59,6 +77,8 @@ public class CarteTest {
         assert (carte.verifierPop(listIntersections, requetes) == false);
 
         assert (carte.verifierPop(listIntersections, requetes2) == true);
+        
+        assert (carte.verifierPop(listIntersections2, requetes3) == false);
     }
 
     /**
@@ -131,6 +151,25 @@ public class CarteTest {
         	assert((long)res[i]==enfant.get(i));
         }
 
+    }
+    
+    /**
+     * Test de vérification de la génération d'un chromosome aléatoire
+     */
+
+    @Test
+    public void genererChromosomeTest() {
+
+    	List<Requete> requetes = new ArrayList<Requete>();
+
+	    requetes.add(new Requete((long)1,0,(long)3,0));
+	    requetes.add(new Requete((long)4,0,(long)9,0));
+	    requetes.add(new Requete((long)5,0,(long)7,0));
+    	
+        List<Long> chromosome=carte.genererChromosomeAleatoire((long)0, requetes) ;
+        
+        assert (carte.verifierPop(chromosome, requetes) == true);
+        
     }
     
 }

@@ -200,7 +200,7 @@ public class Carte {
             Boolean livraison = false;
             Boolean collecte = false;
             for (int j = 0; j < chromosome.size(); j++) {
-                if (chromosome.get(j) == requetes.get(0).getIdPickup()) {
+                if (chromosome.get(j) == requetes.get(i).getIdPickup()) {
                     collecte = true;
                     if (livraison == false) {
                         continue;
@@ -209,7 +209,7 @@ public class Carte {
                     }
                 }
 
-                if (chromosome.get(j) == requetes.get(0).getIdDelivery()) {
+                if (chromosome.get(j) == requetes.get(i).getIdDelivery()) {
                     livraison = true;
 
                     if (collecte == false) {
@@ -270,7 +270,7 @@ public class Carte {
      * @param requetes 
      */
 
-    private List<Long> genererChromosomeAleatoire(Long idDepot, List<Requete> requetes) {
+    public List<Long> genererChromosomeAleatoire(Long idDepot, List<Requete> requetes) {
         List<Long> shuffleList;
 
         do {
