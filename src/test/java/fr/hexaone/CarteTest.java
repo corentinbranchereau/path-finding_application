@@ -1,12 +1,15 @@
 package fr.hexaone;
 
 import fr.hexaone.model.Carte;
-
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Requete;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import fr.hexaone.model.Requete;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.javatuples.Pair;
@@ -52,13 +55,12 @@ public class CarteTest {
         
         requetes.add(new Requete(huit,0,trois,0));
         requetes2.add(new Requete(trois,0,huit,0));
-
+        
         assert (carte.verifierPop(listIntersections, requetes) == false);
 
         assert (carte.verifierPop(listIntersections, requetes2) == true);
-
     }
-    
+
     /**
      * Test de vérification de l'espacement minimum des coûts pour une population
      */
@@ -90,5 +92,45 @@ public class CarteTest {
 
     }
     
+    /**
+     * Test de vérification de la génération d'un chromosome enfant
+     */
 
+    @Test
+    public void crossoverOXTest() {
+
+    	List<Long> P1 = new ArrayList<Long>();
+    	List<Long> P2 = new ArrayList<Long>();
+    	
+    	P1.add((long)1);
+    	P1.add((long)3);
+    	P1.add((long)2);
+    	P1.add((long)6);
+    	P1.add((long)4);
+    	P1.add((long)5);
+    	P1.add((long)9);
+    	P1.add((long)7);
+    	P1.add((long)8);
+    	
+    	P2.add((long)3);
+    	P2.add((long)7);
+    	P2.add((long)8);
+    	P2.add((long)1);
+    	P2.add((long)4);
+    	P2.add((long)9);
+    	P2.add((long)2);
+    	P2.add((long)5);
+    	P2.add((long)6);
+    	
+    	
+        List<Long> enfant=carte.crossoverOX(P1,P2,3,5); 
+     
+        int[]res= {8,1,9,6,4,5,2,3,7};
+        
+        for(int i=0;i<enfant.size();i++) {
+        	assert((long)res[i]==enfant.get(i));
+        }
+
+    }
+    
 }

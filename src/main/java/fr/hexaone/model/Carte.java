@@ -1,6 +1,7 @@
 
 package fr.hexaone.model;
 
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -296,9 +297,13 @@ public class Carte {
      * @param depot 
      * @param requetes 
      */
-    private List<Long> crossoverOX(List<Long> P1, List<Long> P2, int i, int j) {
+    public List<Long> crossoverOX(List<Long> P1, List<Long> P2, int i, int j) {
 
-        List<Long> child = new ArrayList<Long>(P1.size());
+        List<Long> child = new ArrayList<Long>();
+        
+        for(int k=0;k<P1.size();k++) {
+        	child.add((long)0);
+        }
 
         int max = max(i, j);
         int min = min(i, j);
@@ -306,6 +311,7 @@ public class Carte {
         List<Long> intersectionsVus = new ArrayList<Long>();
 
         for (int k = min; k <= max; k++) {
+        	
             child.set(k, P1.get(k));
             intersectionsVus.add(P1.get(k));
         }
@@ -318,10 +324,10 @@ public class Carte {
         int c = 0;
         while (c < P1.size()) {
             c++;
-            if (k > P1.size()) {
+            if (k >= P1.size()) {
                 k = 0;
             }
-            if (p > P1.size()) {
+            if (p >= P1.size()) {
                 p = 0;
             }
             if (intersectionsVus.contains(P2.get(k))) {
@@ -336,14 +342,13 @@ public class Carte {
         return child;
 
     }
-    
-    
-    /**
-     * Retourne le max entre a et b
-     * @param a	
-     * @param b
-     */
-    private int max(int a, int b) {
+
+	/**
+	 * Retourne le max entre a et b
+	 * @param a	
+	 * @param b
+	 */
+	private int max(int a, int b) {
 
         if (a > b) {
             return a;
