@@ -3,11 +3,13 @@ package fr.hexaone.model;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.Comparator;
 import org.javatuples.Pair;
 
@@ -167,7 +169,7 @@ public class Carte {
             double costChild = cout(child); // to compute
             
 
-           /*if (Math.random() < p) {
+           if (Math.random() < p) {
                 // mutation with LS to improve C
         	   
         	   List<Long> M=this.mutationLocalSearch(child, cout(child), requetes);
@@ -183,9 +185,7 @@ public class Carte {
         	   population.get(kRand).setAt1(ancienCout);
 
             }
-            */
-
-          
+            
            double ancienCout=population.get(kRand).getValue1();
      	   population.get(kRand).setAt1(-10000);
 
@@ -399,7 +399,7 @@ public class Carte {
         int max = max(i, j);
         int min = min(i, j);
 
-        List<Long> intersectionsVus = new ArrayList<Long>();
+        Set<Long> intersectionsVus = new HashSet<Long>();
 
         for (int k = min; k <= max; k++) {
         	
