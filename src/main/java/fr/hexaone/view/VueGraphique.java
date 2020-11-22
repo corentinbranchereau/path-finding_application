@@ -130,6 +130,12 @@ public class VueGraphique {
         }
     }
 
+    /**
+     * Cette méthode permet de dessiner les requêtes dans le canvas.
+     * 
+     * @param planning Le planning actuel de l'application, contenant les requêtes
+     * @param carte    La carte actuelle de l'application
+     */
     public void afficherRequetes(Planning planning, Carte carte) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
