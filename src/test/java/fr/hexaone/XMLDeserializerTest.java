@@ -128,7 +128,7 @@ public class XMLDeserializerTest {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
-            XMLDeserializer.loadRequete(xml, carte, planning);
+            XMLDeserializer.loadRequete(xml, planning);
         } catch (Exception e) {
             fail();
         }
@@ -145,7 +145,7 @@ public class XMLDeserializerTest {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
-            XMLDeserializer.loadRequete(xml, carte, planning);
+            XMLDeserializer.loadRequete(xml, planning);
             assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()), () -> assertTrue(
                     planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")) == 0));
         } catch (Exception e) {
@@ -162,7 +162,7 @@ public class XMLDeserializerTest {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
-            XMLDeserializer.loadRequete(xml, carte, planning);
+            XMLDeserializer.loadRequete(xml, planning);
             assertEquals(5, planning.getRequetes().size());
         } catch (Exception e) {
             fail();
