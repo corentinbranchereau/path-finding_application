@@ -116,6 +116,8 @@ public class VueGraphique {
                     / (this.maxLongitude - this.minLongitude);
             double yPos = (entry.getValue().getLatitude() - this.minLatitude) * this.canvas.getHeight()
                     / (this.maxLatitude - this.minLatitude);
+            // On traite les coordonnées y pour enlever l'effet "miroir"
+            yPos = -yPos + this.canvas.getHeight();
 
             for (Segment s : entry.getValue().getSegmentsPartants()) {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
@@ -123,6 +125,8 @@ public class VueGraphique {
                         / (this.maxLongitude - this.minLongitude);
                 double yPos2 = (arrivee.getLatitude() - this.minLatitude) * this.canvas.getHeight()
                         / (this.maxLatitude - this.minLatitude);
+                // On traite les coordonnées y pour enlever l'effet "miroir"
+                yPos2 = -yPos2 + this.canvas.getHeight();
 
                 // On dessine le segment
                 gc.strokeLine(xPos, yPos, xPos2, yPos2);
