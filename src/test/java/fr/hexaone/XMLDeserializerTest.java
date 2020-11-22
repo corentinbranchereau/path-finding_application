@@ -1,7 +1,6 @@
 package fr.hexaone;
 
 import fr.hexaone.model.Carte;
-import fr.hexaone.model.Depot;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
@@ -147,8 +146,8 @@ public class XMLDeserializerTest {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, carte, planning);
-            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()),
-                    () -> assertEquals(new SimpleDateFormat("H:m:s").parse("8:0:0"), planning.getDateDebut()));
+            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()), () -> assertTrue(
+                    planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")) == 0));
         } catch (Exception e) {
             fail();
         }

@@ -6,27 +6,21 @@ package fr.hexaone.controller;
  * @version 1.0
  */
 public class EtatRequetesChargees implements State{
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void chargerCarte() {
-
+    public void handleClicBoutonCalcul(Controleur c) {
+        System.out.println("handleClicBoutonCalcul [requests loaded state implementation]");
+        c.setEtatCourant(c.etatTourneeCalcule);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void chargerRequete() {
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void calculerPlanning() {
-
+    public void handleClicQuitter(Controleur c) {
+        System.out.println("handleClicQuitter [requests loaded state implementation] --> TODO");
     }
 }

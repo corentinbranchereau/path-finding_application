@@ -1,7 +1,11 @@
 package fr.hexaone.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Controleur JavaFX permettant de récupérer les éléments graphiques issus du
@@ -32,6 +36,32 @@ public class FenetreControleurFXML {
     protected MenuItem quitterItem;
 
     /**
+     * Canvas où sont dessinées la carte et les requêtes. Correspond à la vue
+     * graphique de l'application.
+     */
+    @FXML
+    protected Canvas canvas;
+
+    /**
+     * Rectangle permettant de délimiter le canvas de dessin.
+     */
+    @FXML
+    protected Rectangle bordureCanvas;
+
+    /**
+     * Zone de texte où sont affichées les informations sur le planning. Correspond
+     * à la vue textuelle de l'application.
+     */
+    @FXML
+    protected TextArea zoneTexte;
+
+    /**
+     * Bouton permettant de lancer le calcul du planning.
+     */
+    @FXML
+    protected Button boutonLancer;
+
+    /**
      * Renvoie l'item du menu permettant de charger une carte.
      * 
      * @return L'item chargerCarteItem
@@ -56,5 +86,41 @@ public class FenetreControleurFXML {
      */
     public MenuItem getQuitterItem() {
         return quitterItem;
+    }
+
+    /**
+     * Renvoie le canvas de l'application (vue graphique)
+     * 
+     * @return Le canvas de l'application
+     */
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    /**
+     * Renvoie le rectangle délimitant le canvas.
+     * 
+     * @return Le rectangle délimitant le canvas de l'application
+     */
+    public Rectangle getBordureCanvas() {
+        return bordureCanvas;
+    }
+
+    /**
+     * Renvoie la zone de texte (vue textuelle) de l'application.
+     * 
+     * @return La zone de texte de l'application.
+     */
+    public TextArea getZoneTexte() {
+        return zoneTexte;
+    }
+
+    /**
+     * Renvoie le bouton lançant le calcul du planning.
+     * 
+     * @return Le bouton lançant le calcul du planning.
+     */
+    public Button getBoutonLancer() {
+        return boutonLancer;
     }
 }
