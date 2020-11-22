@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< HEAD
-<?import javafx.scene.control.Label ?>
-<?import javafx.scene.control.Menu ?>
-<?import javafx.scene.control.MenuBar ?>
-<?import javafx.scene.control.MenuItem ?>
-<?import javafx.scene.layout.AnchorPane ?>
-<?import javafx.scene.layout.VBox ?>
-<?import javafx.scene.text.Font ?>
-=======
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
@@ -17,46 +8,52 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
->>>>>>> 4936de9ffd25d04fb35fcd8d7f859b5af4b45628
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.hexaone.view.FenetreControleurFXML">
-  <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="Fichier">
-          <items>
-            <MenuItem fx:id="chargerCarteItem" mnemonicParsing="false" text="Charger une carte" />
-            <MenuItem fx:id="chargerRequetesItem" mnemonicParsing="false" text="Charger des requêtes" />
-            <MenuItem fx:id="quitterItem" mnemonicParsing="false" text="Quitter" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-<<<<<<< HEAD
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <children>
-        <Label alignment="CENTER" layoutX="206.0" layoutY="173.0" style="&#10;" text="Premier test de SceneBuilder" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
-      </children>
-    </AnchorPane>
-  </children>
-=======
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="515.0" prefWidth="1037.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Rectangle fx:id="bordureCanvas" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="436.0" layoutX="14.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" width="928.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-            <Canvas fx:id="canvas" height="425.0" layoutX="10.0" layoutY="52.0" width="915.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            <Button fx:id="boutonLancer" alignment="CENTER" contentDisplay="CENTER" layoutX="429.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lancer le calcul" AnchorPane.leftAnchor="429.0" AnchorPane.rightAnchor="430.2" />
-            <TextArea fx:id="zoneTexte" editable="false" layoutX="100.0" layoutY="504.0" prefHeight="200.0" prefWidth="754.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet quam ac est venenatis tincidunt eget a ligula. Vestibulum tincidunt lorem quis nibh tincidunt, et tincidunt diam vulputate. Nullam a porttitor tellus. Suspendisse quis nulla urna. Fusce eros eros, viverra nec commodo ac, tempus nec ipsum. Ut sit amet sollicitudin lectus, id ullamcorper nunc. Etiam feugiat fringilla imperdiet.&#10;&#10;Morbi turpis mi, tempor eu finibus eu, ornare ut dolor. Nunc facilisis tristique eros, vel ultrices tellus blandit quis. Fusce lacinia quis est eu imperdiet. Donec eu malesuada libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum dignissim ut sem quis porta. Cras sit amet aliquam leo. Cras mattis sapien a magna porttitor egestas. Aliquam imperdiet, orci ut commodo aliquam, justo dui molestie mauris, dapibus tristique nulla sapien vitae turpis. Ut id egestas nibh. Curabitur et justo at tortor maximus maximus in et neque. Donec condimentum velit risus, eget imperdiet nunc mollis eget. Maecenas elementum tincidunt condimentum. In sodales nisl bibendum, commodo magna vitae, posuere dui.&#10;&#10;Fusce faucibus nulla ut ipsum scelerisque blandit. Fusce convallis iaculis diam id efficitur. Suspendisse potenti. Sed eu mauris scelerisque, eleifend mi interdum, sagittis tellus. Phasellus luctus ut mauris eu viverra. Aenean vitae nibh libero. Duis auctor aliquam ligula auctor dapibus. Fusce at lacus dui. Pellentesque luctus mi fermentum elementum ornare. Sed luctus neque purus, id gravida urna consequat eu.&#10;&#10;Proin quis efficitur magna, eget iaculis velit. Cras tincidunt sodales leo, in fermentum augue viverra ac. Integer ac massa in est iaculis venenatis ac eget diam. Aenean non elit nulla. Nam convallis ligula vel libero cursus interdum. Ut luctus ex ut tincidunt dapibus. Pellentesque id rutrum nisi. Nam ut ex sed nibh convallis euismod in et velit. Fusce justo risus, semper vel pharetra quis, rhoncus quis risus. Cras posuere lacus quis mollis fermentum. Donec gravida vestibulum leo vulputate tempor. Duis sit amet neque at nibh auctor convallis non et neque.&#10;&#10;Sed vulputate lectus bibendum lobortis facilisis. Aenean in diam lacus. Fusce id mauris velit. Cras faucibus finibus felis, id faucibus nunc dictum vel. Nam sodales facilisis felis, efficitur suscipit ex convallis ac. Aliquam hendrerit neque maximus congue eleifend. Nam ultrices turpis sed nisi consequat laoreet. Maecenas non nisl a lorem euismod maximus. Nulla scelerisque nec justo et varius. Quisque felis lectus, eleifend nec pretium eu, accumsan in purus. Proin ut eleifend sapien.&#10;&#10;Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla volutpat, urna vitae elementum ultricies, quam nisi malesuada felis, non bibendum enim augue non ante. Maecenas iaculis augue lorem. Donec finibus eros at mauris pharetra iaculis. Quisque sagittis nisl eget erat ultrices, sit amet lobortis sem malesuada. Fusce facilisis, sem vitae consectetur facilisis, elit arcu congue mauris, eget vehicula mi lorem quis arcu. Aenean maximus dapibus neque quis efficitur. In ornare, nulla in facilisis ornare, metus eros ultrices lorem, vel finibus metus elit a magna. Donec et neque risus. Sed eu nulla erat. Sed gravida odio ac tortor facilisis rutrum.&#10;&#10;Proin auctor vestibulum ex, at dapibus velit. Aliquam sed turpis quis metus facilisis tincidunt nec vitae tellus. Aliquam gravida dictum leo quis finibus. Curabitur in odio vitae turpis facilisis congue sed ac arcu. Mauris iaculis, augue pellentesque pharetra porttitor, erat ipsum ullamcorper dolor, non vulputate neque magna at nisi. Suspendisse euismod luctus neque. Vivamus id felis urna. Interdum et malesuada fames ac ante ipsum primis in faucibus. " wrapText="true" />
-         </children>
-    </AnchorPane>
-  </children>
+<VBox prefHeight="746.0" prefWidth="1420.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.hexaone.view.FenetreControleurFXML">
+   <children>
+      <MenuBar VBox.vgrow="NEVER">
+         <menus>
+            <Menu mnemonicParsing="false" text="Fichier">
+               <items>
+                  <MenuItem fx:id="chargerCarteItem" mnemonicParsing="false" text="Charger une carte" />
+                  <MenuItem fx:id="chargerRequetesItem" mnemonicParsing="false" text="Charger des requêtes" />
+                  <MenuItem fx:id="quitterItem" mnemonicParsing="false" text="Quitter" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <Button fx:id="boutonLancer" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lancer le calcul" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="10.0" />
+               </BorderPane.margin>
+            </Button>
+         </top>
+         <bottom>
+            <TextArea fx:id="zoneTexte" editable="false" prefHeight="200.0" prefWidth="754.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet quam ac est venenatis tincidunt eget a ligula. Vestibulum tincidunt lorem quis nibh tincidunt, et tincidunt diam vulputate. Nullam a porttitor tellus. Suspendisse quis nulla urna. Fusce eros eros, viverra nec commodo ac, tempus nec ipsum. Ut sit amet sollicitudin lectus, id ullamcorper nunc. Etiam feugiat fringilla imperdiet.&#10;&#10;Morbi turpis mi, tempor eu finibus eu, ornare ut dolor. Nunc facilisis tristique eros, vel ultrices tellus blandit quis. Fusce lacinia quis est eu imperdiet. Donec eu malesuada libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum dignissim ut sem quis porta. Cras sit amet aliquam leo. Cras mattis sapien a magna porttitor egestas. Aliquam imperdiet, orci ut commodo aliquam, justo dui molestie mauris, dapibus tristique nulla sapien vitae turpis. Ut id egestas nibh. Curabitur et justo at tortor maximus maximus in et neque. Donec condimentum velit risus, eget imperdiet nunc mollis eget. Maecenas elementum tincidunt condimentum. In sodales nisl bibendum, commodo magna vitae, posuere dui.&#10;&#10;Fusce faucibus nulla ut ipsum scelerisque blandit. Fusce convallis iaculis diam id efficitur. Suspendisse potenti. Sed eu mauris scelerisque, eleifend mi interdum, sagittis tellus. Phasellus luctus ut mauris eu viverra. Aenean vitae nibh libero. Duis auctor aliquam ligula auctor dapibus. Fusce at lacus dui. Pellentesque luctus mi fermentum elementum ornare. Sed luctus neque purus, id gravida urna consequat eu.&#10;&#10;Proin quis efficitur magna, eget iaculis velit. Cras tincidunt sodales leo, in fermentum augue viverra ac. Integer ac massa in est iaculis venenatis ac eget diam. Aenean non elit nulla. Nam convallis ligula vel libero cursus interdum. Ut luctus ex ut tincidunt dapibus. Pellentesque id rutrum nisi. Nam ut ex sed nibh convallis euismod in et velit. Fusce justo risus, semper vel pharetra quis, rhoncus quis risus. Cras posuere lacus quis mollis fermentum. Donec gravida vestibulum leo vulputate tempor. Duis sit amet neque at nibh auctor convallis non et neque.&#10;&#10;Sed vulputate lectus bibendum lobortis facilisis. Aenean in diam lacus. Fusce id mauris velit. Cras faucibus finibus felis, id faucibus nunc dictum vel. Nam sodales facilisis felis, efficitur suscipit ex convallis ac. Aliquam hendrerit neque maximus congue eleifend. Nam ultrices turpis sed nisi consequat laoreet. Maecenas non nisl a lorem euismod maximus. Nulla scelerisque nec justo et varius. Quisque felis lectus, eleifend nec pretium eu, accumsan in purus. Proin ut eleifend sapien.&#10;&#10;Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla volutpat, urna vitae elementum ultricies, quam nisi malesuada felis, non bibendum enim augue non ante. Maecenas iaculis augue lorem. Donec finibus eros at mauris pharetra iaculis. Quisque sagittis nisl eget erat ultrices, sit amet lobortis sem malesuada. Fusce facilisis, sem vitae consectetur facilisis, elit arcu congue mauris, eget vehicula mi lorem quis arcu. Aenean maximus dapibus neque quis efficitur. In ornare, nulla in facilisis ornare, metus eros ultrices lorem, vel finibus metus elit a magna. Donec et neque risus. Sed eu nulla erat. Sed gravida odio ac tortor facilisis rutrum.&#10;&#10;Proin auctor vestibulum ex, at dapibus velit. Aliquam sed turpis quis metus facilisis tincidunt nec vitae tellus. Aliquam gravida dictum leo quis finibus. Curabitur in odio vitae turpis facilisis congue sed ac arcu. Mauris iaculis, augue pellentesque pharetra porttitor, erat ipsum ullamcorper dolor, non vulputate neque magna at nisi. Suspendisse euismod luctus neque. Vivamus id felis urna. Interdum et malesuada fames ac ante ipsum primis in faucibus. " wrapText="true" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="30.0" right="30.0" />
+               </BorderPane.margin>
+            </TextArea>
+         </bottom>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Canvas fx:id="canvas" height="436.0" layoutX="-46.0" width="1340.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="0.0" />
+                  <Rectangle fx:id="bordureCanvas" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="436.0" layoutX="33.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="1340.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="0.0" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" top="10.0" />
+               </BorderPane.margin>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+   </children>
    <padding>
       <Insets bottom="40.0" />
    </padding>
->>>>>>> 4936de9ffd25d04fb35fcd8d7f859b5af4b45628
 </VBox>

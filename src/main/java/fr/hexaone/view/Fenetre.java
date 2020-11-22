@@ -88,25 +88,25 @@ public class Fenetre {
             // Définition des handlers sur les éléments du menu
             fenetreControleur.getChargerCarteItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.handleClicChargerCarte();
+                    controleur.chargerCarte();
                 }
             });
 
             fenetreControleur.getChargerRequetesItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.handleClicChargerRequetes();
+                    controleur.chargerRequetes();
                 }
             });
 
             fenetreControleur.getQuitterItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.handleClicQuitter();
+                    controleur.quitterApplication();
                 }
             });
 
             fenetreControleur.getBoutonLancer().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.handleClicBoutonCalcul();
+                    controleur.lancerCalcul();
                 }
             });
 

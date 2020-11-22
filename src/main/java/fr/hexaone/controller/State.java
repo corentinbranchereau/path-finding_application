@@ -1,39 +1,40 @@
 package fr.hexaone.controller;
 
 /**
- * Interface implémentant le design pattern STATE pour la gestion des évènements du controleur
+ * Interface implémentant le design pattern STATE pour la gestion des évènements
+ * du controleur
+ * 
  * @author HexaOne
  * @version 1.0
  */
 public interface State {
 
     /**
-     * Chargement de la carte
+     * Cette méthode permet de charger et d'afficher une carte
      */
-    default void handleClicChargerCarte(Controleur c){
+    default void chargerCarte(Controleur c) {
         System.out.println("handleClicChargerCarte [default state implementation]");
     }
 
     /**
-     * Chargement des requêtes
+     * Cette méthode permet de charger et d'afficher des requêtes
      */
-    default void handleClicChargerRequetes(Controleur c){
+    default void chargerRequetes(Controleur c) {
         System.out.println("handleClicChargerRequetes [default state implementation]");
     }
 
     /**
-     * Calcul du planning
+     * Cette méthode permet de calculer le planning pour les requêtes actuelles
      */
-    default void handleClicBoutonCalcul(Controleur c){
+    default void lancerCalcul(Controleur c) {
         System.out.println("handleClicBoutonCalcul [default state implementation]");
     }
 
     /**
-     * Quitter l'application
+     * Cette méthode quitte l'application
      */
-    default void handleClicQuitter(Controleur c){
+    default void quitterApplication(Controleur c) {
         System.out.println("handleClicQuitter [default state implementation]");
     }
-
 
 }

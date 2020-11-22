@@ -13,26 +13,27 @@ import java.io.IOException;
 
 /**
  * Implémentation d'un State représentant l'état initial de l'application
+ * 
  * @author HexaOne
  * @version 1.0
  */
-public class EtatInitial implements State{
+public class EtatInitial implements State {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void handleClicChargerCarte(Controleur c) {
+    public void chargerCarte(Controleur c) {
         FileChooser fChooser = new FileChooser();
         File fichier = fChooser.showOpenDialog(c.getFenetre().getStage());
         if (fichier != null) {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
                 Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
-                Carte carte = new Carte();
-                XMLDeserializer.loadCarte(carte, xmlCarte);
+                c.setCarte(new Carte());
+                XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
 
-                c.getFenetre().getVueGraphique().afficherCarte(carte);
+                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
                 c.setEtatCourant(c.etatCarteChargee);
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
@@ -50,7 +51,7 @@ public class EtatInitial implements State{
      * {@inheritDoc}
      */
     @Override
-    public void handleClicQuitter(Controleur c) {
+    public void quitterApplication(Controleur c) {
         System.out.println("handleClicQuitter [initial state implementation] --> TODO");
     }
 }

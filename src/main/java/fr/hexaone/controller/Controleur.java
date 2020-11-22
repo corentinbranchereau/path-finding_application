@@ -3,8 +3,8 @@ package fr.hexaone.controller;
 import fr.hexaone.view.Fenetre;
 import javafx.stage.Stage;
 
-import fr.hexaone.view.Fenetre;
-import javafx.stage.Stage;
+import fr.hexaone.model.Carte;
+import fr.hexaone.model.Planning;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
@@ -19,6 +19,16 @@ public class Controleur {
      * Gère l'affichage de l'application (Vue du MVC)
      */
     protected Fenetre fenetre;
+
+    /**
+     * Carte actuelle de l'application
+     */
+    protected Carte carte;
+
+    /**
+     * Planning actuel de l'application
+     */
+    protected Planning planning;
 
     /**
      * Etat courant du design pattern STATE
@@ -65,29 +75,31 @@ public class Controleur {
      * permet de choisir un fichier carte au format XML et l'affiche dans la vue
      * graphique de l'application
      */
-    public void handleClicChargerCarte() {
-        etatCourant.handleClicChargerCarte(this);
+    public void chargerCarte() {
+        etatCourant.chargerCarte(this);
     }
 
     /**
-     * Méthode gérant le clic sur l'item "Charger des requêtes" du menu
+     * Méthode gérant le clic sur l'item "Charger des requêtes" du menu. La méthode
+     * permet de choisir un fichier de requêtes au format XML et affiche les
+     * requêtes dans la vue graphique de l'application
      */
-    public void handleClicChargerRequetes() {
-        etatCourant.handleClicChargerRequetes(this);
+    public void chargerRequetes() {
+        etatCourant.chargerRequetes(this);
     }
 
     /**
      * Méthode gérant le clic sur l'item "Quitter" du menu
      */
-    public void handleClicQuitter() {
-        etatCourant.handleClicQuitter(this);
+    public void quitterApplication() {
+        etatCourant.quitterApplication(this);
     }
 
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
-    public void handleClicBoutonCalcul() {
-        etatCourant.handleClicBoutonCalcul(this);
+    public void lancerCalcul() {
+        etatCourant.lancerCalcul(this);
     }
 
     /**
@@ -106,5 +118,41 @@ public class Controleur {
      */
     public void setEtatCourant(State etatCourant) {
         this.etatCourant = etatCourant;
+    }
+
+    /**
+     * Renvoie le planning.
+     * 
+     * @return Le planning
+     */
+    public Planning getPlanning() {
+        return planning;
+    }
+
+    /**
+     * Change la valeur du planning actuel.
+     * 
+     * @param planning Le nouveau planning
+     */
+    public void setPlanning(Planning planning) {
+        this.planning = planning;
+    }
+
+    /**
+     * Renvoie la carte.
+     * 
+     * @return La carte
+     */
+    public Carte getCarte() {
+        return carte;
+    }
+
+    /**
+     * Change la valeur de la carte actuelle.
+     * 
+     * @param carte La nouvelle carte
+     */
+    public void setCarte(Carte carte) {
+        this.carte = carte;
     }
 }
