@@ -152,6 +152,38 @@ public class VueGraphique {
     public void afficherRequetes(Planning planning, Carte carte) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
+        // Dessin du dépôt (sous la forme d'une étoile)
+        Intersection depot = carte.getIntersections().get(planning.getIdDepot());
+        double xDepot = (depot.getLongitude() - this.minLongitude) * this.canvas.getWidth()
+                / (this.maxLongitude - this.minLongitude);
+        double yDepot = (depot.getLatitude() - this.minLatitude) * this.canvas.getHeight()
+                / (this.maxLatitude - this.minLatitude);
+        // On traite les coordonnées y pour enlever l'effet "miroir"
+        yDepot = -yDepot + this.canvas.getHeight();
+
+        double rayonLarge = 8.0;
+        double rayonCourt = 3.0;
+
+        double[] positionsX = new double[10];
+        double[] positionsY = new double[10];
+
+        for (int i = 0; i < 10; i++) {
+            double xTemp;
+            double yTemp;
+            if (i % 2 == 0) {
+                xTemp = rayonLarge * Math.cos(2 * Math.PI * (i / 2) / 5 - Math.PI / 2);
+                yTemp = rayonLarge * Math.sin(2 * Math.PI * (i / 2) / 5 - Math.PI / 2);
+            } else {
+                xTemp = rayonCourt * Math.cos(2 * Math.PI * (i / 2) / 5 - Math.PI / 2 + Math.PI / 5);
+                yTemp = rayonCourt * Math.sin(2 * Math.PI * (i / 2) / 5 - Math.PI / 2 + Math.PI / 5);
+            }
+            positionsX[i] = xTemp + xDepot;
+            positionsY[i] = yTemp + yDepot;
+        }
+
+        gc.setFill(Color.RED);
+        gc.fillPolygon(positionsX, positionsY, 10);
+
         // Liste des couleurs qui auront été générées aléatoirement
         List<Color> couleursDejaPresentes = new LinkedList<Color>();
 
