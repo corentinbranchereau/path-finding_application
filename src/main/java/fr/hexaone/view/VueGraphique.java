@@ -1,5 +1,7 @@
 package fr.hexaone.view;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import fr.hexaone.model.Carte;
@@ -45,6 +47,13 @@ public class VueGraphique {
      * Latitude maximale dans la carte
      */
     protected double maxLatitude = Double.MIN_VALUE;
+
+    /**
+     * Constante qui permet de définir la valeur seuil que l'on souhaite comme
+     * différence entre les couleurs générées aléatoirement pour les points de
+     * collecte et de livraison
+     */
+    protected final double VALEUR_SEUIL_DIFF_COULEUR = 0.9;
 
     /**
      * Constructeur de VueGraphique.
@@ -143,6 +152,9 @@ public class VueGraphique {
     public void afficherRequetes(Planning planning, Carte carte) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
+        // Liste des couleurs qui auront été générées aléatoirement
+        List<Color> couleursDejaPresentes = new LinkedList<Color>();
+
         for (Requete requete : planning.getRequetes()) {
             Intersection collecte = carte.getIntersections().get(requete.getIdPickup());
             Intersection livraison = carte.getIntersections().get(requete.getIdDelivery());
@@ -161,8 +173,29 @@ public class VueGraphique {
             // On traite les coordonnées y pour enlever l'effet "miroir"
             yLivraison = -yLivraison + this.canvas.getHeight();
 
+            // On va générer une couleur aléatoire qui est suffisament différente des
+            // couleurs déjà présentes (cela est déterminé grâce à la constante
+            // VALEUR_SEUIL_DIFF_COULEUR)
+            boolean couleurSimilairePresente;
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+            do {
+                couleurSimilairePresente = false;
+                for (Color c : couleursDejaPresentes) {
+                    // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
+                    // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
+                    double sommeDiffComposantes = Math.abs(c.getRed() - couleur.getRed())
+                            + Math.abs(c.getGreen() - couleur.getGreen()) + Math.abs(c.getBlue() - couleur.getBlue());
+                    if (sommeDiffComposantes < VALEUR_SEUIL_DIFF_COULEUR) {
+                        couleur = Color.color(Math.random(), Math.random(), Math.random());
+                        couleurSimilairePresente = true;
+                        break;
+                    }
+                }
+            } while (couleurSimilairePresente);
+
+            couleursDejaPresentes.add(couleur);
             gc.setFill(couleur);
+
             // Pour le point de collecte, on dessine un carré
             gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);
             // Pour le point de livraison on dessine un rond
