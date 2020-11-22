@@ -209,10 +209,7 @@ public class CarteTest {
     	P1.add((long)3);
     	
 	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
-	    
-	    for(int i=0;i<mutation.size();i++) {
-	    	System.out.println(mutation.get(i));
-	    }
+
 	    
 	    assert(carte.cout(mutation)<=carte.cout(P1));
         
