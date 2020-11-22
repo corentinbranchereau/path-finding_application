@@ -1,17 +1,5 @@
 package fr.hexaone.controller;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import fr.hexaone.model.Carte;
-import fr.hexaone.utils.XMLDeserializer;
-import fr.hexaone.utils.XMLFileOpener;
-import fr.hexaone.utils.exception.FileBadExtensionException;
 import fr.hexaone.view.Fenetre;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -29,14 +17,43 @@ public class Controleur {
     protected Fenetre fenetre;
 
     /**
-     * Constructeur de Controleur. Instancie la fenêtre de l'application et
-     * l'affiche à l'écran.
+     * Etat courant du design pattern STATE
+     */
+    protected State etatCourant;
+
+    /**
+     * Etat initial de l'application du design pattern STATE
+     */
+    public EtatInitial etatInitial;
+
+    /**
+     * Etat carte chargée du design pattern STATE
+     */
+    public EtatCarteChargee etatCarteChargee;
+
+    /**
+     * Etat requête chargées du design pattern STATE
+     */
+    public EtatRequetesChargees etatRequetesChargees;
+
+    /**
+     * Etat tournée calculée du design pattern STATE
+     */
+    public EtatTourneeCalcule etatTourneeCalcule;
+
+    /**
+     * Constructeur de Controleur. Instancie la fenêtre de l'application,
+     * l'affiche à l'écran et met l'application à son état initial
      * 
      * @param stage Conteneur principal des éléments graphiques de la fenêtre
      */
     public Controleur(Stage stage) {
         this.fenetre = new Fenetre(stage, this);
         this.fenetre.dessinerFenetre();
+        this.etatInitial = new EtatInitial();
+        this.etatCarteChargee = new EtatCarteChargee();
+        this.etatRequetesChargees = new EtatRequetesChargees();
+        setEtatCourant(etatInitial);
     }
 
     /**
@@ -45,48 +62,28 @@ public class Controleur {
      * graphique de l'application
      */
     public void handleClicChargerCarte() {
-        FileChooser fChooser = new FileChooser();
-        File fichier = fChooser.showOpenDialog(this.fenetre.getStage());
-        if (fichier != null) {
-            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            try {
-                Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
-                Carte carte = new Carte();
-                XMLDeserializer.loadCarte(carte, xmlCarte);
-
-                this.fenetre.getVueGraphique().afficherCarte(carte);
-            } catch (IOException e) {
-                System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
-            } catch (FileBadExtensionException e) {
-                System.out.println("Le fichier sélectionné n'est pas de type XML");
-            } catch (SAXException e) {
-                System.out.println("Erreur liée au fichier XML : " + e);
-            }
-        } else {
-            System.out.println("Aucun fichier n'a été sélectionné");
-        }
-
+        etatCourant.handleClicChargerCarte(this);
     }
 
     /**
      * Méthode gérant le clic sur l'item "Charger des requêtes" du menu
      */
     public void handleClicChargerRequetes() {
-        System.out.println("Charger requêtes");
+        etatCourant.handleClicChargerRequetes(this);
     }
 
     /**
      * Méthode gérant le clic sur l'item "Quitter" du menu
      */
     public void handleClicQuitter() {
-        System.out.println("Quitter");
+        etatCourant.handleClicQuitter(this);
     }
 
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
     public void handleClicBoutonCalcul() {
-        System.out.println("Lancement du calcul");
+        etatCourant.handleClicBoutonCalcul(this);
     }
 
     /**
@@ -96,5 +93,13 @@ public class Controleur {
      */
     public Fenetre getFenetre() {
         return fenetre;
+    }
+
+    /**
+     * Change l'état courant par un SETTER du design pattern STATE
+     * @param etatCourant L'état courant de l'application
+     */
+    public void setEtatCourant(State etatCourant) {
+        this.etatCourant = etatCourant;
     }
 }
