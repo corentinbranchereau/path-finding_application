@@ -132,4 +132,30 @@ public class VueGraphique {
 
         this.canvasSauvegardeCarte = canvas;
     }
+
+    public void afficherRequetes(Planning planning, Carte carte) {
+        this.canvas = this.canvasSauvegardeCarte;
+
+        GraphicsContext gc = this.canvas.getGraphicsContext2D();
+
+        for (Requete requete : planning.getRequetes()) {
+            Intersection collecte = carte.getIntersections().get(requete.getIdPickup());
+            Intersection livraison = carte.getIntersections().get(requete.getIdDelivery());
+
+            double xCollecte = (collecte.getLongitude() - this.minLongitude) * this.canvas.getWidth()
+                    / (this.maxLongitude - this.minLongitude);
+            double yCollecte = (collecte.getLatitude() - this.minLatitude) * this.canvas.getHeight()
+                    / (this.maxLatitude - this.minLatitude);
+
+            double xLivraison = (livraison.getLongitude() - this.minLongitude) * this.canvas.getWidth()
+                    / (this.maxLongitude - this.minLongitude);
+            double yLivraison = (livraison.getLatitude() - this.minLatitude) * this.canvas.getHeight()
+                    / (this.maxLatitude - this.minLatitude);
+
+            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+            gc.setFill(couleur);
+            gc.fillOval(xCollecte - 5, yCollecte - 5, 10, 10);
+            gc.fillOval(xLivraison - 5, yLivraison - 5, 10, 10);
+        }
+    }
 }
