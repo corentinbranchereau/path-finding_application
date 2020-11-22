@@ -9,12 +9,4 @@ package fr.hexaone.controller;
  */
 public class EtatTourneeCalcule implements State {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void quitterApplication(Controleur c) {
-        System.out.println("handleClicQuitter [tour computed state implementation] --> TODO");
-    }
-
 }

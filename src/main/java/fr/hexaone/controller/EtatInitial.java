@@ -1,15 +1,7 @@
 package fr.hexaone.controller;
 
-import fr.hexaone.model.Carte;
-import fr.hexaone.utils.XMLDeserializer;
-import fr.hexaone.utils.XMLFileOpener;
-import fr.hexaone.utils.exception.FileBadExtensionException;
-import javafx.stage.FileChooser;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.IOException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * Implémentation d'un State représentant l'état initial de l'application
@@ -23,35 +15,24 @@ public class EtatInitial implements State {
      * {@inheritDoc}
      */
     @Override
-    public void chargerCarte(Controleur c) {
-        FileChooser fChooser = new FileChooser();
-        File fichier = fChooser.showOpenDialog(c.getFenetre().getStage());
-        if (fichier != null) {
-            XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            try {
-                Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
-                c.setCarte(new Carte());
-                XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
-
-                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
-                c.setEtatCourant(c.etatCarteChargee);
-            } catch (IOException e) {
-                System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
-            } catch (FileBadExtensionException e) {
-                System.out.println("Le fichier sélectionné n'est pas de type XML");
-            } catch (SAXException e) {
-                System.out.println("Erreur liée au fichier XML : " + e);
-            }
-        } else {
-            System.out.println("Aucun fichier n'a été sélectionné");
-        }
+    public void chargerRequetes(Controleur c) {
+        Alert messageAlerte = new Alert(AlertType.INFORMATION);
+        messageAlerte.setTitle("Information");
+        messageAlerte.setHeaderText(null);
+        messageAlerte.setContentText("Vous devez charger une carte avant de pouvoir charger des requêtes !");
+        messageAlerte.showAndWait();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void quitterApplication(Controleur c) {
-        System.out.println("handleClicQuitter [initial state implementation] --> TODO");
+    public void lancerCalcul(Controleur c) {
+        Alert messageAlerte = new Alert(AlertType.INFORMATION);
+        messageAlerte.setTitle("Information");
+        messageAlerte.setHeaderText(null);
+        messageAlerte
+                .setContentText("Vous devez charger une carte et des requêtes avant de pouvoir lancer le calcul !");
+        messageAlerte.showAndWait();
     }
 }

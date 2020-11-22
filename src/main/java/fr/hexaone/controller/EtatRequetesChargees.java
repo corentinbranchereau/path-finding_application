@@ -17,12 +17,4 @@ public class EtatRequetesChargees implements State {
         System.out.println("handleClicBoutonCalcul [requests loaded state implementation]");
         c.setEtatCourant(c.etatTourneeCalcule);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void quitterApplication(Controleur c) {
-        System.out.println("handleClicQuitter [requests loaded state implementation] --> TODO");
-    }
 }
