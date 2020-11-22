@@ -10,15 +10,30 @@ public interface State {
     /**
      * Chargement de la carte
      */
-    void chargerCarte();
+    default void handleClicChargerCarte(Controleur c){
+        System.out.println("handleClicChargerCarte [default state implementation]");
+    }
 
     /**
-     * Chargement de la requête
+     * Chargement des requêtes
      */
-    void chargerRequete();
+    default void handleClicChargerRequetes(Controleur c){
+        System.out.println("handleClicChargerRequetes [default state implementation]");
+    }
 
     /**
      * Calcul du planning
      */
-    void calculerPlanning();
+    default void handleClicBoutonCalcul(Controleur c){
+        System.out.println("handleClicBoutonCalcul [default state implementation]");
+    }
+
+    /**
+     * Quitter l'application
+     */
+    default void handleClicQuitter(Controleur c){
+        System.out.println("handleClicQuitter [default state implementation]");
+    }
+
+
 }
