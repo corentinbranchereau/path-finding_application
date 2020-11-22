@@ -2,6 +2,7 @@ package fr.hexaone.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -12,6 +13,9 @@ import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
 import fr.hexaone.utils.exception.FileBadExtensionException;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 
 /**
@@ -88,7 +92,17 @@ public interface State {
      * Cette méthode quitte l'application
      */
     default void quitterApplication(Controleur c) {
-        Platform.exit();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quitter l'application ?");
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir quitter l'application ?");
+
+        Optional<ButtonType> decision = alert.showAndWait();
+        if (decision.get() == ButtonType.OK) {
+            Platform.exit();
+        } else {
+            // Rien
+        }
     }
 
 }
