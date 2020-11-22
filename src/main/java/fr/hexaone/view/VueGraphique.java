@@ -151,11 +151,15 @@ public class VueGraphique {
                     / (this.maxLongitude - this.minLongitude);
             double yCollecte = (collecte.getLatitude() - this.minLatitude) * this.canvas.getHeight()
                     / (this.maxLatitude - this.minLatitude);
+            // On traite les coordonnées y pour enlever l'effet "miroir"
+            yCollecte = -yCollecte + this.canvas.getHeight();
 
             double xLivraison = (livraison.getLongitude() - this.minLongitude) * this.canvas.getWidth()
                     / (this.maxLongitude - this.minLongitude);
             double yLivraison = (livraison.getLatitude() - this.minLatitude) * this.canvas.getHeight()
                     / (this.maxLatitude - this.minLatitude);
+            // On traite les coordonnées y pour enlever l'effet "miroir"
+            yLivraison = -yLivraison + this.canvas.getHeight();
 
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             gc.setFill(couleur);
