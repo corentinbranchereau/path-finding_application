@@ -53,6 +53,14 @@ public class Intersection {
         this.segmentsArrivants = new HashSet<>();
         this.segmentsPartants = new HashSet<>();
     }
+    
+    /**
+     * Getter
+     * @return l'identifiant
+     */
+    public long getId() {
+        return id;
+    }
 
     /**
      * Getter
