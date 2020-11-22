@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
- * avec vue et modèle
+ * avec vue et modèle. Inclue le design pattern STATE.
  * 
  * @author HexaOne
  * @version 1.0
