@@ -40,7 +40,7 @@ public interface State {
                 c.setCarte(new Carte());
                 XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
 
-                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
+                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte(), false);
                 c.setEtatCourant(c.etatCarteChargee);
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
@@ -67,7 +67,13 @@ public interface State {
                 c.setPlanning(new Planning());
                 XMLDeserializer.loadRequete(xmlRequete, null, c.getPlanning());
 
+                // On réaffiche d'abord la carte pour effacer les potentielles anciennes
+                // requêtes
+                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte(), true);
+
+                // On affiche ensuite les requêtes chargées
                 c.getFenetre().getVueGraphique().afficherRequetes(c.getPlanning(), c.getCarte());
+
                 c.setEtatCourant(c.etatRequetesChargees);
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de requêtes : " + e);

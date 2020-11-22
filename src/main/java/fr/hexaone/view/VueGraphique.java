@@ -27,12 +27,6 @@ public class VueGraphique {
     protected Canvas canvas;
 
     /**
-     * Canvas de sauvegarde qui n'a que la carte d'affichée. Cela permet, en cas de
-     * changement de fichier de requêtes, d'effacer les précédentes requêtes.
-     */
-    protected Canvas canvasSauvegardeCarte;
-
-    /**
      * Longitude minimale dans la carte
      */
     protected double minLongitude = Double.MAX_VALUE;
@@ -81,32 +75,37 @@ public class VueGraphique {
      * Cette méthode permet de dessiner la carte dans le canvas, en adaptant les
      * coordonnées des éléments en fonction de la taille du canvas.
      * 
-     * @param carte La carte à dessiner
+     * @param carte      La carte à dessiner
+     * @param redessiner Paramètre indiquant si la carte passée en paramètre a déjà
+     *                   été affichée précédemment, dans le cas où la première étape
+     *                   de calcul n'est pas nécessaire
      */
-    public void afficherCarte(Carte carte) {
+    public void afficherCarte(Carte carte, boolean redessiner) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setLineWidth(1.0);
 
         // On efface le canvas au cas où une carte est déjà affichée.
         gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
-        // Tout d'abord, on recherche le min et le max des longitudes et latitudes pour
-        // pouvoir adapter l'affichage en conséquence
-        this.minLongitude = Double.MAX_VALUE;
-        this.maxLongitude = Double.MIN_VALUE;
-        this.minLatitude = Double.MAX_VALUE;
-        this.maxLatitude = Double.MIN_VALUE;
-        for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
-            if (entry.getValue().getLongitude() > this.maxLongitude) {
-                this.maxLongitude = entry.getValue().getLongitude();
-            } else if (entry.getValue().getLongitude() < this.minLongitude) {
-                this.minLongitude = entry.getValue().getLongitude();
-            }
+        if (!redessiner) {
+            // Tout d'abord, on recherche le min et le max des longitudes et latitudes pour
+            // pouvoir adapter l'affichage en conséquence
+            this.minLongitude = Double.MAX_VALUE;
+            this.maxLongitude = Double.MIN_VALUE;
+            this.minLatitude = Double.MAX_VALUE;
+            this.maxLatitude = Double.MIN_VALUE;
+            for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
+                if (entry.getValue().getLongitude() > this.maxLongitude) {
+                    this.maxLongitude = entry.getValue().getLongitude();
+                } else if (entry.getValue().getLongitude() < this.minLongitude) {
+                    this.minLongitude = entry.getValue().getLongitude();
+                }
 
-            if (entry.getValue().getLatitude() > this.maxLatitude) {
-                this.maxLatitude = entry.getValue().getLatitude();
-            } else if (entry.getValue().getLatitude() < this.minLatitude) {
-                this.minLatitude = entry.getValue().getLatitude();
+                if (entry.getValue().getLatitude() > this.maxLatitude) {
+                    this.maxLatitude = entry.getValue().getLatitude();
+                } else if (entry.getValue().getLatitude() < this.minLatitude) {
+                    this.minLatitude = entry.getValue().getLatitude();
+                }
             }
         }
 
@@ -129,13 +128,9 @@ public class VueGraphique {
                 gc.strokeLine(xPos, yPos, xPos2, yPos2);
             }
         }
-
-        this.canvasSauvegardeCarte = canvas;
     }
 
     public void afficherRequetes(Planning planning, Carte carte) {
-        this.canvas = this.canvasSauvegardeCarte;
-
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
         for (Requete requete : planning.getRequetes()) {
