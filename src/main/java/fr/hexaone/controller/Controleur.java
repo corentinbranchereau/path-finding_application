@@ -67,6 +67,7 @@ public class Controleur {
         this.etatInitial = new EtatInitial();
         this.etatCarteChargee = new EtatCarteChargee();
         this.etatRequetesChargees = new EtatRequetesChargees();
+        this.etatTourneeCalcule = new EtatTourneeCalcule();
         setEtatCourant(etatInitial);
     }
 

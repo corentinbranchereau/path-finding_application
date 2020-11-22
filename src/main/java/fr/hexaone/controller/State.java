@@ -64,6 +64,7 @@ public interface State {
                 XMLDeserializer.loadRequete(xmlRequete, null, c.getPlanning());
 
                 c.getFenetre().getVueGraphique().afficherRequetes(c.getPlanning(), c.getCarte());
+                c.setEtatCourant(c.etatRequetesChargees);
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de requêtes : " + e);
             } catch (FileBadExtensionException e) {
@@ -74,8 +75,6 @@ public interface State {
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
         }
-
-        c.setEtatCourant(c.etatRequetesChargees);
     }
 
     /**
