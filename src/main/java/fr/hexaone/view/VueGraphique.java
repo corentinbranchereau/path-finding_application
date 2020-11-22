@@ -163,7 +163,9 @@ public class VueGraphique {
 
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             gc.setFill(couleur);
-            gc.fillOval(xCollecte - 5, yCollecte - 5, 10, 10);
+            // Pour le point de collecte, on dessine un carré
+            gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);
+            // Pour le point de livraison on dessine un rond
             gc.fillOval(xLivraison - 5, yLivraison - 5, 10, 10);
         }
     }
