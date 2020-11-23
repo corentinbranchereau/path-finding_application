@@ -128,6 +128,10 @@ public class VueGraphique {
             // On traite les coordonnées y pour enlever l'effet "miroir"
             yPos = -yPos + this.canvas.getHeight();
 
+            // On dessine l'intersection
+            gc.setFill(Color.GRAY);
+            gc.fillOval(xPos - 2, yPos - 2, 4, 4);
+
             for (Segment s : entry.getValue().getSegmentsPartants()) {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
                 double xPos2 = (arrivee.getLongitude() - this.minLongitude) * this.canvas.getWidth()
@@ -138,6 +142,7 @@ public class VueGraphique {
                 yPos2 = -yPos2 + this.canvas.getHeight();
 
                 // On dessine le segment
+                gc.setFill(Color.BLACK);
                 gc.strokeLine(xPos, yPos, xPos2, yPos2);
             }
         }
