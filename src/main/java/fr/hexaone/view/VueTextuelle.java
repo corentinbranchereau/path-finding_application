@@ -71,6 +71,7 @@ public class VueTextuelle {
         // écriture du point et de l'heure de départ
         Text texteDepot = new Text(
                 " ★ Départ de " + depotName + " à " + heureString + 'h' + minutesString + "\r\n\r\n");
+        texteDepot.setFill(Color.RED);
         this.zoneTexte.getChildren().add(texteDepot);
         int i = 1;
 
