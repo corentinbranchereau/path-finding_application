@@ -7,8 +7,6 @@ import java.util.Map;
 
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Requete;
-import fr.hexaone.view.VueGraphique;
-import fr.hexaone.view.VueTextuelle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
