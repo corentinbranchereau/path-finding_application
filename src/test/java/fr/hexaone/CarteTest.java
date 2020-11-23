@@ -5,6 +5,8 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -194,7 +196,6 @@ public class CarteTest {
     }
     
     
-    
     /**
      * Tes de la boucle principale de l'algorithme génétique
      */
@@ -214,15 +215,10 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
         
-        System.out.println("PASSE");
-
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
-        
-        for(int i=0;i<bestSolution.size();i++) {
-        	System.out.println(bestSolution.get(i));
-        }
-        
+
+        assert(carte.cout(bestSolution)<=81.0);
         
     }
 
