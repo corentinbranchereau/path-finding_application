@@ -70,11 +70,10 @@ public class VueTextuelle {
         this.zoneTexte.getChildren().add(texteDepot);
         int i = 1;
 
-        // parcours de map
-        for (Map.Entry<Requete, Color> requete : mapCouleurRequete.entrySet()) {
-            Set<Segment> segmentsCollecte = carte.getIntersections().get(requete.getKey().getIdPickup())
-                    .getSegmentsPartants();
-            Set<Segment> segmentsLivraison = carte.getIntersections().get(requete.getKey().getIdDelivery())
+        // parcours des requêtes
+        for (Requete requete : planning.getRequetes()) {
+            Set<Segment> segmentsCollecte = carte.getIntersections().get(requete.getIdPickup()).getSegmentsPartants();
+            Set<Segment> segmentsLivraison = carte.getIntersections().get(requete.getIdDelivery())
                     .getSegmentsPartants();
             String nomCollecte = "";
             String nomLivraison = "";
@@ -92,14 +91,14 @@ public class VueTextuelle {
             }
             Text titreText = new Text("Requête " + i + ": \r\n");
             Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - "
-                    + String.valueOf(requete.getKey().getDureePickup()) + "s" + "\r\n");
+                    + String.valueOf(requete.getDureePickup()) + "s" + "\r\n");
             Text livraisonText = new Text("     ● Livraison : " + nomLivraison + " - "
-                    + String.valueOf(requete.getKey().getDureeDelivery()) + "s" + "\r\n\n");
+                    + String.valueOf(requete.getDureeDelivery()) + "s" + "\r\n\n");
             i++;
 
-            titreText.setFill(requete.getValue());
-            collecteText.setFill(requete.getValue());
-            livraisonText.setFill(requete.getValue());
+            titreText.setFill(mapCouleurRequete.get(requete));
+            collecteText.setFill(mapCouleurRequete.get(requete));
+            livraisonText.setFill(mapCouleurRequete.get(requete));
 
             this.zoneTexte.getChildren().addAll(titreText, collecteText, livraisonText);
         }
