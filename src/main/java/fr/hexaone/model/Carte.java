@@ -105,13 +105,11 @@ public class Carte {
             String sourceId = source.getId() + "|";
 
             for (Intersection i : specialIntersections) {
-                if(i.getId() != source.getId()) {
-                    String key = sourceId + i.getId();
-                    this.cheminsLesPlusCourts.put(
-                        key,
-                        new Trajet(i.getCheminLePlusCourt(), i.getDistance())
-                    );
-                }
+                String key = sourceId + i.getId();
+                this.cheminsLesPlusCourts.put(
+                    key,
+                    new Trajet(i.getCheminLePlusCourt(), i.getDistance())
+                );
             }
 
             intersections.forEach((id,intersection) -> {
@@ -167,6 +165,8 @@ public class Carte {
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
         int BetaMax = 100;// Nb max de crossosovers sans améliorer la solution
+        int maxIter=1000;
+        int iter=0;
         
     	
     	/*int sigma = 6; // Nb chromosomes
@@ -178,23 +178,31 @@ public class Carte {
 		*/
 
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
+        
+        List<Long> chr1=this.genererChromosomeAleatoire(requetes);
+        
+        chr1=this.mutationLocalSearch(chr1,cout(chr1), requetes);
+        
+        population.add(new Pair<>(chr1,cout(chr1)));
 
-        int k = 0;
+        int k = 1;
         int nbEssais = 0;
         Random rand = new Random();
 
-        while (k <= sigma && nbEssais <= nMax) {
+        while (k <= sigma && nbEssais <= nMax ) {
         
             k++;
             nbEssais = 0;
             Pair<List<Long>, Double> chrom;
+            double cost;
             
             do {
             	 nbEssais++;
             	 List<Long> chr=genererChromosomeAleatoire(requetes);
-            	 chrom=  new Pair<>(chr,cout(chr));
+            	 cost=cout(chr);
+            	 chrom=  new Pair<>(chr,cost);
             }
-            while (nbEssais <= nMax && !espacePopulation(population, delta)) ;
+            while (nbEssais <= nMax && !espacePopulation(population, delta,cost)) ;
             if(nbEssais<=nMax) {
             	population.add(chrom);
             }    
@@ -208,19 +216,20 @@ public class Carte {
         int alpha = 0;
         int beta = 0;
 
-        // main loop GA
-        while (alpha < alphamax && beta < BetaMax) {
-            
-            for (Pair<List<Long>,Double> pair : population) {
-                //System.out.print(pair.getValue1() + " : ");
-                List<Long> ll = pair.getValue0();
-                for (Long l : ll) {
-                    //System.out.print(l+ ", ");
-                }
-                //System.out.println();
+        /*for (Pair<List<Long>,Double> pair : population) {
+     	   
+            System.out.print(pair.getValue1() + " : ");
+            List<Long> ll = pair.getValue0();
+            for (Long l : ll) {
+                System.out.print(l+ ", ");
             }
-            
-            
+            System.out.println();
+        }
+        */
+
+        // main loop GA
+        while (alpha < alphamax && beta < BetaMax && iter<=maxIter) {
+
             int indexP1 = 0;
             int indexP2 = 0;
 
@@ -244,32 +253,29 @@ public class Carte {
                     }
                 }
             }
+            
 
-
-            // TODO calculer dans le if plutot qu'avant
-            List<Long> C1 = crossoverOX(population.get(indexP1).getValue0(),
-                    population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
-                    rand.nextInt(population.get(0).getValue0().size()));
-           
-            List<Long> C2 = crossoverOX(population.get(indexP2).getValue0(),
-                    population.get(indexP1).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
-                    rand.nextInt(population.get(0).getValue0().size()));
-          
             int choiceChild = rand.nextInt(2);
 
-            List<Long> child = C2;
+            List<Long> child;
 
             if (choiceChild == 0) {
-                child = C1;
+               child= crossoverOX(population.get(indexP1).getValue0(),
+                       population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
+                       rand.nextInt(population.get(0).getValue0().size()));
             }
-            
+            else {
+            	child=crossoverOX(population.get(indexP2).getValue0(),
+                        population.get(indexP1).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
+                        rand.nextInt(population.get(0).getValue0().size()));	
+            }
+
             child=correctionCrossover(child,requetes);
 
             int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
             
             double costChild = cout(child); // to compute
             
-
            if (Math.random() < p) {
                 // mutation with LS to improve C
         	   
@@ -290,6 +296,7 @@ public class Carte {
             double ancienCout=population.get(kRand).getValue1();
      	    population.get(kRand).setAt1(-10000);
             if (this.espacePopulation(population, delta, costChild)) {
+            	iter=0;
                 // productive iteration
             	population.remove(kRand);
                 population.add(new Pair<>(child, costChild));
@@ -301,10 +308,14 @@ public class Carte {
                 } else {
                     //beta = 0;
                 }
+      
+                Collections.sort(population, ComparatorChromosome);
+                // TODO tree set 
+            }
 
-                Collections.sort(population, ComparatorChromosome); // TODO Faire un TreeSet pour trier auto ?
-            } else {
-            	population.get(kRand).setAt1(ancienCout);
+            else {
+            	 population.get(kRand).setAt1(ancienCout);
+            	 iter++;
             }
         }
         
@@ -349,7 +360,7 @@ public class Carte {
     		
     		for(int i=1;i<chromosome.size()-2;i++) {
     			for(int j=1;j<chromosome.size()-2;j++) {
-    				if(i!=j) {
+    				if(i!=j && j!=i-1 && j!=i+1) {
     					
     					long u=chromosome.get(i);
     					long v=chromosome.get(j);
@@ -381,7 +392,6 @@ public class Carte {
     	}
     	return chromosome;
     }
-    
     
     
     /**
