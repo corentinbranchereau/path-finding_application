@@ -30,7 +30,7 @@
       </MenuBar>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <AnchorPane prefHeight="736.0" prefWidth="996.0">
+            <AnchorPane fx:id="anchorPaneGraphique" prefHeight="736.0" prefWidth="996.0">
                <children>
                   <Canvas fx:id="canvas" height="736.0" width="1084.0" />
                   <Rectangle fx:id="bordureCanvas" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="736.0" stroke="BLACK" strokeType="INSIDE" width="1084.0" />
