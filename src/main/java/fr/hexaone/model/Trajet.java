@@ -30,4 +30,36 @@ public class Trajet {
         this.poids = poids;
     }
 
+    /**
+     * Getter
+     * @return la liste des intersections
+     */
+    public List<Intersection> getListeIntersections() {
+        return listeIntersections;
+    }
+
+    /**
+     * Setter
+     * @param listeIntersections
+     */
+    public void setListeIntersections(List<Intersection> listeIntersections) {
+        this.listeIntersections = listeIntersections;
+    }
+
+    /**
+     * Getter
+     * @return le poid total du trajet
+     */
+    public Double getPoids() {
+        return poids;
+    }
+
+    /**
+     * Setter
+     */
+    public void setPoids(Double poids) {
+        this.poids = poids;
+    }
+    
+
 }

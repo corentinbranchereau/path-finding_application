@@ -24,8 +24,9 @@ import org.javatuples.Pair;
  */
 public class Carte {
 
-    protected List<Trajet> cheminsLesPlusCourts;
+    protected Map<String,Trajet> cheminsLesPlusCourts;
     protected Map<Long, Intersection> intersections;
+    protected Long depotId;
 
     /**
      * Constructeur par défaut de Carte
@@ -41,23 +42,24 @@ public class Carte {
      * @return
      */
     public Planning calculerTournee(Planning planning) {
+
+        this.depotId = planning.getIdDepot();
         
         // Recherche des chemins des plus courts entre tous les points (dépots, livraisons et dépot) 
-        calculerLesCheminsLesPlusCourts(planning.getIdDepot(), planning.getRequetes());
+        calculerLesCheminsLesPlusCourts(planning.getRequetes());
         
         // Recherche de la tournée la plus rapide respectant les précédences entre dépot/livraison. 
-        Planning planning = trouverMeilleureTournee(planning.getIdDepot(), planning.getRequetes());
+        Planning planning = trouverMeilleureTournee(planning.getRequetes());
 
         return planning;
     }
 
-    private void calculerLesCheminsLesPlusCourts(Long IdDepot, List<Requete> requetes) {
-
+    private void calculerLesCheminsLesPlusCourts(List<Requete> requetes) {
 
         //Préparation
 
         List<Intersection> specialIntersections = new ArrayList<Intersection>();
-        specialIntersections.add(intersections.get(IdDepot));
+        specialIntersections.add(intersections.get(depotId));
         
         for (Requete r : requetes) {
             specialIntersections.add(intersections.get(r.getIdDelivery()));
@@ -65,7 +67,7 @@ public class Carte {
         }
 
 
-        this.cheminsLesPlusCourts = new ArrayList<Trajet>();
+        this.cheminsLesPlusCourts = new HashMap<String,Trajet>();
 
         // Calcul de tous les chemins les plus courts n fois avec dijkstra
 
@@ -98,8 +100,12 @@ public class Carte {
                 settledIntersections.add(currentIntersection);
             }
             
+            String sourceId = source.getId() + "|";
+
             for (Intersection i : specialIntersections) {
-                this.cheminsLesPlusCourts.add(
+                String key = sourceId + i.getId();
+                this.cheminsLesPlusCourts.put(
+                    key,
                     new Trajet(i.getCheminLePlusCourt(), i.getDistance())
                 );
             }
@@ -108,12 +114,16 @@ public class Carte {
                 intersection.resetIntersection();
             }); 
 
-
         }
 
-        
     }
 
+    /**
+     * 
+     * @param evaluationIntersection
+     * @param edgeWeigh
+     * @param sourceIntersection
+     */
     private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection) {
 	    Double sourceDistance = sourceIntersection.getDistance();
 	    if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
@@ -144,7 +154,7 @@ public class Carte {
      * @param depot 
      * @param requetes
      */
-    public List<Long> trouverMeilleureTournee(long idDepot , List<Requete> requetes) {
+    public List<Long> trouverMeilleureTournee(List<Requete> requetes) {
     	//TO DO
 
         /*int sigma = 10; // Nb chromosomes
@@ -176,7 +186,7 @@ public class Carte {
             
             do {
             	 nbEssais++;
-            	 chrom=  new Pair<>(genererChromosomeAleatoire(idDepot, requetes), (double)(rand.nextInt(100)+10));
+            	 chrom=  new Pair<>(genererChromosomeAleatoire(depotId, requetes), (double)(rand.nextInt(100)+10));
             }
             while (nbEssais <= nMax && !espacePopulation(population, delta)) ;
             if(nbEssais<=nMax) {
@@ -283,12 +293,17 @@ public class Carte {
      */
     public double cout(List<Long> chromosome) {
     	
-    	double somme=0;
-    	
-    	for(int i=0;i<chromosome.size();i++) {
-    		somme+=chromosome.get(i)*i*i*i;
+        double somme=0;
+        
+        Long prevIntersectionId = this.depotId;
+
+    	for (Long newId : chromosome) {
+            somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
+            prevIntersectionId = newId;
     	}
-    	
+        
+        somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids();
+
     	return somme;
     }
     
