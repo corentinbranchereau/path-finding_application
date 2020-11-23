@@ -59,6 +59,7 @@ public class Fenetre {
         this.stage = stage;
         this.controleur = controleur;
         this.vueGraphique = new VueGraphique();
+        this.vueTextuelle = new VueTextuelle();
     }
 
     /**
@@ -76,6 +77,9 @@ public class Fenetre {
 
             // On donne le canvas à la vue graphique
             this.vueGraphique.setCanvas(this.fenetreControleur.getCanvas());
+
+            // on donne la zone de texte à la vue textuelle
+            this.vueTextuelle.setZoneTexte(this.fenetreControleur.getZoneTexte());
 
             // Affichage de la scène
             Scene scene = new Scene(root);
@@ -140,5 +144,14 @@ public class Fenetre {
      */
     public VueGraphique getVueGraphique() {
         return vueGraphique;
+    }
+
+    /**
+     * Renvoie la vue textuelle de l'application.
+     * 
+     * @return La vue textuelle
+     */
+    public VueTextuelle getVueTextuelle() {
+        return vueTextuelle;
     }
 }

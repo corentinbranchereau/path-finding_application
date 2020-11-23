@@ -123,4 +123,5 @@ public class FenetreControleurFXML {
     public Button getBoutonLancer() {
         return boutonLancer;
     }
+
 }
