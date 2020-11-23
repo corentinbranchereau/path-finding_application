@@ -248,4 +248,15 @@ public class Fenetre {
     public Map<Requete, Color> getMapCouleurRequete() {
         return mapCouleurRequete;
     }
+
+    /**
+     * Cette méthode permet de réinitialiser le zoom (et la translation liée)
+     * appliqué sur la carte.
+     */
+    public void resetZoom() {
+        this.getFenetreControleur().getCanvas().setTranslateX(0);
+        this.getFenetreControleur().getCanvas().setTranslateY(0);
+        this.getFenetreControleur().getCanvas().setScaleX(1);
+        this.getFenetreControleur().getCanvas().setScaleY(1);
+    }
 }

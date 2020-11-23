@@ -40,6 +40,9 @@ public interface State {
                 c.setCarte(new Carte());
                 XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
 
+                // On réinitialise le zoom avant d'afficher la carte
+                c.getFenetre().resetZoom();
+
                 c.getFenetre().getVueGraphique().afficherCarte(c.getCarte(), false);
                 c.setEtatCourant(c.etatCarteChargee);
             } catch (IOException e) {
