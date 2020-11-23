@@ -178,7 +178,7 @@ public class XMLDeserializerTest {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
-            XMLDeserializer.loadRequete(xml, carte, planning);
+            XMLDeserializer.loadRequete(xml, planning);
             boolean testPresence = false;
             Long idPickupTest = 1400900990L, idDeliveryTest = 208769083L;
             int pickupDurationTest = 180, deliveryDurationTest = 240;
