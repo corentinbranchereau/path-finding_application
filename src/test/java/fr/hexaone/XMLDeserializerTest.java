@@ -127,7 +127,7 @@ public class XMLDeserializerTest {
     public void shouldLoadRequete() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsLarge9.xml");
             XMLDeserializer.loadRequete(xml, planning);
         } catch (Exception e) {
             fail();
