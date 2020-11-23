@@ -80,9 +80,15 @@ public class VueTextuelle {
             String nomLivraison = "";
             if (!segmentsCollecte.isEmpty()) {
                 nomCollecte = segmentsCollecte.iterator().next().getNom();
+                while ((nomCollecte.isBlank() || nomCollecte.isEmpty()) && segmentsCollecte.iterator().hasNext()) {
+                    nomCollecte = segmentsCollecte.iterator().next().getNom();
+                }
             }
             if (!segmentsLivraison.isEmpty()) {
                 nomLivraison = segmentsLivraison.iterator().next().getNom();
+                while ((nomLivraison.isBlank() || nomLivraison.isEmpty()) && segmentsLivraison.iterator().hasNext()) {
+                    nomLivraison = segmentsLivraison.iterator().next().getNom();
+                }
             }
             Text titreText = new Text("Requête " + i + ": \r\n");
             Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - "
