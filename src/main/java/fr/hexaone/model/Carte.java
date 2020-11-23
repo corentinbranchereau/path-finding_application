@@ -95,7 +95,7 @@ public class Carte {
                     Intersection adjacentIntersection = intersections.get(segmentAdjacent.getArrivee());
                     Double edgeWeight = segmentAdjacent.getLongueur();
                     if (!settledIntersections.contains(adjacentIntersection)) {
-                        CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection);
+                        CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection, segmentAdjacent);
                         unsettledIntersections.add(adjacentIntersection);
                     }
                 }
@@ -128,12 +128,12 @@ public class Carte {
      * @param edgeWeigh
      * @param sourceIntersection
      */
-    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection) {
+    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection, Segment seg) {
         Double sourceDistance = sourceIntersection.getDistance();
 	    if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
 	        evaluationIntersection.setDistance(sourceDistance + edgeWeigh);
-	        LinkedList<Intersection> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
-	        shortestPath.add(sourceIntersection);
+	        LinkedList<Segment> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
+	        shortestPath.add(seg);
 	        evaluationIntersection.setCheminLePlusCourt(shortestPath);
 	    }
 	}
@@ -208,18 +208,16 @@ public class Carte {
         int alpha = 0;
         int beta = 0;
 
-        System.out.println("startGA");
-
         // main loop GA
         while (alpha < alphamax && beta < BetaMax) {
             
             for (Pair<List<Long>,Double> pair : population) {
-                System.out.print(pair.getValue1() + " : ");
+                //System.out.print(pair.getValue1() + " : ");
                 List<Long> ll = pair.getValue0();
                 for (Long l : ll) {
-                    System.out.print(l+ ", ");
+                    //System.out.print(l+ ", ");
                 }
-                System.out.println();
+                //System.out.println();
             }
             
             
@@ -247,6 +245,8 @@ public class Carte {
                 }
             }
 
+
+            // TODO calculer dans le if plutot qu'avant
             List<Long> C1 = crossoverOX(population.get(indexP1).getValue0(),
                     population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
                     rand.nextInt(population.get(0).getValue0().size()));
@@ -287,26 +287,24 @@ public class Carte {
 
             }
             
-           double ancienCout=population.get(kRand).getValue1();
-     	   population.get(kRand).setAt1(-10000);
-
+            double ancienCout=population.get(kRand).getValue1();
+     	    population.get(kRand).setAt1(-10000);
             if (this.espacePopulation(population, delta, costChild)) {
                 // productive iteration
             	population.remove(kRand);
                 population.add(new Pair<>(child, costChild));
                 alpha++;
 
-                if (costChild > population.get(0).getValue1()) {
+                if (costChild >= population.get(0).getValue1()) {
                     beta++;
+                    System.out.println("x");
                 } else {
-                    beta = 0;
+                    //beta = 0;
                 }
 
-                Collections.sort(population, ComparatorChromosome);
-            }
-
-            else {
-            	 population.get(kRand).setAt1(ancienCout);
+                Collections.sort(population, ComparatorChromosome); // TODO Faire un TreeSet pour trier auto ?
+            } else {
+            	population.get(kRand).setAt1(ancienCout);
             }
         }
         
@@ -434,7 +432,7 @@ public class Carte {
 
     public Boolean espacePopulation(List<Pair<List<Long>, Double>> population, double ecart) {
 
-        for (int i = 1; i < population.size(); i++) {
+        for (int i = 1; i < population.size(); i++) { // TODO foreach pour pas faire get()
 
             if (Math.abs(population.get(i).getValue1() - population.get(i - 1).getValue1()) < ecart) {
                 return false;
@@ -454,7 +452,7 @@ public class Carte {
 
     public Boolean espacePopulation(List<Pair<List<Long>, Double>> population, double ecart, double valeurEnfant) {
 
-        for (int i = 0; i < population.size(); i++) {
+        for (int i = 0; i < population.size(); i++) { // TODO foreach pour pas faire get()
 
             if (Math.abs(population.get(i).getValue1() - valeurEnfant) < ecart) {
                 return false;

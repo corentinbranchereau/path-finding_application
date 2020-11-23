@@ -12,7 +12,7 @@ public class Trajet {
     /**
      * liste de toutes les intersections représenant les chemins les plus courts
      */
-    protected List<Intersection> listeIntersections;
+    protected List<Segment> listeSegments;
 
     /**
      * poids temporel total du trajet
@@ -22,28 +22,28 @@ public class Trajet {
     /**
      * constructeur de Trajet
      *
-     * @param listeIntersections
+     * @param listeSegments
      * @param poids
      */
-    public Trajet(List<Intersection> listeIntersections, Double poids) {
-        this.listeIntersections = listeIntersections;
+    public Trajet(List<Segment> listeSegments, Double poids) {
+        this.listeSegments = listeSegments;
         this.poids = poids;
     }
 
     /**
      * Getter
-     * @return la liste des intersections
+     * @return la liste des segments
      */
-    public List<Intersection> getListeIntersections() {
-        return listeIntersections;
+    public List<Segment> getListeIntersections() {
+        return listeSegments;
     }
 
     /**
      * Setter
-     * @param listeIntersections
+     * @param listeSegments
      */
-    public void setListeIntersections(List<Intersection> listeIntersections) {
-        this.listeIntersections = listeIntersections;
+    public void setListeSegments(List<Segment> listeSegments) {
+        this.listeSegments = listeSegments;
     }
 
     /**

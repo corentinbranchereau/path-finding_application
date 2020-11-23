@@ -42,9 +42,9 @@ public class Intersection {
     protected Set<Segment> segmentsPartants;
 
     /**
-     * Liste des intersection pour les calculs de chemins les plus courts
+     * Liste des segments pour les calculs de chemins les plus courts
      */
-    private List<Intersection> cheminLePlusCourt = new LinkedList<Intersection>();
+    private List<Segment> cheminLePlusCourt = new LinkedList<Segment>();
     
     /**
      * Distance entre l'intersection source et ce point. Utilisé pour le calcul
@@ -120,14 +120,14 @@ public class Intersection {
      * @return les intersections du chemin le plus court 
      * pendant le calcul du chemin le plus court
      */
-    public List<Intersection> getCheminLePlusCourt() {
+    public List<Segment> getCheminLePlusCourt() {
         return cheminLePlusCourt;
     }
 
     /**
      * Setter
      */
-    public void setCheminLePlusCourt(List<Intersection> cheminLePlusCourt) {
+    public void setCheminLePlusCourt(List<Segment> cheminLePlusCourt) {
         this.cheminLePlusCourt = cheminLePlusCourt;
     }
 
@@ -153,7 +153,7 @@ public class Intersection {
      */
     public void resetIntersection() {
         distance = Double.MAX_VALUE;
-        cheminLePlusCourt = new LinkedList<Intersection>();
+        cheminLePlusCourt = new LinkedList<Segment>();
     }
 
 
