@@ -225,11 +225,18 @@ public class VueGraphique {
             // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
             // claire.
             boolean couleurSimilairePresente;
-            boolean couleurTropClaire;
+            int maxIterations = 1000;
+            int nbIterations = 0;
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             do {
+                nbIterations++;
                 couleurSimilairePresente = false;
-                couleurTropClaire = false;
+                // On vérifie que la couleur ne soit pas trop claire
+                if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
+                        && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
+                    couleur = Color.color(couleur.getRed() - 0.2, couleur.getGreen() - 0.2, couleur.getBlue() - 0.2);
+                }
+
                 for (Color c : couleursDejaPresentes) {
                     // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
                     // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
@@ -241,12 +248,7 @@ public class VueGraphique {
                         break;
                     }
                 }
-
-                if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
-                        && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
-                    couleurTropClaire = true;
-                }
-            } while (couleurSimilairePresente || couleurTropClaire);
+            } while (couleurSimilairePresente && nbIterations < maxIterations);
 
             couleursDejaPresentes.add(couleur);
             gc.setFill(couleur);
