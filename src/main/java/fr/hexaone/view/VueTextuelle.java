@@ -44,6 +44,8 @@ public class VueTextuelle {
      * @param planning liste des segments à parcourir
      */
     public void afficherPlanning(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+        // On vide le zone de texte au cas où des choses sont déjà affichées dedans
+        this.zoneTexte.getChildren().clear();
 
         // récupération du nom du dépot
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
