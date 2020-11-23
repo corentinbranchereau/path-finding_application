@@ -18,6 +18,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -68,6 +70,26 @@ public class Fenetre {
      * Map qui contient pour chaque requête sa couleur d'affichage
      */
     protected Map<Requete, Color> mapCouleurRequete;
+
+    /**
+     * Coordonnée x du clic lors d'un "drag" pour déplacer la carte
+     */
+    protected double origineDragSceneX;
+
+    /**
+     * Coordonnée y du clic lors d'un "drag" pour déplacer la carte
+     */
+    protected double origineDragSceneY;
+
+    /**
+     * Translation x de la carte lors d'un "drag" pour la déplacer
+     */
+    protected double origineDragTranslateX;
+
+    /**
+     * Translation y de la carte lors d'un "drag" pour la déplacer
+     */
+    protected double origineDragTranslateY;
 
     /**
      * Constructeur de Fenetre
@@ -174,6 +196,72 @@ public class Fenetre {
                     timeline.play();
                     // On consomme l'événement
                     event.consume();
+                }
+            });
+
+            // Ajoute une fonctionnalité pour déplacer la carte avec la souris
+            this.fenetreControleur.getCanvas().setOnMousePressed(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    // Lorsque la souris est pressée, on retient les coordonnées initiales et la
+                    // translation initiale de la carte pour ensuite la déplacer dans le cas d'un
+                    // "drag"
+                    origineDragSceneX = event.getSceneX();
+                    origineDragSceneY = event.getSceneY();
+                    origineDragTranslateX = ((Canvas) (event.getSource())).getTranslateX();
+                    origineDragTranslateY = ((Canvas) (event.getSource())).getTranslateY();
+                }
+            });
+
+            this.fenetreControleur.getCanvas().setOnMouseDragged(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    // On calcule la translation à appliquer pour bouger la carte lors du "drag"
+                    double offsetX = event.getSceneX() - origineDragSceneX;
+                    double offsetY = event.getSceneY() - origineDragSceneY;
+                    double nouvelleTranslationX = origineDragTranslateX + offsetX;
+                    double nouvelleTranslationY = origineDragTranslateY + offsetY;
+
+                    // On calcule le delta x et le delta y que cela provoquerait
+                    double deltaX = (nouvelleTranslationX - fenetreControleur.getCanvas().getTranslateX());
+                    double deltaY = (nouvelleTranslationY - fenetreControleur.getCanvas().getTranslateY());
+
+                    Bounds boundsInParent = ((Canvas) (event.getSource())).getBoundsInParent();
+
+                    // On vérifie qu'après la translation la carte est toujours dans les limites de
+                    // l'AnchorPane (sur l'axe x)
+                    if (boundsInParent.getMaxX() + deltaX >= fenetreControleur.getAnchorPaneGraphique().getWidth()
+                            && boundsInParent.getMinX() + deltaX <= 0) {
+                        // On translate la carte selon l'axe x
+                        ((Canvas) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                    } else {
+                        // On applique la translation maximale sans dépasser la bordure
+                        if (boundsInParent.getMaxX() + deltaX < fenetreControleur.getAnchorPaneGraphique().getWidth()) {
+                            nouvelleTranslationX = fenetreControleur.getAnchorPaneGraphique().getWidth()
+                                    - boundsInParent.getMaxX() + fenetreControleur.getCanvas().getTranslateX();
+                        } else {
+                            nouvelleTranslationX = fenetreControleur.getCanvas().getTranslateX()
+                                    - boundsInParent.getMinX();
+                        }
+                        ((Canvas) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                    }
+
+                    // On vérifie qu'après la translation la carte est toujours dans les limites de
+                    // l'AnchorPane (sur l'axe y)
+                    if (boundsInParent.getMaxY() + deltaY >= fenetreControleur.getAnchorPaneGraphique().getHeight()
+                            && boundsInParent.getMinY() + deltaY <= 0) {
+                        // On translate la carte selon l'axe y
+                        ((Canvas) (event.getSource())).setTranslateY(nouvelleTranslationY);
+                    } else {
+                        // On applique la translation maximale sans dépasser la bordure
+                        if (boundsInParent.getMaxY() + deltaY < fenetreControleur.getAnchorPaneGraphique()
+                                .getHeight()) {
+                            nouvelleTranslationY = fenetreControleur.getAnchorPaneGraphique().getHeight()
+                                    - boundsInParent.getMaxY() + fenetreControleur.getCanvas().getTranslateY();
+                        } else {
+                            nouvelleTranslationY = fenetreControleur.getCanvas().getTranslateY()
+                                    - boundsInParent.getMinY();
+                        }
+                        ((Canvas) (event.getSource())).setTranslateY(nouvelleTranslationY);
+                    }
                 }
             });
 
