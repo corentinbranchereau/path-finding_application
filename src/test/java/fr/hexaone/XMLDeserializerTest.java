@@ -138,16 +138,15 @@ public class XMLDeserializerTest {
      * Test le chargement des requêtes avec un fichier XML correct en vérifiant les
      * propriétés du depot.
      */
-    // TODO : Bug Date
     @Test
-    @Disabled
     public void shouldLoadRequeteDepot() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, planning);
-            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()), () -> assertTrue(
-                    planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")) == 0));
+            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()),
+                    () -> assertEquals(planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")),
+                            0));
         } catch (Exception e) {
             fail();
         }
