@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
 
@@ -60,6 +62,12 @@ public class FenetreControleurFXML {
      */
     @FXML
     protected Button boutonLancer;
+
+    /**
+     * AnchorPane contenant le canvas de dessin (vue graphique)
+     */
+    @FXML
+    protected AnchorPane anchorPaneGraphique;
 
     /**
      * Renvoie l'item du menu permettant de charger une carte.
@@ -124,4 +132,12 @@ public class FenetreControleurFXML {
         return boutonLancer;
     }
 
+    /**
+     * Renvoie le AnchorPane contenant le canvas de dessin
+     * 
+     * @return Le AnchorPane contenant le canvas de dessin
+     */
+    public AnchorPane getAnchorPaneGraphique() {
+        return anchorPaneGraphique;
+    }
 }

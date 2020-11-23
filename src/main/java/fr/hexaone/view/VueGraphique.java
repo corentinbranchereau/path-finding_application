@@ -128,6 +128,10 @@ public class VueGraphique {
             // On traite les coordonnées y pour enlever l'effet "miroir"
             yPos = -yPos + this.canvas.getHeight();
 
+            // On dessine l'intersection
+            gc.setFill(Color.GRAY);
+            gc.fillOval(xPos - 2, yPos - 2, 4, 4);
+
             for (Segment s : entry.getValue().getSegmentsPartants()) {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
                 double xPos2 = (arrivee.getLongitude() - this.minLongitude) * this.canvas.getWidth()
@@ -138,6 +142,7 @@ public class VueGraphique {
                 yPos2 = -yPos2 + this.canvas.getHeight();
 
                 // On dessine le segment
+                gc.setFill(Color.BLACK);
                 gc.strokeLine(xPos, yPos, xPos2, yPos2);
             }
         }
@@ -149,7 +154,10 @@ public class VueGraphique {
      * @param planning Le planning actuel de l'application, contenant les requêtes
      * @param carte    La carte actuelle de l'application
      */
-    public void afficherRequetes(Planning planning, Carte carte) {
+    public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+        // On réinitialise la map d'association Requete <-> Couleur
+        mapCouleurRequete.clear();
+
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
         // Dessin du dépôt (sous la forme d'une étoile)
@@ -227,6 +235,9 @@ public class VueGraphique {
 
             couleursDejaPresentes.add(couleur);
             gc.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(requete, couleur);
 
             // Pour le point de collecte, on dessine un carré
             gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);

@@ -2,16 +2,27 @@ package fr.hexaone.view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.model.Requete;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Permet d'afficher la fenêtre d'IHM.
@@ -49,6 +60,16 @@ public class Fenetre {
     protected Controleur controleur;
 
     /**
+     * Variable indiquant la vitesse de l'animation de zoom
+     */
+    protected final double VITESSE_ZOOM = 100;
+
+    /**
+     * Map qui contient pour chaque requête sa couleur d'affichage
+     */
+    protected Map<Requete, Color> mapCouleurRequete;
+
+    /**
      * Constructeur de Fenetre
      * 
      * @param stage      le conteneur principal des éléments graphiques de
@@ -60,6 +81,7 @@ public class Fenetre {
         this.controleur = controleur;
         this.vueGraphique = new VueGraphique();
         this.vueTextuelle = new VueTextuelle();
+        this.mapCouleurRequete = new HashMap<>();
     }
 
     /**
@@ -88,6 +110,69 @@ public class Fenetre {
             this.stage.setTitle("TITRE A DEFINIR");
 
             this.stage.show();
+
+            // On met un clip sur le anchor pane pour ne pas que le contenu dépasse
+            this.fenetreControleur.getAnchorPaneGraphique()
+                    .setClip(new Rectangle(this.fenetreControleur.getAnchorPaneGraphique().getWidth(),
+                            this.fenetreControleur.getAnchorPaneGraphique().getHeight()));
+
+            // Ajoute une fonctionnalité de zoom sur la carte
+            this.fenetreControleur.getAnchorPaneGraphique().setOnScroll(new EventHandler<ScrollEvent>() {
+                public void handle(ScrollEvent event) {
+                    double facteurZoom = 0.0;
+                    if (event.getTextDeltaY() > 0) {
+                        // Zoom
+                        facteurZoom = 2;
+                    } else {
+                        // Dézoom
+                        facteurZoom = 0.5;
+                    }
+
+                    Timeline timeline = new Timeline(60);
+                    double ancienScale = fenetreControleur.canvas.getScaleX();
+                    double nouveauScale = ancienScale * facteurZoom;
+                    double translationX = 0.0;
+                    double translationY = 0.0;
+
+                    if (nouveauScale <= 1) {
+                        // On ne peut pas plus dézoomer
+                        nouveauScale = 1;
+                        // On remet la carte à sa place initiale
+                        translationX = 0;
+                        translationY = 0;
+
+                    } else {
+                        // On ajuste le facteur de zoom
+                        facteurZoom = (nouveauScale / ancienScale) - 1;
+
+                        // On calcule la translation nécessaire pour centrer la carte à l'endroit du
+                        // zoom
+                        double xCentre = event.getSceneX();
+                        double yCentre = event.getSceneY();
+                        Bounds bounds = fenetreControleur.canvas
+                                .localToScene(fenetreControleur.canvas.getBoundsInLocal());
+                        double deltaX = (xCentre - (bounds.getWidth() / 2 + bounds.getMinX()));
+                        double deltaY = (yCentre - (bounds.getHeight() / 2 + bounds.getMinY()));
+                        translationX = fenetreControleur.canvas.getTranslateX() - facteurZoom * deltaX;
+                        translationY = fenetreControleur.canvas.getTranslateY() - facteurZoom * deltaY;
+                    }
+
+                    // On utilise une timeline pour faire une animation de zoom/dézoom
+                    timeline.getKeyFrames().clear();
+                    timeline.getKeyFrames()
+                            .addAll(new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                    new KeyValue(fenetreControleur.canvas.translateXProperty(), translationX)),
+                                    new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                            new KeyValue(fenetreControleur.canvas.translateYProperty(), translationY)),
+                                    new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                            new KeyValue(fenetreControleur.canvas.scaleXProperty(), nouveauScale)),
+                                    new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                            new KeyValue(fenetreControleur.canvas.scaleYProperty(), nouveauScale)));
+                    timeline.play();
+                    // On consomme l'événement
+                    event.consume();
+                }
+            });
 
             // Définition des handlers sur les éléments du menu
             fenetreControleur.getChargerCarteItem().setOnAction(new EventHandler<ActionEvent>() {
@@ -153,5 +238,14 @@ public class Fenetre {
      */
     public VueTextuelle getVueTextuelle() {
         return vueTextuelle;
+    }
+
+    /**
+     * Renvoie la map d'association entre les requêtes et les couleurs
+     * 
+     * @return La map d'association entre les requêtes et les couleurs
+     */
+    public Map<Requete, Color> getMapCouleurRequete() {
+        return mapCouleurRequete;
     }
 }
