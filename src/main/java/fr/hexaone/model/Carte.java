@@ -35,6 +35,8 @@ public class Carte {
         intersections = new HashMap<>();
     }
 
+    
+
     /**
      * Recherche de la tournée la plus rapide
      *
@@ -54,7 +56,7 @@ public class Carte {
         return planning;
     }
 
-    private void calculerLesCheminsLesPlusCourts(List<Requete> requetes) {
+    public void calculerLesCheminsLesPlusCourts(List<Requete> requetes) {
 
         //Préparation
 
@@ -90,7 +92,7 @@ public class Carte {
                 Intersection currentIntersection = unsettledIntersections.first();
                 unsettledIntersections.remove(currentIntersection);
                 for (Segment segmentAdjacent: currentIntersection.getSegmentsPartants()) {
-                    Intersection adjacentIntersection = intersections.get(segmentAdjacent.getDepart());
+                    Intersection adjacentIntersection = intersections.get(segmentAdjacent.getArrivee());
                     Double edgeWeight = segmentAdjacent.getLongueur();
                     if (!settledIntersections.contains(adjacentIntersection)) {
                         CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection);
@@ -103,11 +105,13 @@ public class Carte {
             String sourceId = source.getId() + "|";
 
             for (Intersection i : specialIntersections) {
-                String key = sourceId + i.getId();
-                this.cheminsLesPlusCourts.put(
-                    key,
-                    new Trajet(i.getCheminLePlusCourt(), i.getDistance())
-                );
+                if(i.getId() != source.getId()) {
+                    String key = sourceId + i.getId();
+                    this.cheminsLesPlusCourts.put(
+                        key,
+                        new Trajet(i.getCheminLePlusCourt(), i.getDistance())
+                    );
+                }
             }
 
             intersections.forEach((id,intersection) -> {
@@ -125,7 +129,7 @@ public class Carte {
      * @param sourceIntersection
      */
     private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection) {
-	    Double sourceDistance = sourceIntersection.getDistance();
+        Double sourceDistance = sourceIntersection.getDistance();
 	    if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
 	        evaluationIntersection.setDistance(sourceDistance + edgeWeigh);
 	        LinkedList<Intersection> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
@@ -162,7 +166,7 @@ public class Carte {
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
-        int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
+        int BetaMax = 100;// Nb max de crossosovers sans améliorer la solution
         
     	
     	/*int sigma = 6; // Nb chromosomes
@@ -204,9 +208,21 @@ public class Carte {
         int alpha = 0;
         int beta = 0;
 
+        System.out.println("startGA");
+
         // main loop GA
         while (alpha < alphamax && beta < BetaMax) {
-          
+            
+            for (Pair<List<Long>,Double> pair : population) {
+                System.out.print(pair.getValue1() + " : ");
+                List<Long> ll = pair.getValue0();
+                for (Long l : ll) {
+                    System.out.print(l+ ", ");
+                }
+                System.out.println();
+            }
+            
+            
             int indexP1 = 0;
             int indexP2 = 0;
 
@@ -280,8 +296,10 @@ public class Carte {
                 population.add(new Pair<>(child, costChild));
                 alpha++;
 
-                if (costChild < population.get(0).getValue1()) {
+                if (costChild > population.get(0).getValue1()) {
                     beta++;
+                } else {
+                    beta = 0;
                 }
 
                 Collections.sort(population, ComparatorChromosome);
@@ -593,5 +611,20 @@ public class Carte {
      */
     public Map<Long, Intersection> getIntersections() {
         return intersections;
+    }
+
+    /**
+     * Getter
+     * @return l'id du dépot
+     */
+    public Long getDepotId() {
+        return depotId;
+    }
+
+    /**
+     * Setter
+     */
+    public void setDepotId(Long depotId) {
+        this.depotId = depotId;
     }
 }

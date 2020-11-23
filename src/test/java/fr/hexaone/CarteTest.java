@@ -1,11 +1,15 @@
 package fr.hexaone;
 
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Requete;
+import fr.hexaone.model.Segment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +29,6 @@ public class CarteTest {
     @BeforeEach
     void init() {
         carte = new Carte();
-
     }
     
 
@@ -169,16 +172,49 @@ public class CarteTest {
     @Test
     public void GaTest() {
 
-    	List<Requete> requetes = new ArrayList<Requete>();
+        // Création d'un grap simple
+        createSimpleGraph();
 
-	    requetes.add(new Requete((long)1,0,(long)3,0));
-	    requetes.add(new Requete((long)4,0,(long)9,0));
-	    requetes.add(new Requete((long)5,0,(long)7,0));
-	    
-	    List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
+        // Création des requetes
+    	List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        //recherche de la meilleur solution
+        List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
+        
+        for (Long l : bestSolution) {
+            System.out.println(l);
+        }
 
 	    assert (carte.verifierPop(bestSolution, requetes) == true);  
         
+    }
+
+    @Test
+    public void coutTest() {
+
+        //Création d'un graphe simple
+        createSimpleGraph();
+        
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+         
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        List<Long> chromosome = new ArrayList<Long>();
+    	chromosome.add((long)1);
+        chromosome.add((long)3);
+        
+        Double cout = carte.cout(chromosome);
+
+        System.out.print(cout);
+
+        assert(cout == 5);
     }
     
     /**
@@ -212,6 +248,97 @@ public class CarteTest {
 
 	    
 	    assert(carte.cout(mutation)<=carte.cout(P1));
+        
+    }
+
+    @Test
+    public void rechercheDesPlusCourtsChemins(){
+
+        //Création d'un graphe
+        createSimpleGraph();
+
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        // Vérification des résultats
+        assert(carte.getCheminsLesPlusCourts().size() == 6);
+
+        carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
+            switch (key) {
+                case "0|1":
+                    assert(value.getPoids() == 1.);
+                    break;
+                case "0|3":
+                    assert(value.getPoids() == 3.);
+                    break;
+                case "1|0":
+                    assert(value.getPoids() == 1.);
+                    break;
+                case "1|3":
+                    assert(value.getPoids() == 2.);
+                    break;
+                case "3|0":
+                    assert(value.getPoids() == 2.);
+                    break;
+                case "3|1":
+                    assert(value.getPoids() == 2.);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+    private void createSimpleGraph() {
+        
+        carte.setDepotId((long)0);
+
+        Intersection i0 = new Intersection(0, 0, 0);
+        Intersection i1 = new Intersection(1, 0, 0);
+        Intersection i2 = new Intersection(2, 0, 0);
+        Intersection i3 = new Intersection(3, 0, 0);
+
+        Segment s01 = new Segment(1, "nom", 0, 1);
+        Segment s02 = new Segment(3, "nom", 0, 2);
+        Segment s03 = new Segment(4, "nom", 0, 3);
+        Segment s10 = new Segment(1, "nom", 1, 0);
+        Segment s12 = new Segment(1, "nom", 1, 2);
+        Segment s20 = new Segment(1, "nom", 2, 0);
+        Segment s21 = new Segment(1, "nom", 2, 1);
+        Segment s23 = new Segment(1, "nom", 2, 3);
+        Segment s30 = new Segment(4, "nom", 3, 0);
+        Segment s32 = new Segment(1, "nom", 3, 2);
+
+        Set<Segment> set0 = new HashSet<Segment>();
+        Set<Segment> set1 = new HashSet<Segment>();
+        Set<Segment> set2 = new HashSet<Segment>();
+        Set<Segment> set3 = new HashSet<Segment>();
+
+        set0.add(s01);
+        set0.add(s02);
+        set0.add(s03);
+        set1.add(s10);
+        set1.add(s12);
+        set2.add(s20);
+        set2.add(s21);
+        set2.add(s23);
+        set3.add(s30);
+        set3.add(s32);
+
+        i0.setSegmentsPartants(set0);
+        i1.setSegmentsPartants(set1);
+        i2.setSegmentsPartants(set2);
+        i3.setSegmentsPartants(set3);
+
+        carte.getIntersections().put(i0.getId(), i0);
+        carte.getIntersections().put(i1.getId(), i1);
+        carte.getIntersections().put(i2.getId(), i2);
+        carte.getIntersections().put(i3.getId(), i3);
+
         
     }
     

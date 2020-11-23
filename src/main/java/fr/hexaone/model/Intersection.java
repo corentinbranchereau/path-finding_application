@@ -65,6 +65,7 @@ public class Intersection {
         this.longitude = longitude;
         this.segmentsArrivants = new HashSet<>();
         this.segmentsPartants = new HashSet<>();
+        this.distance = Double.MAX_VALUE;
     }
     
     /**
@@ -108,6 +109,13 @@ public class Intersection {
     }
 
     /**
+     * Setter
+     */
+    public void setSegmentsPartants(Set<Segment> segmentsPartants) {
+        this.segmentsPartants = segmentsPartants;
+    }
+
+    /**
      * Getter
      * @return les intersections du chemin le plus court 
      * pendant le calcul du chemin le plus court
@@ -147,5 +155,7 @@ public class Intersection {
         distance = Double.MAX_VALUE;
         cheminLePlusCourt = new LinkedList<Intersection>();
     }
+
+
 
 }
