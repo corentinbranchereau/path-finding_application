@@ -3,6 +3,7 @@ package fr.hexaone.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +56,13 @@ public class Carte {
 
         return planning;
     }
+    
+    public static Comparator ComparatorChemin = new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
+        @Override
+        public int compare(Intersection o1, Intersection o2) {
+            return (int)(o1.getDistance()-o2.getDistance());
+        }
+    };
 
     public void calculerLesCheminsLesPlusCourts(List<Requete> requetes) {
 
@@ -78,30 +86,43 @@ public class Carte {
             source.setDistance(0.);
 
             Set<Intersection> settledIntersections = new HashSet<Intersection>();
-            SortedSet<Intersection> unsettledIntersections = new TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
+            
+            ArrayList<Intersection> unsettledIntersections = new ArrayList<Intersection>();
+          
+            
+            /*SortedSet<Intersection> unsettledIntersections = new TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
                 @Override
                 public int compare(Intersection o1, Intersection o2) {
                     return (int)(o1.getDistance()-o2.getDistance());
                 }
             });
-
+            */
 
             unsettledIntersections.add(source);
         
             while (unsettledIntersections.size() != 0) {
-                Intersection currentIntersection = unsettledIntersections.first();
-                unsettledIntersections.remove(currentIntersection);
+            	
+                //Intersection currentIntersection = unsettledIntersections.first();
+            	
+            	Intersection currentIntersection = unsettledIntersections.get(0);
+            	
+            	unsettledIntersections.remove(0);
+
                 for (Segment segmentAdjacent: currentIntersection.getSegmentsPartants()) {
                     Intersection adjacentIntersection = intersections.get(segmentAdjacent.getArrivee());
                     Double edgeWeight = segmentAdjacent.getLongueur();
                     if (!settledIntersections.contains(adjacentIntersection)) {
                         CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection, segmentAdjacent);
                         unsettledIntersections.add(adjacentIntersection);
+         
                     }
                 }
+                
+                Collections.sort(unsettledIntersections,this.ComparatorChemin);
                 settledIntersections.add(currentIntersection);
+
             }
-            
+
             String sourceId = source.getId() + "|";
 
             for (Intersection i : specialIntersections) {
