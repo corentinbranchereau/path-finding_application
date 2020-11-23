@@ -74,7 +74,8 @@ public interface State {
                 // On affiche ensuite les requêtes chargées
                 c.getFenetre().getVueGraphique().afficherRequetes(c.getPlanning(), c.getCarte(),
                         c.getFenetre().getMapCouleurRequete());
-                c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+                c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
+                        c.getFenetre().getMapCouleurRequete());
 
                 c.setEtatCourant(c.etatRequetesChargees);
             } catch (IOException e) {

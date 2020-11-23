@@ -2,7 +2,9 @@ package fr.hexaone.view;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import fr.hexaone.model.Carte;
@@ -11,6 +13,7 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -40,7 +43,7 @@ public class VueTextuelle {
      * 
      * @param planning liste des segments à parcourir
      */
-    public void afficherPlanning(Planning planning, Carte carte) {
+    public void afficherPlanning(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
 
         // récupération du nom du dépot
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
@@ -60,11 +63,13 @@ public class VueTextuelle {
         // écriture du point et de l'heure de départ
         Text texteDepot = new Text(" ★ Départ de " + depotName + " à " + heure + 'h' + minutes + "\r\n\r\n");
         this.zoneTexte.getChildren().add(texteDepot);
-        int i = 0;
+        int i = 1;
 
-        for (Requete requete : planning.getRequetes()) {
-            Set<Segment> segmentsCollecte = carte.getIntersections().get(requete.getIdPickup()).getSegmentsPartants();
-            Set<Segment> segmentsLivraison = carte.getIntersections().get(requete.getIdDelivery())
+        // parcours de map
+        for (Map.Entry<Requete, Color> requete : mapCouleurRequete.entrySet()) {
+            Set<Segment> segmentsCollecte = carte.getIntersections().get(requete.getKey().getIdPickup())
+                    .getSegmentsPartants();
+            Set<Segment> segmentsLivraison = carte.getIntersections().get(requete.getKey().getIdDelivery())
                     .getSegmentsPartants();
             String nomCollecte = "";
             String nomLivraison = "";
@@ -74,12 +79,18 @@ public class VueTextuelle {
             if (!segmentsLivraison.isEmpty()) {
                 nomLivraison = segmentsLivraison.iterator().next().getNom();
             }
-            this.zoneTexte.getChildren().add(new Text("" + i + "\r\n"));
-            this.zoneTexte.getChildren().add(new Text("     ■ Collecte : " + nomCollecte + " - "
-                    + String.valueOf(requete.getDureePickup()) + "s" + "\r\n"));
-            this.zoneTexte.getChildren().add(new Text("     ● Livraison : " + nomLivraison + " - "
-                    + String.valueOf(requete.getDureeDelivery()) + "s" + "\r\n\n"));
+            Text titreText = new Text("requête " + i + ": \r\n");
+            Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - "
+                    + String.valueOf(requete.getKey().getDureePickup()) + "s" + "\r\n");
+            Text livraisonText = new Text("     ● Livraison : " + nomLivraison + " - "
+                    + String.valueOf(requete.getKey().getDureeDelivery()) + "s" + "\r\n\n");
             i++;
+
+            titreText.setFill(requete.getValue());
+            collecteText.setFill(requete.getValue());
+            livraisonText.setFill(requete.getValue());
+
+            this.zoneTexte.getChildren().addAll(titreText, collecteText, livraisonText);
         }
     }
 
