@@ -9,6 +9,7 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import fr.hexaone.model.Trajet;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -243,6 +244,51 @@ public class VueGraphique {
             gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);
             // Pour le point de livraison on dessine un rond
             gc.fillOval(xLivraison - 5, yLivraison - 5, 10, 10);
+        }
+    }
+
+    /**
+     * Cette méthode permet de dessiner le trajet passé en paramètre avec la couleur
+     * choisie.
+     * 
+     * @param carte   La carte actuelle de l'application, contenant les
+     *                intersections
+     * @param trajet  Le trajet à dessiner
+     * @param couleur La couleur du trajet
+     */
+    public void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
+        GraphicsContext gc = this.canvas.getGraphicsContext2D();
+
+        // On parcourt tous les segments composant le trajet
+        for (Segment segment : trajet.getListeSegments()) {
+            // On calcule les coordonnées du départ et de l'arrivée
+            Intersection depart = carte.getIntersections().get(segment.getDepart());
+            double xDepart = (depart.getLongitude() - this.minLongitude) * this.canvas.getWidth()
+                    / (this.maxLongitude - this.minLongitude);
+            double yDepart = (depart.getLatitude() - this.minLatitude) * this.canvas.getHeight()
+                    / (this.maxLatitude - this.minLatitude);
+            yDepart = -yDepart + this.canvas.getHeight();
+
+            Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
+            double xArrivee = (arrivee.getLongitude() - this.minLongitude) * this.canvas.getWidth()
+                    / (this.maxLongitude - this.minLongitude);
+            double yArrivee = (arrivee.getLatitude() - this.minLatitude) * this.canvas.getHeight()
+                    / (this.maxLatitude - this.minLatitude);
+            yArrivee = -yArrivee + this.canvas.getHeight();
+
+            // On affiche le segment
+            gc.setStroke(couleur);
+            gc.setLineWidth(3.0);
+            gc.strokeLine(xDepart, yDepart, xArrivee, yArrivee);
+
+            // On redessine par dessus les intersections correspondantes
+            gc.setFill(Color.GRAY);
+            gc.fillOval(xDepart - 2, yDepart - 2, 4, 4);
+            gc.fillOval(xArrivee - 2, yArrivee - 2, 4, 4);
+
+            gc.setFill(couleur);
+            gc.fillOval(xDepart - 1, yDepart - 1, 2, 2);
+            gc.fillOval(xArrivee - 1, yArrivee - 1, 2, 2);
         }
     }
 }

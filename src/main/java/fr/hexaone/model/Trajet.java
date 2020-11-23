@@ -30,4 +30,7 @@ public class Trajet {
         this.poids = poids;
     }
 
+    public List<Segment> getListeSegments() {
+        return listeSegments;
+    }
 }
