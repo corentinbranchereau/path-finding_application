@@ -60,10 +60,13 @@ public class VueTextuelle {
         Calendar date = Calendar.getInstance();
         date.setTime(dateDebut);
         int heure = date.get(Calendar.HOUR_OF_DAY);
+        String heureString = heure < 10 ? ("0" + heure) : String.valueOf(heure);
         int minutes = date.get(Calendar.MINUTE);
+        String minutesString = minutes < 10 ? ("0" + minutes) : String.valueOf(minutes);
 
         // écriture du point et de l'heure de départ
-        Text texteDepot = new Text(" ★ Départ de " + depotName + " à " + heure + 'h' + minutes + "\r\n\r\n");
+        Text texteDepot = new Text(
+                " ★ Départ de " + depotName + " à " + heureString + 'h' + minutesString + "\r\n\r\n");
         this.zoneTexte.getChildren().add(texteDepot);
         int i = 1;
 
@@ -81,7 +84,7 @@ public class VueTextuelle {
             if (!segmentsLivraison.isEmpty()) {
                 nomLivraison = segmentsLivraison.iterator().next().getNom();
             }
-            Text titreText = new Text("requête " + i + ": \r\n");
+            Text titreText = new Text("Requête " + i + ": \r\n");
             Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - "
                     + String.valueOf(requete.getKey().getDureePickup()) + "s" + "\r\n");
             Text livraisonText = new Text("     ● Livraison : " + nomLivraison + " - "
