@@ -185,11 +185,11 @@ public class CarteTest {
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
         
-        for (Long l : bestSolution) {
-            System.out.println(l);
-        }
-
-	    assert (carte.verifierPop(bestSolution, requetes) == true);  
+        assert(bestSolution.size()==2);
+        
+        assert(bestSolution.get(0)==1);
+        assert(bestSolution.get(1)==3);
+        
         
     }
 
@@ -212,8 +212,6 @@ public class CarteTest {
         
         Double cout = carte.cout(chromosome);
 
-        System.out.print(cout);
-
         assert(cout == 5);
     }
     
@@ -223,27 +221,22 @@ public class CarteTest {
 
     @Test
     public void MutationLocalSearchTest() {
+    	 
+    	//Création d'un graphe
+        createSimpleGraph();
 
-    	List<Requete> requetes = new ArrayList<Requete>();
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
 
-	    requetes.add(new Requete((long)1,0,(long)5,0));
-	    requetes.add(new Requete((long)4,0,(long)2,0));
-	    requetes.add(new Requete((long)8,0,(long)6,0));
-	    requetes.add(new Requete((long)100,0,(long)3,0));
-	    
 	    List<Long> P1 = new ArrayList<Long>();
 
-    	P1.add((long)0);
     	P1.add((long)1);
-    	P1.add((long)8);
-    	P1.add((long)6);
-    	P1.add((long)4);
-    	P1.add((long)2);
     	P1.add((long)3);
-    	P1.add((long)0);
-    	P1.add((long)100);
-    	P1.add((long)3);
-    	
+
 	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
 
 	    
@@ -265,10 +258,21 @@ public class CarteTest {
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
         // Vérification des résultats
-        assert(carte.getCheminsLesPlusCourts().size() == 6);
+        assert(carte.getCheminsLesPlusCourts().size() == 9);
 
         carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
             switch (key) {
+	            case "0|0":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "1|1":
+	                assert(value.getPoids() == 0.);
+	                break;
+	                
+	            case "3|3":
+	                assert(value.getPoids() == 0.);
+	                break;
+	                
                 case "0|1":
                     assert(value.getPoids() == 1.);
                     break;
