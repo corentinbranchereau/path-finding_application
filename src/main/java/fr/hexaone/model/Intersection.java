@@ -1,6 +1,8 @@
 package fr.hexaone.model;
 
+import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,6 +40,17 @@ public class Intersection {
      * tournée
      */
     protected Set<Segment> segmentsPartants;
+
+    /**
+     * Liste des intersection pour les calculs de chemins les plus courts
+     */
+    private List<Intersection> cheminLePlusCourt = new LinkedList<Intersection>();
+    
+    /**
+     * Distance entre l'intersection source et ce point. Utilisé pour le calcul
+     * de chemins les plus courts
+     */
+    private Double distance = Double.MAX_VALUE;
 
     /**
      * constructeur d'Intersection
@@ -93,4 +106,46 @@ public class Intersection {
     public Set<Segment> getSegmentsPartants() {
         return segmentsPartants;
     }
+
+    /**
+     * Getter
+     * @return les intersections du chemin le plus court 
+     * pendant le calcul du chemin le plus court
+     */
+    public List<Intersection> getCheminLePlusCourt() {
+        return cheminLePlusCourt;
+    }
+
+    /**
+     * Setter
+     */
+    public void setCheminLePlusCourt(List<Intersection> cheminLePlusCourt) {
+        this.cheminLePlusCourt = cheminLePlusCourt;
+    }
+
+    /**
+     * Getter
+     * @return la distance à la source pendant le calcul du
+     * chemin le plus court 
+     */
+    public Double getDistance() {
+        return distance;
+    }
+
+    /**
+     * Setter
+     */
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+    
+    /**
+     * Remet à zero les variables utilisées pour calculer les 
+     * chemins les plus courts.
+     */
+    public void resetIntersection() {
+        distance = Double.MAX_VALUE;
+        cheminLePlusCourt = new LinkedList<Intersection>();
+    }
+
 }

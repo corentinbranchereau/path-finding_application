@@ -10,23 +10,23 @@ import java.util.List;
  */
 public class Trajet {
     /**
-     * liste de tous les segments représenant les chemins les plus courts
+     * liste de toutes les intersections représenant les chemins les plus courts
      */
-    protected List<Segment> listeSegments;
+    protected List<Intersection> listeIntersections;
 
     /**
      * poids temporel total du trajet
      */
-    protected int poids;
+    protected Double poids;
 
     /**
      * constructeur de Trajet
      *
-     * @param listeSegments
+     * @param listeIntersections
      * @param poids
      */
-    public Trajet(List<Segment> listeSegments, int poids) {
-        this.listeSegments = listeSegments;
+    public Trajet(List<Intersection> listeIntersections, Double poids) {
+        this.listeIntersections = listeIntersections;
         this.poids = poids;
     }
 

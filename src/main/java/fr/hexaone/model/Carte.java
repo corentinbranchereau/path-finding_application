@@ -1,13 +1,17 @@
 
 package fr.hexaone.model;
 
-
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Comparator;
 import org.javatuples.Pair;
 
@@ -31,26 +35,95 @@ public class Carte {
     }
 
     /**
-     * Calculer une tournée et l'inscrit dans le planning
+     * Recherche de la tournée la plus rapide
      *
      * @param planning
      * @return
      */
     public Planning calculerTournee(Planning planning) {
-        // TODO
+        
+        // Recherche des chemins des plus courts entre tous les points (dépots, livraisons et dépot) 
+        calculerLesCheminsLesPlusCourts(planning.getIdDepot(), planning.getRequetes());
+        
+        // Recherche de la tournée la plus rapide respectant les précédences entre dépot/livraison. 
+        Planning planning = trouverMeilleureTournee(planning.getIdDepot(), planning.getRequetes());
+
         return planning;
-
     }
 
-    private void calculerLesCheminsLesPlusCourts() {
-        // TODO
+    private void calculerLesCheminsLesPlusCourts(Long IdDepot, List<Requete> requetes) {
 
+
+        //Préparation
+
+        List<Intersection> specialIntersections = new ArrayList<Intersection>();
+        specialIntersections.add(intersections.get(IdDepot));
+        
+        for (Requete r : requetes) {
+            specialIntersections.add(intersections.get(r.getIdDelivery()));
+            specialIntersections.add(intersections.get(r.getIdPickup()));
+        }
+
+
+        this.cheminsLesPlusCourts = new ArrayList<Trajet>();
+
+        // Calcul de tous les chemins les plus courts n fois avec dijkstra
+
+        for (Intersection source : specialIntersections) {
+
+            source.setDistance(0.);
+
+            Set<Intersection> settledIntersections = new HashSet<Intersection>();
+            SortedSet<Intersection> unsettledIntersections = new TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
+                @Override
+                public int compare(Intersection o1, Intersection o2) {
+                    return (int)(o1.getDistance()-o2.getDistance());
+                }
+            });
+
+
+            unsettledIntersections.add(source);
+        
+            while (unsettledIntersections.size() != 0) {
+                Intersection currentIntersection = unsettledIntersections.first();
+                unsettledIntersections.remove(currentIntersection);
+                for (Segment segmentAdjacent: currentIntersection.getSegmentsPartants()) {
+                    Intersection adjacentIntersection = intersections.get(segmentAdjacent.getDepart());
+                    Double edgeWeight = segmentAdjacent.getLongueur();
+                    if (!settledIntersections.contains(adjacentIntersection)) {
+                        CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection);
+                        unsettledIntersections.add(adjacentIntersection);
+                    }
+                }
+                settledIntersections.add(currentIntersection);
+            }
+            
+            for (Intersection i : specialIntersections) {
+                this.cheminsLesPlusCourts.add(
+                    new Trajet(i.getCheminLePlusCourt(), i.getDistance())
+                );
+            }
+
+            intersections.forEach((id,intersection) -> {
+                intersection.resetIntersection();
+            }); 
+
+
+        }
+
+        
     }
 
-    private void trouverMeilleureTournee() {
-        // TODO
+    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection) {
+	    Double sourceDistance = sourceIntersection.getDistance();
+	    if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
+	        evaluationIntersection.setDistance(sourceDistance + edgeWeigh);
+	        LinkedList<Intersection> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
+	        shortestPath.add(sourceIntersection);
+	        evaluationIntersection.setCheminLePlusCourt(shortestPath);
+	    }
+	}
 
-    }
 
     /**
      * Comparateur afin de classer les chromosomes au sein d'une population
