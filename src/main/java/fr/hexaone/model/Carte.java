@@ -49,7 +49,7 @@ public class Carte {
         calculerLesCheminsLesPlusCourts(planning.getRequetes());
         
         // Recherche de la tournée la plus rapide respectant les précédences entre dépot/livraison. 
-        Planning planning = trouverMeilleureTournee(planning.getRequetes());
+        //Planning planning = trouverMeilleureTournee(planning.getRequetes());
 
         return planning;
     }
@@ -157,20 +157,21 @@ public class Carte {
     public List<Long> trouverMeilleureTournee(List<Requete> requetes) {
     	//TO DO
 
-        /*int sigma = 10; // Nb chromosomes
+        int sigma = 10; // Nb chromosomes
         double delta = 1;// Minimum d'ecart entre les valeurs
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
         int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
-        */
+        
     	
-    	int sigma = 6; // Nb chromosomes
+    	/*int sigma = 6; // Nb chromosomes
         double delta = 1;// Minimum d'ecart entre les valeurs
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 3000;// Nb max de crossovers productifs
         int BetaMax = 1000;// Nb max de crossosovers sans améliorer la solution
+		*/
 
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
 
@@ -186,7 +187,8 @@ public class Carte {
             
             do {
             	 nbEssais++;
-            	 chrom=  new Pair<>(genererChromosomeAleatoire(depotId, requetes), (double)(rand.nextInt(100)+10));
+            	 List<Long> chr=genererChromosomeAleatoire(requetes);
+            	 chrom=  new Pair<>(chr,cout(chr));
             }
             while (nbEssais <= nMax && !espacePopulation(population, delta)) ;
             if(nbEssais<=nMax) {
@@ -248,26 +250,33 @@ public class Carte {
             child=correctionCrossover(child,requetes);
 
             int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
+            
+            double costChild = cout(child); // to compute
+            
 
-           /* if (Math.random() < p) {
+           if (Math.random() < p) {
                 // mutation with LS to improve C
-                continue;
-            }
-            */
+        	   
+        	   List<Long> M=this.mutationLocalSearch(child, cout(child), requetes);
+        	   
+        	   double ancienCout=population.get(kRand).getValue1();
+        	   population.get(kRand).setAt1(-10000);
+        	   
+        	   if(this.espacePopulation(population, delta, costChild)) {
+        		   child=M;
+        		   costChild=cout(child); 
+        	   }
+        	   
+        	   population.get(kRand).setAt1(ancienCout);
 
-            double costChild = (double)(rand.nextInt(100)+10); // to compute
-            
-            List<Pair<List<Long>, Double>> copiePopulation=new ArrayList<Pair<List<Long>, Double>>();
-            
-            for(int i=0;i<population.size();i++) {
-            	
-            	copiePopulation.add(population.get(i));
             }
             
-            population.remove(kRand);
+           double ancienCout=population.get(kRand).getValue1();
+     	   population.get(kRand).setAt1(-10000);
 
             if (this.espacePopulation(population, delta, costChild)) {
                 // productive iteration
+            	population.remove(kRand);
                 population.add(new Pair<>(child, costChild));
                 alpha++;
 
@@ -279,7 +288,7 @@ public class Carte {
             }
 
             else {
-                population = copiePopulation;
+            	 population.get(kRand).setAt1(ancienCout);
             }
         }
         
@@ -409,7 +418,7 @@ public class Carte {
 
         for (int i = 1; i < population.size(); i++) {
 
-            if (population.get(i).getValue1() - population.get(i - 1).getValue1() < ecart) {
+            if (Math.abs(population.get(i).getValue1() - population.get(i - 1).getValue1()) < ecart) {
                 return false;
             }
 
@@ -445,7 +454,7 @@ public class Carte {
      * @param requetes 
      */
 
-    public List<Long> genererChromosomeAleatoire(Long idDepot, List<Requete> requetes) {
+    public List<Long> genererChromosomeAleatoire(List<Requete> requetes) {
         List<Long> shuffleList;
 
         do {
@@ -458,9 +467,6 @@ public class Carte {
 
             Collections.shuffle(shuffleList);
         } while (!verifierPop(shuffleList, requetes));
-
-        shuffleList.add(0, idDepot);
-        shuffleList.add(idDepot);
 
         return shuffleList;
 
@@ -483,7 +489,7 @@ public class Carte {
         int max = max(i, j);
         int min = min(i, j);
 
-        List<Long> intersectionsVus = new ArrayList<Long>();
+        Set<Long> intersectionsVus = new HashSet<Long>();
 
         for (int k = min; k <= max; k++) {
         	
@@ -577,7 +583,7 @@ public class Carte {
      * Getter
      * @return Les plus courts chemins
      */
-    public List<Trajet> getCheminsLesPlusCourts() {
+    public Map<String,Trajet> getCheminsLesPlusCourts() {
         return cheminsLesPlusCourts;
     }
 

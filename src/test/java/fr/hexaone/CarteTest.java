@@ -156,7 +156,7 @@ public class CarteTest {
 	    requetes.add(new Requete((long)4,0,(long)9,0));
 	    requetes.add(new Requete((long)5,0,(long)7,0));
     	
-        List<Long> chromosome=carte.genererChromosomeAleatoire((long)0, requetes) ;
+        List<Long> chromosome=carte.genererChromosomeAleatoire(requetes) ;
         
         assert (carte.verifierPop(chromosome, requetes) == true);
         
@@ -175,7 +175,7 @@ public class CarteTest {
 	    requetes.add(new Requete((long)4,0,(long)9,0));
 	    requetes.add(new Requete((long)5,0,(long)7,0));
 	    
-	    List<Long> bestSolution=carte.trouverMeilleureTournee(0, requetes);
+	    List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
 
 	    assert (carte.verifierPop(bestSolution, requetes) == true);  
         
@@ -209,10 +209,7 @@ public class CarteTest {
     	P1.add((long)3);
     	
 	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
-	    
-	    for(int i=0;i<mutation.size();i++) {
-	    	System.out.println(mutation.get(i));
-	    }
+
 	    
 	    assert(carte.cout(mutation)<=carte.cout(P1));
         
