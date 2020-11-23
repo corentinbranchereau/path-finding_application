@@ -116,8 +116,11 @@ public class Fenetre {
                     .setClip(new Rectangle(this.fenetreControleur.getAnchorPaneGraphique().getWidth(),
                             this.fenetreControleur.getAnchorPaneGraphique().getHeight()));
 
+            // On affiche le canvas devant les autres composants graphiques
+            this.fenetreControleur.getCanvas().setViewOrder(-1);
+
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getAnchorPaneGraphique().setOnScroll(new EventHandler<ScrollEvent>() {
+            this.fenetreControleur.getCanvas().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
                     double facteurZoom = 0.0;
                     if (event.getTextDeltaY() > 0) {
