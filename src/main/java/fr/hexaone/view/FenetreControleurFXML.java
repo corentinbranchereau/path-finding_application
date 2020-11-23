@@ -7,6 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextFlow;
 
 /**
  * Controleur JavaFX permettant de récupérer les éléments graphiques issus du
@@ -54,7 +55,7 @@ public class FenetreControleurFXML {
      * à la vue textuelle de l'application.
      */
     @FXML
-    protected TextArea zoneTexte;
+    protected TextFlow zoneTexte;
 
     /**
      * Bouton permettant de lancer le calcul du planning.
@@ -118,7 +119,7 @@ public class FenetreControleurFXML {
      * 
      * @return La zone de texte de l'application.
      */
-    public TextArea getZoneTexte() {
+    public TextFlow getZoneTexte() {
         return zoneTexte;
     }
 
