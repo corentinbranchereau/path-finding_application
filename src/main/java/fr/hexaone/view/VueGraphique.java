@@ -57,6 +57,12 @@ public class VueGraphique {
     protected final double VALEUR_SEUIL_DIFF_COULEUR = 0.9;
 
     /**
+     * Constante qui permet de définir la valeur seuil permettant de déterminer si
+     * une couleur est trop claire ou non
+     */
+    protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
+
+    /**
      * Constructeur de VueGraphique.
      */
     public VueGraphique() {
@@ -216,11 +222,14 @@ public class VueGraphique {
 
             // On va générer une couleur aléatoire qui est suffisament différente des
             // couleurs déjà présentes (cela est déterminé grâce à la constante
-            // VALEUR_SEUIL_DIFF_COULEUR)
+            // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
+            // claire.
             boolean couleurSimilairePresente;
+            boolean couleurTropClaire;
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             do {
                 couleurSimilairePresente = false;
+                couleurTropClaire = false;
                 for (Color c : couleursDejaPresentes) {
                     // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
                     // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
@@ -232,7 +241,12 @@ public class VueGraphique {
                         break;
                     }
                 }
-            } while (couleurSimilairePresente);
+
+                if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
+                        && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
+                    couleurTropClaire = true;
+                }
+            } while (couleurSimilairePresente || couleurTropClaire);
 
             couleursDejaPresentes.add(couleur);
             gc.setFill(couleur);
