@@ -2,8 +2,11 @@ package fr.hexaone.view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.model.Requete;
 import fr.hexaone.view.VueGraphique;
 import fr.hexaone.view.VueTextuelle;
 import javafx.animation.KeyFrame;
@@ -16,6 +19,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -61,6 +65,11 @@ public class Fenetre {
     protected final double VITESSE_ZOOM = 100;
 
     /**
+     * Map qui contient pour chaque requête sa couleur d'affichage
+     */
+    protected Map<Requete, Color> mapCouleurRequete;
+
+    /**
      * Constructeur de Fenetre
      * 
      * @param stage      le conteneur principal des éléments graphiques de
@@ -72,6 +81,7 @@ public class Fenetre {
         this.controleur = controleur;
         this.vueGraphique = new VueGraphique();
         this.vueTextuelle = new VueTextuelle();
+        this.mapCouleurRequete = new HashMap<>();
     }
 
     /**
@@ -228,5 +238,14 @@ public class Fenetre {
      */
     public VueTextuelle getVueTextuelle() {
         return vueTextuelle;
+    }
+
+    /**
+     * Renvoie la map d'association entre les requêtes et les couleurs
+     * 
+     * @return La map d'association entre les requêtes et les couleurs
+     */
+    public Map<Requete, Color> getMapCouleurRequete() {
+        return mapCouleurRequete;
     }
 }

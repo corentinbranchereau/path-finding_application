@@ -154,7 +154,10 @@ public class VueGraphique {
      * @param planning Le planning actuel de l'application, contenant les requêtes
      * @param carte    La carte actuelle de l'application
      */
-    public void afficherRequetes(Planning planning, Carte carte) {
+    public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+        // On réinitialise la map d'association Requete <-> Couleur
+        mapCouleurRequete.clear();
+
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
         // Dessin du dépôt (sous la forme d'une étoile)
@@ -232,6 +235,9 @@ public class VueGraphique {
 
             couleursDejaPresentes.add(couleur);
             gc.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(requete, couleur);
 
             // Pour le point de collecte, on dessine un carré
             gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);
