@@ -78,15 +78,18 @@ public class VueTextuelle {
             String nomCollecte = "";
             String nomLivraison = "";
             if (!segmentsCollecte.isEmpty()) {
-                nomCollecte = segmentsCollecte.iterator().next().getNom();
-                while ((nomCollecte.isBlank() || nomCollecte.isEmpty()) && segmentsCollecte.iterator().hasNext()) {
-                    nomCollecte = segmentsCollecte.iterator().next().getNom();
+                Iterator<Segment> iterateurCollecte = segmentsCollecte.iterator();
+                nomCollecte = iterateurCollecte.next().getNom();
+                while ((nomCollecte.isBlank() || nomCollecte.isEmpty()) && iterateurCollecte.hasNext()) {
+                    nomCollecte = iterateurCollecte.next().getNom();
                 }
             }
             if (!segmentsLivraison.isEmpty()) {
-                nomLivraison = segmentsLivraison.iterator().next().getNom();
-                while ((nomLivraison.isBlank() || nomLivraison.isEmpty()) && segmentsLivraison.iterator().hasNext()) {
-                    nomLivraison = segmentsLivraison.iterator().next().getNom();
+                Iterator<Segment> iterateurLivraison = segmentsCollecte.iterator();
+                nomLivraison = iterateurLivraison.next().getNom();
+                while ((nomLivraison.isBlank() || nomLivraison.isEmpty()) && iterateurLivraison.hasNext()) {
+                    System.out.println(nomLivraison);
+                    nomLivraison = iterateurLivraison.next().getNom();
                 }
             }
             Text titreText = new Text("Requête " + i + ": \r\n");
