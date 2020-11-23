@@ -179,13 +179,13 @@ public class Carte {
 
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
         
-        //List<Long> chr1=this.genererChromosomeAleatoire(requetes);
+        List<Long> chr1=this.genererChromosomeAleatoire(requetes);
         
-        //chr1=this.mutationLocalSearch(chr1,cout(chr1), requetes);
+        chr1=this.mutationLocalSearch(chr1,cout(chr1), requetes);
         
-        //population.add(new Pair<>(chr1,cout(chr1)));
+        population.add(new Pair<>(chr1,cout(chr1)));
 
-        int k = 0;
+        int k = 1;
         int nbEssais = 0;
         Random rand = new Random();
 
@@ -310,6 +310,7 @@ public class Carte {
                 }
       
                 Collections.sort(population, ComparatorChromosome);
+                //tree set 
             }
 
             else {
