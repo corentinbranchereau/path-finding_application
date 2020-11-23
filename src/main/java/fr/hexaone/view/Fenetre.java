@@ -17,6 +17,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
@@ -127,7 +128,8 @@ public class Fenetre {
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
             this.stage.setResizable(false);
-            this.stage.setTitle("TITRE A DEFINIR");
+            this.stage.setTitle("いちONE - Application développée par l'HexaOne");
+            stage.getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
 
             this.stage.show();
 
