@@ -52,7 +52,11 @@ public class VueTextuelle {
         Set<Segment> segmentsDepot = depot.getSegmentsPartants();
         String depotName = "";
         if (!segmentsDepot.isEmpty()) {
-            depotName = segmentsDepot.iterator().next().getNom();
+            Iterator<Segment> iterateurDepot = segmentsDepot.iterator();
+            depotName = iterateurDepot.next().getNom();
+            while ((depotName.isBlank() || depotName.isEmpty()) && iterateurDepot.hasNext()) {
+                depotName = iterateurDepot.next().getNom();
+            }
         }
 
         // récupération de l'heure de départ
