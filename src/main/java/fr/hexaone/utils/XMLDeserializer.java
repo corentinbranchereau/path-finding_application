@@ -5,7 +5,6 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Carte;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +66,7 @@ public class XMLDeserializer {
      * @param planning Le planning où charger les données.
      * @param xml      Le fichier XML bien formé contenant les données.
      */
-    public static void loadRequete(Document xml, Carte carte, Planning planning) {
+    public static void loadRequete(Document xml, Planning planning) {
         try {
             // Récupèrer le depot
             Element depotTag = (Element) xml.getElementsByTagName("depot").item(0);
