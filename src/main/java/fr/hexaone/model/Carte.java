@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Comparator;
+import java.util.Date;
+
 import org.javatuples.Pair;
 
 
@@ -47,13 +49,84 @@ public class Carte {
     public Planning calculerTournee(Planning planning) {
 
         this.depotId = planning.getIdDepot();
+        List<Requete>requetes=planning.getRequetes();
         
         // Recherche des chemins des plus courts entre tous les points (dépots, livraisons et dépot) 
-        calculerLesCheminsLesPlusCourts(planning.getRequetes());
+        calculerLesCheminsLesPlusCourts(requetes);
         
-        // Recherche de la tournée la plus rapide respectant les précédences entre dépot/livraison. 
-        //Planning planning = trouverMeilleureTournee(planning.getRequetes());
-
+        List<Long> bestSolution=trouverMeilleureTournee(requetes);
+        
+        Date debut=planning.getDateDebut();
+        
+        Map<Intersection,Date> temps =new HashMap<Intersection,Date>();
+        
+        Map<Intersection,Date> tempsSorti =new HashMap<Intersection,Date>();
+        
+        tempsSorti.put(intersections.get(depotId),debut);
+     
+        long t=debut.getTime();
+        
+        long tIni=t;
+        
+        Long prevIntersectionId = this.depotId;
+        
+        Set<Requete> requetesCollectees = new HashSet<Requete>();
+        
+        Set<Requete> requetesLivrees = new HashSet<Requete>();
+        
+        List<Trajet> listTrajets= new LinkedList<Trajet>();
+        
+    	for (Long newId : bestSolution) {
+    		
+            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids()*15000.0/3600.0*1000.0;
+            
+            
+            temps.put(intersections.get(newId),new Date(t));
+            
+            for(int i=0;i<requetes.size();i++) {
+            	
+            	if(newId==requetes.get(i).getIdPickup()) {
+            		
+            		if(!requetesCollectees.contains(newId) && !requetesLivrees.contains(newId)) {
+            			
+            			t+=requetes.get(i).getDureePickup();
+            			requetesCollectees.add(requetes.get(i));
+            		}
+            	}
+            		
+            	if(newId==requetes.get(i).getIdDelivery()){
+            		
+            		if(requetesCollectees.contains(newId) && !requetesLivrees.contains(newId)) {
+            			
+            			t+=requetes.get(i).getDureeDelivery();
+            			requetesLivrees.add(requetes.get(i));
+            		}
+            	}
+            	
+            }
+            
+            tempsSorti.put(intersections.get(newId),new Date(t));
+            
+            listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId+"|"+newId));
+            
+            prevIntersectionId = newId;
+            
+    	}
+    	
+    	listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId+"|"+depotId));
+    	
+    	temps.put(intersections.get(depotId),new Date(t));
+    	
+    	planning.setDatesPassage(temps);
+    	
+    	planning.setDatesSorties(tempsSorti);
+    	
+    	long tempsPasse=t-tIni;
+    	
+    	planning.setDureeTotale((double)tempsPasse);
+    	
+    	planning.setListeTrajets(listTrajets);
+    	
         return planning;
     }
     
