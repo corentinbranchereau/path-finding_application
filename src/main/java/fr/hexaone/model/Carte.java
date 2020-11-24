@@ -47,6 +47,7 @@ public class Carte {
 
     /**
      * Getter
+     * 
      * @return Les plus courts chemins
      */
     public List<Trajet> getCheminsLesPlusCourts() {
@@ -55,6 +56,7 @@ public class Carte {
 
     /**
      * Getter
+     * 
      * @return Les intersections
      */
     public Map<Long, Intersection> getIntersections() {
