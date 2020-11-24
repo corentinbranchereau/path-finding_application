@@ -1,6 +1,8 @@
 package fr.hexaone.model;
 
+import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -40,6 +42,17 @@ public class Intersection {
     protected Set<Segment> segmentsPartants;
 
     /**
+     * Liste des segments pour les calculs de chemins les plus courts
+     */
+    private List<Segment> cheminLePlusCourt = new LinkedList<Segment>();
+    
+    /**
+     * Distance entre l'intersection source et ce point. Utilisé pour le calcul
+     * de chemins les plus courts
+     */
+    private Double distance = Double.MAX_VALUE;
+
+    /**
      * constructeur d'Intersection
      *
      * @param id
@@ -52,6 +65,15 @@ public class Intersection {
         this.longitude = longitude;
         this.segmentsArrivants = new HashSet<>();
         this.segmentsPartants = new HashSet<>();
+        this.distance = Double.MAX_VALUE;
+    }
+    
+    /**
+     * Getter
+     * @return l'identifiant
+     */
+    public long getId() {
+        return id;
     }
 
     /**
@@ -85,4 +107,55 @@ public class Intersection {
     public Set<Segment> getSegmentsPartants() {
         return segmentsPartants;
     }
+
+    /**
+     * Setter
+     */
+    public void setSegmentsPartants(Set<Segment> segmentsPartants) {
+        this.segmentsPartants = segmentsPartants;
+    }
+
+    /**
+     * Getter
+     * @return les intersections du chemin le plus court 
+     * pendant le calcul du chemin le plus court
+     */
+    public List<Segment> getCheminLePlusCourt() {
+        return cheminLePlusCourt;
+    }
+
+    /**
+     * Setter
+     */
+    public void setCheminLePlusCourt(List<Segment> cheminLePlusCourt) {
+        this.cheminLePlusCourt = cheminLePlusCourt;
+    }
+
+    /**
+     * Getter
+     * @return la distance à la source pendant le calcul du
+     * chemin le plus court 
+     */
+    public Double getDistance() {
+        return distance;
+    }
+
+    /**
+     * Setter
+     */
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+    
+    /**
+     * Remet à zero les variables utilisées pour calculer les 
+     * chemins les plus courts.
+     */
+    public void resetIntersection() {
+        distance = Double.MAX_VALUE;
+        cheminLePlusCourt = new LinkedList<Segment>();
+    }
+
+
+
 }

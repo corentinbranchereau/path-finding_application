@@ -22,14 +22,53 @@ public class Planning {
      * Liste des requêtes en rapport avec la demande client
      */
     protected List<Requete> requetes;
+
+    public List<Trajet> getListeTrajets() {
+        return listeTrajets;
+    }
+
+    public void setListeTrajets(List<Trajet> listeTrajets) {
+        this.listeTrajets = listeTrajets;
+    }
+
+    public Map<Intersection, Date> getDatesPassage() {
+        return datesPassage;
+    }
+
+    public void setDatesPassage(Map<Intersection, Date> datesPassage) {
+        this.datesPassage = datesPassage;
+    }
+
+    public Map<Intersection, Date> getDatesSorties() {
+        return datesSorties;
+    }
+
+    public void setDatesSorties(Map<Intersection, Date> datesSorties) {
+        this.datesSorties = datesSorties;
+    }
+
+    public double getDureeTotale() {
+        return dureeTotale;
+    }
+
+    public void setDureeTotale(double dureeTotale) {
+        this.dureeTotale = dureeTotale;
+    }
+
     /**
-     * Tournée relative au planning
+     * liste de tous les trajets composant la tournée
      */
-    protected Tournee tournee;
+    protected List<Trajet> listeTrajets;
+
     /**
      * Dates des passages des points spéciaux
      */
     protected Map<Intersection, Date> datesPassage;
+    /**
+     * Duree totale de la duree
+     */
+
+    protected Map<Intersection, Date> datesSorties;
     /**
      * Duree totale de la duree
      */
@@ -57,10 +96,6 @@ public class Planning {
 
     public Date getDateDebut() {
         return this.dateDebut;
-    }
-
-    public Map<Intersection, Date> getDatesPassage() {
-        return this.datesPassage;
     }
 
     public void setDateDebut(Date newDateDebut) {
