@@ -95,7 +95,7 @@ public class Planning {
     }
 
     public Date getDateDebut() {
-        return this.getDateDebut();
+        return this.dateDebut;
     }
 
     public void setDateDebut(Date newDateDebut) {

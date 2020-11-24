@@ -2,15 +2,19 @@ package fr.hexaone;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Intersection;
+import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import fr.hexaone.model.Trajet;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.javatuples.Pair;
@@ -220,6 +224,49 @@ public class CarteTest {
 
         assert(carte.cout(bestSolution)<=81.0);
         
+    }
+
+    @Test
+    public void calculerTourneeSimpleTest() {
+        
+        createSimpleGraph();
+
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,3,3,5));
+
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        Planning planning = new Planning();
+
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+
+        Map<Intersection,Date> datesPassages = planning.getDatesPassage();
+        Map<Intersection,Date> datesSorties = planning.getDatesSorties();
+
+        Map<Long,Intersection> intersections = carte.getIntersections();
+        Long d1;
+        Long d2;
+
+        d1 = datesPassages.get(intersections.get(0L)).getTime();
+        d2 = datesSorties.get(intersections.get(0L)).getTime();
+        assert(d1 == 1*15000000/3600 + 3 + 2*15000000/3600 + 5 + 2*15000000/3600);
+        assert(d2 == 0);
+
+        d1 = datesPassages.get(intersections.get(1L)).getTime();
+        d2 = datesSorties.get(intersections.get(1L)).getTime();
+        assert(d1 == 1*15000000/3600);
+        assert(d2 == 1*15000000/3600 + 3);
+
+        d1 = datesPassages.get(intersections.get(3L)).getTime();
+        d2 = datesSorties.get(intersections.get(3L)).getTime();
+        assert(d1 == 1*15000000/3600 + 3 + 2*15000000/3600);
+        assert(d2 == 1*15000000/3600 + 3 + 2*15000000/3600 + 5);
+
     }
 
     @Test

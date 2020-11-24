@@ -78,28 +78,28 @@ public class Carte {
         
     	for (Long newId : bestSolution) {
     		
-            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids()*15000.0/3600.0*1000.0;
+            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids()*15000000/3600;
             
             
             temps.put(intersections.get(newId),new Date(t));
             
-            for(int i=0;i<requetes.size();i++) {
-            	
-            	if(newId==requetes.get(i).getIdPickup()) {
+            for (Requete r : requetes) {
+                
+            	if(newId==r.getIdPickup()) {
             		
-            		if(!requetesCollectees.contains(newId) && !requetesLivrees.contains(newId)) {
+            		if(!requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
             			
-            			t+=requetes.get(i).getDureePickup();
-            			requetesCollectees.add(requetes.get(i));
+            			t+=r.getDureePickup();
+            			requetesCollectees.add(r);
             		}
             	}
             		
-            	if(newId==requetes.get(i).getIdDelivery()){
+            	if(newId==r.getIdDelivery()){
             		
-            		if(requetesCollectees.contains(newId) && !requetesLivrees.contains(newId)) {
+            		if(requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
             			
-            			t+=requetes.get(i).getDureeDelivery();
-            			requetesLivrees.add(requetes.get(i));
+            			t+=r.getDureeDelivery();
+            			requetesLivrees.add(r);
             		}
             	}
             	
@@ -114,7 +114,8 @@ public class Carte {
     	}
     	
     	listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId+"|"+depotId));
-    	
+        
+        t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + "0").getPoids()*15000000/3600;
     	temps.put(intersections.get(depotId),new Date(t));
     	
     	planning.setDatesPassage(temps);
