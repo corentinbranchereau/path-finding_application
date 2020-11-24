@@ -127,7 +127,7 @@ public class XMLDeserializerTest {
     public void shouldLoadRequete() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/requestsLarge9.xml");
             XMLDeserializer.loadRequete(xml, planning);
         } catch (Exception e) {
             fail();
@@ -138,16 +138,15 @@ public class XMLDeserializerTest {
      * Test le chargement des requêtes avec un fichier XML correct en vérifiant les
      * propriétés du depot.
      */
-    // TODO : Bug Date
     @Test
-    @Disabled
     public void shouldLoadRequeteDepot() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, planning);
-            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()), () -> assertTrue(
-                    planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")) == 0));
+            assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()),
+                    () -> assertEquals(planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")),
+                            0));
         } catch (Exception e) {
             fail();
         }
@@ -178,7 +177,7 @@ public class XMLDeserializerTest {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
-            XMLDeserializer.loadRequete(xml, carte, planning);
+            XMLDeserializer.loadRequete(xml, planning);
             boolean testPresence = false;
             Long idPickupTest = 1400900990L, idDeliveryTest = 208769083L;
             int pickupDurationTest = 180, deliveryDurationTest = 240;
