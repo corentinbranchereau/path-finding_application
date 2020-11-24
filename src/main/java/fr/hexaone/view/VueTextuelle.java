@@ -72,17 +72,18 @@ public class VueTextuelle {
                     carte.getIntersections().get(requete.getIdDelivery()));
 
             Text titreText = new Text("Requête " + i + ": \r\n");
-            Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - "
-                    + String.valueOf(requete.getDureePickup()) + "s" + "\r\n");
-            Text livraisonText = new Text("     ● Livraison : " + nomLivraison + " - "
+            Text collecteIcon = new Text("     ■ ");
+            Text collecteText = new Text(
+                    "Collecte : " + nomCollecte + " - " + String.valueOf(requete.getDureePickup()) + "s" + "\r\n");
+            Text livraisonIcon = new Text("     ● ");
+            Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
                     + String.valueOf(requete.getDureeDelivery()) + "s" + "\r\n\n");
             i++;
 
-            titreText.setFill(mapCouleurRequete.get(requete));
-            collecteText.setFill(mapCouleurRequete.get(requete));
-            livraisonText.setFill(mapCouleurRequete.get(requete));
+            collecteIcon.setFill(mapCouleurRequete.get(requete));
+            livraisonIcon.setFill(mapCouleurRequete.get(requete));
 
-            this.zoneTexte.getChildren().addAll(titreText, collecteText, livraisonText);
+            this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText, livraisonIcon, livraisonText);
         }
     }
 
