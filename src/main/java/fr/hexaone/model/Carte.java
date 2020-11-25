@@ -18,7 +18,6 @@ import java.util.Date;
 
 import org.javatuples.Pair;
 
-
 /**
  * Objet contenant les structures de données relatives à la carte"
  *
@@ -27,7 +26,7 @@ import org.javatuples.Pair;
  */
 public class Carte {
 
-    protected Map<String,Trajet> cheminsLesPlusCourts;
+    protected Map<String, Trajet> cheminsLesPlusCourts;
     protected Map<Long, Intersection> intersections;
     protected Long depotId;
 
@@ -38,8 +37,6 @@ public class Carte {
         intersections = new HashMap<>();
     }
 
-    
-
     /**
      * Recherche de la tournée la plus rapide
      *
@@ -49,113 +46,122 @@ public class Carte {
     public Planning calculerTournee(Planning planning) {
 
         this.depotId = planning.getIdDepot();
-        List<Requete>requetes=planning.getRequetes();
-        
-        // Recherche des chemins des plus courts entre tous les points (dépots, livraisons et dépot) 
+        List<Requete> requetes = planning.getRequetes();
+
+        // Recherche des chemins des plus courts entre tous les points (dépots,
+        // livraisons et dépot)
+        System.out.println("AVANT");
         calculerLesCheminsLesPlusCourts(requetes);
-        
-        List<Long> bestSolution=trouverMeilleureTournee(requetes);
-        
-        for(Long l: bestSolution) {
-        	System.out.println(l);
+        System.out.println("APRES");
+        List<Long> bestSolution = trouverMeilleureTournee(requetes);
+        System.out.println("FIN");
+        for (Long l : bestSolution) {
+            System.out.println(l);
         }
-        
-        Date debut=planning.getDateDebut();
-        
-        Map<Intersection,Date> temps =new HashMap<Intersection,Date>();
-        
-        Map<Intersection,Date> tempsSorti =new HashMap<Intersection,Date>();
-        
-        tempsSorti.put(intersections.get(depotId),debut);
-     
-        long t=debut.getTime();
-        
-        long tIni=t;
-        
+
+        Date debut = planning.getDateDebut();
+
+        Map<Intersection, Date> temps = new HashMap<Intersection, Date>();
+
+        Map<Intersection, Date> tempsSorti = new HashMap<Intersection, Date>();
+
+        tempsSorti.put(intersections.get(depotId), debut);
+
+        long t = debut.getTime();
+
+        long tIni = t;
+
         Long prevIntersectionId = this.depotId;
-        
+
         Set<Requete> requetesCollectees = new HashSet<Requete>();
-        
+
         Set<Requete> requetesLivrees = new HashSet<Requete>();
-        
-        List<Trajet> listTrajets= new LinkedList<Trajet>();
-        
-    	for (Long newId : bestSolution) {
-    		
-            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids()*15000000/3600;
-            
-            
-            temps.put(intersections.get(newId),new Date(t));
-            
+
+        List<Trajet> listTrajets = new LinkedList<Trajet>();
+
+        for (Long newId : bestSolution) {
+
+            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids() * 3600.0 / 15000000.0;
+
+            temps.put(intersections.get(newId), new Date(t));
+
             for (Requete r : requetes) {
-                
-            	if(newId==r.getIdPickup()) {
-            		
-            		if(!requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
-            			
-            			t+=r.getDureePickup();
-            			requetesCollectees.add(r);
-            		}
-            	}
-            		
-            	if(newId==r.getIdDelivery()){
-            		
-            		if(requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
-            			
-            			t+=r.getDureeDelivery();
-            			requetesLivrees.add(r);
-            		}
-            	}
-            	
+
+                if (newId == r.getIdPickup()) {
+
+                    if (!requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
+
+                        t += r.getDureePickup() * 1000;
+                        requetesCollectees.add(r);
+                    }
+                }
+
+                if (newId == r.getIdDelivery()) {
+
+                    if (requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
+
+                        t += r.getDureeDelivery() * 1000;
+                        requetesLivrees.add(r);
+                    }
+                }
+
             }
-            
-            tempsSorti.put(intersections.get(newId),new Date(t));
-            
-            listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId+"|"+newId));
-            
+
+            tempsSorti.put(intersections.get(newId), new Date(t));
+
+            listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
             prevIntersectionId = newId;
-            
-    	}
-    	
-    	listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId+"|"+depotId));
-        
-        t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + "0").getPoids()*15000000/3600;
-    	temps.put(intersections.get(depotId),new Date(t));
-    	
-    	planning.setDatesPassage(temps);
-    	
-    	planning.setDatesSorties(tempsSorti);
-    	
-    	long tempsPasse=t-tIni;
-    	
-    	planning.setDureeTotale((double)tempsPasse);
-    	
-    	planning.setListeTrajets(listTrajets);
-    	
+
+        }
+
+        listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+        t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids() * 3600.0 / 15000000.0;
+        temps.put(intersections.get(depotId), new Date(t));
+
+        planning.setDatesPassage(temps);
+
+        planning.setDatesSorties(tempsSorti);
+
+        long tempsPasse = t - tIni;
+
+        planning.setDureeTotale((double) tempsPasse);
+
+        planning.setListeTrajets(listTrajets);
+
         return planning;
     }
-    
-    public static Comparator ComparatorChemin = new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
+
+    public Comparator<Intersection> ComparatorChemin = new Comparator<Intersection>() { // TODO Vérifier si c'est
+                                                                                        // le set le plus
+                                                                                        // efficace pour
+                                                                                        // récupérer le premier
         @Override
         public int compare(Intersection o1, Intersection o2) {
-            return (int)(o1.getDistance()-o2.getDistance());
+            if (o1.getDistance() > o2.getDistance()) {
+                return 1;
+            } else if (o1.getDistance() < o2.getDistance()) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
     };
 
     public void calculerLesCheminsLesPlusCourts(List<Requete> requetes) {
 
-        //Préparation
+        // Préparation
 
         List<Intersection> specialIntersections = new ArrayList<Intersection>();
         specialIntersections.add(intersections.get(depotId));
-        
+
         for (Requete r : requetes) {
             specialIntersections.add(intersections.get(r.getIdDelivery()));
             specialIntersections.add(intersections.get(r.getIdPickup()));
         }
 
-
-        this.cheminsLesPlusCourts = new HashMap<String,Trajet>();
+        this.cheminsLesPlusCourts = new HashMap<String, Trajet>();
 
         // Calcul de tous les chemins les plus courts n fois avec dijkstra
 
@@ -164,39 +170,42 @@ public class Carte {
             source.setDistance(0.);
 
             Set<Intersection> settledIntersections = new HashSet<Intersection>();
-            
-            ArrayList<Intersection> unsettledIntersections = new ArrayList<Intersection>();
-          
-            
-            /*SortedSet<Intersection> unsettledIntersections = new TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si c'est le set le plus efficace pour récupérer le premier
-                @Override
-                public int compare(Intersection o1, Intersection o2) {
-                    return (int)(o1.getDistance()-o2.getDistance());
-                }
-            });
-            */
+
+            Set<Intersection> unsettledIntersections = new HashSet<Intersection>();
+
+            /*
+             * SortedSet<Intersection> unsettledIntersections = new
+             * TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si
+             * c'est le set le plus efficace pour récupérer le premier
+             * 
+             * @Override public int compare(Intersection o1, Intersection o2) { return
+             * (int)(o1.getDistance()-o2.getDistance()); } });
+             */
 
             unsettledIntersections.add(source);
-        
-            while (unsettledIntersections.size() != 0) {
-            	
-                //Intersection currentIntersection = unsettledIntersections.first();
-            	
-            	Intersection currentIntersection = unsettledIntersections.get(0);
-            	
-            	unsettledIntersections.remove(0);
 
-                for (Segment segmentAdjacent: currentIntersection.getSegmentsPartants()) {
+            while (unsettledIntersections.size() != 0) {
+
+                // Intersection currentIntersection = unsettledIntersections.first();
+
+                // Intersection currentIntersection = unsettledIntersections.get(0);
+                Intersection currentIntersection = getLowestDistanceIntersection(unsettledIntersections);
+
+                unsettledIntersections.remove(currentIntersection);
+                System.out.println(unsettledIntersections.size());
+
+                for (Segment segmentAdjacent : currentIntersection.getSegmentsPartants()) {
                     Intersection adjacentIntersection = intersections.get(segmentAdjacent.getArrivee());
                     Double edgeWeight = segmentAdjacent.getLongueur();
                     if (!settledIntersections.contains(adjacentIntersection)) {
-                        CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection, segmentAdjacent);
+                        CalculateMinimumDistance(adjacentIntersection, edgeWeight, currentIntersection,
+                                segmentAdjacent);
                         unsettledIntersections.add(adjacentIntersection);
-         
+
                     }
                 }
-                
-                Collections.sort(unsettledIntersections,this.ComparatorChemin);
+
+                // Collections.sort(unsettledIntersections, this.ComparatorChemin);
                 settledIntersections.add(currentIntersection);
 
             }
@@ -205,18 +214,28 @@ public class Carte {
 
             for (Intersection i : specialIntersections) {
                 String key = sourceId + i.getId();
-                this.cheminsLesPlusCourts.put(
-                    key,
-                    new Trajet(i.getCheminLePlusCourt(), i.getDistance())
-                );
+                this.cheminsLesPlusCourts.put(key, new Trajet(i.getCheminLePlusCourt(), i.getDistance()));
             }
 
-            intersections.forEach((id,intersection) -> {
+            intersections.forEach((id, intersection) -> {
                 intersection.resetIntersection();
-            }); 
+            });
 
         }
 
+    }
+
+    private Intersection getLowestDistanceIntersection(Set<Intersection> unsettledIntersections) {
+        Intersection lowestDistanceIntersection = null;
+        double lowestDistance = Double.MAX_VALUE;
+        for (Intersection intersection : unsettledIntersections) {
+            double intersectionDistance = intersection.getDistance();
+            if (intersectionDistance < lowestDistance) {
+                lowestDistance = intersectionDistance;
+                lowestDistanceIntersection = intersection;
+            }
+        }
+        return lowestDistanceIntersection;
     }
 
     /**
@@ -225,21 +244,22 @@ public class Carte {
      * @param edgeWeigh
      * @param sourceIntersection
      */
-    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh, Intersection sourceIntersection, Segment seg) {
+    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh,
+            Intersection sourceIntersection, Segment seg) {
         Double sourceDistance = sourceIntersection.getDistance();
-	    if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
-	        evaluationIntersection.setDistance(sourceDistance + edgeWeigh);
-	        LinkedList<Segment> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
-	        shortestPath.add(seg);
-	        evaluationIntersection.setCheminLePlusCourt(shortestPath);
-	    }
-	}
-
+        if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
+            evaluationIntersection.setDistance(sourceDistance + edgeWeigh);
+            LinkedList<Segment> shortestPath = new LinkedList<>(sourceIntersection.getCheminLePlusCourt());
+            shortestPath.add(seg);
+            evaluationIntersection.setCheminLePlusCourt(shortestPath);
+        }
+    }
 
     /**
-     * Comparateur afin de classer les chromosomes au sein d'une population
-     * dans l'ordre croissant des coûts
-     * @param depot 
+     * Comparateur afin de classer les chromosomes au sein d'une population dans
+     * l'ordre croissant des coûts
+     * 
+     * @param depot
      * @param requetes
      */
     public static Comparator<Pair<List<Long>, Double>> ComparatorChromosome = new Comparator<Pair<List<Long>, Double>>() {
@@ -252,58 +272,58 @@ public class Carte {
 
     /**
      * Algorithme génétique permettant de trouver le melleure tournée
-     * @param depot 
+     * 
+     * @param depot
      * @param requetes
      */
     public List<Long> trouverMeilleureTournee(List<Requete> requetes) {
-    	//TO DO
+        // TO DO
 
-        int sigma = 10; // Nb chromosomes
-        double delta = 1;// Minimum d'ecart entre les valeurs
+        int sigma = 30; // Nb chromosomes
+        double delta = 3;// Minimum d'ecart entre les valeurs
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
-        int BetaMax = 100;// Nb max de crossosovers sans améliorer la solution
-        int maxIter=1000;
-        int iter=0;
-        
-    	/*int sigma = 6; // Nb chromosomes
-        double delta = 1;// Minimum d'ecart entre les valeurs
-        double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
-        int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
-        int alphamax = 3000;// Nb max de crossovers productifs
-        int BetaMax = 1000;// Nb max de crossosovers sans améliorer la solution
-		*/
+        int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
+        int maxIter = 1000;
+        int iter = 0;
+
+        /*
+         * int sigma = 6; // Nb chromosomes double delta = 1;// Minimum d'ecart entre
+         * les valeurs double p = 0.1; // probabilité d'améliorer avec du Local Search
+         * un enfant int nMax = 10000;// Nb max d'itérations pour générer une pop
+         * initiale int alphamax = 3000;// Nb max de crossovers productifs int BetaMax =
+         * 1000;// Nb max de crossosovers sans améliorer la solution
+         */
 
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
-        
-        List<Long> chr1=this.genererChromosomeAleatoire(requetes);
-        
-        chr1=this.mutationLocalSearch(chr1,cout(chr1), requetes);
-        
-        population.add(new Pair<>(chr1,cout(chr1)));
+
+        List<Long> chr1 = this.genererChromosomeAleatoire(requetes);
+
+        chr1 = this.mutationLocalSearch(chr1, cout(chr1), requetes);
+
+        population.add(new Pair<>(chr1, cout(chr1)));
 
         int k = 1;
         int nbEssais = 0;
         Random rand = new Random();
 
-        while (k <= sigma && nbEssais <= nMax ) {
-        
+        while (k <= sigma && nbEssais <= nMax) {
+
             k++;
             nbEssais = 0;
             Pair<List<Long>, Double> chrom;
             double cost;
-            
+
             do {
-            	 nbEssais++;
-            	 List<Long> chr=genererChromosomeAleatoire(requetes);
-            	 cost=cout(chr);
-            	 chrom=  new Pair<>(chr,cost);
+                nbEssais++;
+                List<Long> chr = genererChromosomeAleatoire(requetes);
+                cost = cout(chr);
+                chrom = new Pair<>(chr, cost);
+            } while (nbEssais <= nMax && !espacePopulation(population, delta, cost));
+            if (nbEssais <= nMax) {
+                population.add(chrom);
             }
-            while (nbEssais <= nMax && !espacePopulation(population, delta,cost)) ;
-            if(nbEssais<=nMax) {
-            	population.add(chrom);
-            }    
         }
         if (nbEssais > nMax) {
             sigma = k - 1;
@@ -314,19 +334,15 @@ public class Carte {
         int alpha = 0;
         int beta = 0;
 
-        /*for (Pair<List<Long>,Double> pair : population) {
-     	   
-            System.out.print(pair.getValue1() + " : ");
-            List<Long> ll = pair.getValue0();
-            for (Long l : ll) {
-                System.out.print(l+ ", ");
-            }
-            System.out.println();
-        }
-        */
+        /*
+         * for (Pair<List<Long>,Double> pair : population) {
+         * 
+         * System.out.print(pair.getValue1() + " : "); List<Long> ll = pair.getValue0();
+         * for (Long l : ll) { System.out.print(l+ ", "); } System.out.println(); }
+         */
 
         // main loop GA
-        while (alpha < alphamax && beta < BetaMax && iter<=maxIter) {
+        while (alpha < alphamax && beta < BetaMax && iter <= maxIter) {
 
             int indexP1 = 0;
             int indexP2 = 0;
@@ -351,153 +367,149 @@ public class Carte {
                     }
                 }
             }
-            
 
             int choiceChild = rand.nextInt(2);
 
             List<Long> child;
 
             if (choiceChild == 0) {
-               child= crossoverOX(population.get(indexP1).getValue0(),
-                       population.get(indexP2).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
-                       rand.nextInt(population.get(0).getValue0().size()));
-            }
-            else {
-            	child=crossoverOX(population.get(indexP2).getValue0(),
-                        population.get(indexP1).getValue0(), rand.nextInt(population.get(0).getValue0().size()),
-                        rand.nextInt(population.get(0).getValue0().size()));	
+                child = crossoverOX(population.get(indexP1).getValue0(), population.get(indexP2).getValue0(),
+                        rand.nextInt(population.get(0).getValue0().size()),
+                        rand.nextInt(population.get(0).getValue0().size()));
+            } else {
+                child = crossoverOX(population.get(indexP2).getValue0(), population.get(indexP1).getValue0(),
+                        rand.nextInt(population.get(0).getValue0().size()),
+                        rand.nextInt(population.get(0).getValue0().size()));
             }
 
-            child=correctionCrossover(child,requetes);
+            child = correctionCrossover(child, requetes);
 
             int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
-            
+
             double costChild = cout(child); // to compute
-            
-           if (Math.random() < p) {
+
+            if (Math.random() < p) {
                 // mutation with LS to improve C
-        	   
-        	   List<Long> M=this.mutationLocalSearch(child, cout(child), requetes);
-        	   
-        	   double ancienCout=population.get(kRand).getValue1();
-        	   population.get(kRand).setAt1(-10000);
-        	   
-        	   if(this.espacePopulation(population, delta, costChild)) {
-        		   child=M;
-        		   costChild=cout(child); 
-        	   }
-        	   
-        	   population.get(kRand).setAt1(ancienCout);
+
+                List<Long> M = this.mutationLocalSearch(child, cout(child), requetes);
+
+                double ancienCout = population.get(kRand).getValue1();
+                population.get(kRand).setAt1(Integer.MIN_VALUE);
+
+                if (this.espacePopulation(population, delta, costChild)) {
+                    child = M;
+                    costChild = cout(child);
+                }
+
+                population.get(kRand).setAt1(ancienCout);
 
             }
-            
-            double ancienCout=population.get(kRand).getValue1();
-     	    population.get(kRand).setAt1(-10000);
+
+            double ancienCout = population.get(kRand).getValue1();
+            population.get(kRand).setAt1(Integer.MIN_VALUE);
             if (this.espacePopulation(population, delta, costChild)) {
-            	iter=0;
+                iter = 0;
                 // productive iteration
-            	population.remove(kRand);
+                population.remove(kRand);
                 population.add(new Pair<>(child, costChild));
                 alpha++;
 
                 if (costChild >= population.get(0).getValue1()) {
                     beta++;
-                    
+
                 } else {
                     beta = 0;
                 }
-      
+
                 Collections.sort(population, ComparatorChromosome);
-                // TODO tree set 
+                // TODO tree set
             }
 
             else {
-            	 population.get(kRand).setAt1(ancienCout);
-            	 iter++;
+                population.get(kRand).setAt1(ancienCout);
+                iter++;
             }
         }
-        
-        
-        
+
         return population.get(0).getValue0();
     }
-    
-    
+
     /**
      * Calcule le cout d'un chromsomome (une solution à la tournée)
+     * 
      * @param chromosome que l'on teste
      */
     public double cout(List<Long> chromosome) {
-    	
-        double somme=0;
-        
+
+        double somme = 0;
+
         Long prevIntersectionId = this.depotId;
 
-    	for (Long newId : chromosome) {
+        for (Long newId : chromosome) {
             somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
             prevIntersectionId = newId;
-    	}
-        
+        }
+
         somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids();
 
-    	return somme;
+        return somme;
     }
-    
+
     /**
      * Mutation d'un chromosme grâce à un algorithme de recherche locale
+     * 
      * @param chromosome que l'on teste
-     * @param requetes liste des requêtes
+     * @param requetes   liste des requêtes
      */
 
     public List<Long> mutationLocalSearch(List<Long> chromosome, double coutIni, List<Requete> requetes) {
-    	
-    	Boolean amelioration=true;
-    	double coutMin=coutIni;
-    	
-    	while(amelioration==true)
-    	{
-    		amelioration=false;
-    		
-    		for(int i=1;i<chromosome.size()-2;i++) {
-    			for(int j=1;j<chromosome.size()-2;j++) {
-    				if(i!=j && j!=i-1 && j!=i+1) {
-    					
-    					long u=chromosome.get(i);
-    					long v=chromosome.get(j);
-    					long x=chromosome.get(i+1);
-    					long y=chromosome.get(j+1);
-    					
-    					chromosome.set(i+1,v);
-    					chromosome.set(j,x);
-    					
-    					if(this.verifierPop(chromosome, requetes))
-    					{
-    						double cout=cout(chromosome);
-    						
-        					if(cout<coutMin) {
-        						coutMin=cout;
-        						amelioration=true;
-        						break;
-        					}
-    					}
-    					
-    					chromosome.set(i+1,x);
-    					chromosome.set(j,v);	
-    				}
-    			}
-    			if(amelioration==true) {
-    				break;
-    			}
-    		}
-    	}
-    	return chromosome;
+
+        Boolean amelioration = true;
+        double coutMin = coutIni;
+
+        while (amelioration == true) {
+            amelioration = false;
+
+            for (int i = 1; i < chromosome.size() - 2; i++) {
+                for (int j = 1; j < chromosome.size() - 2; j++) {
+                    if (i != j && j != i - 1 && j != i + 1) {
+
+                        long u = chromosome.get(i);
+                        long v = chromosome.get(j);
+                        long x = chromosome.get(i + 1);
+                        long y = chromosome.get(j + 1);
+
+                        chromosome.set(i + 1, v);
+                        chromosome.set(j, x);
+
+                        if (this.verifierPop(chromosome, requetes)) {
+                            double cout = cout(chromosome);
+
+                            if (cout < coutMin) {
+                                coutMin = cout;
+                                amelioration = true;
+                                break;
+                            }
+                        }
+
+                        chromosome.set(i + 1, x);
+                        chromosome.set(j, v);
+                    }
+                }
+                if (amelioration == true) {
+                    break;
+                }
+            }
+        }
+        return chromosome;
     }
-    
-    
+
     /**
-     * Renvoie true si toutes les contraintes de précédences sont respectées, faux sinon
+     * Renvoie true si toutes les contraintes de précédences sont respectées, faux
+     * sinon
+     * 
      * @param chromosome que l'on teste
-     * @param requetes liste des requêtes
+     * @param requetes   liste des requêtes
      */
 
     public Boolean verifierPop(List<Long> chromosome, List<Requete> requetes) {
@@ -506,10 +518,10 @@ public class Carte {
             Boolean livraison = false;
             Boolean collecte = false;
             for (int j = 0; j < chromosome.size(); j++) {
-            	
-            	if(livraison==true && collecte==true) {
-            		break;
-            	}
+
+                if (livraison == true && collecte == true) {
+                    break;
+                }
                 if (chromosome.get(j) == requetes.get(i).getIdPickup()) {
                     collecte = true;
                     if (livraison == false) {
@@ -535,9 +547,11 @@ public class Carte {
     }
 
     /**
-     * Renvoie true si l'espacement minimum dans la population est supérieur à ecart en termes de couts
+     * Renvoie true si l'espacement minimum dans la population est supérieur à ecart
+     * en termes de couts
+     * 
      * @param population à tester
-     * @param ecart maximum
+     * @param ecart      maximum
      */
 
     public Boolean espacePopulation(List<Pair<List<Long>, Double>> population, double ecart) {
@@ -554,9 +568,11 @@ public class Carte {
     }
 
     /**
-     * Renvoie true si l'espacement minimum dans la population est supérieur à ecart en termes de couts avec l'ajout de l'enfant
-     * @param population à tester
-     * @param ecart maximum
+     * Renvoie true si l'espacement minimum dans la population est supérieur à ecart
+     * en termes de couts avec l'ajout de l'enfant
+     * 
+     * @param population   à tester
+     * @param ecart        maximum
      * @param valeurEnfant
      */
 
@@ -572,12 +588,12 @@ public class Carte {
         return true;
 
     }
-    
-    
+
     /**
-     * Renvoie une liste de chromosomes aléatoires (donc une liste d'intersections) 
-     * @param depot 
-     * @param requetes 
+     * Renvoie une liste de chromosomes aléatoires (donc une liste d'intersections)
+     * 
+     * @param depot
+     * @param requetes
      */
 
     public List<Long> genererChromosomeAleatoire(List<Requete> requetes) {
@@ -598,18 +614,18 @@ public class Carte {
 
     }
 
-    
     /**
      * Réalise le crossover de chromosomes afin d'obtenir un enfant
-     * @param depot 
-     * @param requetes 
+     * 
+     * @param depot
+     * @param requetes
      */
     public List<Long> crossoverOX(List<Long> P1, List<Long> P2, int i, int j) {
 
         List<Long> child = new ArrayList<Long>();
-        
-        for(int k=0;k<P1.size();k++) {
-        	child.add((long)0);
+
+        for (int k = 0; k < P1.size(); k++) {
+            child.add((long) 0);
         }
 
         int max = max(i, j);
@@ -618,7 +634,7 @@ public class Carte {
         Set<Long> intersectionsVus = new HashSet<Long>();
 
         for (int k = min; k <= max; k++) {
-        	
+
             child.set(k, P1.get(k));
             intersectionsVus.add(P1.get(k));
         }
@@ -645,43 +661,45 @@ public class Carte {
             p++;
             k++;
         }
-        
+
         return child;
 
     }
-    
 
-	/**
-	 * Permet la correction d'un chromosome en intégrant les conditions de précédence des requêtes
-	 * Echange la place des couples <pickup,delivery> quand ils sont inversés
-	 * @param requetes 
-	 * @param chromosome
-	 */
+    /**
+     * Permet la correction d'un chromosome en intégrant les conditions de
+     * précédence des requêtes Echange la place des couples <pickup,delivery> quand
+     * ils sont inversés
+     * 
+     * @param requetes
+     * @param chromosome
+     */
     public List<Long> correctionCrossover(List<Long> chromosome, List<Requete> requetes) {
-    	
+
         for (int i = 0; i < requetes.size(); i++) {
-        	
-        	int indiceCollecte=chromosome.indexOf(requetes.get(i).getIdPickup());
-        	int indiceLivraison=chromosome.indexOf(requetes.get(i).getIdDelivery());
-        	
-        	if(indiceLivraison<indiceCollecte) {
-        		
-        		long id=chromosome.get(indiceCollecte);
-        		chromosome.set(indiceCollecte,requetes.get(i).getIdDelivery());
-            	chromosome.set(indiceLivraison,id);
-        	}
+
+            int indiceCollecte = chromosome.indexOf(requetes.get(i).getIdPickup());
+            int indiceLivraison = chromosome.indexOf(requetes.get(i).getIdDelivery());
+
+            if (indiceLivraison < indiceCollecte) {
+
+                long id = chromosome.get(indiceCollecte);
+                chromosome.set(indiceCollecte, requetes.get(i).getIdDelivery());
+                chromosome.set(indiceLivraison, id);
+            }
         }
-        
-        return chromosome;   	
+
+        return chromosome;
 
     }
 
-	/**
-	 * Retourne le max entre a et b
-	 * @param a	
-	 * @param b
-	 */
-	private int max(int a, int b) {
+    /**
+     * Retourne le max entre a et b
+     * 
+     * @param a
+     * @param b
+     */
+    private int max(int a, int b) {
 
         if (a > b) {
             return a;
@@ -692,7 +710,8 @@ public class Carte {
 
     /**
      * Retourne le min entre a et b
-     * @param a	
+     * 
+     * @param a
      * @param b
      */
     private int min(int a, int b) {
@@ -703,14 +722,12 @@ public class Carte {
         return b;
     }
 
-
-
     /**
      * Getter
      * 
      * @return Les plus courts chemins
      */
-    public Map<String,Trajet> getCheminsLesPlusCourts() {
+    public Map<String, Trajet> getCheminsLesPlusCourts() {
         return cheminsLesPlusCourts;
     }
 
@@ -725,6 +742,7 @@ public class Carte {
 
     /**
      * Getter
+     * 
      * @return l'id du dépot
      */
     public Long getDepotId() {

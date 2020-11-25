@@ -99,6 +99,7 @@ public class VueGraphique {
     public void afficherCarte(Carte carte, boolean redessiner) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setLineWidth(1.0);
+        gc.setStroke(Color.BLACK);
 
         // On efface le canvas au cas où une carte est déjà affichée.
         gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
