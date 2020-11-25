@@ -54,6 +54,7 @@ public class XMLFileOpener implements FileFilter {
      *                                   XML
      * @throws SAXException              Lors que le fichier possède des erreurs de
      *                                   formatage
+     * @throws DTDValidationException    Lorsque le fichier XML ne valide pas son DTD
      * @return Le document XML correspondant au format org.w3c.dom.Document
      */
     public Document open(String path) throws IOException, FileBadExtensionException, SAXException, DTDValidationException {
@@ -61,11 +62,12 @@ public class XMLFileOpener implements FileFilter {
         if (!accept(file))
             throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
         Document xml = null;
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
+        ParserErrorHandler errorHandler = new ParserErrorHandler();
+        DocumentBuilder documentBuilder;
         try {
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
-            ParserErrorHandler errorHandler = new ParserErrorHandler();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setErrorHandler(errorHandler);
             xml = documentBuilder.parse(file);
             if(!errorHandler.isValid()){
