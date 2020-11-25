@@ -10,8 +10,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 /**
- * Permet d'ouvrir un fichier et de version type (XML).
- * Implémente FileFilter du package java.io
+ * Permet d'ouvrir un fichier et de version type (XML). Implémente FileFilter du
+ * package java.io
+ * 
  * @see FileFilter
  * @author HexaOne
  * @version 1.0
@@ -26,32 +27,42 @@ public class XMLFileOpener implements FileFilter {
     /**
      * Constructeur par défaut privé.
      */
-    private XMLFileOpener(){}
+    private XMLFileOpener() {
+    }
 
     /**
-     * Implémentation du design pattern SINGLETON afin d'implémenter l'interface FileFilter du package java.io
-     * en gardant un comportement static pour la classe
-     * @return l'unique instance de la classe XMLFileOpener. Si elle n'existe pas, l'instancie.
+     * Implémentation du design pattern SINGLETON afin d'implémenter l'interface
+     * FileFilter du package java.io en gardant un comportement static pour la
+     * classe
+     * 
+     * @return l'unique instance de la classe XMLFileOpener. Si elle n'existe pas,
+     *         l'instancie.
      */
-    public static XMLFileOpener getInstance(){
-        if(instance == null) instance = new XMLFileOpener();
+    public static XMLFileOpener getInstance() {
+        if (instance == null)
+            instance = new XMLFileOpener();
         return instance;
     }
 
     /**
      * Ouverture d'un fichier XML dont l'URI est est spécifié en paramètre
+     * 
      * @param path L'URI vers le fichier à ouvrir
-     * @throws IOException Lorsque le fichier spécifié n'existe pas
-     * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas XML
-     * @throws SAXException Lors que le fichier possède des erreurs de formatage
+     * @throws IOException               Lorsque le fichier spécifié n'existe pas
+     * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas
+     *                                   XML
+     * @throws SAXException              Lors que le fichier possède des erreurs de
+     *                                   formatage
      * @return Le document XML correspondant au format org.w3c.dom.Document
      */
     public Document open(String path) throws IOException, FileBadExtensionException, SAXException {
         File file = new File(path);
-        if(!accept(file)) throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        if (!accept(file))
+            throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
         Document xml = null;
         try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             xml = documentBuilder.parse(file);
             xml.getDocumentElement().normalize();
@@ -63,6 +74,7 @@ public class XMLFileOpener implements FileFilter {
 
     /**
      * Vérifie l'extension du fichier ouvert
+     * 
      * @param file Le fichier à vérifier
      * @return true si le fichier est au format XML, false sinon.
      */

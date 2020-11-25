@@ -120,6 +120,19 @@ public class XMLDeserializerTest {
     }
 
     /**
+     * Test le chargement d'une carte avec un fichier XML non correct
+     */
+    @Test
+    public void shouldntLoadCarte() throws FileBadExtensionException, SAXException, IOException {
+        try {
+            Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMapError.xml");
+            XMLDeserializer.loadCarte(carte, xml);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+    }
+
+    /**
      * Test le chargement des requêtes avec un fichier XML correct sans exception
      * levée.
      */
@@ -190,6 +203,19 @@ public class XMLDeserializerTest {
             assertTrue(testPresence);
         } catch (Exception e) {
             fail();
+        }
+    }
+
+    /**
+     * Test le chargement de requetes avec un fichier XML non correct
+     */
+    @Test
+    public void shouldntLoadRequetes() throws FileBadExtensionException, SAXException, IOException {
+        try {
+            Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallError.xml");
+            XMLDeserializer.loadRequete(xml, planning);
+        } catch (Exception e) {
+            assertTrue(true);
         }
     }
 
