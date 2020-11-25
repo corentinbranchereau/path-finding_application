@@ -68,7 +68,7 @@ public interface State {
             try {
                 Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath());
                 c.setPlanning(new Planning());
-                XMLDeserializer.loadRequete(xmlRequete, null, c.getPlanning());
+                XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
                 // On réaffiche d'abord la carte pour effacer les potentielles anciennes
                 // requêtes

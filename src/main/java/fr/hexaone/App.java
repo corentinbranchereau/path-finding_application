@@ -5,7 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * Permet de lancer l'application et de créer le controleur.
+ * Permet de lancer l'application et de créer le controleur.mvx
  * 
  * @author HexaOne
  * @version 1.0
