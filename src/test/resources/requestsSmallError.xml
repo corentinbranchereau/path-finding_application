@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE planningRequest SYSTEM
-        "C:\Users\Thibaut\Documents\4A - INSA Lyon\1 - Cours\PLD AGILE\1 - Projet\4IF_PLD_AGILE\src\test\resources\dtd\requetes.dtd">
+        ".\dtd\requetes.dtd">
 <planningRequest>
     <depot address="2835339774" />
     <request pickupAddress="1679901320" deliveryAddress="208769457" pickupDuration="420" deliveryDuration="600" />
