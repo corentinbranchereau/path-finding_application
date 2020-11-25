@@ -180,15 +180,17 @@ public class VueTextuelle {
                 retourDepotText.setFill(Color.RED);
                 this.zoneTexte.getChildren().add(retourDepotText);
 
-                Date dureeTotaleDate = new Date(dateRetourDepot.getTime() - planning.getDateDebut().getTime());
-                Pair<String, String> horaireDureeTotale = getStringFromDate(planning, dureeTotaleDate);
-                String heureDureeTotale = horaireDureeTotale.getKey();
-                String minutesDureeTotale = horaireDureeTotale.getValue();
-                Text dureeTotaleText = new Text(
-                                "Durée totale de la tournée : " + heureDureeTotale + "h" + minutesDureeTotale);
+                double dureeTotale = planning.getDureeTotale() / 1000; // en secondes
+                int heuresDureeTotale = (int) dureeTotale / 3600;
+                int minutesDureeTotale = ((int) dureeTotale % 3600) / 60;
+                String heuresDureeTotaleString = heuresDureeTotale < 10 ? "0" + heuresDureeTotale
+                                : String.valueOf(heuresDureeTotale);
+                String minutesDureeTotaleString = minutesDureeTotale < 10 ? "0" + minutesDureeTotale
+                                : String.valueOf(minutesDureeTotale);
+                Text dureeTotaleText = new Text("Durée totale de la tournée : " + heuresDureeTotaleString + "h"
+                                + minutesDureeTotaleString);
                 dureeTotaleText.setFill(Color.BLACK);
                 this.zoneTexte.getChildren().add(dureeTotaleText);
-
         }
 
         /**
