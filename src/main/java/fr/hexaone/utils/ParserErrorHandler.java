@@ -5,18 +5,28 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 public class ParserErrorHandler implements ErrorHandler {
-    @Override
-    public void warning(SAXParseException exception) throws SAXException {
-        
+
+    private boolean isValid = true;
+
+    public boolean isValid(){
+        return this.isValid;
     }
 
     @Override
-    public void error(SAXParseException exception) throws SAXException {
+    public void warning(SAXParseException exception) {
+        System.out.println("[HEXAONE PARSER WARNING] : "+exception.toString());
+    }
 
+    @Override
+    public void error(SAXParseException exception) {
+        System.out.println("[HEXAONE PARSER ERROR] : "+exception.toString());
+        this.isValid = false;
     }
 
     @Override
     public void fatalError(SAXParseException exception) throws SAXException {
-
+        System.out.println("[HEXAONE PARSER FATAL ERROR] : "+exception.toString());
+        this.isValid = false;
+        throw exception;
     }
 }
