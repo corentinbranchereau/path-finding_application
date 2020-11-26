@@ -5,12 +5,14 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Carte;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import fr.hexaone.model.Segment;
+import fr.hexaone.utils.exception.IllegalAttributException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -32,30 +34,34 @@ public class XMLDeserializer {
      * @param carte La carte où charger les données.
      * @param xml   Le document XML bien formé contenant les données.
      */
-    public static void loadCarte(Carte carte, Document xml) {
+    public static void loadCarte(Carte carte, Document xml) throws IllegalAttributException {
         Map<Long, Intersection> intersections = carte.getIntersections();
 
-        // Charger les intersections
-        NodeList ns = xml.getElementsByTagName("intersection");
-        for (int i = 0; i < ns.getLength(); i++) {
-            Element element = (Element) ns.item(i);
-            long id = Long.parseLong(element.getAttribute("id"));
-            double latitude = Double.parseDouble(element.getAttribute("latitude"));
-            double longitude = Double.parseDouble(element.getAttribute("longitude"));
-            intersections.put(id, new Intersection(id, latitude, longitude));
-        }
+        try{
+            // Charger les intersections
+            NodeList ns = xml.getElementsByTagName("intersection");
+            for (int i = 0; i < ns.getLength(); i++) {
+                Element element = (Element) ns.item(i);
+                long id = Long.parseLong(element.getAttribute("id"));
+                double latitude = Double.parseDouble(element.getAttribute("latitude"));
+                double longitude = Double.parseDouble(element.getAttribute("longitude"));
+                intersections.put(id, new Intersection(id, latitude, longitude));
+            }
 
-        // Charger les segments
-        ns = xml.getElementsByTagName("segment");
-        for (int i = 0; i < ns.getLength(); i++) {
-            Element element = (Element) ns.item(i);
-            long depart = Long.parseLong(element.getAttribute("origin"));
-            long destination = Long.parseLong(element.getAttribute("destination"));
-            double longueur = Double.parseDouble(element.getAttribute("length"));
-            String nom = element.getAttribute("name");
-            Segment segment = new Segment(longueur, nom, depart, destination);
-            intersections.get(depart).getSegmentsPartants().add(segment);
-            intersections.get(destination).getSegmentsArrivants().add(segment); // TODO : A vérifier
+            // Charger les segments
+            ns = xml.getElementsByTagName("segment");
+            for (int i = 0; i < ns.getLength(); i++) {
+                Element element = (Element) ns.item(i);
+                long depart = Long.parseLong(element.getAttribute("origin"));
+                long destination = Long.parseLong(element.getAttribute("destination"));
+                double longueur = Double.parseDouble(element.getAttribute("length"));
+                String nom = element.getAttribute("name");
+                Segment segment = new Segment(longueur, nom, depart, destination);
+                intersections.get(depart).getSegmentsPartants().add(segment);
+                intersections.get(destination).getSegmentsArrivants().add(segment); // TODO : A vérifier
+            }
+        } catch (IllegalArgumentException e){
+            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incompatible/illégal");
         }
     }
 
@@ -66,7 +72,7 @@ public class XMLDeserializer {
      * @param planning Le planning où charger les données.
      * @param xml      Le fichier XML bien formé contenant les données.
      */
-    public static void loadRequete(Document xml, Planning planning) {
+    public static void loadRequete(Document xml, Planning planning) throws IllegalAttributException {
         try {
             // Récupèrer le depot
             Element depotTag = (Element) xml.getElementsByTagName("depot").item(0);
@@ -86,8 +92,8 @@ public class XMLDeserializer {
             planning.setIdDepot(idDepot);
             planning.setDateDebut(dateDebut);
             planning.setRequetes(listeRequetes);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException | ParseException e){
+            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incompatible/illégal");
         }
     }
 }
