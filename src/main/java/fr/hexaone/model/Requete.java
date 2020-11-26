@@ -54,7 +54,8 @@ public class Requete {
         this.dureeDelivery = dureeDelivery;
     }
 
-    /**
+
+	/**
      * Getter
      * 
      * @return L'id de l'intersection de Pickup
@@ -117,5 +118,37 @@ public class Requete {
     public void setIdUniqueDelivery(long idUniqueDelivery) {
         this.idUniqueDelivery = idUniqueDelivery;
     }
+    
+    /**
+     * Setter
+     * @param idPickup
+     */
+    public void setIdPickup(long idPickup) {
+		this.idPickup = idPickup;
+	}
+
+    /**
+     * Setter
+     * @param dureePickup
+     */
+	public void setDureePickup(Integer dureePickup) {
+		this.dureePickup = dureePickup;
+	}
+
+	/**
+	 * Getter
+	 * @param idDelivery
+	 */
+	public void setIdDelivery(long idDelivery) {
+		this.idDelivery = idDelivery;
+	}
+
+	/**
+	 * Setter
+	 * @param dureeDelivery
+	 */
+	public void setDureeDelivery(Integer dureeDelivery) {
+		this.dureeDelivery = dureeDelivery;
+	}
 
 }

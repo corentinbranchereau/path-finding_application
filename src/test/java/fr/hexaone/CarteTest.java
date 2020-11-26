@@ -648,7 +648,7 @@ public class CarteTest {
 
         planning = carte.calculerTournee(planning);
 
-        System.out.println("size :" + planning.getListeTrajets().size());
+        /*System.out.println("size :" + planning.getListeTrajets().size());
 
         for (Trajet t : planning.getListeTrajets()) {
             if (t.getListeSegments().size()!=0) {
@@ -656,6 +656,7 @@ public class CarteTest {
                 System.out.println(t.getListeSegments().get(t.getListeSegments().size()-1).getArrivee());
             } else System.out.println("?");
         }
+        */
 
         Map<Long,Date> datesPassages = planning.getDatesPassage();
         Map<Long,Date> datesSorties = planning.getDatesSorties();
@@ -690,6 +691,43 @@ public class CarteTest {
             }
 
         }
+
+    }
+    
+    
+    
+    /**
+     * Méthode pour tester la modification d'une requête en remplacçant un point par un nouveau
+     */
+    @Test
+    public void test_modifier_requetes_intersection() {
+    	 // Création d'un graphe
+        createGraph();
+
+        // Création des requetes
+    	List<Requete> requetes = new ArrayList<Requete>();
+     
+    	requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(4,5,9,5));
+        requetes.add(new Requete(6,5,8,5));
+       
+        Planning planning = new Planning();
+        
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+        
+        double dureeAvantChangement=planning.getDureeTotale();
+
+        //modfication du du point de livraison de la 1 ère requête
+        Requete r1=requetes.get(0);
+        carte.modifierRequeteLieu(planning,r1.getIdUniqueDelivery(),7);
+
+        //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+        assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-0.48)<0.001);
 
     }
 

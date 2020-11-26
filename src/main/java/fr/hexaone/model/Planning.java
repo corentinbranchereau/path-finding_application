@@ -26,8 +26,14 @@ public class Planning {
      * Liste des requêtes en rapport avec la demande client
      */
     protected List<Requete> requetes;
-
+    
     /**
+     * Liste des ids uniques d'intersections constituant la tournée
+     */
+    protected List<Long> tournee;
+
+
+	/**
      * liste de tous les trajets composant la tournée
      */
     protected List<Trajet> listeTrajets;
@@ -118,4 +124,12 @@ public class Planning {
     public void setRequetes(List<Requete> newRequetes) {
         this.requetes = newRequetes;
     }
+
+    public List<Long> getTournee() {
+		return tournee;
+	}
+
+	public void setTournee(List<Long> tournee) {
+		this.tournee = tournee;
+	}
 }
