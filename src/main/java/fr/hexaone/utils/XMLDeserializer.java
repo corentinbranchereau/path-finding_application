@@ -77,7 +77,7 @@ public class XMLDeserializer {
             NodeList requetesNode = xml.getElementsByTagName("request");
             for (int i = 0; i < requetesNode.getLength(); ++i) {
                 Element requeteTag = (Element) requetesNode.item(i);
-                Long idPickup = Long.parseLong(requeteTag.getAttribute("pickupAddress")),
+                long idPickup = Long.parseLong(requeteTag.getAttribute("pickupAddress")),
                         idDelivery = Long.parseLong(requeteTag.getAttribute("deliveryAddress"));
                 int pickupDuration = Integer.parseInt(requeteTag.getAttribute("pickupDuration")),
                         deliveryDuration = Integer.parseInt(requeteTag.getAttribute("deliveryDuration"));
