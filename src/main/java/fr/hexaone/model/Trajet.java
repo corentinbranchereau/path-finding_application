@@ -32,14 +32,16 @@ public class Trajet {
 
     /**
      * Getter
+     * 
      * @return la liste des segments
      */
-    public List<Segment> getListeIntersections() {
+    public List<Segment> getListeSegments() {
         return listeSegments;
     }
 
     /**
      * Setter
+     * 
      * @param listeSegments
      */
     public void setListeSegments(List<Segment> listeSegments) {
@@ -48,6 +50,7 @@ public class Trajet {
 
     /**
      * Getter
+     * 
      * @return le poid total du trajet
      */
     public Double getPoids() {
@@ -60,6 +63,5 @@ public class Trajet {
     public void setPoids(Double poids) {
         this.poids = poids;
     }
-    
 
 }

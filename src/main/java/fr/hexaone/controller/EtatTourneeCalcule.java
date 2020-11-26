@@ -4,13 +4,13 @@ import fr.hexaone.model.Trajet;
 import javafx.scene.paint.Color;
 
 /**
- * Implémentation d'un State représentant l'état de l'application lorsque les
- * requetes sont chargées dans l'application
+ * Implémentation d'un State représentant l'état de l'application lorsqu'une
+ * tournée est calculé dans l'application
  * 
  * @author HexaOne
  * @version 1.0
  */
-public class EtatRequetesChargees implements State {
+public class EtatTourneeCalcule implements State {
 
     /**
      * {@inheritDoc}
@@ -25,7 +25,5 @@ public class EtatRequetesChargees implements State {
 
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
                 c.getFenetre().getMapCouleurRequete());
-
-        c.setEtatCourant(c.etatTourneeCalcule);
     }
 }

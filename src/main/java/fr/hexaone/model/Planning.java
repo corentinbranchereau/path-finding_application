@@ -24,50 +24,50 @@ public class Planning {
     protected List<Requete> requetes;
 
     public List<Trajet> getListeTrajets() {
-		return listeTrajets;
-	}
+        return listeTrajets;
+    }
 
-	public void setListeTrajets(List<Trajet> listeTrajets) {
-		this.listeTrajets = listeTrajets;
-	}
+    public void setListeTrajets(List<Trajet> listeTrajets) {
+        this.listeTrajets = listeTrajets;
+    }
 
-	public Map<Intersection, Date> getDatesPassage() {
-		return datesPassage;
-	}
+    public Map<Intersection, Date> getDatesPassage() {
+        return datesPassage;
+    }
 
-	public void setDatesPassage(Map<Intersection, Date> datesPassage) {
-		this.datesPassage = datesPassage;
-	}
+    public void setDatesPassage(Map<Intersection, Date> datesPassage) {
+        this.datesPassage = datesPassage;
+    }
 
-	public Map<Intersection, Date> getDatesSorties() {
-		return datesSorties;
-	}
+    public Map<Intersection, Date> getDatesSorties() {
+        return datesSorties;
+    }
 
-	public void setDatesSorties(Map<Intersection, Date> datesSorties) {
-		this.datesSorties = datesSorties;
-	}
+    public void setDatesSorties(Map<Intersection, Date> datesSorties) {
+        this.datesSorties = datesSorties;
+    }
 
-	public double getDureeTotale() {
-		return dureeTotale;
-	}
+    public double getDureeTotale() {
+        return dureeTotale;
+    }
 
-	public void setDureeTotale(double dureeTotale) {
-		this.dureeTotale = dureeTotale;
-	}
-	
+    public void setDureeTotale(double dureeTotale) {
+        this.dureeTotale = dureeTotale;
+    }
+
     /**
      * liste de tous les trajets composant la tournée
      */
     protected List<Trajet> listeTrajets;
 
-	/**
+    /**
      * Dates des passages des points spéciaux
      */
     protected Map<Intersection, Date> datesPassage;
     /**
      * Duree totale de la duree
      */
-    
+
     protected Map<Intersection, Date> datesSorties;
     /**
      * Duree totale de la duree

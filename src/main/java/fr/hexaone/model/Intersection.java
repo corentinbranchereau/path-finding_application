@@ -45,10 +45,10 @@ public class Intersection {
      * Liste des segments pour les calculs de chemins les plus courts
      */
     private List<Segment> cheminLePlusCourt = new LinkedList<Segment>();
-    
+
     /**
-     * Distance entre l'intersection source et ce point. Utilisé pour le calcul
-     * de chemins les plus courts
+     * Distance entre l'intersection source et ce point. Utilisé pour le calcul de
+     * chemins les plus courts
      */
     private Double distance = Double.MAX_VALUE;
 
@@ -67,9 +67,10 @@ public class Intersection {
         this.segmentsPartants = new HashSet<>();
         this.distance = Double.MAX_VALUE;
     }
-    
+
     /**
      * Getter
+     * 
      * @return l'identifiant
      */
     public long getId() {
@@ -78,6 +79,7 @@ public class Intersection {
 
     /**
      * Getter
+     * 
      * @return La latitude de l'intersection
      */
     public double getLatitude() {
@@ -86,6 +88,7 @@ public class Intersection {
 
     /**
      * Getter
+     * 
      * @return La longitude de l'intersection
      */
     public double getLongitude() {
@@ -94,6 +97,7 @@ public class Intersection {
 
     /**
      * Getter
+     * 
      * @return Le set des segments arrivant sur l'intersection
      */
     public Set<Segment> getSegmentsArrivants() {
@@ -102,6 +106,7 @@ public class Intersection {
 
     /**
      * Getter
+     * 
      * @return Le set des segments partants sur l'intersection
      */
     public Set<Segment> getSegmentsPartants() {
@@ -117,8 +122,9 @@ public class Intersection {
 
     /**
      * Getter
-     * @return les intersections du chemin le plus court 
-     * pendant le calcul du chemin le plus court
+     * 
+     * @return les intersections du chemin le plus court pendant le calcul du chemin
+     *         le plus court
      */
     public List<Segment> getCheminLePlusCourt() {
         return cheminLePlusCourt;
@@ -133,8 +139,8 @@ public class Intersection {
 
     /**
      * Getter
-     * @return la distance à la source pendant le calcul du
-     * chemin le plus court 
+     * 
+     * @return la distance à la source pendant le calcul du chemin le plus court
      */
     public Double getDistance() {
         return distance;
@@ -146,16 +152,29 @@ public class Intersection {
     public void setDistance(Double distance) {
         this.distance = distance;
     }
-    
+
     /**
-     * Remet à zero les variables utilisées pour calculer les 
-     * chemins les plus courts.
+     * Remet à zero les variables utilisées pour calculer les chemins les plus
+     * courts.
      */
     public void resetIntersection() {
         distance = Double.MAX_VALUE;
         cheminLePlusCourt = new LinkedList<Segment>();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Intersection)) {
+            return false;
+        }
 
+        Intersection i = (Intersection) o;
+
+        // If the object is compared with itself then return true
+        if (i.id == this.id) {
+            return true;
+        }
+        return false;
+    }
 
 }
