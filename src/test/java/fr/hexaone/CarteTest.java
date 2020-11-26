@@ -489,6 +489,9 @@ public class CarteTest {
 
     }
     
+    /**
+     * TODO or del ?
+     */
     @Test
     public void calculerTourneeTest() {
     	 // Création d'un grap simple
