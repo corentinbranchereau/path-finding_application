@@ -1,6 +1,5 @@
 package fr.hexaone.utils;
 
-import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -54,25 +53,18 @@ public class XMLFileOpener implements FileFilter {
      *                                   XML
      * @throws SAXException              Lors que le fichier possède des erreurs de
      *                                   formatage
-     * @throws DTDValidationException    Lorsque le fichier XML ne valide pas son DTD
      * @return Le document XML correspondant au format org.w3c.dom.Document
      */
-    public Document open(String path) throws IOException, FileBadExtensionException, SAXException, DTDValidationException {
+    public Document open(String path) throws IOException, FileBadExtensionException, SAXException {
         File file = new File(path);
         if (!accept(file))
             throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
         Document xml = null;
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
-        ParserErrorHandler errorHandler = new ParserErrorHandler();
-        DocumentBuilder documentBuilder;
         try {
-            documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            documentBuilder.setErrorHandler(errorHandler);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             xml = documentBuilder.parse(file);
-            if(!errorHandler.isValid()){
-                throw new DTDValidationException("DTD Error, XML file does not validate it.");
-            }
             xml.getDocumentElement().normalize();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

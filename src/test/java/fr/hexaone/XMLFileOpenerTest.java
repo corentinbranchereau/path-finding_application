@@ -1,7 +1,6 @@
 package fr.hexaone;
 
 import fr.hexaone.utils.XMLFileOpener;
-import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
 import org.junit.jupiter.api.Test;
 
@@ -40,23 +39,5 @@ public class XMLFileOpenerTest
         assertThrows(FileBadExtensionException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileFormatText.txt"));
     }
 
-    /**
-     * Test l'ouverture d'un fichier de requête dont le DTD n'est pas validé.
-     * Une DTDValidationException est levée
-     */
-    @Test
-    public void shouldOpenRequestThrowDTDValidationException()
-    {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallError.xml"));
-    }
 
-    /**
-     * Test l'ouverture d'un fichier de map dont le DTD n'est pas validé.
-     * Une DTDValidationException est levée
-     */
-    @Test
-    public void shouldOpenMapThrowDTDValidationException()
-    {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapError.xml"));
-    }
 }

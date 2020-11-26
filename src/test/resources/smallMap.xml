@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE map SYSTEM
-        ".\dtd\carte.dtd">
+<!DOCTYPE map SYSTEM "../../main/java/fr/hexaone/utils/carte.dtd">
 <map>
     <intersection id="25175791" latitude="45.75406" longitude="4.857418" />
     <intersection id="2129259178" latitude="45.750404" longitude="4.8744674" />

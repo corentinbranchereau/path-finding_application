@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE planningRequest SYSTEM
-        ".\dtd\requetes.dtd">
+<!DOCTYPE planningRequest SYSTEM "../../main/java/fr/hexaone/utils/requetes.dtd">
 <planningRequest>
     <depot address="2835339774" departureTime="8:0:0" />
     <request pickupAddress="1679901320" deliveryAddress="208769457" pickupDuration="420" deliveryDuration="600" />

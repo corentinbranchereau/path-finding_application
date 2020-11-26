@@ -1,9 +1,0 @@
-<!ELEMENT planningRequest (depot, request*)>
-<!ELEMENT depot (#PCDATA)>
-<!ELEMENT request (#PCDATA)>
-<!ATTLIST depot address CDATA #REQUIRED>
-<!ATTLIST depot departureTime CDATA #REQUIRED>
-<!ATTLIST request pickupAddress CDATA #REQUIRED>
-<!ATTLIST request deliveryAddress CDATA #REQUIRED>
-<!ATTLIST request pickupDuration CDATA #REQUIRED>
-<!ATTLIST request deliveryDuration CDATA #REQUIRED>
