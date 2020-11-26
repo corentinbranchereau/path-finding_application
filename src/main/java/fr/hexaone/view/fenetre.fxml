@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.canvas.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.* ?>
+<?import java.lang.* ?>
+<?import javafx.geometry.* ?>
+<?import javafx.scene.canvas.* ?>
+<?import javafx.scene.control.* ?>
+<?import javafx.scene.layout.* ?>
+<?import javafx.scene.shape.* ?>
+<?import javafx.geometry.Insets ?>
+<?import javafx.scene.canvas.Canvas ?>
+<?import javafx.scene.control.Button ?>
+<?import javafx.scene.control.Menu ?>
+<?import javafx.scene.control.MenuBar ?>
+<?import javafx.scene.control.MenuItem ?>
+<?import javafx.scene.control.TextArea ?>
+<?import javafx.scene.layout.AnchorPane ?>
+<?import javafx.scene.layout.HBox ?>
+<?import javafx.scene.layout.VBox ?>
+<?import javafx.scene.shape.Rectangle ?>
 
 <VBox prefHeight="785.0" prefWidth="1534.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.hexaone.view.FenetreControleurFXML">
    <children>
@@ -53,12 +53,18 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
+                  <Button fx:id="boutonNouvelleRequete" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Nouvelle demande de livraison">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Button>
                   <ScrollPane prefHeight="700.0" prefWidth="320.0">
                      <content>
                         <TextFlow fx:id="zoneTexte" prefHeight="700.0" prefWidth="393.0" style="-fx-padding: 20;">
                            <children>
                               <Text lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pour charger une Carte ou des Requêtes, rendez-vous dans &quot;Fichier&quot;, en haut à gauche de l'application." />
-                           </children></TextFlow>
+                           </children>
+                        </TextFlow>
                      </content>
                   </ScrollPane>
                </children>

@@ -194,6 +194,22 @@ public class VueTextuelle {
         }
 
         /**
+         * Méthode qui permet d'afficher le popup demande nouvelle livraison dans la vue
+         * textuelle
+         */
+        public void afficherPopUpNouvelleDemandeLivraison() {
+                // TODO
+        }
+
+        /**
+         * Méthode qui permet d'afficher la nouvelle demande de livraison sur la vue
+         * textuelle
+         */
+        public void afficherNouvelleRequeteVueTextuelle() {
+                // TODO
+        }
+
+        /**
          * setter permettant de définir la zone de texte de la fenêtre
          * 
          * @param zoneTexte
@@ -262,5 +278,4 @@ public class VueTextuelle {
 
                 return sortedMap;
         }
-
 }

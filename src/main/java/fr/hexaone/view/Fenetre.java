@@ -144,7 +144,7 @@ public class Fenetre {
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getCanvas().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
-                	System.out.println(event.getTextDeltaY());
+                    System.out.println(event.getTextDeltaY());
                     double facteurZoom = 0.0;
                     if (event.getTextDeltaY() > 0) {
                         // Zoom
@@ -289,6 +289,13 @@ public class Fenetre {
             fenetreControleur.getBoutonLancer().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.lancerCalcul();
+                }
+            });
+
+            // TODO : Ajouter event handler bouton ajouter requête
+            fenetreControleur.getBoutonNouvelleRequete().setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    controleur.ouvrirPopUpNouvelleRequete();
                 }
             });
 

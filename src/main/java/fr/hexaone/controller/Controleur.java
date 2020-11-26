@@ -56,6 +56,11 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
+     * Etat popup nouvelle requête affichée du design pattern STATE
+     */
+    public EtatPopUpNouvelleRequeteAffiche etatPopUpNouvelleRequeteAffiche;
+
+    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -101,6 +106,11 @@ public class Controleur {
      */
     public void lancerCalcul() {
         etatCourant.lancerCalcul(this);
+    }
+
+    // TODO : Ajouter méthode etatCourant --> OuvrirPopUP nouvelle demande livraison
+    public void ouvrirPopUpNouvelleRequete() {
+        etatCourant.ouvrirPopUpNouvelleRequete(this);
     }
 
     /**
