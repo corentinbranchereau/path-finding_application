@@ -81,36 +81,32 @@ public class Carte {
         Long tempDebut = planning.getDateDebut().getTime();
         double duree = 0.;
 
+        Long idUniqueDepot = planning.getIdUniqueDepot();
+        datesSorties.put(idUniqueDepot, new Date(tempDebut));
         Long idDepot = planning.getIdDepot();
-        datesSorties.put(idDepot, new Date(tempDebut));
-        
         Long previd = idDepot;
         for (Long id : idIntersections) {
-            System.out.println("id1 = " + id);
-            id = this.idUniqueTOIdIntersection.get(id);
-            System.out.println("id2 = " + id);
-            Trajet t = this.cheminsLesPlusCourts.get(previd + "|" + id);
+            Long idInter = this.idUniqueTOIdIntersection.get(id);
+            Trajet t = this.cheminsLesPlusCourts.get(previd + "|" + idInter);
             duree += t.getPoids() * 3600. / 15.;
-            System.out.println("duree = " + duree);
             datesPassage.put(id, new Date(tempDebut + (long)duree ));
             for (Requete r : planning.getRequetes()) {
-                if (r.getIdDelivery() == id) {
+                if (r.getIdUniqueDelivery() == id) {
                     duree += r.getDureeDelivery() * 1000 ;
                     //break;
-                } else if (r.getIdPickup() == id) {
-                    duree += r.getIdDelivery() * 1000 ;
+                } else if (r.getIdUniquePickup() == id) {
+                    duree += r.getDureePickup() * 1000 ;
                     //break;
                 }
             }
-            System.out.println("duree2 = " + duree);
 
             datesSorties.put(id, new Date(tempDebut + (long)duree ));
-            previd = id;
+            previd = idInter;
         }
 
         Trajet t = this.cheminsLesPlusCourts.get(previd + "|" + idDepot);
         duree += t.getPoids() * 3600. / 15.;
-        datesPassage.put(idDepot, new Date(tempDebut + (long)duree ));
+        datesPassage.put(idUniqueDepot, new Date(tempDebut + (long)duree ));
 
         planning.setDureeTotale(duree);
         
@@ -118,9 +114,10 @@ public class Carte {
         planning.setDatesPassage(datesPassage);
     }
 
-    public void generateNewId(List<Requete> requetes) {
+    public void generateNewId(Planning planning) {
         Long id = 0L;
 
+        List<Requete> requetes = planning.getRequetes();
 
         idUniqueTOIdIntersection = new HashMap<Long,Long>();
 
@@ -132,6 +129,9 @@ public class Carte {
             requete.setIdUniqueDelivery(id);
             id += 1;
         }
+
+        planning.setIdUniqueDepot(id);
+
     }
 
     /**
@@ -149,7 +149,7 @@ public class Carte {
         // livraisons et dépot)
         calculerLesCheminsLesPlusCourts(requetes);
         
-        generateNewId(requetes);
+        generateNewId(planning);
         
         //recherche de la melleure tournéee
         List<Long> bestSolution = trouverMeilleureTournee(requetes);
@@ -159,7 +159,9 @@ public class Carte {
 
         for (Long newId : bestSolution) {
             newId = idUniqueTOIdIntersection.get(newId);
+            System.out.println(prevIntersectionId + " " + newId);
             listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+            System.out.println(listTrajets.size());
             prevIntersectionId = newId;
         }
 
@@ -469,6 +471,7 @@ public class Carte {
         Long prevIntersectionId = this.depotId;
 
         for (Long newId : chromosome) {
+            newId = idUniqueTOIdIntersection.get(newId);
             somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
             prevIntersectionId = newId;
         }

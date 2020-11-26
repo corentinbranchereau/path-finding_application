@@ -15,6 +15,10 @@ public class Planning {
      */
     protected Long idDepot;
     /**
+     * L'id unqiue du Dépôt associé au planning
+     */
+    protected Long idUniqueDepot;
+    /**
      * Date de début de la tournée. 24 hours format - H:m:s
      */
     protected Date dateDebut;
@@ -37,6 +41,7 @@ public class Planning {
      */
 
     protected Map<Long, Date> datesSorties;
+
     /**
      * Duree totale de la duree
      */
@@ -92,6 +97,14 @@ public class Planning {
 
     public void setIdDepot(Long newIdDepot) {
         this.idDepot = newIdDepot;
+    }
+
+    public Long getIdUniqueDepot() {
+        return this.idUniqueDepot;
+    }
+
+    public void setIdUniqueDepot(Long newIdUniqueDepot) {
+        this.idUniqueDepot = newIdUniqueDepot;
     }
 
     public Date getDateDebut() {

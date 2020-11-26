@@ -5,6 +5,7 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import fr.hexaone.model.Trajet;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,7 +146,8 @@ public class CarteTest {
     }
 
     /**
-     * TODO
+     * Méthode de test de la recherche de plus courts chemins contenant
+     * des mêmes intersections
      */
     @Test
     public void test_RechercheDesPlusCourtsChemins_memeIntersection(){
@@ -372,14 +374,18 @@ public class CarteTest {
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,5,3,5));
 
-        //carte.generateNewId(requetes);
+        Planning planning = new Planning();
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+
+        carte.generateNewId(planning);
          
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
         List<Long> chromosome = new ArrayList<Long>();
-    	chromosome.add(1L);
-        chromosome.add(3L);
+    	chromosome.add(0L);
+        chromosome.add(1L);
         
         Double cout = carte.cout(chromosome);
 
@@ -406,9 +412,15 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
+        Planning planning = new Planning();
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+
+        carte.generateNewId(planning);
+
         List<Long> chromosome = new ArrayList<Long>();
-    	chromosome.add((long)1);
-        chromosome.add((long)9);
+    	chromosome.add(0L);
+        chromosome.add(1L);
         
         Double cout = carte.cout(chromosome);
 
@@ -434,10 +446,16 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
+        Planning planning = new Planning();
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+
+        carte.generateNewId(planning);
+
 	    List<Long> P1 = new ArrayList<Long>();
 
-    	P1.add((long)1);
-    	P1.add((long)3);
+    	P1.add(0L);
+    	P1.add(1L);
 
 	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
 
@@ -492,7 +510,11 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
-        carte.generateNewId(requetes);
+        Planning planning = new Planning();
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+
+        carte.generateNewId(planning);
 
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
@@ -530,6 +552,12 @@ public class CarteTest {
         
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        Planning planning = new Planning();
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+
+        carte.generateNewId(planning);
         
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
@@ -569,25 +597,19 @@ public class CarteTest {
         Map<Long,Date> datesPassages = planning.getDatesPassage();
         Map<Long,Date> datesSorties = planning.getDatesSorties();
 
-        Long d1_depot = datesPassages.get(planning.getIdDepot()).getTime();
-        Long d2_depot = datesSorties.get(planning.getIdDepot()).getTime();
-        System.out.println(d1_depot);
-        System.out.println(d2_depot);
-        //assert(d1_depot == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
+        Long d1_depot = datesPassages.get(planning.getIdUniqueDepot()).getTime();
+        Long d2_depot = datesSorties.get(planning.getIdUniqueDepot()).getTime();
+        assert(d1_depot == 5*3600/15 + 8000);
         assert(d2_depot == 0);
 
         for (Requete r : requetes) {
-            Long d1 = datesPassages.get(r.getIdPickup()).getTime();
-            Long d2 = datesSorties.get(r.getIdPickup()).getTime();
-            Long d3 = datesPassages.get(r.getIdDelivery()).getTime();
-            Long d4 = datesSorties.get(r.getIdDelivery()).getTime();
+            Long d1 = datesPassages.get(r.getIdUniquePickup()).getTime();
+            Long d2 = datesSorties.get(r.getIdUniquePickup()).getTime();
+            Long d3 = datesPassages.get(r.getIdUniqueDelivery()).getTime();
+            Long d4 = datesSorties.get(r.getIdUniqueDelivery()).getTime();
 
             switch (r.getIdPickup() + "|" +r.getIdDelivery() ) {
                 case "1|3":
-                    System.out.println(d1);
-                    System.out.println(d2);
-                    System.out.println(d3);
-                    System.out.println(d4);
                     assert(d1 == 1*3600/15);
                     assert(d2 == 1*3600/15 + 3000);
                     assert(d3 == 1*3600/15 + 3000 + 2*3600/15);
@@ -603,7 +625,7 @@ public class CarteTest {
     }
     
     /**
-     * TODO Méthode pour tester la création des tournée avec des mêmes
+     * Méthode pour tester la création des tournée avec des mêmes
      * intersections dans les requêtes
      */
     @Test
@@ -626,12 +648,21 @@ public class CarteTest {
 
         planning = carte.calculerTournee(planning);
 
+        System.out.println("size :" + planning.getListeTrajets().size());
+
+        for (Trajet t : planning.getListeTrajets()) {
+            if (t.getListeSegments().size()!=0) {
+                System.out.print(t.getListeSegments().get(0).getDepart() + " ");
+                System.out.println(t.getListeSegments().get(t.getListeSegments().size()-1).getArrivee());
+            } else System.out.println("?");
+        }
+
         Map<Long,Date> datesPassages = planning.getDatesPassage();
         Map<Long,Date> datesSorties = planning.getDatesSorties();
 
-        Long d1_depot = datesPassages.get(planning.getIdDepot()).getTime();
-        Long d2_depot = datesSorties.get(planning.getIdDepot()).getTime();
-        assert(d1_depot == 1*3600/15 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
+        Long d1_depot = datesPassages.get(planning.getIdUniqueDepot()).getTime();
+        Long d2_depot = datesSorties.get(planning.getIdUniqueDepot()).getTime();
+        assert(d1_depot == 58*3600/15 + 20*1000);
         assert(d2_depot == 0);
 
         for (Requete r : requetes) {
@@ -642,10 +673,16 @@ public class CarteTest {
 
             switch (r.getIdPickup() + "|" +r.getIdDelivery() ) {
                 case "1|3":
-                    assert(d1 == 1*3600/15000000);
-                    assert(d2 == 1*3600/15000000 + 3000);
-                    assert(d3 == 1*3600/15000000 + 3000 + 2*3600/15000000);
-                    assert(d4 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000);
+                    assert(d1 == 4*3600/15);
+                    assert(d2 == 4*3600/15 + 5*1000);
+                    assert( (d3 == 16*3600/15 + 5*1000) || (d3 == 16*3600/15 + 10*1000) );
+                    assert( (d4 == 16*3600/15 + 10*1000) || (d4 == 16*3600/15 + 15*1000) ) ;
+                    break;
+                case "3|9":
+                    assert( (d1 == 16*3600/15 + 5*1000) || (d1 == 16*3600/15 + 10*1000) );
+                    assert( (d2 == 16*3600/15 + 10*1000) || (d2 == 16*3600/15 + 15*1000) ) ;
+                    assert(d3 == 31*3600/15 + 15*1000);
+                    assert(d4 == 31*3600/15 + 20*1000);
                     break;
                 default:
                     assert(false);
