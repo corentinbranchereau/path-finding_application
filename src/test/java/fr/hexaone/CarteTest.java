@@ -313,7 +313,7 @@ public class CarteTest {
         
         Double cout = carte.cout(chromosome);
 
-        assert(cout == Double.MAX_VALUE);
+        assert(cout >= Double.MAX_VALUE);
     }
     
     /**
@@ -355,7 +355,7 @@ public class CarteTest {
      *   - verifierPop
      */
     @Test
-    public void genererChromosomeTest() {
+    public void test_genererChromosome() {
 
     	List<Requete> requetes = new ArrayList<Requete>();
 
@@ -474,18 +474,18 @@ public class CarteTest {
 
         d1 = datesPassages.get(intersections.get(0L)).getTime();
         d2 = datesSorties.get(intersections.get(0L)).getTime();
-        assert(d1 == 1*15000000/3600 + 3 + 2*15000000/3600 + 5 + 2*15000000/3600);
+        assert(d1 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
         assert(d2 == 0);
 
         d1 = datesPassages.get(intersections.get(1L)).getTime();
         d2 = datesSorties.get(intersections.get(1L)).getTime();
-        assert(d1 == 1*15000000/3600);
-        assert(d2 == 1*15000000/3600 + 3);
+        assert(d1 == 1*3600/15000000);
+        assert(d2 == 1*3600/15000000 + 3000);
 
         d1 = datesPassages.get(intersections.get(3L)).getTime();
         d2 = datesSorties.get(intersections.get(3L)).getTime();
-        assert(d1 == 1*15000000/3600 + 3 + 2*15000000/3600);
-        assert(d2 == 1*15000000/3600 + 3 + 2*15000000/3600 + 5);
+        assert(d1 == 1*3600/15000000 + 3000 + 2*3600/15000000);
+        assert(d2 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000);
 
     }
     
@@ -493,7 +493,7 @@ public class CarteTest {
      * TODO or del ?
      */
     @Test
-    public void calculerTourneeTest() {
+    public void test_calculerTournee() {
     	 // Création d'un grap simple
         createGraph();
 

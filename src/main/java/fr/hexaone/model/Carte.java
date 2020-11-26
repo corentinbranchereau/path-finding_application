@@ -449,11 +449,8 @@ public class Carte {
         Long prevIntersectionId = this.depotId;
 
         for (Long newId : chromosome) {
-        	//ajout des couts successifs
             somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
-            prevIntersectionId = newId;
         }
-
         somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids();
 
         return somme;
