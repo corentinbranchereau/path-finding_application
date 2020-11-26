@@ -56,6 +56,10 @@ public class Carte {
         
         List<Long> bestSolution=trouverMeilleureTournee(requetes);
         
+        for(Long l: bestSolution) {
+        	System.out.println(l);
+        }
+        
         Date debut=planning.getDateDebut();
         
         Map<Intersection,Date> temps =new HashMap<Intersection,Date>();
@@ -263,7 +267,6 @@ public class Carte {
         int maxIter=1000;
         int iter=0;
         
-    	
     	/*int sigma = 6; // Nb chromosomes
         double delta = 1;// Minimum d'ecart entre les valeurs
         double p = 0.1; // probabilité d'améliorer avec du Local Search un enfant
@@ -399,9 +402,9 @@ public class Carte {
 
                 if (costChild >= population.get(0).getValue1()) {
                     beta++;
-                    System.out.println("x");
+                    
                 } else {
-                    //beta = 0;
+                    beta = 0;
                 }
       
                 Collections.sort(population, ComparatorChromosome);
@@ -413,6 +416,8 @@ public class Carte {
             	 iter++;
             }
         }
+        
+        
         
         return population.get(0).getValue0();
     }

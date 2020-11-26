@@ -455,9 +455,7 @@ public class CarteTest {
 
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,3,3,5));
-
-        carte.calculerLesCheminsLesPlusCourts(requetes);
-
+        
         Planning planning = new Planning();
 
         planning.setIdDepot(0L);
@@ -488,6 +486,42 @@ public class CarteTest {
         d2 = datesSorties.get(intersections.get(3L)).getTime();
         assert(d1 == 1*15000000/3600 + 3 + 2*15000000/3600);
         assert(d2 == 1*15000000/3600 + 3 + 2*15000000/3600 + 5);
+
+    }
+    
+    @Test
+    public void calculerTourneeTest() {
+    	 // Création d'un grap simple
+        createGraph();
+
+        // Création des requetes
+    	List<Requete> requetes = new ArrayList<Requete>();
+     
+    	requetes.add(new Requete(3,5,5,5));
+        requetes.add(new Requete(6,5,8,5));
+        requetes.add(new Requete(7,5,4,5));
+        requetes.add(new Requete(2,5,9,5));
+        
+        Planning planning = new Planning();
+        
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+
+        Map<Intersection,Date> datesPassages = planning.getDatesPassage();
+        Map<Intersection,Date> datesSorties = planning.getDatesSorties();
+
+        Map<Long,Intersection> intersections = carte.getIntersections();
+
+        Long d1;
+        Long d2;
+
+        d1 = datesPassages.get(intersections.get(0L)).getTime();
+        d2 = datesSorties.get(intersections.get(0L)).getTime();
+        assert(d2 == 0);
 
     }
 
