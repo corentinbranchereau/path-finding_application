@@ -23,38 +23,6 @@ public class Planning {
      */
     protected List<Requete> requetes;
 
-    public List<Trajet> getListeTrajets() {
-        return listeTrajets;
-    }
-
-    public void setListeTrajets(List<Trajet> listeTrajets) {
-        this.listeTrajets = listeTrajets;
-    }
-
-    public Map<Intersection, Date> getDatesPassage() {
-        return datesPassage;
-    }
-
-    public void setDatesPassage(Map<Intersection, Date> datesPassage) {
-        this.datesPassage = datesPassage;
-    }
-
-    public Map<Intersection, Date> getDatesSorties() {
-        return datesSorties;
-    }
-
-    public void setDatesSorties(Map<Intersection, Date> datesSorties) {
-        this.datesSorties = datesSorties;
-    }
-
-    public double getDureeTotale() {
-        return dureeTotale;
-    }
-
-    public void setDureeTotale(double dureeTotale) {
-        this.dureeTotale = dureeTotale;
-    }
-
     /**
      * liste de tous les trajets composant la tournée
      */
@@ -63,12 +31,12 @@ public class Planning {
     /**
      * Dates des passages des points spéciaux
      */
-    protected Map<Intersection, Date> datesPassage;
+    protected Map<Long, Date> datesPassage;
     /**
      * Duree totale de la duree
      */
 
-    protected Map<Intersection, Date> datesSorties;
+    protected Map<Long, Date> datesSorties;
     /**
      * Duree totale de la duree
      */
@@ -80,6 +48,38 @@ public class Planning {
     public Planning() {
         this.requetes = new ArrayList<>();
         this.datesPassage = new HashMap<>();
+    }
+
+    public List<Trajet> getListeTrajets() {
+        return listeTrajets;
+    }
+
+    public void setListeTrajets(List<Trajet> listeTrajets) {
+        this.listeTrajets = listeTrajets;
+    }
+
+    public Map<Long, Date> getDatesPassage() {
+        return datesPassage;
+    }
+
+    public void setDatesPassage(Map<Long, Date> datesPassage) {
+        this.datesPassage = datesPassage;
+    }
+
+    public Map<Long, Date> getDatesSorties() {
+        return datesSorties;
+    }
+
+    public void setDatesSorties(Map<Long, Date> datesSorties) {
+        this.datesSorties = datesSorties;
+    }
+
+    public double getDureeTotale() {
+        return dureeTotale;
+    }
+
+    public void setDureeTotale(double dureeTotale) {
+        this.dureeTotale = dureeTotale;
     }
 
     public List<Requete> getRequetes() {

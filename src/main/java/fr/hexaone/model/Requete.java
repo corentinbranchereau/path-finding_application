@@ -30,6 +30,16 @@ public class Requete {
     protected Integer dureeDelivery;
 
     /**
+     * Id l'intersection spéciale de type point de livraison
+     */
+    protected long idUniquePickup;
+
+    /**
+     * Id l'intersection spéciale de type point de livraison
+     */
+    protected long idUniqueDelivery;
+
+    /**
      * Constructeur de Requete
      *
      * @param idPickup
@@ -78,6 +88,34 @@ public class Requete {
      */
     public Integer getDureeDelivery() {
         return dureeDelivery;
+    }
+
+    /**
+     * Getter
+     */
+    public long getIdUniquePickup() {
+        return idUniquePickup;
+    }
+
+    /**
+     * Setter
+     */
+    public void setIdUniquePickup(long idUniquePickup) {
+        this.idUniquePickup = idUniquePickup;
+    }
+
+    /**
+     * Getter
+     */
+    public long getIdUniqueDelivery() {
+        return idUniqueDelivery;
+    }
+
+    /**
+     * Setter
+     */
+    public void setIdUniqueDelivery(long idUniqueDelivery) {
+        this.idUniqueDelivery = idUniqueDelivery;
     }
 
 }

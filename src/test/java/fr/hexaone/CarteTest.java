@@ -145,6 +145,83 @@ public class CarteTest {
     }
 
     /**
+     * TODO
+     */
+    @Test
+    public void test_RechercheDesPlusCourtsChemins_memeIntersection(){
+
+        //Création d'un graphe
+        createGraph();
+
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(3,5,9,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        // Vérification des résultats
+        assert(carte.getCheminsLesPlusCourts().size() == 16);
+
+        carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
+            switch (key) {
+	            case "0|0":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "1|1":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "9|9":
+	                assert(value.getPoids() == 0.);
+                    break;
+                case "3|3":
+	                assert(value.getPoids() == 0.);
+	                break;
+                case "0|1":
+                    assert(value.getPoids() == 4.);
+                    break;
+                case "0|3":
+                    assert(value.getPoids() == 16.);
+                    break;
+                case "0|9":
+                    assert(value.getPoids() == 27.);
+                    break;
+                case "1|0":
+                    assert(value.getPoids() == 4.);
+                    break;
+                case "1|3":
+                    assert(value.getPoids() == 12.);
+                    break;
+                case "1|9":
+                    assert(value.getPoids() == 23.);
+                    break;
+                case "3|0":
+                    assert(value.getPoids() == 16.);
+                    break;
+                case "3|1":
+                    assert(value.getPoids() == 12.);
+                    break;
+                case "3|9":
+                    assert(value.getPoids() == 15.);
+                    break;
+                case "9|0":
+                    assert(value.getPoids() == 27.);
+                    break;
+                case "9|1":
+                    assert(value.getPoids() == 23.);
+                    break;
+                case "9|3":
+                    assert(value.getPoids() == 15.);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
+        });
+    }
+
+    /**
      * Méthode de test pour la vérification des contraintes sur une population
      * 
      * Préconditions :
@@ -171,12 +248,32 @@ public class CarteTest {
         List<Requete> requetes2 = new ArrayList<Requete>();
         List<Requete> requetes3 = new ArrayList<Requete>();
         
-        requetes3.add(new Requete((long)1,0,(long)3,0));
-	    requetes3.add(new Requete((long)4,0,(long)9,0));
-	    requetes3.add(new Requete((long)5,0,(long)7,0));
-        requetes.add(new Requete((long) 8,0,(long) 3,0));
-        requetes2.add(new Requete((long) 3,0,(long) 8,0));
+        Requete r1 = new Requete(1,0,3,0);
+        Requete r2 = new Requete(4,0,9,0);
+        Requete r3 = new Requete(5,0,7,0);
+        Requete r4 = new Requete(8,0,3,0);
+        Requete r5 = new Requete(3,0,8,0);
+        r1.setIdUniquePickup(1);
+        r1.setIdUniqueDelivery(3);
+        r2.setIdUniquePickup(4);
+        r2.setIdUniqueDelivery(9);
+        r3.setIdUniquePickup(5);
+        r3.setIdUniqueDelivery(7);
+        r4.setIdUniquePickup(8);
+        r4.setIdUniqueDelivery(3);
+        r5.setIdUniquePickup(3);
+        r5.setIdUniqueDelivery(8);
+
+        requetes.add(r4);
+
+        requetes2.add(r5);
+
+        requetes3.add(r1);
+	    requetes3.add(r2);
+        requetes3.add(r3);
+
         
+
         assert (carte.verifierPop(listIntersections, requetes) == false);
 
         assert (carte.verifierPop(listIntersections, requetes2) == true);
@@ -274,13 +371,15 @@ public class CarteTest {
         //Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,5,3,5));
+
+        //carte.generateNewId(requetes);
          
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
         List<Long> chromosome = new ArrayList<Long>();
-    	chromosome.add((long)1);
-        chromosome.add((long)3);
+    	chromosome.add(1L);
+        chromosome.add(3L);
         
         Double cout = carte.cout(chromosome);
 
@@ -393,13 +492,15 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
+        carte.generateNewId(requetes);
+
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
         
         assert(bestSolution.size()==2);
         
-        assert(bestSolution.get(0)==1);
-        assert(bestSolution.get(1)==3);
+        assert(carte.getIdUniqueTOIdIntersection().get(bestSolution.get(0))==1);
+        assert(carte.getIdUniqueTOIdIntersection().get(bestSolution.get(1))==3);
         
         
     }
@@ -465,45 +566,56 @@ public class CarteTest {
 
         planning = carte.calculerTournee(planning);
 
-        Map<Intersection,Date> datesPassages = planning.getDatesPassage();
-        Map<Intersection,Date> datesSorties = planning.getDatesSorties();
+        Map<Long,Date> datesPassages = planning.getDatesPassage();
+        Map<Long,Date> datesSorties = planning.getDatesSorties();
 
-        Map<Long,Intersection> intersections = carte.getIntersections();
-        Long d1;
-        Long d2;
+        Long d1_depot = datesPassages.get(planning.getIdDepot()).getTime();
+        Long d2_depot = datesSorties.get(planning.getIdDepot()).getTime();
+        System.out.println(d1_depot);
+        System.out.println(d2_depot);
+        //assert(d1_depot == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
+        assert(d2_depot == 0);
 
-        d1 = datesPassages.get(intersections.get(0L)).getTime();
-        d2 = datesSorties.get(intersections.get(0L)).getTime();
-        assert(d1 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
-        assert(d2 == 0);
+        for (Requete r : requetes) {
+            Long d1 = datesPassages.get(r.getIdPickup()).getTime();
+            Long d2 = datesSorties.get(r.getIdPickup()).getTime();
+            Long d3 = datesPassages.get(r.getIdDelivery()).getTime();
+            Long d4 = datesSorties.get(r.getIdDelivery()).getTime();
 
-        d1 = datesPassages.get(intersections.get(1L)).getTime();
-        d2 = datesSorties.get(intersections.get(1L)).getTime();
-        assert(d1 == 1*3600/15000000);
-        assert(d2 == 1*3600/15000000 + 3000);
+            switch (r.getIdPickup() + "|" +r.getIdDelivery() ) {
+                case "1|3":
+                    System.out.println(d1);
+                    System.out.println(d2);
+                    System.out.println(d3);
+                    System.out.println(d4);
+                    assert(d1 == 1*3600/15);
+                    assert(d2 == 1*3600/15 + 3000);
+                    assert(d3 == 1*3600/15 + 3000 + 2*3600/15);
+                    assert(d4 == 1*3600/15 + 3000 + 2*3600/15 + 5000);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
 
-        d1 = datesPassages.get(intersections.get(3L)).getTime();
-        d2 = datesSorties.get(intersections.get(3L)).getTime();
-        assert(d1 == 1*3600/15000000 + 3000 + 2*3600/15000000);
-        assert(d2 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000);
+        }
 
     }
     
     /**
-     * TODO or del ?
+     * TODO Méthode pour tester la création des tournée avec des mêmes
+     * intersections dans les requêtes
      */
     @Test
-    public void test_calculerTournee() {
+    public void test_calculerTournee_memeIntersection() {
     	 // Création d'un grap simple
         createGraph();
 
         // Création des requetes
     	List<Requete> requetes = new ArrayList<Requete>();
      
-    	requetes.add(new Requete(3,5,5,5));
-        requetes.add(new Requete(6,5,8,5));
-        requetes.add(new Requete(7,5,4,5));
-        requetes.add(new Requete(2,5,9,5));
+    	requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(3,5,9,5));
         
         Planning planning = new Planning();
         
@@ -514,17 +626,33 @@ public class CarteTest {
 
         planning = carte.calculerTournee(planning);
 
-        Map<Intersection,Date> datesPassages = planning.getDatesPassage();
-        Map<Intersection,Date> datesSorties = planning.getDatesSorties();
+        Map<Long,Date> datesPassages = planning.getDatesPassage();
+        Map<Long,Date> datesSorties = planning.getDatesSorties();
 
-        Map<Long,Intersection> intersections = carte.getIntersections();
+        Long d1_depot = datesPassages.get(planning.getIdDepot()).getTime();
+        Long d2_depot = datesSorties.get(planning.getIdDepot()).getTime();
+        assert(d1_depot == 1*3600/15 + 3000 + 2*3600/15000000 + 5000 + 2*3600/15000000);
+        assert(d2_depot == 0);
 
-        Long d1;
-        Long d2;
+        for (Requete r : requetes) {
+            Long d1 = datesPassages.get(r.getIdUniquePickup()).getTime();
+            Long d2 = datesSorties.get(r.getIdUniquePickup()).getTime();
+            Long d3 = datesPassages.get(r.getIdUniqueDelivery()).getTime();
+            Long d4 = datesSorties.get(r.getIdUniqueDelivery()).getTime();
 
-        d1 = datesPassages.get(intersections.get(0L)).getTime();
-        d2 = datesSorties.get(intersections.get(0L)).getTime();
-        assert(d2 == 0);
+            switch (r.getIdPickup() + "|" +r.getIdDelivery() ) {
+                case "1|3":
+                    assert(d1 == 1*3600/15000000);
+                    assert(d2 == 1*3600/15000000 + 3000);
+                    assert(d3 == 1*3600/15000000 + 3000 + 2*3600/15000000);
+                    assert(d4 == 1*3600/15000000 + 3000 + 2*3600/15000000 + 5000);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
+
+        }
 
     }
 
