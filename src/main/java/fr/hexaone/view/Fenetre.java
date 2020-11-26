@@ -144,7 +144,6 @@ public class Fenetre {
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getCanvas().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
-                	System.out.println(event.getTextDeltaY());
                     double facteurZoom = 0.0;
                     if (event.getTextDeltaY() > 0) {
                         // Zoom
@@ -154,7 +153,6 @@ public class Fenetre {
                         facteurZoom = 0.5;
                     }
 
-                    System.out.println(facteurZoom);
                     Timeline timeline = new Timeline(60);
                     double ancienScale = fenetreControleur.canvas.getScaleX();
                     double nouveauScale = ancienScale * facteurZoom;
