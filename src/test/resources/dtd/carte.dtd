@@ -1,0 +1,10 @@
+<!ELEMENT map (intersection*, segment*)>
+<!ELEMENT intersection (#PCDATA)>
+<!ELEMENT segment (#PCDATA)>
+<!ATTLIST intersection id CDATA #REQUIRED>
+<!ATTLIST intersection latitude CDATA #REQUIRED>
+<!ATTLIST intersection longitude CDATA #REQUIRED>
+<!ATTLIST segment destination CDATA #REQUIRED>
+<!ATTLIST segment length CDATA #REQUIRED>
+<!ATTLIST segment name CDATA #REQUIRED>
+<!ATTLIST segment origin CDATA #REQUIRED>

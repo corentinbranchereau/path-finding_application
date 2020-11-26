@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import fr.hexaone.utils.exception.DTDValidationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -51,6 +52,8 @@ public interface State {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
+            } catch (DTDValidationException e) {
+                System.out.println("Le fichier XML ne respecte pas son DTD");
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
@@ -87,6 +90,8 @@ public interface State {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
+            } catch (DTDValidationException e) {
+                System.out.println("Le fichier XML ne respecte pas son DTD");
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");

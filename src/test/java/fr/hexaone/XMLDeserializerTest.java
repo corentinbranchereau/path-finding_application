@@ -7,6 +7,7 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
+import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +62,7 @@ public class XMLDeserializerTest {
      * nombre d'intersections
      */
     @Test
-    public void shouldLoadCarteWithGoodSize() throws FileBadExtensionException, SAXException, IOException {
+    public void shouldLoadCarteWithGoodSize() throws FileBadExtensionException, SAXException, IOException, DTDValidationException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         assertEquals(308, carte.getIntersections().size());
@@ -72,7 +73,7 @@ public class XMLDeserializerTest {
      * présence d'une intersection précise
      */
     @Test
-    public void shouldLoadCarteContainsExactKey() throws FileBadExtensionException, SAXException, IOException {
+    public void shouldLoadCarteContainsExactKey() throws FileBadExtensionException, SAXException, IOException, DTDValidationException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         assertTrue(carte.getIntersections().containsKey(54803122L));
@@ -83,7 +84,7 @@ public class XMLDeserializerTest {
      * propriétés d'une intersection
      */
     @Test
-    public void shouldLoadCarteContainsExactIntersection() throws FileBadExtensionException, SAXException, IOException {
+    public void shouldLoadCarteContainsExactIntersection() throws FileBadExtensionException, SAXException, IOException, DTDValidationException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Intersection intersection = carte.getIntersections().get(26086124L);
@@ -99,7 +100,7 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadCarteContainsExactNumberOfSegmentsArrivant()
-            throws FileBadExtensionException, SAXException, IOException {
+            throws FileBadExtensionException, SAXException, IOException, DTDValidationException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Set<Segment> segmentsArrivants = carte.getIntersections().get(26086128L).getSegmentsArrivants();
@@ -112,24 +113,11 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadCarteContainsExactNumberOfSegmentsPartants()
-            throws FileBadExtensionException, SAXException, IOException {
+            throws FileBadExtensionException, SAXException, IOException, DTDValidationException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Set<Segment> segmentsPartants = carte.getIntersections().get(459797866L).getSegmentsPartants();
         assertEquals(1, segmentsPartants.size());
-    }
-
-    /**
-     * Test le chargement d'une carte avec un fichier XML non correct
-     */
-    @Test
-    public void shouldntLoadCarte() throws FileBadExtensionException, SAXException, IOException {
-        try {
-            Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMapError.xml");
-            XMLDeserializer.loadCarte(carte, xml);
-        } catch (Exception e) {
-            assertTrue(true);
-        }
     }
 
     /**
@@ -203,19 +191,6 @@ public class XMLDeserializerTest {
             assertTrue(testPresence);
         } catch (Exception e) {
             fail();
-        }
-    }
-
-    /**
-     * Test le chargement de requetes avec un fichier XML non correct
-     */
-    @Test
-    public void shouldntLoadRequetes() throws FileBadExtensionException, SAXException, IOException {
-        try {
-            Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallError.xml");
-            XMLDeserializer.loadRequete(xml, planning);
-        } catch (Exception e) {
-            assertTrue(true);
         }
     }
 
