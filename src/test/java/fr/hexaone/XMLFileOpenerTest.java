@@ -47,7 +47,7 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenRequestThrowDTDValidationException()
     {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallError.xml"));
+        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallDTDError.xml"));
     }
 
     /**
@@ -57,6 +57,6 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenMapThrowDTDValidationException()
     {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapError.xml"));
+        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapDTDError.xml"));
     }
 }
