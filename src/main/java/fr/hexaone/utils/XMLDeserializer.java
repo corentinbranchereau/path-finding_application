@@ -61,7 +61,7 @@ public class XMLDeserializer {
                 intersections.get(destination).getSegmentsArrivants().add(segment); // TODO : A vérifier
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incompatible/illégal");
+            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incohérent / illégal");
         }
     }
 
@@ -93,7 +93,7 @@ public class XMLDeserializer {
             planning.setDateDebut(dateDebut);
             planning.setRequetes(listeRequetes);
         } catch (IllegalArgumentException | ParseException e){
-            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incompatible/illégal");
+            throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incohérent / illégal");
         }
     }
 }
