@@ -5,12 +5,8 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
-import fr.hexaone.model.Trajet;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -37,13 +33,125 @@ public class CarteTest {
         carte = new Carte();
     }
     
+    /**
+     * Méthode de test pour vérifer les trajets créés pour un
+     * un graphe simple
+     */
+    @Test
+    public void test_RechercheDesPlusCourtsChemins_simple(){
+
+        //Création d'un graphe
+        createSimpleGraph();
+
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        // Vérification des résultats
+        assert(carte.getCheminsLesPlusCourts().size() == 9);
+
+        carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
+            switch (key) {
+	            case "0|0":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "1|1":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "3|3":
+	                assert(value.getPoids() == 0.);
+	                break;
+                case "0|1":
+                    assert(value.getPoids() == 1.);
+                    break;
+                case "0|3":
+                    assert(value.getPoids() == 3.);
+                    break;
+                case "1|0":
+                    assert(value.getPoids() == 1.);
+                    break;
+                case "1|3":
+                    assert(value.getPoids() == 2.);
+                    break;
+                case "3|0":
+                    assert(value.getPoids() == 2.);
+                    break;
+                case "3|1":
+                    assert(value.getPoids() == 2.);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
 
     /**
-     * Test de vérification de contraintes des requêtes sur une solution de tournée
+     * Méthode de test pour vérifer les trajets créés pour un
+     * un graphe avec une intersection inaccessible
      */
-
     @Test
-    public void verifierPopTest() {
+    public void test_RechercheDesPlusCourtsChemins_inaccessible(){
+
+        //Création d'un graphe
+        createWeirdGraph();
+
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,9,5)); //9 est le point inaccessible
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        // Vérification des résultats
+        assert(carte.getCheminsLesPlusCourts().size() == 9);
+
+        carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
+            switch (key) {
+	            case "0|0":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "1|1":
+	                assert(value.getPoids() == 0.);
+	                break;
+	            case "9|9":
+	                assert(value.getPoids() == 0.);
+	                break;
+                case "0|1":
+                    assert(value.getPoids() == 4.);
+                    break;
+                case "0|9":
+                    assert(value.getPoids() == Double.MAX_VALUE);
+                    break;
+                case "1|0":
+                    assert(value.getPoids() == 4.);
+                    break;
+                case "1|9":
+                    assert(value.getPoids() == Double.MAX_VALUE);
+                    break;
+                case "9|0":
+                    assert(value.getPoids() == Double.MAX_VALUE);
+                    break;
+                case "9|1":
+                    assert(value.getPoids() == Double.MAX_VALUE);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
+        });
+    }
+
+    /**
+     * Méthode de test pour la vérification des contraintes sur une population
+     * 
+     * Préconditions :
+     *   - correctionCrossover
+     */
+    @Test
+    public void test_verifierPop() {
 
         List<Long> listIntersections = new ArrayList<Long>();
         List<Long> listIntersections2 = new ArrayList<Long>();
@@ -81,11 +189,10 @@ public class CarteTest {
     }
 
     /**
-     * Test de vérification de l'espacement minimum des coûts pour une population
+     * Méthode de test pour la vérification de l'espacement minimum des coûts pour une population
      */
-
     @Test
-    public void espacePopulationTest() {
+    public void test_espacePopulation() {
 
     	List<Long> listIntersections1 = new ArrayList<Long>();
         List<Long> listIntersections2 = new ArrayList<Long>();
@@ -112,11 +219,10 @@ public class CarteTest {
     }
     
     /**
-     * Test de vérification de la génération d'un chromosome enfant
+     * Méthode de test de la vérification de la génération d'un chromosome enfant
      */
-
     @Test
-    public void crossoverOXTest() {
+    public void test_crossoverOX() {
 
     	List<Long> P1 = new ArrayList<Long>();
     	List<Long> P2 = new ArrayList<Long>();
@@ -152,10 +258,102 @@ public class CarteTest {
 
     }
     
-    /**
-     * Test de vérification de la génération d'un chromosome aléatoire
-     */
 
+    /**
+     * Méthode de test pour vérifier le calul du coup total d'une tournée
+     * 
+     * Préconditions :
+     *   - calculerLesCheminsLesPlusCourts
+     */
+    @Test
+    public void test_cout_simple() {
+
+        //Création d'un graphe simple
+        createSimpleGraph();
+        
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+         
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        List<Long> chromosome = new ArrayList<Long>();
+    	chromosome.add((long)1);
+        chromosome.add((long)3);
+        
+        Double cout = carte.cout(chromosome);
+
+        assert(cout == 5);
+    }
+
+    /**
+     * Méthode de test pour vérifier le calul du coup total d'une tournée
+     * lorsque des intersections sont à l'infini
+     * 
+     * Préconditions :
+     *   - calculerLesCheminsLesPlusCourts
+     */
+    @Test
+    public void test_cout_infini() {
+
+        //Création d'un graphe simple
+        createWeirdGraph();
+        
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,9,5));
+         
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+        List<Long> chromosome = new ArrayList<Long>();
+    	chromosome.add((long)1);
+        chromosome.add((long)9);
+        
+        Double cout = carte.cout(chromosome);
+
+        assert(cout == Double.MAX_VALUE);
+    }
+    
+    /**
+     * Méthode de test de la mutation avec recherche locale
+     * 
+     * Préconditions :
+     *   - calculerLesCheminsLesPlusCourts
+     */
+    @Test
+    public void test_MutationLocalSearch() {
+    	 
+    	//Création d'un graphe
+        createSimpleGraph();
+
+        //Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        requetes.add(new Requete(1,5,3,5));
+        
+        //Calcul des chemins les plus courts
+        carte.calculerLesCheminsLesPlusCourts(requetes);
+
+	    List<Long> P1 = new ArrayList<Long>();
+
+    	P1.add((long)1);
+    	P1.add((long)3);
+
+	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
+
+	    
+	    assert(carte.cout(mutation)<=carte.cout(P1));
+        
+    }
+
+    /**
+     * Méthode de test pour la vérification de la génération d'un chromosome aléatoire
+     * 
+     * Préconditions :
+     *   - genererChromosomeAleatoire
+     *   - verifierPop
+     */
     @Test
     public void genererChromosomeTest() {
 
@@ -172,11 +370,18 @@ public class CarteTest {
     }
     
     /**
-     * Test simple de la boucle principale de l'algorithme génétique
+     * Méthode de test de la boucle principale de l'algorithme génétique
+     * 
+     * Précondition :
+     *   - calculerLesCheminsLesPlusCourts
+     *   - cout
+     *   - mutationLocalSearch
+     *   - genererChromosomeAleatoire
+     *   - verifierPop
+     *   - correctionCrossover
      */
-
     @Test
-    public void GaTestSimple() {
+    public void test_trouverMeilleureTournee_simple() {
 
         // Création d'un grap simple
         createSimpleGraph();
@@ -199,13 +404,19 @@ public class CarteTest {
         
     }
     
-    
     /**
-     * Tes de la boucle principale de l'algorithme génétique
+     * Méthode de test de la boucle principale de l'algorithme génétique
+     * 
+     * Précondition :
+     *   - calculerLesCheminsLesPlusCourts
+     *   - cout
+     *   - mutationLocalSearch
+     *   - genererChromosomeAleatoire
+     *   - verifierPop
+     *   - correctionCrossover
      */
-
     @Test
-    public void GaTest() {
+    public void test_trouverMeilleureTournee_normal() {
 
         // Création d'un grap simple
         createGraph();
@@ -226,8 +437,19 @@ public class CarteTest {
         
     }
 
+    /**
+     * Méthode de test pour vérifier les horraires de la tournée calculés
+     * 
+     * Préconditions :
+     *   - calculerLesCheminsLesPlusCourts
+     *   - cout
+     *   - mutationLocalSearch
+     *   - genererChromosomeAleatoire
+     *   - verifierPop
+     *   - correctionCrossover
+     */
     @Test
-    public void calculerTourneeSimpleTest() {
+    public void test_calculerTournee_simple() {
         
         createSimpleGraph();
 
@@ -269,110 +491,9 @@ public class CarteTest {
 
     }
 
-    @Test
-    public void coutTest() {
-
-        //Création d'un graphe simple
-        createSimpleGraph();
-        
-        //Création des requetes
-        List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,5,3,5));
-         
-        //Calcul des chemins les plus courts
-        carte.calculerLesCheminsLesPlusCourts(requetes);
-
-        List<Long> chromosome = new ArrayList<Long>();
-    	chromosome.add((long)1);
-        chromosome.add((long)3);
-        
-        Double cout = carte.cout(chromosome);
-
-        assert(cout == 5);
-    }
-    
     /**
-     * Test de la mutation avec recherche locale
+     * Méthode pour créer un graphe orienté simple avec 4 intersections
      */
-
-    @Test
-    public void MutationLocalSearchTest() {
-    	 
-    	//Création d'un graphe
-        createSimpleGraph();
-
-        //Création des requetes
-        List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,5,3,5));
-        
-        //Calcul des chemins les plus courts
-        carte.calculerLesCheminsLesPlusCourts(requetes);
-
-	    List<Long> P1 = new ArrayList<Long>();
-
-    	P1.add((long)1);
-    	P1.add((long)3);
-
-	    List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
-
-	    
-	    assert(carte.cout(mutation)<=carte.cout(P1));
-        
-    }
-
-    @Test
-    public void rechercheDesPlusCourtsChemins(){
-
-        //Création d'un graphe
-        createSimpleGraph();
-
-        //Création des requetes
-        List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,5,3,5));
-        
-        //Calcul des chemins les plus courts
-        carte.calculerLesCheminsLesPlusCourts(requetes);
-
-        // Vérification des résultats
-        assert(carte.getCheminsLesPlusCourts().size() == 9);
-
-        carte.getCheminsLesPlusCourts().forEach( (key,value) -> {
-            switch (key) {
-	            case "0|0":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "1|1":
-	                assert(value.getPoids() == 0.);
-	                break;
-	                
-	            case "3|3":
-	                assert(value.getPoids() == 0.);
-	                break;
-	                
-                case "0|1":
-                    assert(value.getPoids() == 1.);
-                    break;
-                case "0|3":
-                    assert(value.getPoids() == 3.);
-                    break;
-                case "1|0":
-                    assert(value.getPoids() == 1.);
-                    break;
-                case "1|3":
-                    assert(value.getPoids() == 2.);
-                    break;
-                case "3|0":
-                    assert(value.getPoids() == 2.);
-                    break;
-                case "3|1":
-                    assert(value.getPoids() == 2.);
-                    break;
-                default:
-                    break;
-            }
-        });
-    }
-
     private void createSimpleGraph() {
         
         carte.setDepotId((long)0);
@@ -422,7 +543,11 @@ public class CarteTest {
         
     }
     
+    /**
+     * Méthode pour créer un graphe non orienté avec 10 intersections
+     */
     private void createGraph() {
+        //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
         
         carte.setDepotId((long)0);
 
@@ -553,6 +678,153 @@ public class CarteTest {
         set9.add(s92);
         set9.add(s93);
         set9.add(s97);
+        
+
+        i0.setSegmentsPartants(set0);
+        i1.setSegmentsPartants(set1);
+        i2.setSegmentsPartants(set2);
+        i3.setSegmentsPartants(set3);
+        i4.setSegmentsPartants(set4);
+        i5.setSegmentsPartants(set5);
+        i6.setSegmentsPartants(set6);
+        i7.setSegmentsPartants(set7);
+        i8.setSegmentsPartants(set8);
+        i9.setSegmentsPartants(set9);
+
+
+        carte.getIntersections().put(i0.getId(), i0);
+        carte.getIntersections().put(i1.getId(), i1);
+        carte.getIntersections().put(i2.getId(), i2);
+        carte.getIntersections().put(i3.getId(), i3);
+        carte.getIntersections().put(i4.getId(), i4);
+        carte.getIntersections().put(i5.getId(), i5);
+        carte.getIntersections().put(i6.getId(), i6);
+        carte.getIntersections().put(i7.getId(), i7);
+        carte.getIntersections().put(i8.getId(), i8);
+        carte.getIntersections().put(i9.getId(), i9);
+
+        
+    }
+
+    /**
+     * Méthode pour créer un graphe non orienté avec 10 intersections
+     * avec un cul de sac et un point inaccessible
+     */
+    private void createWeirdGraph() {
+        //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
+
+        // Caractéristiques : 
+        // J est innacessible
+        // H est un cul de sac
+        
+        carte.setDepotId((long)0);
+
+        Intersection i0 = new Intersection(0, 0, 0); //A
+        Intersection i1 = new Intersection(1, 0, 0); //B
+        Intersection i2 = new Intersection(2, 0, 0); //C
+        Intersection i3 = new Intersection(3, 0, 0); //D
+        Intersection i4 = new Intersection(4, 0, 0); //E
+        Intersection i5 = new Intersection(5, 0, 0); //F
+        Intersection i6 = new Intersection(6, 0, 0); //G
+        Intersection i7 = new Intersection(7, 0, 0); //H
+        Intersection i8 = new Intersection(8, 0, 0); //I
+        Intersection i9 = new Intersection(9, 0, 0); //J
+
+
+        Segment s01 = new Segment(4, "nom", 0, 1);
+        Segment s10 = new Segment(4, "nom", 1, 0);
+        
+        Segment s12 = new Segment(10, "nom", 1, 2);
+        Segment s21 = new Segment(10, "nom", 2, 1);
+        
+        Segment s13 = new Segment(17, "nom", 1, 3);
+        Segment s31 = new Segment(17, "nom", 3, 1);
+        
+        Segment s16 = new Segment(7, "nom", 1, 6);
+        Segment s61 = new Segment(7, "nom", 6, 1);
+        
+        Segment s14 = new Segment(18, "nom", 1, 4);
+        Segment s41 = new Segment(18, "nom", 4, 1);
+        
+        Segment s23 = new Segment(8, "nom", 2, 3);
+        Segment s32 = new Segment(8, "nom", 3, 2);
+        
+        Segment s37 = new Segment(9, "nom", 3, 7);
+        Segment s73 = new Segment(9, "nom", 7, 3);
+        
+        Segment s36 = new Segment(5, "nom", 3, 6);
+        Segment s63 = new Segment(5, "nom", 6, 3);
+        
+        Segment s04 = new Segment(3, "nom", 0, 4);
+        Segment s40 = new Segment(3, "nom", 4, 0);
+        
+        Segment s48 = new Segment(19, "nom", 4, 8);
+        Segment s84 = new Segment(19, "nom", 8, 4);
+        
+        Segment s08 = new Segment(11, "nom", 0, 8);
+        Segment s80 = new Segment(11, "nom", 8, 0);
+        
+        Segment s58 = new Segment(6, "nom", 5, 8);
+        Segment s85 = new Segment(6, "nom", 8, 5);
+        
+        Segment s56 = new Segment(11, "nom", 5, 6);
+        Segment s65 = new Segment(11, "nom", 6, 5);
+        
+        Segment s45 = new Segment(8, "nom", 4, 5);
+        Segment s54 = new Segment(8, "nom", 5, 4);
+        
+        Segment s64 = new Segment(17, "nom", 6, 4);
+        Segment s46 = new Segment(17, "nom", 4, 6);
+        
+        Set<Segment> set0 = new HashSet<Segment>();
+        Set<Segment> set1 = new HashSet<Segment>();
+        Set<Segment> set2 = new HashSet<Segment>();
+        Set<Segment> set3 = new HashSet<Segment>();
+        Set<Segment> set4 = new HashSet<Segment>();
+        Set<Segment> set5 = new HashSet<Segment>();
+        Set<Segment> set6 = new HashSet<Segment>();
+        Set<Segment> set7 = new HashSet<Segment>();
+        Set<Segment> set8 = new HashSet<Segment>();
+        Set<Segment> set9 = new HashSet<Segment>();
+
+        set0.add(s01);
+        set0.add(s04);
+        set0.add(s08);
+        
+        set1.add(s10);
+        set1.add(s12);
+        set1.add(s13);
+        set1.add(s14);
+        set1.add(s16);
+        
+        set2.add(s21);
+        set2.add(s23);
+        
+        set3.add(s31);
+        set3.add(s32);
+        set3.add(s36);
+        set3.add(s37);
+        
+        set4.add(s40);
+        set4.add(s41);
+        set4.add(s45);
+        set4.add(s46);
+        set4.add(s48);
+        
+        set5.add(s54);
+        set5.add(s56);
+        set5.add(s58);
+        
+        set6.add(s61);
+        set6.add(s63);
+        set6.add(s64);
+        set6.add(s65);
+        
+        set7.add(s73);
+        
+        set8.add(s80);
+        set8.add(s84);
+        set8.add(s85);
         
 
         i0.setSegmentsPartants(set0);
