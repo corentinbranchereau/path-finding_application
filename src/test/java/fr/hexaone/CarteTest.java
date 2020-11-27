@@ -805,6 +805,58 @@ public class CarteTest {
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-2.16)<0.01);
 
     }
+    
+    /**
+     * Méthode pour tester l'ajout de requête après le calcul de la tournée
+     */
+    @Test
+    public void test_ajouter_requetes() {
+    	 // Création d'un graphe
+        createGraph();
+        
+        // Création des requetes de référence
+    	List<Requete> requetes = new ArrayList<Requete>();
+     
+    	requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(4,5,9,5));
+        requetes.add(new Requete(6,5,8,5));
+       
+        Planning planning = new Planning();
+        
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+        
+        double dureeReference=planning.getDureeTotale();
+        
+        // Création des requetes de test
+    	List<Requete> requetesTest = new ArrayList<Requete>();
+     
+    	requetesTest.add(new Requete(1,5,3,5));
+        requetesTest.add(new Requete(4,5,9,5));
+       
+        Planning planningTest = new Planning();
+        
+        planningTest.setIdDepot(0L);
+        planningTest.setRequetes(requetesTest);
+        Date dTest = new Date(0);
+        planningTest.setDateDebut(dTest);
+        
+        planningTest = carte.calculerTournee(planningTest);
+
+        //ajout d'une nouvelle requête
+
+        carte.ajouterRequete(planningTest,new Requete(6,5,8,5));
+ 
+        //on vérifie si la durée totale du nouveau planning est cohérente
+ 
+        assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
+
+    }
+
 
     /**
      * Méthode pour créer un graphe orienté simple avec 4 intersections

@@ -76,6 +76,7 @@ public class Carte {
      * Calcul du temps d'arrivé et de sortie sur les points spéciaux
      */
     public void calculTempsDePassage(Planning planning) {
+
         Map<Long,Date> datesPassage = new HashMap<Long,Date>();
         Map<Long,Date> datesSorties = new HashMap<Long,Date>();
 
@@ -93,13 +94,17 @@ public class Carte {
             duree += t.getPoids() * 3600. / 15.;
             datesPassage.put(id, new Date(tempDebut + (long)duree ));
             for (Requete r : planning.getRequetes()) {
+            	//System.out.println()
                 if (r.getIdUniqueDelivery() == id) {
                     duree += r.getDureeDelivery() * 1000 ;
-                    //break;
-                } else if (r.getIdUniquePickup() == id) {
-                    duree += r.getDureePickup() * 1000 ;
-                    //break;
+                    break;
                 }
+                
+                if (r.getIdUniquePickup() == id) {
+                    duree += r.getDureePickup() * 1000 ;
+                    break;
+                }
+                
             }
 
             datesSorties.put(id, new Date(tempDebut + (long)duree ));
@@ -114,6 +119,7 @@ public class Carte {
         
         planning.setDatesSorties(datesSorties);
         planning.setDatesPassage(datesPassage);
+
     }
 
     
@@ -254,24 +260,30 @@ public class Carte {
     public Planning ajouterRequete(Planning planning,Requete newRequete) {
     	
     	  List<Requete> requetes=planning.getRequetes();
-    	
+    	  List<Long> tournee=planning.getTournee();
+    	  List<Trajet> listTrajets = new LinkedList<Trajet>();
+    	 
+    	  tournee.add(idUniqueMax+1);
+    	  tournee.add(idUniqueMax+2);
+    	  
     	  //maj de la map des correspondances d'ids
     	  idUniqueTOIdIntersection.put(idUniqueMax+1,newRequete.getIdPickup());
     	  idUniqueTOIdIntersection.put(idUniqueMax+2,newRequete.getIdDelivery());
+    	  
+    	  newRequete.setIdUniquePickup(idUniqueMax+1);
+    	  newRequete.setIdUniqueDelivery(idUniqueMax+2);
+    	  
     	  idUniqueMax+=2;
     	  
     	  requetes.add(newRequete);
-    	  
           planning.setRequetes(requetes);
+          planning.setTournee(tournee);
           
           //recalcul des chemins
     	  calculerLesCheminsLesPlusCourts(requetes);
     	
     	  Long prevIntersectionId = this.depotId;
-          List<Trajet> listTrajets = new LinkedList<Trajet>();
-          
-          List<Long> tournee=planning.getTournee();
-          
+
           for (Long newId : tournee) {
               newId = idUniqueTOIdIntersection.get(newId);
              
@@ -310,7 +322,7 @@ public class Carte {
         
         //recherche de la melleure tournéee
         List<Long> bestSolution = trouverMeilleureTournee(requetes);
-        
+ 
         planning.setTournee(bestSolution);
 
         Long prevIntersectionId = this.depotId;
@@ -327,7 +339,6 @@ public class Carte {
         planning.setListeTrajets(listTrajets);
 
         calculTempsDePassage(planning);
-        
         
         return planning;
     }
