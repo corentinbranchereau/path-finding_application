@@ -697,7 +697,7 @@ public class CarteTest {
     
     
     /**
-     * Méthode pour tester la modification d'une requête en remplacçant un point par un nouveau
+     * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
      */
     @Test
     public void test_modifier_requetes_intersection() {
@@ -728,6 +728,46 @@ public class CarteTest {
 
         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-0.48)<0.001);
+
+    }
+    
+    /**
+     * Méthode pour tester la modification d'une requête en changeant le durée de livraison
+     */
+    @Test
+    public void test_modifier_requetes_duree() {
+    	 // Création d'un graphe
+        createGraph();
+
+        // Création des requetes
+    	List<Requete> requetes = new ArrayList<Requete>();
+     
+    	requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(4,5,9,5));
+        requetes.add(new Requete(6,5,8,5));
+       
+        Planning planning = new Planning();
+        
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+        
+        double dureeAvantChangement=planning.getDureeTotale();
+
+        //modfication de la durée de livraison
+        Requete r1=requetes.get(0);
+        
+        r1.setDureePickup(15);
+        
+        planning.setRequetes(requetes);
+        
+        carte.calculTempsDePassage(planning);
+      
+        //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+        assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement)==10.0);
 
     }
 

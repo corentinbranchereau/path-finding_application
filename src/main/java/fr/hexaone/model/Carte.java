@@ -74,10 +74,11 @@ public class Carte {
     /**
      * Calcul du temps d'arrivé et de sortie sur les points spéciaux
      */
-    public void calculTempsDePassage(Planning planning, List<Long> idIntersections) {
+    public void calculTempsDePassage(Planning planning) {
         Map<Long,Date> datesPassage = new HashMap<Long,Date>();
         Map<Long,Date> datesSorties = new HashMap<Long,Date>();
 
+        List<Long> idIntersections=planning.getTournee();
         Long tempDebut = planning.getDateDebut().getTime();
         double duree = 0.;
 
@@ -114,7 +115,11 @@ public class Carte {
         planning.setDatesPassage(datesPassage);
     }
 
-
+    
+    /**
+     * Génère des ids uniques pour chaque point de collecte ou de livraison d'une requête
+     * @param planning
+     */
     public void generateNewId(Planning planning) {
         Long id = 0L;
 
@@ -183,14 +188,12 @@ public class Carte {
           planning.setListeTrajets(listTrajets);
 
           //nouveaux temps de passage
-          calculTempsDePassage(planning,tournee);
+          calculTempsDePassage(planning);
           
           return planning;
     	  
     }
     
-    
-
     /**
      * Recherche de la tournée la plus rapide
      *
@@ -226,7 +229,7 @@ public class Carte {
 
         planning.setListeTrajets(listTrajets);
 
-        calculTempsDePassage(planning, bestSolution);
+        calculTempsDePassage(planning);
         
         
         return planning;
