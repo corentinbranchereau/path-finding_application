@@ -770,6 +770,41 @@ public class CarteTest {
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement)==10.0);
 
     }
+    
+    /**
+     * Méthode pour tester la modification d'une requête en inversant 2 points de livraison ou collecte
+     */
+    @Test
+    public void test_modifier_requetes_ordre() {
+    	 // Création d'un graphe
+        createGraph();
+
+        // Création des requetes
+    	List<Requete> requetes = new ArrayList<Requete>();
+     
+    	requetes.add(new Requete(1,5,3,5));
+        requetes.add(new Requete(4,5,9,5));
+        requetes.add(new Requete(6,5,8,5));
+       
+        Planning planning = new Planning();
+        
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
+
+        planning = carte.calculerTournee(planning);
+        
+        double dureeAvantChangement=planning.getDureeTotale();
+
+        //modfication de l'ordre de passage
+
+        carte.modifierOrdreRequetes(planning,0,4);
+      
+        //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+        assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-2.16)<0.01);
+
+    }
 
     /**
      * Méthode pour créer un graphe orienté simple avec 4 intersections

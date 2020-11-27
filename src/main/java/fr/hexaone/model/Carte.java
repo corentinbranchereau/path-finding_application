@@ -195,6 +195,54 @@ public class Carte {
     }
     
     /**
+     * Permet de faire une modification de requête : changement d'un point de pickup ou delivery 
+     * @param planning planning en cours de modification
+     * @param idUnique de l'intersection de la requête à changer
+     * @param idIntersection de la nouvelle intersection (géographique)
+     * @return
+     */
+    public Planning modifierOrdreRequetes(Planning planning,long idUnique1,long idUnique2) {
+    	
+			/*for(Long l : this.idUniqueTOIdIntersection.keySet())
+			{
+				System.out.println(l + ":" +this.idUniqueTOIdIntersection.get(l));
+			}
+			*/
+		
+    	  int i1=0;
+    	  int i2=0;
+    	  
+    	  List<Long> tournee=planning.getTournee();
+    	  
+    	  i1=tournee.indexOf(idUnique1);
+    	  i2=tournee.indexOf(idUnique2);
+   
+    	  Collections.swap(tournee,i1,i2);
+    	  
+          planning.setTournee(tournee);
+
+    	  Long prevIntersectionId = this.depotId;
+          List<Trajet> listTrajets = new LinkedList<Trajet>();
+          
+          for (Long newId : tournee) {
+              newId = idUniqueTOIdIntersection.get(newId);
+             
+              listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
+              prevIntersectionId = newId;
+          }
+
+          listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+          planning.setListeTrajets(listTrajets);
+
+          //nouveaux temps de passage
+          calculTempsDePassage(planning);
+          
+          return planning;
+    }
+    
+    /**
      * Recherche de la tournée la plus rapide
      *
      * @param planning
