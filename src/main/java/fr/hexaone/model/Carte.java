@@ -31,6 +31,7 @@ public class Carte {
     protected Map<String, Trajet> cheminsLesPlusCourts;
     protected Map<Long, Intersection> intersections;
     protected Long depotId;
+    protected Long idUniqueMax;
 
     /**
      * Comparateur d'intersections en fonction de la distance
@@ -136,9 +137,11 @@ public class Carte {
             id += 1;
         }
 
+        idUniqueMax=id-1;
         planning.setIdUniqueDepot(id);
 
     }
+    
     
     /**
      * Permet de faire une modification de requête : changement d'un point de pickup ou delivery 
@@ -196,9 +199,9 @@ public class Carte {
     
     /**
      * Permet de faire une modification de requête : changement d'un point de pickup ou delivery 
-     * @param planning planning en cours de modification
-     * @param idUnique de l'intersection de la requête à changer
-     * @param idIntersection de la nouvelle intersection (géographique)
+     * @param planning
+     * @param idUnique1
+     * @param idUnique2
      * @return
      */
     public Planning modifierOrdreRequetes(Planning planning,long idUnique1,long idUnique2) {
@@ -240,6 +243,52 @@ public class Carte {
           calculTempsDePassage(planning);
           
           return planning;
+    }
+   
+    /**
+     * Permet d'ajouter une requête après le calcul
+     * @param planning
+     * @param newRequete
+     * @return
+     */
+    public Planning ajouterRequete(Planning planning,Requete newRequete) {
+    	
+    	  List<Requete> requetes=planning.getRequetes();
+    	
+    	  //maj de la map des correspondances d'ids
+    	  idUniqueTOIdIntersection.put(idUniqueMax+1,newRequete.getIdPickup());
+    	  idUniqueTOIdIntersection.put(idUniqueMax+2,newRequete.getIdDelivery());
+    	  idUniqueMax+=2;
+    	  
+    	  requetes.add(newRequete);
+    	  
+          planning.setRequetes(requetes);
+          
+          //recalcul des chemins
+    	  calculerLesCheminsLesPlusCourts(requetes);
+    	
+    	  Long prevIntersectionId = this.depotId;
+          List<Trajet> listTrajets = new LinkedList<Trajet>();
+          
+          List<Long> tournee=planning.getTournee();
+          
+          for (Long newId : tournee) {
+              newId = idUniqueTOIdIntersection.get(newId);
+             
+              listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
+              prevIntersectionId = newId;
+          }
+
+          listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+          planning.setListeTrajets(listTrajets);
+
+          //nouveaux temps de passage
+          calculTempsDePassage(planning);
+          
+          return planning;
+    	  
     }
     
     /**
