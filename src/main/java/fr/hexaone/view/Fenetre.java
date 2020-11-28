@@ -298,6 +298,18 @@ public class Fenetre {
                 }
             });
 
+            fenetreControleur.getBoutonValider().setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    controleur.valider();
+                }
+            });
+
+            fenetreControleur.getBoutonAnnuler().setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    controleur.annuler();
+                }
+            });
+
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
         }
