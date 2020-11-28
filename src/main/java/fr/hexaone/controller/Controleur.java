@@ -56,6 +56,11 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
+     * Etat sélection de nouvaux points pour une nouvelle requête du design pattern STATE
+     */
+    public EtatAjouterNouvelleRequete etatAjouterNouvelleRequete;
+
+    /**
      * Etat popup nouvelle requête affichée du design pattern STATE
      */
     public EtatPopUpNouvelleRequeteAffiche etatPopUpNouvelleRequeteAffiche;
@@ -73,6 +78,8 @@ public class Controleur {
         this.etatCarteChargee = new EtatCarteChargee();
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
+        this.etatAjouterNouvelleRequete = new EtatAjouterNouvelleRequete();
+        this.etatPopUpNouvelleRequeteAffiche = new EtatPopUpNouvelleRequeteAffiche();
         setEtatCourant(etatInitial);
     }
 
@@ -108,7 +115,16 @@ public class Controleur {
         etatCourant.lancerCalcul(this);
     }
 
+    /**
+     * Méthode permettant la sélection de deux intersections pour une nouvelle requête en fin de trajet
+     */
+    public void ajouterNouvelleRequete(){ etatCourant.selectionnerIntersection(this); }
+
+
     // TODO : Ajouter méthode etatCourant --> OuvrirPopUP nouvelle demande livraison
+    /**
+     * Méthode permettant la saisie des durées lors de l'ajout d'une nouvelle requête en fin de trajet
+     */
     public void ouvrirPopUpNouvelleRequete() {
         etatCourant.ouvrirPopUpNouvelleRequete(this);
     }

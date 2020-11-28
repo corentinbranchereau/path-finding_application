@@ -144,4 +144,11 @@ public interface State {
             // Rien
         }
     }
+
+    /**
+     * Cette méthode permet de sélectionner une intersection
+     */
+    default void selectionnerIntersection(Controleur c){
+        System.out.println("selectionnerIntersection [default state implementation]");
+    }
 }
