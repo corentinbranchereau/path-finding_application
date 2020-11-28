@@ -64,10 +64,10 @@ public class FenetreControleurFXML {
     protected Button boutonLancer;
 
     /**
-     * Bouton permettant de lancer le calcul du planning.
+     * Bouton permettant de lancer le processus d'ajout d'une nouvelle requête.
      */
     @FXML
-    protected Button getBoutonNouvelleRequete;
+    protected Button boutonNouvelleRequete;
 
     /**
      * AnchorPane contenant le canvas de dessin (vue graphique)
@@ -144,7 +144,7 @@ public class FenetreControleurFXML {
      * @return Le bouton demandant l'ajout d'une requête.
      */
     public Button getBoutonNouvelleRequete() {
-        return getBoutonNouvelleRequete;
+        return boutonNouvelleRequete;
     }
 
     /**
