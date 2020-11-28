@@ -127,11 +127,10 @@ public interface State {
         }
     }
 
-    // TODO : implémenter l'appel par défaut à l'affichage du popup d'ajout requete
     /**
-     * Cette méthode permet d'afficher le pop up de nouvelle demande de livraison
+     * Cette méthode permet de passer en mode d'ajout d'une nouvelle requête
      */
-    default void ouvrirPopUpNouvelleRequete(Controleur c) {
+    default void ajoutNouvelleRequete(Controleur c) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Demande nouvelle livraison");
         alert.setHeaderText(null);

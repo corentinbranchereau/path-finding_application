@@ -56,14 +56,10 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
-     * Etat sélection de nouvaux points pour une nouvelle requête du design pattern STATE
+     * Etat sélection de nouvaux points et saisie de temps pour une nouvelle requête du design pattern STATE
      */
     public EtatAjouterNouvelleRequete etatAjouterNouvelleRequete;
 
-    /**
-     * Etat popup nouvelle requête affichée du design pattern STATE
-     */
-    public EtatPopUpNouvelleRequeteAffiche etatPopUpNouvelleRequeteAffiche;
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
@@ -79,7 +75,6 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjouterNouvelleRequete = new EtatAjouterNouvelleRequete();
-        this.etatPopUpNouvelleRequeteAffiche = new EtatPopUpNouvelleRequeteAffiche();
         setEtatCourant(etatInitial);
     }
 
@@ -119,15 +114,13 @@ public class Controleur {
     /**
      * Méthode permettant la sélection de deux intersections pour une nouvelle requête en fin de trajet
      */
-    public void ajouterNouvelleRequete(){ etatCourant.selectionnerIntersection(this); }
+    public void ajouterNouvelleRequete(){ etatCourant.ajoutNouvelleRequete(this); }
 
-    // TODO : Ajouter méthode ajouterNouvelleRequete --> ouvrirPopUpNouvelleRequete nouvelle demande livraison
+    //TODO : Fait côté Killian ?
     /**
-     * Méthode permettant la saisie des durées lors de l'ajout d'une nouvelle requête en fin de trajet
+     * Méthode permettant la sélection d'une intersection
      */
-    public void ouvrirPopUpNouvelleRequete() {
-        etatCourant.ouvrirPopUpNouvelleRequete(this);
-    }
+    public void selectionnerIntersection(){ etatCourant.selectionnerIntersection(this); }
 
     /**
      * Renvoie la fenêtre de l'application.

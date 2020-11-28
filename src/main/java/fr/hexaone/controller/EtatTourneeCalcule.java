@@ -28,4 +28,12 @@ public class EtatTourneeCalcule implements State {
 
         // TODO : Afficher bouton "Ajouter une demande de livraison"
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void ajoutNouvelleRequete(Controleur c) {
+        c.setEtatCourant(c.etatAjouterNouvelleRequete);
+    }
 }
