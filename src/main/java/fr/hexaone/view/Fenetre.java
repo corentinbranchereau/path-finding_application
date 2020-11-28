@@ -292,10 +292,9 @@ public class Fenetre {
                 }
             });
 
-            // TODO : Ajouter event handler bouton ajouter requête
             fenetreControleur.getBoutonNouvelleRequete().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.ouvrirPopUpNouvelleRequete();
+                    controleur.ajouterNouvelleRequete();
                 }
             });
 

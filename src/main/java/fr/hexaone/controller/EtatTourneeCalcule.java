@@ -34,6 +34,6 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void ajoutNouvelleRequete(Controleur c) {
-        c.setEtatCourant(c.etatAjouterNouvelleRequete);
+        c.setEtatCourant(c.etatSelectionPointNouvelleRequete);
     }
 }
