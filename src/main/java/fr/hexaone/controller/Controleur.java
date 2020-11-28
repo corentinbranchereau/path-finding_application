@@ -115,13 +115,13 @@ public class Controleur {
         etatCourant.lancerCalcul(this);
     }
 
+    // TODO : Ajouter méthode etatCourant --> ajouterNouvelleRequete nouvelle demande livraison
     /**
      * Méthode permettant la sélection de deux intersections pour une nouvelle requête en fin de trajet
      */
     public void ajouterNouvelleRequete(){ etatCourant.selectionnerIntersection(this); }
 
-
-    // TODO : Ajouter méthode etatCourant --> OuvrirPopUP nouvelle demande livraison
+    // TODO : Ajouter méthode ajouterNouvelleRequete --> ouvrirPopUpNouvelleRequete nouvelle demande livraison
     /**
      * Méthode permettant la saisie des durées lors de l'ajout d'une nouvelle requête en fin de trajet
      */
