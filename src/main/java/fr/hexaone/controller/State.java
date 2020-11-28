@@ -150,4 +150,18 @@ public interface State {
     default void selectionnerIntersection(Controleur c){
         System.out.println("selectionnerIntersection [default state implementation]");
     }
+
+    /**
+     * Cette méthode permet de valider un choix
+     */
+    default void valider(Controleur c){
+        System.out.println("valider [default state implementation]");
+    }
+
+    /**
+     * Cette méthode permet d'annuler un choix
+     */
+    default void annuler(Controleur c){
+        System.out.println("annuler [default state implementation]");
+    }
 }

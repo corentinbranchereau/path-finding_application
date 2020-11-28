@@ -128,6 +128,16 @@ public class Controleur {
     public void selectionnerIntersection(){ etatCourant.selectionnerIntersection(this); }
 
     /**
+     * Valider l'action en cours
+     */
+    public void valider(){ etatCourant.valider(this); }
+
+    /**
+     * Annuler l'action en cours
+     */
+    public void annuler(){ etatCourant.annuler(this); }
+
+    /**
      * Renvoie la fenêtre de l'application.
      * 
      * @return La fenêtre de l'application

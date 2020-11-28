@@ -70,6 +70,18 @@ public class FenetreControleurFXML {
     protected Button boutonNouvelleRequete;
 
     /**
+     * Bouton permettant de valider un choix qui le nécessite.
+     */
+    @FXML
+    protected Button boutonValider;
+
+    /**
+     * Bouton permettant d'annuler un choix qui le nécessite.
+     */
+    @FXML
+    protected Button boutonAnnuler;
+
+    /**
      * AnchorPane contenant le canvas de dessin (vue graphique)
      */
     @FXML
@@ -145,6 +157,24 @@ public class FenetreControleurFXML {
      */
     public Button getBoutonNouvelleRequete() {
         return boutonNouvelleRequete;
+    }
+
+    /**
+     * Renvoie le bouton de validation
+     *
+     * @return Le bouton de validation
+     */
+    public Button getBoutonValider() {
+        return boutonValider;
+    }
+
+    /**
+     * Renvoie le bouton d'annulation
+     *
+     * @return Le bouton d'annulation
+     */
+    public Button getBoutonAnnuler() {
+        return boutonAnnuler;
     }
 
     /**

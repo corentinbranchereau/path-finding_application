@@ -18,4 +18,15 @@ public class EtatSelectionPointNouvelleRequete implements State{
         System.out.println("selectionnerIntersection [AjouterNouvelleRequete state implementation] --> TODO");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void annuler(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.setEtatCourant(c.etatTourneeCalcule);
+    }
+
 }
