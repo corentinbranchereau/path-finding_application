@@ -58,16 +58,20 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="boutonValider" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Valider" disable="true">
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="boutonAnnuler" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Annuler" disable="true">
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                  </Button>
+                  <HBox alignment="TOP_CENTER" prefWidth="320.0" prefHeight="100">
+                     <Button fx:id="boutonValider" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Valider" disable="true">
+                        <HBox.margin>
+                           <Insets bottom="7.0" />
+                           <Insets left="20.0"/>
+                           <Insets right="20.0"/>
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="boutonAnnuler" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Annuler" disable="true">
+                        <VBox.margin>
+                           <Insets bottom="10.0" />
+                        </VBox.margin>
+                     </Button>
+                  </HBox>
                   <ScrollPane prefHeight="700.0" prefWidth="320.0">
                      <content>
                         <TextFlow fx:id="zoneTexte" prefHeight="700.0" prefWidth="393.0" style="-fx-padding: 20;">
