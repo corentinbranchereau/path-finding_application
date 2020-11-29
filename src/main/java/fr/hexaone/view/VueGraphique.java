@@ -16,6 +16,7 @@ import fr.hexaone.model.Trajet;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -23,6 +24,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -276,6 +278,25 @@ public class VueGraphique {
                 // On change le "viewOrder" pour que les segments apparaissent derrière les
                 // intersections
                 ligneSegment.setViewOrder(2);
+
+                // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+                Tooltip tooltipNomRue = new Tooltip(s.getNom());
+                tooltipNomRue.setShowDelay(new Duration(0));
+                tooltipNomRue.setHideDelay(new Duration(0));
+                Tooltip.install(ligneSegment, tooltipNomRue);
+
+                // Ajoute un handler pour augmenter la taille de la route lors du survol
+                ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                    }
+                });
+
+                ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                    }
+                });
 
                 this.listeNoeudsCarte.add(ligneSegment);
                 this.paneDessin.getChildren().add(ligneSegment);
