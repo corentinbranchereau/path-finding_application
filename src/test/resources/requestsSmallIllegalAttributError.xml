@@ -2,7 +2,7 @@
 <!DOCTYPE planningRequest SYSTEM
         ".\dtd\requetes.dtd">
 <planningRequest>
-    <depot address="2835339774" departureTime="8:0:0" />
+    <depot address="2835339774" departureTime="departureError" />
     <request pickupAddress="1679901320" deliveryAddress="208769457" pickupDuration="420" deliveryDuration="600" />
     <request pickupAddress="208769120" deliveryAddress="25336179" pickupDuration="420" deliveryDuration="480" />
 </planningRequest>

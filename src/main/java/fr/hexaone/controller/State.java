@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import fr.hexaone.utils.exception.DTDValidationException;
+import fr.hexaone.utils.exception.IllegalAttributException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -51,6 +53,10 @@ public interface State {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
+            } catch (DTDValidationException e) {
+                System.out.println("Le fichier XML ne respecte pas son DTD");
+            } catch (IllegalAttributException e) {
+                System.out.println("Le fichier XML contient un attribut de type incohérent");
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
@@ -87,6 +93,10 @@ public interface State {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
+            } catch (DTDValidationException e) {
+                System.out.println("Le fichier XML ne respecte pas son DTD");
+            } catch (IllegalAttributException e) {
+                System.out.println("Le fichier XML contient un attribut de type incohérent");
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
