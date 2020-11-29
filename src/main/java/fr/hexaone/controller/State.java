@@ -42,10 +42,16 @@ public interface State {
                 c.setCarte(new Carte());
                 XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
 
-                // On réinitialise le zoom avant d'afficher la carte
+                // On réinitialise le zoom et la taille de la zone de dessin avant d'afficher la
+                // carte
                 c.getFenetre().resetZoom();
+                c.getFenetre().resetTailleFenetre();
 
-                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte(), false);
+                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
+
+                // On adapte la taille de la fenêtre en fonction de la taille finale de la carte
+                c.getFenetre().adapterTailleFenetre();
+
                 c.setEtatCourant(c.etatCarteChargee);
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
@@ -76,11 +82,7 @@ public interface State {
                 c.setPlanning(new Planning());
                 XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
-                // On réaffiche d'abord la carte pour effacer les potentielles anciennes
-                // requêtes
-                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte(), true);
-
-                // On affiche ensuite les requêtes chargées
+                // On affiche requêtes chargées dans la vue graphique et la vue textuelle
                 c.getFenetre().getVueGraphique().afficherRequetes(c.getPlanning(), c.getCarte(),
                         c.getFenetre().getMapCouleurRequete());
                 c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getCarte(),
