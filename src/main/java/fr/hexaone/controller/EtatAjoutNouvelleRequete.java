@@ -15,10 +15,26 @@ import java.util.regex.Pattern;
  * @author HexaOne
  * @version 1.0
  */
-public class EtatSaisieDureeNouvelleRequete implements State {
+public class EtatAjoutNouvelleRequete implements State {
 
     private Long idPickup = null;
     private Long idDelivery = null;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void selectionnerIntersection(Controleur c, Long idIntersection) {
+        if(idPickup!=null && idPickup.equals(idIntersection)){
+            idPickup = null;
+        } else if (idDelivery!=null && idDelivery.equals(idIntersection)){
+            idDelivery = null;
+        } else if(idPickup==null){
+            idPickup = idIntersection;
+        } else if(idDelivery == null){
+            idDelivery = idIntersection;
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -60,7 +76,7 @@ public class EtatSaisieDureeNouvelleRequete implements State {
         }
 
         if(idPickup==null || idDelivery ==null){
-            System.out.println("Il faut selectionner deux intersections.");
+            System.out.println("Il faut sélectionner deux intersections.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Mauvaise sélection");
             alert.setHeaderText(null);
@@ -77,14 +93,8 @@ public class EtatSaisieDureeNouvelleRequete implements State {
         }
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
                 c.getFenetre().getMapCouleurRequete());
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        c.setEtatCourant(c.etatTourneeCalcule);
+
+        this.annuler(c);
 
         //TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
     }
@@ -102,13 +112,5 @@ public class EtatSaisieDureeNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         c.setEtatCourant(c.etatTourneeCalcule);
-    }
-
-    public void setIdPickup(Long idPickup){
-        this.idPickup = idPickup;
-    }
-
-    public void setIdDelivery(Long idDelivery){
-        this.idDelivery = idDelivery;
     }
 }

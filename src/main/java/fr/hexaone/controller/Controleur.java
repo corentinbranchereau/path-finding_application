@@ -56,16 +56,10 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
-     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du
+     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle requête du
      * design pattern STATE
      */
-    public EtatSelectionPointNouvelleRequete etatSelectionPointNouvelleRequete;
-
-    /**
-     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du
-     * design pattern STATE
-     */
-    public EtatSaisieDureeNouvelleRequete etatSaisieDureeNouvelleRequete;
+    public EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
@@ -80,8 +74,7 @@ public class Controleur {
         this.etatCarteChargee = new EtatCarteChargee();
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
-        this.etatSelectionPointNouvelleRequete = new EtatSelectionPointNouvelleRequete();
-        this.etatSaisieDureeNouvelleRequete = new EtatSaisieDureeNouvelleRequete();
+        this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
         setEtatCourant(etatInitial);
     }
 
@@ -125,7 +118,6 @@ public class Controleur {
         etatCourant.ajoutNouvelleRequete(this);
     }
 
-    // TODO : Fait côté Killian ?
     /**
      * Méthode permettant la sélection d'une intersection
      */
