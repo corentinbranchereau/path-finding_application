@@ -56,6 +56,17 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
+     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du design pattern STATE
+     */
+    public EtatSelectionPointNouvelleRequete etatSelectionPointNouvelleRequete;
+
+    /**
+     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du design pattern STATE
+     */
+    public EtatSaisieDureeNouvelleRequete etatSaisieDureeNouvelleRequete;
+
+
+    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -68,6 +79,8 @@ public class Controleur {
         this.etatCarteChargee = new EtatCarteChargee();
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
+        this.etatSelectionPointNouvelleRequete = new EtatSelectionPointNouvelleRequete();
+        this.etatSaisieDureeNouvelleRequete = new EtatSaisieDureeNouvelleRequete();
         setEtatCourant(etatInitial);
     }
 
@@ -102,6 +115,27 @@ public class Controleur {
     public void lancerCalcul() {
         etatCourant.lancerCalcul(this);
     }
+
+    /**
+     * Méthode permettant la sélection de deux intersections pour une nouvelle requête en fin de trajet
+     */
+    public void ajouterNouvelleRequete(){ etatCourant.ajoutNouvelleRequete(this); }
+
+    //TODO : Fait côté Killian ?
+    /**
+     * Méthode permettant la sélection d'une intersection
+     */
+    public void selectionnerIntersection(){ etatCourant.selectionnerIntersection(this); }
+
+    /**
+     * Valider l'action en cours
+     */
+    public void valider(){ etatCourant.valider(this); }
+
+    /**
+     * Annuler l'action en cours
+     */
+    public void annuler(){ etatCourant.annuler(this); }
 
     /**
      * Renvoie la fenêtre de l'application.

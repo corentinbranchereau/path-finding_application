@@ -1,11 +1,10 @@
 package fr.hexaone.view;
 
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
 
@@ -38,17 +37,10 @@ public class FenetreControleurFXML {
     protected MenuItem quitterItem;
 
     /**
-     * Canvas où sont dessinées la carte et les requêtes. Correspond à la vue
-     * graphique de l'application.
+     * Rectangle permettant de dessiner une bordure autour de la carte.
      */
     @FXML
-    protected Canvas canvas;
-
-    /**
-     * Rectangle permettant de délimiter le canvas de dessin.
-     */
-    @FXML
-    protected Rectangle bordureCanvas;
+    protected Rectangle bordureCarte;
 
     /**
      * Zone de texte où sont affichées les informations sur le planning. Correspond
@@ -64,7 +56,31 @@ public class FenetreControleurFXML {
     protected Button boutonLancer;
 
     /**
-     * AnchorPane contenant le canvas de dessin (vue graphique)
+     * Bouton permettant de lancer le processus d'ajout d'une nouvelle requête.
+     */
+    @FXML
+    protected Button boutonNouvelleRequete;
+
+    /**
+     * Bouton permettant de valider un choix qui le nécessite.
+     */
+    @FXML
+    protected Button boutonValider;
+
+    /**
+     * Bouton permettant d'annuler un choix qui le nécessite.
+     */
+    @FXML
+    protected Button boutonAnnuler;
+
+    /**
+     * Pane qui contient les éléments graphiques dessinant la carte
+     */
+    @FXML
+    protected Pane paneDessin;
+
+    /**
+     * AnchorPane contenant le pane de dessin (vue graphique)
      */
     @FXML
     protected AnchorPane anchorPaneGraphique;
@@ -97,21 +113,12 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le canvas de l'application (vue graphique)
+     * Renvoie le rectangle dessinant la bordure de la carte.
      * 
-     * @return Le canvas de l'application
+     * @return Le rectangle de bordure de la carte
      */
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
-    /**
-     * Renvoie le rectangle délimitant le canvas.
-     * 
-     * @return Le rectangle délimitant le canvas de l'application
-     */
-    public Rectangle getBordureCanvas() {
-        return bordureCanvas;
+    public Rectangle getBordureCarte() {
+        return bordureCarte;
     }
 
     /**
@@ -133,11 +140,42 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le AnchorPane contenant le canvas de dessin
+     * Renvoie le bouton demandant l'ajout d'une requête.
+     *
+     * @return Le bouton demandant l'ajout d'une requête.
+     */
+    public Button getBoutonNouvelleRequete() {
+        return boutonNouvelleRequete;
+    }
+
+    /**
+     * Renvoie le bouton de validation
+     *
+     * @return Le bouton de validation
+     */
+    public Button getBoutonValider() {
+        return boutonValider;
+    }
+
+    /**
+     * Renvoie le bouton d'annulation
+     *
+     * @return Le bouton d'annulation
+     */
+    public Button getBoutonAnnuler() {
+        return boutonAnnuler;
+    }
+
+    /**
+     * Renvoie le AnchorPane contenant le pane de dessin
      * 
-     * @return Le AnchorPane contenant le canvas de dessin
+     * @return Le AnchorPane contenant le pane de dessin
      */
     public AnchorPane getAnchorPaneGraphique() {
         return anchorPaneGraphique;
+    }
+
+    public Pane getPaneDessin() {
+        return paneDessin;
     }
 }

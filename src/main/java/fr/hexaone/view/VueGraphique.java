@@ -10,9 +10,14 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -24,30 +29,47 @@ import javafx.scene.paint.Color;
 public class VueGraphique {
 
     /**
-     * Canvas dans lequel sont dessinés les différents éléments (carte, segments,
+     * Pane dans lequel sont dessinés les différents éléments (carte, segments,
      * etc.)
      */
-    protected Canvas canvas;
+    protected Pane paneDessin;
 
     /**
-     * Longitude minimale dans la carte
+     * Coordonnée x minimale de la carte
      */
-    protected double minLongitude = Double.MAX_VALUE;
+    protected double minX = Double.MAX_VALUE;
 
     /**
-     * Longitude maximale dans la carte
+     * Coordonnée x maximale de la carte
      */
-    protected double maxLongitude = Double.MIN_VALUE;
+    protected double maxX = Double.MIN_VALUE;
 
     /**
-     * Latitude minimale dans la carte
+     * Coordonnée y minimale de la carte
      */
-    protected double minLatitude = Double.MAX_VALUE;
+    protected double minY = Double.MAX_VALUE;
 
     /**
-     * Latitude maximale dans la carte
+     * Coordonnée y maximale de la carte
      */
-    protected double maxLatitude = Double.MIN_VALUE;
+    protected double maxY = Double.MIN_VALUE;
+
+    /**
+     * Padding utilisé pour le calcul de la largeur et de la longueur max de la
+     * carte
+     */
+    protected final double PADDING_CARTE = 10;
+
+    /**
+     * Padding utilisé lors du dessin de la carte
+     */
+    protected double paddingGlobal;
+
+    /**
+     * Variable qui permet d'adapter les coordonnées en fonction du ratio de la
+     * carte. Il sert notamment à ne pas avoir un effet "aplati" sur la carte
+     */
+    protected double ratioGlobal;
 
     /**
      * Constante qui permet de définir la valeur seuil que l'on souhaite comme
@@ -63,6 +85,13 @@ public class VueGraphique {
     protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
 
     /**
+     * Liste contenant les intersections et les segments de la carte chargées. Cela
+     * est utile pour redessiner la carte en cas de changement de fichier de
+     * requêtes
+     */
+    protected List<Node> listeNoeudsCarte;
+
+    /**
      * Constructeur de VueGraphique.
      */
     public VueGraphique() {
@@ -70,94 +99,155 @@ public class VueGraphique {
     }
 
     /**
-     * Renvoie le canvas dans lequel on dessine les éléments.
+     * Renvoie le pane de dessin de la vue graphique.
      * 
-     * @return Le canvas de la vue graphique
+     * @return Le pane de dessin
      */
-    public Canvas getCanvas() {
-        return canvas;
+    public Pane getPaneDessin() {
+        return paneDessin;
     }
 
     /**
-     * Change la valeur du canvas.
+     * Permet de définir un nouveau pane de dessin pour la vue graphique.
      * 
-     * @param canvas Le nouveau canvas.
+     * @param paneDessin Le nouveau pane de dessin
      */
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
+    public void setPaneDessin(Pane paneDessin) {
+        this.paneDessin = paneDessin;
     }
 
     /**
-     * Cette méthode permet de dessiner la carte dans le canvas, en adaptant les
-     * coordonnées des éléments en fonction de la taille du canvas.
+     * Permet de convertir des coordonnées (longitude, latitude) en coordonnées (x,
+     * y) dans le pane de dessin
      * 
-     * @param carte      La carte à dessiner
-     * @param redessiner Paramètre indiquant si la carte passée en paramètre a déjà
-     *                   été affichée précédemment, dans le cas où la première étape
-     *                   de calcul n'est pas nécessaire
+     * @param longitude La longitude du point à convertir
+     * @param latitude  La latitude du point à convertir
+     * @return Un point contenant la paire de coordonnées (x, y)
      */
-    public void afficherCarte(Carte carte, boolean redessiner) {
-        GraphicsContext gc = this.canvas.getGraphicsContext2D();
-        gc.setLineWidth(1.0);
-        gc.setStroke(Color.BLACK);
+    public Point2D longLatToXY(double longitude, double latitude) {
+        // Conversion de la longitude et latitude en radian
+        longitude = longitude * Math.PI / 180;
+        latitude = latitude * Math.PI / 180;
 
-        // On efface le canvas au cas où une carte est déjà affichée.
-        gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+        double x = longitude;
+        double y = Math.log(Math.tan((Math.PI / 4) + (latitude / 2)));
 
-        if (!redessiner) {
-            // Tout d'abord, on recherche le min et le max des longitudes et latitudes pour
-            // pouvoir adapter l'affichage en conséquence
-            this.minLongitude = Double.MAX_VALUE;
-            this.maxLongitude = Double.MIN_VALUE;
-            this.minLatitude = Double.MAX_VALUE;
-            this.maxLatitude = Double.MIN_VALUE;
-            for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
-                if (entry.getValue().getLongitude() > this.maxLongitude) {
-                    this.maxLongitude = entry.getValue().getLongitude();
-                } else if (entry.getValue().getLongitude() < this.minLongitude) {
-                    this.minLongitude = entry.getValue().getLongitude();
-                }
+        return new Point2D(x, y);
+    }
 
-                if (entry.getValue().getLatitude() > this.maxLatitude) {
-                    this.maxLatitude = entry.getValue().getLatitude();
-                } else if (entry.getValue().getLatitude() < this.minLatitude) {
-                    this.minLatitude = entry.getValue().getLatitude();
-                }
+    /**
+     * Permet d'adapter les coordonnées (x, y) obtenues afin que le dessin de la
+     * carte s'ajuste le plus possible à la taille de la zone de dessin
+     * 
+     * @param x La coordonnée x à adapter
+     * @param y La coordonnée y à adapter
+     * @return Un point contenant la paire de coordonnées (x, y) adaptées
+     */
+    public Point2D adapterCoordonnees(double x, double y) {
+        double adaptationX = this.paddingGlobal + ((x - this.minX) * this.ratioGlobal);
+        double adaptationY = this.paneDessin.getHeight() - this.paddingGlobal - ((y - this.minY) * this.ratioGlobal);
+        return new Point2D(adaptationX, adaptationY);
+    }
+
+    /**
+     * Cette méthode permet de dessiner la carte dans le pane de la vue graphique,
+     * en adaptant les coordonnées des éléments en fonction de la taille de ce pane,
+     * en respectant toutefois le ratio longitude/latitude des coordonnées pour ne
+     * pas avoir un effet "aplati"
+     * 
+     * @param carte La carte à dessiner
+     */
+    public void afficherCarte(Carte carte) {
+        this.listeNoeudsCarte = new LinkedList<>();
+
+        // On enlève tous les éléments graphiques déjà affichés (s'il y en a)
+        this.paneDessin.getChildren().clear();
+
+        // On va chercher les coordonnées (x, y) minimales et maximales
+        this.minX = Double.MAX_VALUE;
+        this.maxX = Double.MIN_VALUE;
+        this.minY = Double.MAX_VALUE;
+        this.maxY = Double.MIN_VALUE;
+
+        for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
+            Point2D coordXY = longLatToXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
+
+            if (coordXY.getX() > this.maxX) {
+                this.maxX = coordXY.getX();
+            } else if (coordXY.getX() < this.minX) {
+                this.minX = coordXY.getX();
+            }
+
+            if (coordXY.getY() > this.maxY) {
+                this.maxY = coordXY.getY();
+            } else if (coordXY.getY() < this.minY) {
+                this.minY = coordXY.getY();
             }
         }
 
-        // On parcourt ensuite tous les segments (via les intersections) pour les
-        // afficher en adaptant les coordonnées
-        for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
-            double xPos = (entry.getValue().getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                    / (this.maxLongitude - this.minLongitude);
-            double yPos = (entry.getValue().getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                    / (this.maxLatitude - this.minLatitude);
-            // On traite les coordonnées y pour enlever l'effet "miroir"
-            yPos = -yPos + this.canvas.getHeight();
+        // Offset qui sera appliqué à toutes les coordonnées
+        this.maxX -= this.minX;
+        this.maxY -= this.minY;
 
-            // On dessine l'intersection
-            gc.setFill(Color.GRAY);
-            gc.fillOval(xPos - 2, yPos - 2, 4, 4);
+        // On cherche maintenant la largeur et la hauteur maximales que l'on peut avoir
+        // en respectant la ratio de la carte
+        double largeurCarte = this.paneDessin.getWidth() - this.PADDING_CARTE;
+        double hauteurCarte = this.paneDessin.getHeight() - this.PADDING_CARTE;
+
+        double ratioLargeur = largeurCarte / this.maxX;
+        double ratioHauteur = hauteurCarte / this.maxY;
+
+        // On prend le ratio le plus petit pour que la carte puisse rentrer dans la zone
+        // de dessin
+        this.ratioGlobal = Math.min(ratioLargeur, ratioHauteur);
+
+        double paddingLargeur = (this.paneDessin.getWidth() - (this.ratioGlobal * this.maxX)) / 2;
+        double paddingHauteur = (this.paneDessin.getHeight() - (this.ratioGlobal * this.maxY)) / 2;
+
+        this.paddingGlobal = Math.min(paddingLargeur, paddingHauteur);
+
+        // On va maintenant parcourir la carte dans le but de dessiner les intersections
+        // et les segments
+        for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
+            // On convertit la longitude et latitude en x et y
+            Point2D coordXY = longLatToXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
+
+            // On adapte le x et y en fonction de la taille de la carte établie avant
+            coordXY = adapterCoordonnees(coordXY.getX(), coordXY.getY());
+
+            Circle cercleIntersection = new Circle(coordXY.getX(), coordXY.getY(), 2);
+            cercleIntersection.setFill(Color.GRAY);
+
+            // On ajoute l'élément au dessin
+            this.listeNoeudsCarte.add(cercleIntersection);
+            this.paneDessin.getChildren().add(cercleIntersection);
 
             for (Segment s : entry.getValue().getSegmentsPartants()) {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
-                double xPos2 = (arrivee.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                        / (this.maxLongitude - this.minLongitude);
-                double yPos2 = (arrivee.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                        / (this.maxLatitude - this.minLatitude);
-                // On traite les coordonnées y pour enlever l'effet "miroir"
-                yPos2 = -yPos2 + this.canvas.getHeight();
 
-                // On dessine le segment
-                gc.setFill(Color.BLACK);
-                gc.strokeLine(xPos, yPos, xPos2, yPos2);
+                // On convertit la longitude et latitude en x et y
+                Point2D coordXYArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+
+                // On adapte le x et y en fonction de la taille de la carte établie avant
+                coordXYArrivee = adapterCoordonnees(coordXYArrivee.getX(), coordXYArrivee.getY());
+
+                Line ligneSegment = new Line(coordXY.getX(), coordXY.getY(), coordXYArrivee.getX(),
+                        coordXYArrivee.getY());
+                ligneSegment.setStroke(Color.BLACK);
+
+                // On change le "viewOrder" pour que les segments apparaissent derrière les
+                // intersections
+                ligneSegment.setViewOrder(2);
+
+                this.listeNoeudsCarte.add(ligneSegment);
+                this.paneDessin.getChildren().add(ligneSegment);
             }
         }
     }
 
     /**
-     * Cette méthode permet de dessiner les requêtes dans le canvas.
+     * Cette méthode permet de dessiner les requêtes dans le pane de la vue
+     * graphique.
      * 
      * @param planning Le planning actuel de l'application, contenant les requêtes
      * @param carte    La carte actuelle de l'application
@@ -166,22 +256,18 @@ public class VueGraphique {
         // On réinitialise la map d'association Requete <-> Couleur
         mapCouleurRequete.clear();
 
-        GraphicsContext gc = this.canvas.getGraphicsContext2D();
+        // On redéfinie les éléments contenus dans le pane de dessin pour n'afficher que
+        // la carte (on enlève donc les précédentes requêtes s'il y en a)
+        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
 
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
-        double xDepot = (depot.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                / (this.maxLongitude - this.minLongitude);
-        double yDepot = (depot.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                / (this.maxLatitude - this.minLatitude);
-        // On traite les coordonnées y pour enlever l'effet "miroir"
-        yDepot = -yDepot + this.canvas.getHeight();
+        Point2D coordDepot = longLatToXY(depot.getLongitude(), depot.getLatitude());
+        coordDepot = adapterCoordonnees(coordDepot.getX(), coordDepot.getY());
 
         double rayonLarge = 8.0;
         double rayonCourt = 3.0;
-
-        double[] positionsX = new double[10];
-        double[] positionsY = new double[10];
+        Polygon etoileDepot = new Polygon();
 
         for (int i = 0; i < 10; i++) {
             double xTemp;
@@ -193,12 +279,11 @@ public class VueGraphique {
                 xTemp = rayonCourt * Math.cos(2 * Math.PI * (i / 2) / 5 - Math.PI / 2 + Math.PI / 5);
                 yTemp = rayonCourt * Math.sin(2 * Math.PI * (i / 2) / 5 - Math.PI / 2 + Math.PI / 5);
             }
-            positionsX[i] = xTemp + xDepot;
-            positionsY[i] = yTemp + yDepot;
+            etoileDepot.getPoints().addAll(xTemp + coordDepot.getX(), yTemp + coordDepot.getY());
         }
 
-        gc.setFill(Color.RED);
-        gc.fillPolygon(positionsX, positionsY, 10);
+        etoileDepot.setFill(Color.RED);
+        this.paneDessin.getChildren().add(etoileDepot);
 
         // Liste des couleurs qui auront été générées aléatoirement
         List<Color> couleursDejaPresentes = new LinkedList<Color>();
@@ -207,19 +292,11 @@ public class VueGraphique {
             Intersection collecte = carte.getIntersections().get(requete.getIdPickup());
             Intersection livraison = carte.getIntersections().get(requete.getIdDelivery());
 
-            double xCollecte = (collecte.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                    / (this.maxLongitude - this.minLongitude);
-            double yCollecte = (collecte.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                    / (this.maxLatitude - this.minLatitude);
-            // On traite les coordonnées y pour enlever l'effet "miroir"
-            yCollecte = -yCollecte + this.canvas.getHeight();
+            Point2D coordCollecte = longLatToXY(collecte.getLongitude(), collecte.getLatitude());
+            coordCollecte = adapterCoordonnees(coordCollecte.getX(), coordCollecte.getY());
 
-            double xLivraison = (livraison.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                    / (this.maxLongitude - this.minLongitude);
-            double yLivraison = (livraison.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                    / (this.maxLatitude - this.minLatitude);
-            // On traite les coordonnées y pour enlever l'effet "miroir"
-            yLivraison = -yLivraison + this.canvas.getHeight();
+            Point2D coordLivraison = longLatToXY(livraison.getLongitude(), livraison.getLatitude());
+            coordLivraison = adapterCoordonnees(coordLivraison.getX(), coordLivraison.getY());
 
             // On va générer une couleur aléatoire qui est suffisament différente des
             // couleurs déjà présentes (cela est déterminé grâce à la constante
@@ -252,15 +329,19 @@ public class VueGraphique {
             } while (couleurSimilairePresente && nbIterations < maxIterations);
 
             couleursDejaPresentes.add(couleur);
-            gc.setFill(couleur);
 
             // On ajoute l'association Requete <-> Couleur dans la map
             mapCouleurRequete.put(requete, couleur);
 
-            // Pour le point de collecte, on dessine un carré
-            gc.fillRect(xCollecte - 5, yCollecte - 5, 10, 10);
-            // Pour le point de livraison on dessine un rond
-            gc.fillOval(xLivraison - 5, yLivraison - 5, 10, 10);
+            // Pour le point de collecte, on crée un carré
+            Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
+            rectangleCollecte.setFill(couleur);
+
+            // Pour le point de livraison on crée un rond
+            Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
+            cercleLivraison.setFill(couleur);
+
+            this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
         }
     }
 
@@ -274,38 +355,52 @@ public class VueGraphique {
      * @param couleur La couleur du trajet
      */
     public void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
-        GraphicsContext gc = this.canvas.getGraphicsContext2D();
-
         // On parcourt tous les segments composant le trajet
         for (Segment segment : trajet.getListeSegments()) {
             // On calcule les coordonnées du départ et de l'arrivée
             Intersection depart = carte.getIntersections().get(segment.getDepart());
-            double xDepart = (depart.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                    / (this.maxLongitude - this.minLongitude);
-            double yDepart = (depart.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                    / (this.maxLatitude - this.minLatitude);
-            yDepart = -yDepart + this.canvas.getHeight();
+
+            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
 
             Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
-            double xArrivee = (arrivee.getLongitude() - this.minLongitude) * this.canvas.getWidth()
-                    / (this.maxLongitude - this.minLongitude);
-            double yArrivee = (arrivee.getLatitude() - this.minLatitude) * this.canvas.getHeight()
-                    / (this.maxLatitude - this.minLatitude);
-            yArrivee = -yArrivee + this.canvas.getHeight();
 
-            // On affiche le segment
-            gc.setStroke(couleur);
-            gc.setLineWidth(3.0);
-            gc.strokeLine(xDepart, yDepart, xArrivee, yArrivee);
+            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
 
-            // On redessine par dessus les intersections correspondantes
-            gc.setFill(Color.GRAY);
-            gc.fillOval(xDepart - 2, yDepart - 2, 4, 4);
-            gc.fillOval(xArrivee - 2, yArrivee - 2, 4, 4);
+            // On crée une ligne pour le segment
+            Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
+                    coordArrivee.getY());
+            ligneSegment.setStroke(couleur);
+            ligneSegment.setStrokeWidth(3.0);
 
-            gc.setFill(couleur);
-            gc.fillOval(xDepart - 1, yDepart - 1, 2, 2);
-            gc.fillOval(xArrivee - 1, yArrivee - 1, 2, 2);
+            // On change le "viewOrder" pour que les trajets apparaissent derrière les
+            // intersections
+            ligneSegment.setViewOrder(2);
+
+            this.paneDessin.getChildren().add(ligneSegment);
         }
+
+        // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
+    }
+
+    public double getMinX() {
+        return minX;
+    }
+
+    public double getMaxX() {
+        return maxX;
+    }
+
+    public double getMinY() {
+        return minY;
+    }
+
+    public double getMaxY() {
+        return maxY;
+    }
+
+    public double getPADDING_CARTE() {
+        return PADDING_CARTE;
     }
 }
