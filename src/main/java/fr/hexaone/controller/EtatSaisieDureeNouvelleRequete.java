@@ -1,5 +1,13 @@
 package fr.hexaone.controller;
 
+import fr.hexaone.model.Requete;
+import fr.hexaone.model.Trajet;
+import javafx.scene.control.Alert;
+import javafx.scene.paint.Color;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Implémentation d'un State représentant l'état de l'application lorsque l'on
  * souhaite demander une nouvelle livraison et saisir les durées
@@ -9,13 +17,76 @@ package fr.hexaone.controller;
  */
 public class EtatSaisieDureeNouvelleRequete implements State {
 
+    private Long idPickup = null;
+    private Long idDelivery = null;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void valider(Controleur c, String pickUpDurationField, String deliveryDurationField) {
-        // TODO
-        System.out.println("valider [SaisieDureeNouvelleRequete state implementation]");
+        if (pickUpDurationField.isEmpty()) {
+            System.out.println("Le champ concernant la durée de Collecte est vide !");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise saisie de durée");
+            alert.setHeaderText(null);
+            alert.setContentText("Le champ concernant la durée de Collecte est vide !");
+            alert.show();
+            return;
+        }
+        if (deliveryDurationField.isEmpty()) {
+            System.out.println("Le champ concernant la durée de Livraison est vide !");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise saisie de durée");
+            alert.setHeaderText(null);
+            alert.setContentText("Le champ concernant la durée de Livraison est vide !");
+            alert.show();
+            return;
+        }
+        // Regex to check string contains only digits
+        String regex = "[0-9]+";
+        Pattern p = Pattern.compile(regex);
+        Matcher matcherPickUp = p.matcher(pickUpDurationField);
+        Matcher matcherDelivery = p.matcher(deliveryDurationField);
+        // If the input doesn't contain ONLY digits then we alert the user
+        if (!matcherPickUp.matches() || !matcherDelivery.matches()) {
+            System.out.println("Les durées ne doivent contenir que des chiffres !");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise saisie de durée");
+            alert.setHeaderText(null);
+            alert.setContentText("Les durées (en secondes) ne doivent contenir que des chiffres !");
+            alert.show();
+            return;
+        }
+
+        if(idPickup==null || idDelivery ==null){
+            System.out.println("Il faut selectionner deux intersections.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Il faut selectionner deux intersections.");
+            alert.show();
+            return;
+        }
+
+        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery, Integer.parseInt(deliveryDurationField));
+        c.getCarte().ajouterRequete(c.planning,nouvelleRequete);
+        for (Trajet trajet : c.getPlanning().getListeTrajets()) {
+            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+            c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
+        }
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
+                c.getFenetre().getMapCouleurRequete());
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        c.setEtatCourant(c.etatTourneeCalcule);
+
+        //TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
     }
 
     /**
@@ -28,6 +99,16 @@ public class EtatSaisieDureeNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         c.setEtatCourant(c.etatTourneeCalcule);
+    }
+
+    public void setIdPickup(Long idPickup){
+        this.idPickup = idPickup;
+    }
+
+    public void setIdDelivery(Long idDelivery){
+        this.idDelivery = idDelivery;
     }
 }

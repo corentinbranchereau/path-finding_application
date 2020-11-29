@@ -67,12 +67,12 @@
                      <!-- Add PickupDuration Label -->
                      <Label text="Durée Collecte" GridPane.columnIndex="0" GridPane.rowIndex="1"></Label>
                      <!-- Add PickupDuration Text Field -->
-                     <TextField fx:id="pickupDurationField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" />
+                     <TextField fx:id="pickupDurationField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true"/>
 
                      <!-- Add deliveryDuration Label -->
                      <Label text="Durée Livraison" GridPane.columnIndex="0" GridPane.rowIndex="2"></Label>
                      <!-- Add deliveryDuration Field -->
-                     <TextField fx:id="deliveryDurationField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="2" disable="true" />
+                     <TextField fx:id="deliveryDurationField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="2" disable="true"/>
                   </GridPane>
                   <HBox alignment="TOP_CENTER" prefWidth="320.0" prefHeight="100">
                      <Button fx:id="boutonValider" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Valider" disable="true">

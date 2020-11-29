@@ -49,6 +49,8 @@ public interface State {
 
                 c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
 
+                c.getFenetre().getVueGraphique().attacherHandlerIntersection(c);
+
                 // On adapte la taille de la fenêtre en fonction de la taille finale de la carte
                 c.getFenetre().adapterTailleFenetre();
 
@@ -149,7 +151,7 @@ public interface State {
     /**
      * Cette méthode permet de sélectionner une intersection
      */
-    default void selectionnerIntersection(Controleur c) {
+    default void selectionnerIntersection(Controleur c, Long idIntersection) {
         System.out.println("selectionnerIntersection [default state implementation]");
     }
 

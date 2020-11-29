@@ -1,17 +1,21 @@
 package fr.hexaone.view;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -85,11 +89,18 @@ public class VueGraphique {
     protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
 
     /**
-     * Liste contenant les intersections et les segments de la carte chargées. Cela
+     * Liste contenant les intersections et les segments de la carte chargées sous forme
+     * d'élements graphiques. Cela
      * est utile pour redessiner la carte en cas de changement de fichier de
      * requêtes
      */
     protected List<Node> listeNoeudsCarte;
+
+    /**
+     * Map contenant les intersections de la carte chargée mappée avec son ID. Cela est utile afin
+     * de pouvoir sélectionner une intersection précise lors de la modification de requêtes.
+     */
+    protected Map<Long, Circle> mapIntersections;
 
     /**
      * Constructeur de VueGraphique.
@@ -159,6 +170,7 @@ public class VueGraphique {
      */
     public void afficherCarte(Carte carte) {
         this.listeNoeudsCarte = new LinkedList<>();
+        this.mapIntersections = new HashMap<>();
 
         // On enlève tous les éléments graphiques déjà affichés (s'il y en a)
         this.paneDessin.getChildren().clear();
@@ -220,6 +232,7 @@ public class VueGraphique {
 
             // On ajoute l'élément au dessin
             this.listeNoeudsCarte.add(cercleIntersection);
+            this.mapIntersections.put(entry.getKey(),cercleIntersection);
             this.paneDessin.getChildren().add(cercleIntersection);
 
             for (Segment s : entry.getValue().getSegmentsPartants()) {
@@ -382,6 +395,20 @@ public class VueGraphique {
         }
 
         // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
+    }
+
+    /**
+     * Attache les EventHandler aux intersections de la carte chargée afin de préparer la sélection d'intersection
+     * @param controleur Le controleur de l'application
+     */
+    public void attacherHandlerIntersection(Controleur controleur){
+        for(Map.Entry<Long, Circle> entry : this.mapIntersections.entrySet()){
+            entry.getValue().setOnMousePressed(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    controleur.selectionnerIntersection(entry.getKey());
+                }
+            });
+        }
     }
 
     public double getMinX() {

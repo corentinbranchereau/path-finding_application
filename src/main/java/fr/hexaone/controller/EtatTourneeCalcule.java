@@ -34,8 +34,6 @@ public class EtatTourneeCalcule implements State {
     public void ajoutNouvelleRequete(Controleur c) {
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.setEtatCourant(c.etatSelectionPointNouvelleRequete);
     }
 }

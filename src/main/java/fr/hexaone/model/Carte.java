@@ -257,7 +257,7 @@ public class Carte {
      * @param newRequete
      * @return
      */
-    public Planning ajouterRequete(Planning planning,Requete newRequete) {
+    public Planning ajouterRequete(Planning planning, Requete newRequete) {
     	
     	  List<Requete> requetes=planning.getRequetes();
     	  List<Long> tournee=planning.getTournee();

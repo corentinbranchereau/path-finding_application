@@ -9,13 +9,27 @@ package fr.hexaone.controller;
  */
 public class EtatSelectionPointNouvelleRequete implements State{
 
+    private Long idPickup = null;
+    private Long idDelivery = null;
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void selectionnerIntersection(Controleur c) {
-        //TODO
-        System.out.println("selectionnerIntersection [AjouterNouvelleRequete state implementation] --> TODO");
+    public void selectionnerIntersection(Controleur c, Long idIntersection) {
+        if(idPickup==null){
+            idPickup = idIntersection;
+        } else if(idDelivery==null && !idIntersection.equals(idPickup)){
+            idDelivery = idIntersection;
+            c.setEtatCourant(c.etatSaisieDureeNouvelleRequete);
+            c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
+            c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+            c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
+            ((EtatSaisieDureeNouvelleRequete)c.etatCourant).setIdPickup(idPickup);
+            ((EtatSaisieDureeNouvelleRequete) c.etatCourant).setIdDelivery(idDelivery);
+            idPickup = null;
+            idDelivery = null;
+        }
     }
 
     /**
@@ -28,6 +42,10 @@ public class EtatSelectionPointNouvelleRequete implements State{
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        idPickup = null;
+        idDelivery = null;
         c.setEtatCourant(c.etatTourneeCalcule);
     }
 

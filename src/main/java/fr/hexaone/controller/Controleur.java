@@ -129,8 +129,8 @@ public class Controleur {
     /**
      * Méthode permettant la sélection d'une intersection
      */
-    public void selectionnerIntersection() {
-        etatCourant.selectionnerIntersection(this);
+    public void selectionnerIntersection(Long idIntersection) {
+        etatCourant.selectionnerIntersection(this, idIntersection);
     }
 
     /**

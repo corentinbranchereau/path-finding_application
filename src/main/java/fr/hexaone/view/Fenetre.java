@@ -18,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -339,33 +341,9 @@ public class Fenetre {
                 }
             });
 
-            // TODO : On fait des alertes pour les erreurs ? Comme ici :
-            // https://www.callicoder.com/javafx-fxml-form-gui-tutorial/
             fenetreControleur.getBoutonValider().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    if (fenetreControleur.getPickUpDurationField().getText().isEmpty()) {
-                        System.out.println("Le champ concernant la durée de Collecte est vide !");
-                        return;
-                    }
-                    if (fenetreControleur.getDeliveryDurationField().getText().isEmpty()) {
-                        System.out.println("Le champ concernant la durée de Livraison est vide !");
-                        return;
-                    }
-                    // Regex to check string contains only digits
-                    String regex = "[0-9]+";
-                    Pattern p = Pattern.compile(regex);
-                    Matcher matcherPickUp = p.matcher(fenetreControleur.getPickUpDurationField().getText());
-                    Matcher matcherDelivery = p.matcher(fenetreControleur.getDeliveryDurationField().getText());
-                    // If the input doesn't contain ONLY digits then we alert the user
-                    if (!matcherPickUp.matches() || !matcherDelivery.matches()) {
-                        System.out.println("Les durées ne doivent contenir que des chiffres !");
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Mauvaise saisie de durée");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Les durées (en secondes) ne doivent contenir que des chiffres !");
-                        alert.show();
-                        return;
-                    }
+
                     controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
                             fenetreControleur.getDeliveryDurationField().getText());
                 }
