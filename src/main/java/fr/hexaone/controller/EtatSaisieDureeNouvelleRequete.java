@@ -26,6 +26,8 @@ public class EtatSaisieDureeNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
         c.setEtatCourant(c.etatTourneeCalcule);
     }
 }
