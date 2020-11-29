@@ -48,11 +48,13 @@ public class RequetesControleurFXML {
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty()) {
                     Integer index = row.getIndex();
-                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                    db.setDragView(row.snapshot(null, null));
-                    ClipboardContent cc = new ClipboardContent();
-                    cc.put(SERIALIZED_MIME_TYPE, index);
-                    db.setContent(cc);
+                    if (index != 0 && index != demandeTable.getItems().size() - 1) {
+                        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                        db.setDragView(row.snapshot(null, null));
+                        ClipboardContent cc = new ClipboardContent();
+                        cc.put(SERIALIZED_MIME_TYPE, index);
+                        db.setContent(cc);
+                    }
                     event.consume();
                 }
             });
@@ -60,7 +62,8 @@ public class RequetesControleurFXML {
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()
+                            && row.getIndex() != 0 && row.getIndex() != demandeTable.getItems().size() - 1) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -80,7 +83,6 @@ public class RequetesControleurFXML {
                     } else {
                         dropIndex = row.getIndex();
                     }
-
                     demandeTable.getItems().add(dropIndex, draggedPerson);
 
                     event.setDropCompleted(true);
@@ -88,7 +90,6 @@ public class RequetesControleurFXML {
                     event.consume();
                 }
             });
-
             return row;
         });
 
