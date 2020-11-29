@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -91,6 +92,30 @@ public class Fenetre {
     protected double origineDragTranslateY;
 
     /**
+     * Largeur initiale de la carte (utile pour redonner à la carte sa taille
+     * initiale)
+     */
+    protected double largeurInitialeCarte;
+
+    /**
+     * Hauteur initiale de la carte (utile pour redonner à la carte sa taille
+     * initiale)
+     */
+    protected double hauteurInitialeCarte;
+
+    /**
+     * Largeur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
+     * initiale)
+     */
+    protected double largeurInitialeStage;
+
+    /**
+     * Hauteur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
+     * initiale)
+     */
+    protected double hauteurInitialeStage;
+
+    /**
      * Constructeur de Fenetre
      * 
      * @param stage      le conteneur principal des éléments graphiques de
@@ -128,6 +153,11 @@ public class Fenetre {
             // On donne le pane de dessin à la vue graphique
             this.vueGraphique.setPaneDessin(this.fenetreControleur.getPaneDessin());
 
+            // On récupère la taille initiale de la zone de dessin
+            this.fenetreControleur.getAnchorPaneGraphique().autosize();
+            this.largeurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getWidth();
+            this.hauteurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getHeight();
+
             // Affichage de la scène
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
@@ -136,6 +166,9 @@ public class Fenetre {
             stage.getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
 
             this.stage.show();
+
+            this.largeurInitialeStage = this.stage.getWidth();
+            this.hauteurInitialeStage = this.stage.getHeight();
 
             // On met un clip sur le anchor pane pour ne pas que le contenu dépasse
             this.fenetreControleur.getAnchorPaneGraphique()
@@ -350,5 +383,41 @@ public class Fenetre {
         this.getFenetreControleur().getPaneDessin().setTranslateY(0);
         this.getFenetreControleur().getPaneDessin().setScaleX(1);
         this.getFenetreControleur().getPaneDessin().setScaleY(1);
+    }
+
+    public void adapterTailleFenetre() {
+        Point2D coordMin = this.vueGraphique.adapterCoordonnees(this.vueGraphique.getMinX(),
+                this.vueGraphique.getMinY());
+        Point2D coordMax = this.vueGraphique.adapterCoordonnees(
+                (this.vueGraphique.getMaxX() + this.vueGraphique.getMinX()),
+                (this.vueGraphique.getMaxY() + this.vueGraphique.getMinY()));
+
+        double largeur = Math.abs(coordMax.getX() - coordMin.getX()) + this.vueGraphique.getPADDING_CARTE();
+        double hauteur = Math.abs(coordMax.getY() - coordMin.getY()) + this.vueGraphique.getPADDING_CARTE();
+
+        this.fenetreControleur.getBordureCarte().setWidth(largeur);
+        this.fenetreControleur.getBordureCarte().setHeight(hauteur);
+
+        this.fenetreControleur.getPaneDessin().setPrefSize(largeur, hauteur);
+
+        this.fenetreControleur.getAnchorPaneGraphique().setPrefSize(largeur, hauteur);
+        this.fenetreControleur.getAnchorPaneGraphique().setClip(new Rectangle(largeur, hauteur));
+
+        this.stage.setWidth(this.stage.getWidth() - (this.largeurInitialeCarte - largeur));
+        this.stage.setHeight(this.stage.getHeight() - (this.hauteurInitialeCarte - hauteur));
+    }
+
+    public void resetTailleFenetre() {
+        this.fenetreControleur.getBordureCarte().setWidth(largeurInitialeCarte);
+        this.fenetreControleur.getBordureCarte().setHeight(hauteurInitialeCarte);
+
+        this.fenetreControleur.getPaneDessin().setPrefSize(largeurInitialeCarte, hauteurInitialeCarte);
+
+        this.fenetreControleur.getAnchorPaneGraphique().setPrefSize(largeurInitialeCarte, hauteurInitialeCarte);
+        this.fenetreControleur.getAnchorPaneGraphique()
+                .setClip(new Rectangle(largeurInitialeCarte, hauteurInitialeCarte));
+
+        this.stage.setWidth(this.largeurInitialeStage);
+        this.stage.setHeight(this.hauteurInitialeStage);
     }
 }
