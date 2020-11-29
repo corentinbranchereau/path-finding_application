@@ -3,7 +3,6 @@ package fr.hexaone.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -26,9 +23,15 @@ import org.javatuples.Pair;
  */
 public class Carte {
 
+    // Créer une nouvelle map entre les nouveaux points des requetes et les intersections de la map
+    // map<Long,Long> inter requete -> inter carte
+    // map<Intersection,List<Intersection>> inter carte -> list inter requete
+    //     ou directement list dans une intersection
+    protected Map<Long,Long> idUniqueTOIdIntersection;
     protected Map<String, Trajet> cheminsLesPlusCourts;
     protected Map<Long, Intersection> intersections;
     protected Long depotId;
+    protected Long idUniqueMax;
 
     /**
      * Comparateur d'intersections en fonction de la distance
@@ -68,6 +71,238 @@ public class Carte {
         intersections = new HashMap<>();
     }
 
+
+    /**
+     * Calcul du temps d'arrivé et de sortie sur les points spéciaux
+     */
+    public void calculTempsDePassage(Planning planning) {
+
+        Map<Long,Date> datesPassage = new HashMap<Long,Date>();
+        Map<Long,Date> datesSorties = new HashMap<Long,Date>();
+
+        List<Long> idIntersections=planning.getTournee();
+        Long tempDebut = planning.getDateDebut().getTime();
+        double duree = 0.;
+
+        Long idUniqueDepot = planning.getIdUniqueDepot();
+        datesSorties.put(idUniqueDepot, new Date(tempDebut));
+        Long idDepot = planning.getIdDepot();
+        Long previd = idDepot;
+        for (Long id : idIntersections) {
+            Long idInter = this.idUniqueTOIdIntersection.get(id);
+            Trajet t = this.cheminsLesPlusCourts.get(previd + "|" + idInter);
+            duree += t.getPoids() * 3600. / 15.;
+            datesPassage.put(id, new Date(tempDebut + (long)duree ));
+            for (Requete r : planning.getRequetes()) {
+            	//System.out.println()
+                if (r.getIdUniqueDelivery() == id) {
+                    duree += r.getDureeDelivery() * 1000 ;
+                    break;
+                }
+                
+                if (r.getIdUniquePickup() == id) {
+                    duree += r.getDureePickup() * 1000 ;
+                    break;
+                }
+                
+            }
+
+            datesSorties.put(id, new Date(tempDebut + (long)duree ));
+            previd = idInter;
+        }
+
+        Trajet t = this.cheminsLesPlusCourts.get(previd + "|" + idDepot);
+        duree += t.getPoids() * 3600. / 15.;
+        datesPassage.put(idUniqueDepot, new Date(tempDebut + (long)duree ));
+
+        planning.setDureeTotale(duree/1000.0);
+        
+        planning.setDatesSorties(datesSorties);
+        planning.setDatesPassage(datesPassage);
+
+    }
+
+    
+    /**
+     * Génère des ids uniques pour chaque point de collecte ou de livraison d'une requête
+     * @param planning
+     */
+    public void generateNewId(Planning planning) {
+        Long id = 0L;
+
+        List<Requete> requetes = planning.getRequetes();
+
+        idUniqueTOIdIntersection = new HashMap<Long,Long>();
+
+        for (Requete requete : requetes) {
+            idUniqueTOIdIntersection.put(id, requete.getIdPickup());
+            requete.setIdUniquePickup(id);
+            id += 1;
+            idUniqueTOIdIntersection.put(id, requete.getIdDelivery());
+            requete.setIdUniqueDelivery(id);
+            id += 1;
+        }
+
+        idUniqueMax=id-1;
+        planning.setIdUniqueDepot(id);
+
+    }
+    
+    
+    /**
+     * Permet de faire une modification de requête : changement d'un point de pickup ou delivery 
+     * @param planning planning en cours de modification
+     * @param idUnique de l'intersection de la requête à changer
+     * @param idIntersection de la nouvelle intersection (géographique)
+     * @return
+     */
+    public Planning modifierRequeteLieu(Planning planning,long idUnique,long idIntersection) {
+    	
+    	  List<Requete> requetes=planning.getRequetes();
+    	  
+    	  //recherche de l'intersection dans les requêtes
+    	  for(Requete r : requetes) {
+    		  if(r.getIdUniqueDelivery()==idUnique) {
+    			  r.setIdDelivery(idIntersection);
+    		  }
+    		  
+    		  if(r.getIdUniquePickup()==idUnique) {
+    			  r.setIdPickup(idIntersection);
+    			  
+    		  }
+    	  }
+          
+    	  //maj de la map des correspondances d'ids
+    	  idUniqueTOIdIntersection.put(idUnique,idIntersection);
+    	  
+          planning.setRequetes(requetes);
+          //recalcul des chemins
+    	  calculerLesCheminsLesPlusCourts(requetes);
+    	
+    	  Long prevIntersectionId = this.depotId;
+          List<Trajet> listTrajets = new LinkedList<Trajet>();
+          
+          List<Long> tournee=planning.getTournee();
+          
+          for (Long newId : tournee) {
+              newId = idUniqueTOIdIntersection.get(newId);
+             
+              listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
+              prevIntersectionId = newId;
+          }
+
+          listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+          planning.setListeTrajets(listTrajets);
+
+          //nouveaux temps de passage
+          calculTempsDePassage(planning);
+          
+          return planning;
+    	  
+    }
+    
+    /**
+     * Permet de faire une modification de requête : changement d'un point de pickup ou delivery 
+     * @param planning
+     * @param idUnique1
+     * @param idUnique2
+     * @return
+     */
+    public Planning modifierOrdreRequetes(Planning planning,long idUnique1,long idUnique2) {
+    	
+			/*for(Long l : this.idUniqueTOIdIntersection.keySet())
+			{
+				System.out.println(l + ":" +this.idUniqueTOIdIntersection.get(l));
+			}
+			*/
+		
+    	  int i1=0;
+    	  int i2=0;
+    	  
+    	  List<Long> tournee=planning.getTournee();
+    	  
+    	  i1=tournee.indexOf(idUnique1);
+    	  i2=tournee.indexOf(idUnique2);
+   
+    	  Collections.swap(tournee,i1,i2);
+    	  
+          planning.setTournee(tournee);
+
+    	  Long prevIntersectionId = this.depotId;
+          List<Trajet> listTrajets = new LinkedList<Trajet>();
+          
+          for (Long newId : tournee) {
+              newId = idUniqueTOIdIntersection.get(newId);
+             
+              listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
+              prevIntersectionId = newId;
+          }
+
+          listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+          planning.setListeTrajets(listTrajets);
+
+          //nouveaux temps de passage
+          calculTempsDePassage(planning);
+          
+          return planning;
+    }
+   
+    /**
+     * Permet d'ajouter une requête après le calcul
+     * @param planning
+     * @param newRequete
+     * @return
+     */
+    public Planning ajouterRequete(Planning planning,Requete newRequete) {
+    	
+    	  List<Requete> requetes=planning.getRequetes();
+    	  List<Long> tournee=planning.getTournee();
+    	  List<Trajet> listTrajets = new LinkedList<Trajet>();
+    	 
+    	  tournee.add(idUniqueMax+1);
+    	  tournee.add(idUniqueMax+2);
+    	  
+    	  //maj de la map des correspondances d'ids
+    	  idUniqueTOIdIntersection.put(idUniqueMax+1,newRequete.getIdPickup());
+    	  idUniqueTOIdIntersection.put(idUniqueMax+2,newRequete.getIdDelivery());
+    	  
+    	  newRequete.setIdUniquePickup(idUniqueMax+1);
+    	  newRequete.setIdUniqueDelivery(idUniqueMax+2);
+    	  
+    	  idUniqueMax+=2;
+    	  
+    	  requetes.add(newRequete);
+          planning.setRequetes(requetes);
+          planning.setTournee(tournee);
+          
+          //recalcul des chemins
+    	  calculerLesCheminsLesPlusCourts(requetes);
+    	
+    	  Long prevIntersectionId = this.depotId;
+
+          for (Long newId : tournee) {
+              newId = idUniqueTOIdIntersection.get(newId);
+             
+              listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
+
+              prevIntersectionId = newId;
+          }
+
+          listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
+
+          planning.setListeTrajets(listTrajets);
+
+          //nouveaux temps de passage
+          calculTempsDePassage(planning);
+          
+          return planning;
+    	  
+    }
+    
     /**
      * Recherche de la tournée la plus rapide
      *
@@ -83,72 +318,27 @@ public class Carte {
         // livraisons et dépot)
         calculerLesCheminsLesPlusCourts(requetes);
         
+        generateNewId(planning);
+        
         //recherche de la melleure tournéee
         List<Long> bestSolution = trouverMeilleureTournee(requetes);
-
-        Date debut = planning.getDateDebut();
-
-        Map<Intersection, Date> temps = new HashMap<Intersection, Date>();
-        Map<Intersection, Date> tempsSorti = new HashMap<Intersection, Date>();
-
-        tempsSorti.put(intersections.get(depotId), debut);
-
-        //temps départ
-        long t = debut.getTime();
-        long tIni = t;
+ 
+        planning.setTournee(bestSolution);
 
         Long prevIntersectionId = this.depotId;
-
-        Set<Requete> requetesCollectees = new HashSet<Requete>();
-        Set<Requete> requetesLivrees = new HashSet<Requete>();
-
         List<Trajet> listTrajets = new LinkedList<Trajet>();
 
         for (Long newId : bestSolution) {
-
-        	//ajout du temps de parcours du vélo sur le segment
-            t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids() * 3600.0 / 15000000.0;
-
-            temps.put(intersections.get(newId), new Date(t));
-
-            for (Requete r : requetes) {
-                if (newId == r.getIdPickup()) {
-                    if (!requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
-                    	//ajout de la durée de la collecte
-                        t += r.getDureePickup() * 1000;
-                        requetesCollectees.add(r);
-                    }
-                }
-                
-                if (newId == r.getIdDelivery()) {
-                    if (requetesCollectees.contains(r) && !requetesLivrees.contains(r)) {
-                    	//ajout de la durée de la livraison
-                        t += r.getDureeDelivery() * 1000;
-                        requetesLivrees.add(r);
-                    }
-                }
-            }
-
-            tempsSorti.put(intersections.get(newId), new Date(t));
-
+            newId = idUniqueTOIdIntersection.get(newId);
             listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId));
-
             prevIntersectionId = newId;
         }
 
         listTrajets.add(this.cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId));
 
-        t += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids() * 3600.0 / 15000000.0;
-        temps.put(intersections.get(depotId), new Date(t));
-
-        planning.setDatesPassage(temps);
-        planning.setDatesSorties(tempsSorti);
-
-        //temps totale la tournée
-        long tempsPasse = t - tIni;
-
-        planning.setDureeTotale((double) tempsPasse);
         planning.setListeTrajets(listTrajets);
+
+        calculTempsDePassage(planning);
         
         return planning;
     }
@@ -449,11 +639,10 @@ public class Carte {
         Long prevIntersectionId = this.depotId;
 
         for (Long newId : chromosome) {
-        	//ajout des couts successifs
+            newId = idUniqueTOIdIntersection.get(newId);
             somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
             prevIntersectionId = newId;
         }
-
         somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + depotId).getPoids();
 
         return somme;
@@ -520,15 +709,15 @@ public class Carte {
 
     public Boolean verifierPop(List<Long> chromosome, List<Requete> requetes) {
 
-        for (int i = 0; i < requetes.size(); i++) {
+        for (Requete r : requetes) {
             Boolean livraison = false;
             Boolean collecte = false;
-            for (int j = 0; j < chromosome.size(); j++) {
+            for (Long c : chromosome) {
             	//vérifie qu'un point de collecte n'est pas après sa livraison
                 if (livraison == true && collecte == true) {
                     break;
                 }
-                if (chromosome.get(j) == requetes.get(i).getIdPickup()) {
+                if (c == r.getIdUniquePickup()) {
                     collecte = true;
                     if (livraison == false) {
                         continue;
@@ -537,7 +726,7 @@ public class Carte {
                     }
                 }
 
-                if (chromosome.get(j) == requetes.get(i).getIdDelivery()) {
+                if (c == r.getIdUniqueDelivery()) {
                     livraison = true;
 
                     if (collecte == false) {
@@ -608,9 +797,9 @@ public class Carte {
         do {
             shuffleList = new ArrayList<Long>();
 
-            for (int i = 0; i < requetes.size(); i++) {
-                shuffleList.add(requetes.get(i).getIdPickup());
-                shuffleList.add(requetes.get(i).getIdDelivery());
+            for (Requete r : requetes) {
+                shuffleList.add(r.getIdUniquePickup());
+                shuffleList.add(r.getIdUniqueDelivery());
             }
             
             //réarrangement aléatoire de la population
@@ -682,15 +871,15 @@ public class Carte {
      */
     public List<Long> correctionCrossover(List<Long> chromosome, List<Requete> requetes) {
 
-        for (int i = 0; i < requetes.size(); i++) {
+        for (Requete r : requetes) {
 
-            int indiceCollecte = chromosome.indexOf(requetes.get(i).getIdPickup());
-            int indiceLivraison = chromosome.indexOf(requetes.get(i).getIdDelivery());
+            int indiceCollecte = chromosome.indexOf(r.getIdUniquePickup());
+            int indiceLivraison = chromosome.indexOf(r.getIdUniqueDelivery());
 
             if (indiceLivraison < indiceCollecte) {
             	//la livraison est après la collecte : on inverse les 2 points
                 long id = chromosome.get(indiceCollecte);
-                chromosome.set(indiceCollecte, requetes.get(i).getIdDelivery());
+                chromosome.set(indiceCollecte, r.getIdUniqueDelivery());
                 chromosome.set(indiceLivraison, id);
             }
         }
@@ -759,5 +948,12 @@ public class Carte {
      */
     public void setDepotId(Long depotId) {
         this.depotId = depotId;
+    }
+
+    /**
+     * Getter
+     */
+    public Map<Long,Long> getIdUniqueTOIdIntersection(){
+        return idUniqueTOIdIntersection;
     }
 }
