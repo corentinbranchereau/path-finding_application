@@ -26,6 +26,8 @@ public class EtatSelectionPointNouvelleRequete implements State{
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.setEtatCourant(c.etatTourneeCalcule);
     }
 
