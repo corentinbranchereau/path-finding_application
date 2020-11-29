@@ -39,7 +39,7 @@ public class XMLDeserializerTest {
     @BeforeEach
     void init() {
         carte = new Carte();
-        planning = new Planning();
+        planning = new Planning(carte);
     }
 
     /**

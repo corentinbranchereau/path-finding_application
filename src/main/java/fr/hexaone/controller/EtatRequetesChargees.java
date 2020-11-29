@@ -17,7 +17,8 @@ public class EtatRequetesChargees implements State {
      */
     @Override
     public void lancerCalcul(Controleur c) {
-        c.getCarte().calculerTournee(c.getPlanning());
+    	//c.getPlanning().setCarte(c.getCarte());
+    	c.getPlanning().calculerTournee();
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);

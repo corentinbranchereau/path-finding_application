@@ -374,12 +374,12 @@ public class CarteTest {
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,5,3,5));
 
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
+        
+        planning.generateNewId();
 
-        carte.generateNewId(planning);
-         
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
@@ -412,11 +412,11 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
-
-        carte.generateNewId(planning);
+        
+        planning.generateNewId();
 
         List<Long> chromosome = new ArrayList<Long>();
     	chromosome.add(0L);
@@ -446,11 +446,11 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
 
-        carte.generateNewId(planning);
+        planning.generateNewId();
 
 	    List<Long> P1 = new ArrayList<Long>();
 
@@ -510,19 +510,19 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
 
-        carte.generateNewId(planning);
+        planning.generateNewId();
 
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
         
         assert(bestSolution.size()==2);
         
-        assert(carte.getIdUniqueTOIdIntersection().get(bestSolution.get(0))==1);
-        assert(carte.getIdUniqueTOIdIntersection().get(bestSolution.get(1))==3);
+        assert(planning.getIdUniqueTOIdIntersection().get(bestSolution.get(0))==1);
+        assert(planning.getIdUniqueTOIdIntersection().get(bestSolution.get(1))==3);
         
         
     }
@@ -553,12 +553,12 @@ public class CarteTest {
         //Calcul des chemins les plus courts
         carte.calculerLesCheminsLesPlusCourts(requetes);
 
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
 
-        carte.generateNewId(planning);
-        
+        planning.generateNewId();
+
         //recherche de la meilleur solution
         List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
 
@@ -585,14 +585,14 @@ public class CarteTest {
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,3,3,5));
         
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
 
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
-
-        planning = carte.calculerTournee(planning);
+        
+        planning.calculerTournee();
 
         Map<Long,Date> datesPassages = planning.getDatesPassage();
         Map<Long,Date> datesSorties = planning.getDatesSorties();
@@ -639,14 +639,15 @@ public class CarteTest {
     	requetes.add(new Requete(1,5,3,5));
         requetes.add(new Requete(3,5,9,5));
         
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
+        
+        planning.calculerTournee();
 
-        planning = carte.calculerTournee(planning);
 
         /*System.out.println("size :" + planning.getListeTrajets().size());
 
@@ -711,20 +712,20 @@ public class CarteTest {
         requetes.add(new Requete(4,5,9,5));
         requetes.add(new Requete(6,5,8,5));
        
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
 
-        planning = carte.calculerTournee(planning);
-        
+        planning.calculerTournee();
+
         double dureeAvantChangement=planning.getDureeTotale();
 
         //modfication du du point de livraison de la 1 ère requête
         Requete r1=requetes.get(0);
-        carte.modifierRequeteLieu(planning,r1.getIdUniqueDelivery(),7);
+        planning.modifierRequeteLieu(r1.getIdUniqueDelivery(),7);
 
         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-0.48)<0.001);
@@ -746,14 +747,14 @@ public class CarteTest {
         requetes.add(new Requete(4,5,9,5));
         requetes.add(new Requete(6,5,8,5));
        
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
 
-        planning = carte.calculerTournee(planning);
+        planning.calculerTournee();
         
         double dureeAvantChangement=planning.getDureeTotale();
 
@@ -764,8 +765,8 @@ public class CarteTest {
         
         planning.setRequetes(requetes);
         
-        carte.calculTempsDePassage(planning);
-      
+        planning.calculTempsDePassage();
+
         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement)==10.0);
 
@@ -786,20 +787,20 @@ public class CarteTest {
         requetes.add(new Requete(4,5,9,5));
         requetes.add(new Requete(6,5,8,5));
        
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
 
-        planning = carte.calculerTournee(planning);
+        planning.calculerTournee();
         
         double dureeAvantChangement=planning.getDureeTotale();
 
         //modfication de l'ordre de passage
 
-        carte.modifierOrdreRequetes(planning,0,4);
+        planning.modifierOrdreRequetes(0,4);
       
         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
         assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-2.16)<0.01);
@@ -821,14 +822,14 @@ public class CarteTest {
         requetes.add(new Requete(4,5,9,5));
         requetes.add(new Requete(6,5,8,5));
        
-        Planning planning = new Planning();
+        Planning planning = new Planning(carte);
         
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
         Date d = new Date(0);
         planning.setDateDebut(d);
 
-        planning = carte.calculerTournee(planning);
+        planning.calculerTournee();
         
         double dureeReference=planning.getDureeTotale();
         
@@ -838,18 +839,18 @@ public class CarteTest {
     	requetesTest.add(new Requete(1,5,3,5));
         requetesTest.add(new Requete(4,5,9,5));
        
-        Planning planningTest = new Planning();
+        Planning planningTest = new Planning(carte);
         
         planningTest.setIdDepot(0L);
         planningTest.setRequetes(requetesTest);
         Date dTest = new Date(0);
         planningTest.setDateDebut(dTest);
         
-        planningTest = carte.calculerTournee(planningTest);
+        planningTest.calculerTournee();
 
         //ajout d'une nouvelle requête
 
-        carte.ajouterRequete(planningTest,new Requete(6,5,8,5));
+        planningTest.ajouterRequete(new Requete(6,5,8,5));
  
         //on vérifie si la durée totale du nouveau planning est cohérente
  

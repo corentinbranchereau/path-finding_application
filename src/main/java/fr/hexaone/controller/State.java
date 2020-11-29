@@ -81,7 +81,7 @@ public interface State {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
                 Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath());
-                c.setPlanning(new Planning());
+                c.setPlanning(new Planning(c.getCarte()));
                 XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
                 // On affiche requêtes chargées dans la vue graphique et la vue textuelle

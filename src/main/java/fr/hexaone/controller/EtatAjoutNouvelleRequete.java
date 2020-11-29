@@ -86,7 +86,7 @@ public class EtatAjoutNouvelleRequete implements State {
         }
 
         Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery, Integer.parseInt(deliveryDurationField));
-        c.getCarte().ajouterRequete(c.planning,nouvelleRequete);
+        c.getPlanning().ajouterRequete(nouvelleRequete);
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
