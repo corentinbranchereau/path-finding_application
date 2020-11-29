@@ -94,7 +94,6 @@ public class FenetreControleurFXML {
 
     /**
      * AnchorPane contenant le pane de dessin (vue graphique)
-     * AnchorPane contenant le canvas de dessin (vue graphique).
      */
     @FXML
     protected AnchorPane anchorPaneGraphique;
