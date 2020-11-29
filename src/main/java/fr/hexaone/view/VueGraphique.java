@@ -161,6 +161,14 @@ public class VueGraphique {
     }
 
     /**
+     * Méthode permettant de n'affichant que la carte en enlevant toutes les
+     * requêtes dessinées dessus
+     */
+    public void nettoyerCarte() {
+        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
+    }
+
+    /**
      * Cette méthode permet de dessiner la carte dans le pane de la vue graphique,
      * en adaptant les coordonnées des éléments en fonction de la taille de ce pane,
      * en respectant toutefois le ratio longitude/latitude des coordonnées pour ne
@@ -269,9 +277,7 @@ public class VueGraphique {
         // On réinitialise la map d'association Requete <-> Couleur
         mapCouleurRequete.clear();
 
-        // On redéfinie les éléments contenus dans le pane de dessin pour n'afficher que
-        // la carte (on enlève donc les précédentes requêtes s'il y en a)
-        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
+        nettoyerCarte();
 
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
