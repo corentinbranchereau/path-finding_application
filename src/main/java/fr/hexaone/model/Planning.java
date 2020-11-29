@@ -115,13 +115,6 @@ public class Planning {
 
     public Date getDateDebut() {
         return this.dateDebut;
-<<<<<<< HEAD
-    }
-
-    public Map<Intersection, Date> getDatesPassage() {
-        return this.datesPassage;
-=======
->>>>>>> ab77cfc11b40d00d40f325f397a8c653112ac1dd
     }
 
     public void setDateDebut(Date newDateDebut) {
