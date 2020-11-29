@@ -1,5 +1,6 @@
 package fr.hexaone.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -103,6 +104,12 @@ public class VueGraphique {
     protected Map<Long, Circle> mapIntersections;
 
     /**
+     * Liste qui contient les lignes (élément graphique) composant les trajets
+     * affichés sur la carte
+     */
+    protected List<Line> listeLignesTrajets = new ArrayList<>();
+
+    /**
      * Constructeur de VueGraphique.
      */
     public VueGraphique() {
@@ -166,6 +173,16 @@ public class VueGraphique {
      */
     public void nettoyerCarte() {
         this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
+    }
+
+    /**
+     * Méthode qui permet d'effacer les trajets affichés dans la vue graphique
+     */
+    public void effacerTrajets() {
+        for (Line l : this.listeLignesTrajets) {
+            this.paneDessin.getChildren().remove(l);
+        }
+        this.listeLignesTrajets.clear();
     }
 
     /**
@@ -398,6 +415,7 @@ public class VueGraphique {
             ligneSegment.setViewOrder(2);
 
             this.paneDessin.getChildren().add(ligneSegment);
+            this.listeLignesTrajets.add(ligneSegment);
         }
 
         // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)

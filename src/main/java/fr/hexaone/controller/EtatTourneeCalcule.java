@@ -17,7 +17,8 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void lancerCalcul(Controleur c) {
-    	c.getPlanning().calculerTournee();
+        c.getPlanning().calculerTournee();
+        c.getFenetre().getVueGraphique().effacerTrajets();
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
