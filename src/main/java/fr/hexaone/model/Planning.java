@@ -33,10 +33,9 @@ public class Planning {
     protected List<Long> tournee;
     
     /**
-     * carte associée au planning
+     * Carte associée au planning
      */
     protected Carte carte;
-
 
 	/**
      * liste de tous les trajets composant la tournée
@@ -58,12 +57,20 @@ public class Planning {
      */
     protected double dureeTotale;
     
+    /**
+     * Map (statique) permettant d'identifier chaque élément d'une requête à une intersection géographique
+     * à partir de son identifiant unique
+     */
     protected static Map<Long,Long> idUniqueTOIdIntersection;
     
+    /**
+     * Valeur max des identifiants uniques générés
+     */
     protected Long idUniqueMax;
 
     /**
-     * Constructeur par défaut de Planning
+     * Constructeur du planning 
+     * @param carte
      */
     public Planning(Carte carte) {
         this.requetes = new ArrayList<>();
@@ -115,11 +122,6 @@ public class Planning {
         setDatesPassage(datesPassage);
 
     }
-    
-    
-    public Carte getCarte() {
-		return carte;
-	}
 
 
 	/**
@@ -326,6 +328,10 @@ public class Planning {
     }
 
 
+    /**
+     * Tous les Getters et Setters
+     * @return
+     */
     public List<Trajet> getListeTrajets() {
         return listeTrajets;
     }
@@ -416,5 +422,9 @@ public class Planning {
 
 	public void setIdUniqueMax(Long idUniqueMax) {
 		this.idUniqueMax = idUniqueMax;
+	}
+    
+    public Carte getCarte() {
+		return carte;
 	}
 }

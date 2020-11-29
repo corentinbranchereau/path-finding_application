@@ -28,8 +28,17 @@ public class Carte {
     // map<Intersection,List<Intersection>> inter carte -> list inter requete
     //     ou directement list dans une intersection
 
+	/**
+	 * Map permettant d'identifier les chemins les plus courts à partir d'un identifiant (String) 
+	 */
     protected Map<String, Trajet> cheminsLesPlusCourts;
+    /**
+     * Map permettant d'identifier les intersections à partir de leur id
+     */
     protected Map<Long, Intersection> intersections;
+    /**
+     * id du dépot
+     */
     protected Long depotId;
 
 
