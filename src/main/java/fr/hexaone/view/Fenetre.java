@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -356,6 +359,11 @@ public class Fenetre {
                     // If the input doesn't contain ONLY digits then we alert the user
                     if (!matcherPickUp.matches() || !matcherDelivery.matches()) {
                         System.out.println("Les durées ne doivent contenir que des chiffres !");
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Mauvaise saisie de durée");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Les durées (en secondes) ne doivent contenir que des chiffres !");
+                        alert.show();
                         return;
                     }
                     controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
