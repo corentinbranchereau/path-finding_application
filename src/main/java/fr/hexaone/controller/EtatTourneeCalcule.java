@@ -25,8 +25,6 @@ public class EtatTourneeCalcule implements State {
 
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
                 c.getFenetre().getMapCouleurRequete());
-
-        // TODO : Afficher bouton "Ajouter une demande de livraison"
     }
 
     /**

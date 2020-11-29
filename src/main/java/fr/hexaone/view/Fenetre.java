@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Requete;
@@ -175,6 +177,9 @@ public class Fenetre {
                     .setClip(new Rectangle(this.fenetreControleur.getAnchorPaneGraphique().getWidth(),
                             this.fenetreControleur.getAnchorPaneGraphique().getHeight()));
 
+            // On affiche le canvas devant les autres composants graphiques
+            // ! this.fenetreControleur.getCanvas().setViewOrder(-1);
+
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getPaneDessin().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
@@ -331,9 +336,30 @@ public class Fenetre {
                 }
             });
 
+            // TODO : On fait des alertes pour les erreurs ? Comme ici :
+            // https://www.callicoder.com/javafx-fxml-form-gui-tutorial/
             fenetreControleur.getBoutonValider().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    controleur.valider();
+                    if (fenetreControleur.getPickUpDurationField().getText().isEmpty()) {
+                        System.out.println("Le champ concernant la durée de Collecte est vide !");
+                        return;
+                    }
+                    if (fenetreControleur.getDeliveryDurationField().getText().isEmpty()) {
+                        System.out.println("Le champ concernant la durée de Livraison est vide !");
+                        return;
+                    }
+                    // Regex to check string contains only digits
+                    String regex = "[0-9]+";
+                    Pattern p = Pattern.compile(regex);
+                    Matcher matcherPickUp = p.matcher(fenetreControleur.getPickUpDurationField().getText());
+                    Matcher matcherDelivery = p.matcher(fenetreControleur.getDeliveryDurationField().getText());
+                    // If the input doesn't contain ONLY digits then we alert the user
+                    if (!matcherPickUp.matches() || !matcherDelivery.matches()) {
+                        System.out.println("Les durées ne doivent contenir que des chiffres !");
+                        return;
+                    }
+                    controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
+                            fenetreControleur.getDeliveryDurationField().getText());
                 }
             });
 

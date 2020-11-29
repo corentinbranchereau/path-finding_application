@@ -3,6 +3,7 @@ package fr.hexaone.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +63,18 @@ public class FenetreControleurFXML {
     protected Button boutonNouvelleRequete;
 
     /**
+     * Champ permettant de préciser la durée de la collecte.
+     */
+    @FXML
+    protected TextField pickupDurationField;
+
+    /**
+     * Champ permettant de préciser la durée de la livraison.
+     */
+    @FXML
+    protected TextField deliveryDurationField;
+
+    /**
      * Bouton permettant de valider un choix qui le nécessite.
      */
     @FXML
@@ -81,6 +94,7 @@ public class FenetreControleurFXML {
 
     /**
      * AnchorPane contenant le pane de dessin (vue graphique)
+     * AnchorPane contenant le canvas de dessin (vue graphique).
      */
     @FXML
     protected AnchorPane anchorPaneGraphique;
@@ -149,18 +163,36 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le bouton de validation
+     * Renvoie le texte précisant la durée de la collecte.
      *
-     * @return Le bouton de validation
+     * @return Le texte précisant la durée de la collecte.
+     */
+    public TextField getPickUpDurationField() {
+        return pickupDurationField;
+    }
+
+    /**
+     * Renvoie le texte précisant la durée de la livraison.
+     *
+     * @return Le texte précisant la durée de la livraison.
+     */
+    public TextField getDeliveryDurationField() {
+        return deliveryDurationField;
+    }
+
+    /**
+     * Renvoie le bouton de validation.
+     *
+     * @return Le bouton de validation.
      */
     public Button getBoutonValider() {
         return boutonValider;
     }
 
     /**
-     * Renvoie le bouton d'annulation
+     * Renvoie le bouton d'annulation.
      *
-     * @return Le bouton d'annulation
+     * @return Le bouton d'annulation.
      */
     public Button getBoutonAnnuler() {
         return boutonAnnuler;

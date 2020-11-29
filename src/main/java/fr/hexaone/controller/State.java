@@ -149,21 +149,21 @@ public interface State {
     /**
      * Cette méthode permet de sélectionner une intersection
      */
-    default void selectionnerIntersection(Controleur c){
+    default void selectionnerIntersection(Controleur c) {
         System.out.println("selectionnerIntersection [default state implementation]");
     }
 
     /**
      * Cette méthode permet de valider un choix
      */
-    default void valider(Controleur c){
+    default void valider(Controleur c, String pickUpDurationField, String deliveryDurationField) {
         System.out.println("valider [default state implementation]");
     }
 
     /**
      * Cette méthode permet d'annuler un choix
      */
-    default void annuler(Controleur c){
+    default void annuler(Controleur c) {
         System.out.println("annuler [default state implementation]");
     }
 }

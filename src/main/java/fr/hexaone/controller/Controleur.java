@@ -56,15 +56,16 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
-     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du design pattern STATE
+     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du
+     * design pattern STATE
      */
     public EtatSelectionPointNouvelleRequete etatSelectionPointNouvelleRequete;
 
     /**
-     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du design pattern STATE
+     * Etat sélection de nouvaux points pour une ajouter une nouvelle requête du
+     * design pattern STATE
      */
     public EtatSaisieDureeNouvelleRequete etatSaisieDureeNouvelleRequete;
-
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
@@ -117,25 +118,34 @@ public class Controleur {
     }
 
     /**
-     * Méthode permettant la sélection de deux intersections pour une nouvelle requête en fin de trajet
+     * Méthode permettant la sélection de deux intersections pour une nouvelle
+     * requête en fin de trajet
      */
-    public void ajouterNouvelleRequete(){ etatCourant.ajoutNouvelleRequete(this); }
+    public void ajouterNouvelleRequete() {
+        etatCourant.ajoutNouvelleRequete(this);
+    }
 
-    //TODO : Fait côté Killian ?
+    // TODO : Fait côté Killian ?
     /**
      * Méthode permettant la sélection d'une intersection
      */
-    public void selectionnerIntersection(){ etatCourant.selectionnerIntersection(this); }
+    public void selectionnerIntersection() {
+        etatCourant.selectionnerIntersection(this);
+    }
 
     /**
      * Valider l'action en cours
      */
-    public void valider(){ etatCourant.valider(this); }
+    public void valider(String pickUpDurationField, String deliveryDurationField) {
+        etatCourant.valider(this, pickUpDurationField, deliveryDurationField);
+    }
 
     /**
      * Annuler l'action en cours
      */
-    public void annuler(){ etatCourant.annuler(this); }
+    public void annuler() {
+        etatCourant.annuler(this);
+    }
 
     /**
      * Renvoie la fenêtre de l'application.
