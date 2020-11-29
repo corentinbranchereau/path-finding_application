@@ -307,5 +307,7 @@ public class VueGraphique {
             gc.fillOval(xDepart - 1, yDepart - 1, 2, 2);
             gc.fillOval(xArrivee - 1, yArrivee - 1, 2, 2);
         }
+
+        // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
     }
 }

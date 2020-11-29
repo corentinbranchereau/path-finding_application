@@ -127,4 +127,41 @@ public interface State {
         }
     }
 
+    /**
+     * Cette méthode permet de passer en mode d'ajout d'une nouvelle requête
+     */
+    default void ajoutNouvelleRequete(Controleur c) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Demande nouvelle livraison");
+        alert.setHeaderText(null);
+        alert.setContentText("Vous devez avoir un planning determiné avant de pouvoir rajouter d'autres requêtes");
+
+        Optional<ButtonType> decision = alert.showAndWait();
+        if (decision.get() == ButtonType.OK) {
+            // Rien
+        } else {
+            // Rien
+        }
+    }
+
+    /**
+     * Cette méthode permet de sélectionner une intersection
+     */
+    default void selectionnerIntersection(Controleur c){
+        System.out.println("selectionnerIntersection [default state implementation]");
+    }
+
+    /**
+     * Cette méthode permet de valider un choix
+     */
+    default void valider(Controleur c){
+        System.out.println("valider [default state implementation]");
+    }
+
+    /**
+     * Cette méthode permet d'annuler un choix
+     */
+    default void annuler(Controleur c){
+        System.out.println("annuler [default state implementation]");
+    }
 }
