@@ -48,7 +48,7 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
-                  <ScrollPane prefHeight="664.0" prefWidth="320.0">
+                  <ScrollPane  fx:id="textScrollPane" prefHeight="664.0" prefWidth="320.0">
                      <content>
                         <TextFlow fx:id="zoneTexte" prefHeight="664.0" prefWidth="393.0" style="-fx-padding: 10;">
                            <children>

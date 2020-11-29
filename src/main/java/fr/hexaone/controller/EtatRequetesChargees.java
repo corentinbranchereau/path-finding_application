@@ -23,9 +23,10 @@ public class EtatRequetesChargees implements State {
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
 
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
-                c.getFenetre().getMapCouleurRequete());
-
+        // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
+        // c.getCarte(),
+        // c.getFenetre().getMapCouleurRequete());
+        c.getFenetre().afficherRequetesTextuelles(c.getPlanning(), c.getCarte());
         c.setEtatCourant(c.etatTourneeCalcule);
     }
 }

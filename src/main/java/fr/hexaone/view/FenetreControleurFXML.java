@@ -3,6 +3,7 @@ package fr.hexaone.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -68,12 +69,27 @@ public class FenetreControleurFXML {
     protected AnchorPane anchorPaneGraphique;
 
     /**
+     * Scroll pane de la vue textuelle
+     */
+    @FXML
+    protected ScrollPane textScrollPane;
+
+    /**
      * Renvoie l'item du menu permettant de charger une carte.
      * 
      * @return L'item chargerCarteItem
      */
     public MenuItem getChargerCarteItem() {
         return chargerCarteItem;
+    }
+
+    /**
+     * renvoie le scroll pane où se trouve la vue textuelle
+     * 
+     * @return L'item textscrollPane
+     */
+    public ScrollPane getScrollPane() {
+        return textScrollPane;
     }
 
     /**
