@@ -30,16 +30,16 @@ public class RequetesControleurFXML {
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getType());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getTypeProperty());
         typeColumn.setSortable(false);
 
-        arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArrivee());
+        arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArriveeProperty());
         arriveeColumn.setSortable(true);
 
-        departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepart());
+        departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
         departColumn.setSortable(false);
 
-        adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersection());
+        adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
         adresseColumn.setSortable(false);
 
         demandeTable.setRowFactory(tv -> {
