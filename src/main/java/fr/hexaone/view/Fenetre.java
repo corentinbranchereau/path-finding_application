@@ -477,4 +477,13 @@ public class Fenetre {
         return listeDemandes;
     }
 
+    /**
+     * setter
+     * 
+     * @param list
+     */
+    public void setListeDemandes(ObservableList<Demande> list) {
+        this.listeDemandes = list;
+    }
+
 }

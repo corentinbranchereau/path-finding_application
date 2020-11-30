@@ -16,6 +16,7 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -99,7 +100,8 @@ public class VueTextuelle {
         }
 
         public void afficherPlanning(Planning planning, Carte carte) {
-
+                ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
+                fenetre.setListeDemandes(listeDemandes);
                 try {
                         // Load textual tab.
                         FXMLLoader loader = new FXMLLoader();
@@ -119,90 +121,61 @@ public class VueTextuelle {
 
         }
 
-        // /**
-        // * Méthode qui crée les objets demande à la réception d'un planning
-        // *
-        // * @param planning le planning
-        // * @param carte la carte
-        // * @return une liste observable de demandes
-        // */
-        // public ObservableList<Demande> creerListeDemandes(Planning planning, Carte
-        // carte) {
+        /**
+         * Méthode qui crée les objets demande à la réception d'un planning
+         *
+         * @param planning le planning
+         * @param carte    la carte
+         * @return une liste observable de demandes
+         */
+        public ObservableList<Demande> creerListeDemandes(Planning planning, Carte carte) {
 
-        // ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+                ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-        // String depotName = getNomIntersection(planning, carte,
-        // carte.getIntersections().get(planning.getIdDepot()));
-        // Pair<String, String> horaire = getStringFromDate(planning,
-        // planning.getDateDebut());
-        // String heure = horaire.getKey();
-        // String minutes = horaire.getValue();
+                String depotName = getNomIntersection(planning, carte,
+                                carte.getIntersections().get(planning.getIdDepot()));
 
-        // Demande depot = new Demande(0, planning.getIdDepot(), depotName, heure + "h"
-        // + minutes,
-        // heure + "h" + minutes);
-        // listeDemandes.add(depot);
+                Demande depot = new Demande(TypeIntersection.DEPOT, planning.getIdDepot(), depotName, null, null);
+                depot.setDateDepart(planning.getDateDebut());
+                depot.setDateArrivee(planning.getDateDebut());
 
-        // // parcours des requêtes
-        // for (Requete requete : planning.getRequetes()) {
+                // listeDemandes.add(depot);
 
-        // String nomCollecte = getNomIntersection(planning, carte,
-        // carte.getIntersections().get(requete.getIdPickup()));
-        // String nomLivraison = getNomIntersection(planning, carte,
-        // carte.getIntersections().get(requete.getIdDelivery()));
+                // parcours des requêtes
+                for (Requete requete : planning.getRequetes()) {
 
-        // Date dateArriveeCollecte = planning.getDatesPassage()
-        // .get(carte.getIntersections().get(requete.getIdPickup()));
-        // Date dateDepartCollecte = planning.getDatesSorties()
-        // .get(carte.getIntersections().get(requete.getIdPickup()));
-        // Pair<String, String> horaireArriveeCollecte = getStringFromDate(planning,
-        // dateArriveeCollecte);
-        // Pair<String, String> horaireDepartCollecte = getStringFromDate(planning,
-        // dateDepartCollecte);
-        // String heureArriveeCollecte = horaireArriveeCollecte.getKey();
-        // String minutesArriveeCollecte = horaireArriveeCollecte.getValue();
-        // String heureDepartCollecte = horaireDepartCollecte.getKey();
-        // String minutesDepartCollecte = horaireDepartCollecte.getValue();
+                        Demande collecte = requete.getDemandeCollecte();
+                        Demande livraison = requete.getDemandeLivraison();
 
-        // Date dateArriveeLivraison = planning.getDatesPassage()
-        // .get(carte.getIntersections().get(requete.getIdDelivery()));
-        // Date dateDepartLivraison = planning.getDatesSorties()
-        // .get(carte.getIntersections().get(requete.getIdDelivery()));
-        // Pair<String, String> horaireArriveeLivraison = getStringFromDate(planning,
-        // dateArriveeLivraison);
-        // Pair<String, String> horaireDepartLivraison = getStringFromDate(planning,
-        // dateDepartLivraison);
-        // String heureArriveeLivraison = horaireArriveeLivraison.getKey();
-        // String minutesArriveeLivraison = horaireArriveeLivraison.getValue();
-        // String heureDepartLivraison = horaireDepartLivraison.getKey();
-        // String minutesDepartLivraison = horaireDepartLivraison.getValue();
+                        // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
+                        // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
 
-        // Demande collecte = new Demande(1, requete.getIdPickup(), nomCollecte,
-        // heureArriveeCollecte + "h" + minutesArriveeCollecte,
-        // heureDepartCollecte + "h" + minutesDepartCollecte);
-        // Demande livraion = new Demande(2, requete.getIdDelivery(), nomLivraison,
-        // heureArriveeLivraison + "h" + minutesArriveeLivraison,
-        // heureDepartLivraison + "h" + minutesDepartLivraison);
+                        Date dateArriveeCollecte = planning.getDatesPassage()
+                                        .get(requete.getDemandeCollecte().getIdIntersection());
+                        Date dateDepartCollecte = planning.getDatesSorties()
+                                        .get(requete.getDemandeCollecte().getIdIntersection());
+                        Date dateArriveeLivraison = planning.getDatesPassage()
+                                        .get(requete.getDemandeLivraison().getIdIntersection());
+                        Date dateDepartLivraison = planning.getDatesSorties()
+                                        .get(requete.getDemandeLivraison().getIdIntersection());
 
-        // listeDemandes.add(collecte);
-        // listeDemandes.add(livraion);
-        // }
+                        if (dateDepartCollecte != null)
+                                collecte.setDateDepart(dateDepartCollecte);
+                        if (dateArriveeCollecte != null)
+                                collecte.setDateArrivee(dateArriveeCollecte);
+                        if (dateDepartLivraison != null)
+                                livraison.setDateDepart(dateDepartLivraison);
+                        if (dateArriveeLivraison != null)
+                                livraison.setDateArrivee(dateArriveeLivraison);
 
-        // Date dateRetourDepot = planning.getDatesPassage()
-        // .get(carte.getIntersections().get(planning.getIdDepot()));
-        // Pair<String, String> horaireRetourDepot = getStringFromDate(planning,
-        // dateRetourDepot);
-        // String heureRetourDepot = horaireRetourDepot.getKey();
-        // String minutesRetourDepot = horaireRetourDepot.getValue();
+                        listeDemandes.add(collecte);
+                        listeDemandes.add(livraison);
+                }
 
-        // Demande fin = new Demande(0, planning.getIdDepot(), depotName,
-        // heureRetourDepot + "h" + minutesRetourDepot,
-        // heureRetourDepot + "h" + minutesRetourDepot);
+                // listeDemandes.add(fin);
 
-        // listeDemandes.add(fin);
-
-        // return listeDemandes;
-        // }
+                return listeDemandes;
+        }
 
         /**
          * Méthode qui permet d'afficher le popup demande nouvelle livraison dans la vue
