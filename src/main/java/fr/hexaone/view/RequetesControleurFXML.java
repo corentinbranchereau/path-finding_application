@@ -8,6 +8,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 
 public class RequetesControleurFXML {
@@ -90,6 +91,13 @@ public class RequetesControleurFXML {
                     event.consume();
                 }
             });
+
+            row.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
+                }
+            });
+
             return row;
         });
 
