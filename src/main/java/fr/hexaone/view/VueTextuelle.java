@@ -13,6 +13,9 @@ import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -33,6 +36,10 @@ public class VueTextuelle {
          */
         protected TextFlow zoneTexte;
 
+        private ObservableList<String> requetesString = FXCollections.observableArrayList();
+
+        private ObservableList<Text> requetesView = FXCollections.observableArrayList();
+
         /**
          * constructeur
          */
@@ -46,6 +53,7 @@ public class VueTextuelle {
          * @param planning liste des segments à parcourir
          */
         public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+
                 // On vide le zone de texte au cas où des choses sont déjà affichées dedans
                 this.zoneTexte.getChildren().clear();
 
@@ -166,9 +174,19 @@ public class VueTextuelle {
 
                 ordrePassageTrie = getRequetesTrieesParDatePassage(ordrePassageTrie);
 
+                // formatage de la listview
                 for (Text t : ordrePassageTrie.keySet()) {
-                        this.zoneTexte.getChildren().add(t);
+                        // this.zoneTexte.getChildren().add(t);
+                        requetesString.add(t.getText());
+                        requetesView.add(t);
                 }
+                // requetesString.forEach(requetes -> requetesView.add(new Text(requetes)));
+
+                ListView<String> requetesList = new ListView<>(requetesString);
+                requetesList.setCellFactory(param -> new RequetesCell(requetesView));
+                requetesList.setPrefHeight(600);
+                requetesList.setPrefWidth(370);
+                this.zoneTexte.getChildren().add(requetesList);
 
                 Date dateRetourDepot = planning.getDatesPassage().get(planning.getIdUniqueDepot());
                                 //.get(carte.getIntersections().get(planning.getIdDepot()));

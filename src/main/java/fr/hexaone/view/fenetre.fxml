@@ -94,9 +94,9 @@
                         <Insets top="0" right="0" bottom="10" left="0" />
                      </padding>
                   </HBox>
-                  <ScrollPane prefHeight="592.0" prefWidth="416.0">
+                   <ScrollPane  fx:id="textScrollPane" prefHeight="664.0" prefWidth="320.0">
                      <content>
-                        <TextFlow fx:id="zoneTexte" prefHeight="590.0" prefWidth="394.0" style="-fx-padding: 20;">
+                        <TextFlow fx:id="zoneTexte" prefHeight="664.0" prefWidth="393.0" style="-fx-padding: 10;">
                            <children>
                               <Text lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pour charger une Carte ou des Requêtes, rendez-vous dans &quot;Fichier&quot;, en haut à gauche de l'application." />
                            </children>
