@@ -141,46 +141,9 @@ public class VueTextuelle {
 
                 // listeDemandes.add(depot);
 
-
-                // TODO FAIRE AVEC LES DEMANDES 
-                // planning.getDemandesOrdonnes
-
                 for (Demande demande : planning.getDemandesOrdonnees()) {
                         listeDemandes.add(demande);
                 }
-                
-                // parcours des requêtes
-                // for (Requete requete : planning.getRequetes()) {
-
-                //         Demande collecte = requete.getDemandeCollecte();
-                //         Demande livraison = requete.getDemandeLivraison();
-
-                //         // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-                //         // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
-
-                //         Date dateArriveeCollecte = planning.getDatesPassage()
-                //                         .get(requete.getDemandeCollecte().getIdIntersection());
-                //         Date dateDepartCollecte = planning.getDatesSorties()
-                //                         .get(requete.getDemandeCollecte().getIdIntersection());
-                //         Date dateArriveeLivraison = planning.getDatesPassage()
-                //                         .get(requete.getDemandeLivraison().getIdIntersection());
-                //         Date dateDepartLivraison = planning.getDatesSorties()
-                //                         .get(requete.getDemandeLivraison().getIdIntersection());
-
-                //         if (dateDepartCollecte != null)
-                //                 collecte.setDateDepart(dateDepartCollecte);
-                //         if (dateArriveeCollecte != null)
-                //                 collecte.setDateArrivee(dateArriveeCollecte);
-                //         if (dateDepartLivraison != null)
-                //                 livraison.setDateDepart(dateDepartLivraison);
-                //         if (dateArriveeLivraison != null)
-                //                 livraison.setDateArrivee(dateArriveeLivraison);
-
-                //         listeDemandes.add(collecte);
-                //         listeDemandes.add(livraison);
-                // }
-
-                // listeDemandes.add(fin);
 
                 return listeDemandes;
         }
