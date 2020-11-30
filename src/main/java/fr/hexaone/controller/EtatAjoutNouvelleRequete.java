@@ -26,12 +26,16 @@ public class EtatAjoutNouvelleRequete implements State {
     @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
         if(idPickup!=null && idPickup.equals(idIntersection)){
+            c.getFenetre().getVueGraphique().deselectionneIntersection(idIntersection);
             idPickup = null;
         } else if (idDelivery!=null && idDelivery.equals(idIntersection)){
+            c.getFenetre().getVueGraphique().deselectionneIntersection(idIntersection);
             idDelivery = null;
-        } else if(idPickup==null){
+        } else if(idPickup == null){
+            c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
             idPickup = idIntersection;
         } else if(idDelivery == null){
+            c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
             idDelivery = idIntersection;
         }
     }
@@ -111,6 +115,25 @@ public class EtatAjoutNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        idPickup = null;
+        idDelivery = null;
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatCourant(c.etatTourneeCalcule);
+    }
+
+    /**
+     * Setter de l'idPickup
+     * @param idPickup
+     */
+    public void setIdPickup(Long idPickup) {
+        this.idPickup = idPickup;
+    }
+
+    /**
+     * Setter de l'idDelivery
+     * @param idDelivery
+     */
+    public void setIdDelivery(Long idDelivery) {
+        this.idDelivery = idDelivery;
     }
 }

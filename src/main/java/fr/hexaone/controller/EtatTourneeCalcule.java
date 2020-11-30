@@ -37,6 +37,9 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.etatAjoutNouvelleRequete.setIdPickup(null);
+        c.etatAjoutNouvelleRequete.setIdDelivery(null);
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatCourant(c.etatAjoutNouvelleRequete);
     }
 }

@@ -103,6 +103,11 @@ public class VueGraphique {
     protected Map<Long, Circle> mapIntersections;
 
     /**
+     * Liste contenant l'id des intersections sélectionnées sur la carte
+     */
+    protected List<Long> listIntersectionsSelectionnees;
+
+    /**
      * Constructeur de VueGraphique.
      */
     public VueGraphique() {
@@ -171,6 +176,7 @@ public class VueGraphique {
     public void afficherCarte(Carte carte) {
         this.listeNoeudsCarte = new LinkedList<>();
         this.mapIntersections = new HashMap<>();
+        this.listIntersectionsSelectionnees = new LinkedList<>();
 
         // On enlève tous les éléments graphiques déjà affichés (s'il y en a)
         this.paneDessin.getChildren().clear();
@@ -408,6 +414,56 @@ public class VueGraphique {
                     controleur.selectionnerIntersection(entry.getKey());
                 }
             });
+
+            // Ajoute un handler pour augmenter la taille de l'intersection lors du survol
+            entry.getValue().setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                        entry.getValue().setRadius(3.5D);
+                        entry.getValue().setFill(Color.INDIANRED);
+                    }
+                }
+            });
+
+            entry.getValue().setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                        entry.getValue().setRadius(2D);
+                        entry.getValue().setFill(Color.GRAY);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Sélectionne une intersection
+     */
+    public void selectionneIntersection (Long idIntersection){
+        if(!listIntersectionsSelectionnees.contains(idIntersection)){
+            listIntersectionsSelectionnees.add(idIntersection);
+            mapIntersections.get(idIntersection).setFill(Color.RED);
+            mapIntersections.get(idIntersection).setRadius(4D);
+        }
+    }
+
+    /**
+     * Déselectionne une intersection
+     */
+    public void deselectionneIntersection(Long idIntersection){
+        if(listIntersectionsSelectionnees.contains(idIntersection)){
+            listIntersectionsSelectionnees.remove(idIntersection);
+            mapIntersections.get(idIntersection).setFill(Color.GRAY);
+            mapIntersections.get(idIntersection).setRadius(2D);
+        }
+    }
+
+    /**
+     * Déselectionne la totalité des intersections sélectionnées
+     */
+    public void nettoyerIntersectionsSelectionnees(){
+        for(Long l : listIntersectionsSelectionnees){
+            this.deselectionneIntersection(l);
         }
     }
 
