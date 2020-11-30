@@ -1,5 +1,7 @@
 package fr.hexaone.controller;
 
+import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
 import javafx.scene.paint.Color;
 
@@ -49,5 +51,11 @@ public class EtatTourneeCalcule implements State {
         c.etatAjoutNouvelleRequete.setIdDelivery(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatCourant(c.etatAjoutNouvelleRequete);
+    }
+
+    @Override
+    public void supprimerRequete(Controleur c, Demande demande) {
+        c.planning.getRequetes().remove(demande.getRequete());
+        // TODO : re calculer le planning
     }
 }

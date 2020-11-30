@@ -4,6 +4,7 @@ import fr.hexaone.view.Fenetre;
 import javafx.stage.Stage;
 
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 
 /**
@@ -56,8 +57,8 @@ public class Controleur {
     public EtatTourneeCalcule etatTourneeCalcule;
 
     /**
-     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle requête du
-     * design pattern STATE
+     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
+     * requête du design pattern STATE
      */
     public EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
@@ -108,6 +109,13 @@ public class Controleur {
      */
     public void lancerCalcul() {
         etatCourant.lancerCalcul(this);
+    }
+
+    /**
+     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     */
+    public void supprimerRequete(Demande demande) {
+        etatCourant.supprimerRequete(this, demande);
     }
 
     /**
