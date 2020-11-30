@@ -89,16 +89,16 @@ public class VueGraphique {
     protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
 
     /**
-     * Liste contenant les intersections et les segments de la carte chargées sous forme
-     * d'élements graphiques. Cela
-     * est utile pour redessiner la carte en cas de changement de fichier de
-     * requêtes
+     * Liste contenant les intersections et les segments de la carte chargées sous
+     * forme d'élements graphiques. Cela est utile pour redessiner la carte en cas
+     * de changement de fichier de requêtes
      */
     protected List<Node> listeNoeudsCarte;
 
     /**
-     * Map contenant les intersections de la carte chargée mappée avec son ID. Cela est utile afin
-     * de pouvoir sélectionner une intersection précise lors de la modification de requêtes.
+     * Map contenant les intersections de la carte chargée mappée avec son ID. Cela
+     * est utile afin de pouvoir sélectionner une intersection précise lors de la
+     * modification de requêtes.
      */
     protected Map<Long, Circle> mapIntersections;
 
@@ -238,7 +238,7 @@ public class VueGraphique {
 
             // On ajoute l'élément au dessin
             this.listeNoeudsCarte.add(cercleIntersection);
-            this.mapIntersections.put(entry.getKey(),cercleIntersection);
+            this.mapIntersections.put(entry.getKey(), cercleIntersection);
             this.paneDessin.getChildren().add(cercleIntersection);
 
             for (Segment s : entry.getValue().getSegmentsPartants()) {
@@ -404,11 +404,13 @@ public class VueGraphique {
     }
 
     /**
-     * Attache les EventHandler aux intersections de la carte chargée afin de préparer la sélection d'intersection
+     * Attache les EventHandler aux intersections de la carte chargée afin de
+     * préparer la sélection d'intersection
+     * 
      * @param controleur Le controleur de l'application
      */
-    public void attacherHandlerIntersection(Controleur controleur){
-        for(Map.Entry<Long, Circle> entry : this.mapIntersections.entrySet()){
+    public void attacherHandlerIntersection(Controleur controleur) {
+        for (Map.Entry<Long, Circle> entry : this.mapIntersections.entrySet()) {
             entry.getValue().setOnMousePressed(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent mouseEvent) {
                     controleur.selectionnerIntersection(entry.getKey());

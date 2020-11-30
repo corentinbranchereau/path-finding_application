@@ -79,7 +79,7 @@ public class EtatAjoutNouvelleRequete implements State {
             return;
         }
 
-        if(idPickup==null || idDelivery ==null){
+        if (idPickup == null || idDelivery == null) {
             System.out.println("Il faut sélectionner deux intersections.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Mauvaise sélection");
@@ -89,7 +89,8 @@ public class EtatAjoutNouvelleRequete implements State {
             return;
         }
 
-        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery, Integer.parseInt(deliveryDurationField));
+        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery,
+                Integer.parseInt(deliveryDurationField));
         c.getPlanning().ajouterRequete(nouvelleRequete);
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
@@ -100,7 +101,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
         this.annuler(c);
 
-        //TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
+        // TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
     }
 
     /**
@@ -113,6 +114,11 @@ public class EtatAjoutNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         idPickup = null;

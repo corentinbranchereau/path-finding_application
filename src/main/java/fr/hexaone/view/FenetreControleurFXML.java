@@ -2,9 +2,11 @@ package fr.hexaone.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
@@ -63,10 +65,22 @@ public class FenetreControleurFXML {
     protected Button boutonNouvelleRequete;
 
     /**
+     * Label indiquant le champ permettant de préciser la durée de la collecte.
+     */
+    @FXML
+    protected Label pickupDurationLabel;
+
+    /**
      * Champ permettant de préciser la durée de la collecte.
      */
     @FXML
     protected TextField pickupDurationField;
+
+    /**
+     * Champ permettant de préciser la durée de la livraison.
+     */
+    @FXML
+    protected Label deliveryDurationLabel;
 
     /**
      * Champ permettant de préciser la durée de la livraison.
@@ -85,6 +99,12 @@ public class FenetreControleurFXML {
      */
     @FXML
     protected Button boutonAnnuler;
+
+    /**
+     * Box contenant les boutons Valider et Annuler.
+     */
+    @FXML
+    protected HBox boxBoutonsValiderAnnuler;
 
     /**
      * Pane qui contient les éléments graphiques dessinant la carte
@@ -162,12 +182,34 @@ public class FenetreControleurFXML {
     }
 
     /**
+     * Renvoie le label indiquant le champ permettant de préciser la durée de la
+     * collecte.
+     *
+     * @return Le label indiquant le champ permettant de préciser la durée de la
+     *         collecte.
+     */
+    public Label getPickUpDurationLabel() {
+        return pickupDurationLabel;
+    }
+
+    /**
      * Renvoie le texte précisant la durée de la collecte.
      *
      * @return Le texte précisant la durée de la collecte.
      */
     public TextField getPickUpDurationField() {
         return pickupDurationField;
+    }
+
+    /**
+     * Renvoie le label indiquant le champ permettant de préciser la durée de la
+     * livraison.
+     *
+     * @return Le label indiquant le champ permettant de préciser la durée de la
+     *         livraison.
+     */
+    public Label getDeliveryDurationLabel() {
+        return deliveryDurationLabel;
     }
 
     /**
@@ -195,6 +237,15 @@ public class FenetreControleurFXML {
      */
     public Button getBoutonAnnuler() {
         return boutonAnnuler;
+    }
+
+    /**
+     * Renvoie la box contenant les boutons Valider et Annuler.
+     *
+     * @return La box contenant les boutons Valider et Annuler.
+     */
+    public HBox getBoxBoutonsValiderAnnuler() {
+        return boxBoutonsValiderAnnuler;
     }
 
     /**
