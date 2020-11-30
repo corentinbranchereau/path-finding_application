@@ -1,5 +1,7 @@
 package fr.hexaone.model;
 
+import javafx.scene.paint.Color;
+
 /**
  * Objet permettant de modéliser une requête, c'est à dire avec un point de
  * retrait (PICKUP) et un point de livraison (DELIVERY)
@@ -10,35 +12,20 @@ package fr.hexaone.model;
 public class Requete {
 
     /**
-     * Id de l'intersection spéciale de type collecte
+     * 
      */
-    protected long idPickup;
+    protected Demande pickup;
 
     /**
-     * Durée du pickup
+     * 
      */
-    protected Integer dureePickup;
+    protected Demande delivery;
 
     /**
-     * Id l'intersection spéciale de type point de livraison
+     * 
      */
-    protected long idDelivery;
-
-    /**
-     * Durée du delivery
-     */
-    protected Integer dureeDelivery;
-
-    /**
-     * Id l'intersection spéciale de type point de livraison
-     */
-    protected long idUniquePickup;
-
-    /**
-     * Id l'intersection spéciale de type point de livraison
-     */
-    protected long idUniqueDelivery;
-
+    protected Color couleur;
+    
     /**
      * Constructeur de Requete
      *
@@ -48,107 +35,35 @@ public class Requete {
      * @param dureeDelivery
      */
     public Requete(long idPickup, int dureePickup, long idDelivery, int dureeDelivery) {
-        this.idPickup = idPickup;
-        this.dureePickup = dureePickup;
-        this.idDelivery = idDelivery;
-        this.dureeDelivery = dureeDelivery;
+        // this.idPickup = idPickup;
+        // this.dureePickup = dureePickup;
+        // this.idDelivery = idDelivery;
+        // this.dureeDelivery = dureeDelivery;
     }
 
-
-	/**
-     * Getter
-     * 
-     * @return L'id de l'intersection de Pickup
-     */
-    public long getIdPickup() {
-        return idPickup;
+    public Demande getPickup() {
+        return pickup;
     }
 
-    /**
-     * Getter
-     * 
-     * @return Durée du pickup
-     */
-    public Integer getDureePickup() {
-        return dureePickup;
+    public void setPickup(Demande pickup) {
+        this.pickup = pickup;
     }
 
-    /**
-     * Getter
-     * 
-     * @return L'id de l'intersection de delivery
-     */
-    public long getIdDelivery() {
-        return idDelivery;
+    public Demande getDelivery() {
+        return delivery;
     }
 
-    /**
-     * Getter
-     * 
-     * @return Durée du delivery
-     */
-    public Integer getDureeDelivery() {
-        return dureeDelivery;
+    public void setDelivery(Demande delivery) {
+        this.delivery = delivery;
     }
 
-    /**
-     * Getter
-     */
-    public long getIdUniquePickup() {
-        return idUniquePickup;
+    public Color getCouleur() {
+        return couleur;
     }
 
-    /**
-     * Setter
-     */
-    public void setIdUniquePickup(long idUniquePickup) {
-        this.idUniquePickup = idUniquePickup;
+    public void setCouleur(Color couleur) {
+        this.couleur = couleur;
     }
 
-    /**
-     * Getter
-     */
-    public long getIdUniqueDelivery() {
-        return idUniqueDelivery;
-    }
-
-    /**
-     * Setter
-     */
-    public void setIdUniqueDelivery(long idUniqueDelivery) {
-        this.idUniqueDelivery = idUniqueDelivery;
-    }
-    
-    /**
-     * Setter
-     * @param idPickup
-     */
-    public void setIdPickup(long idPickup) {
-		this.idPickup = idPickup;
-	}
-
-    /**
-     * Setter
-     * @param dureePickup
-     */
-	public void setDureePickup(Integer dureePickup) {
-		this.dureePickup = dureePickup;
-	}
-
-	/**
-	 * Getter
-	 * @param idDelivery
-	 */
-	public void setIdDelivery(long idDelivery) {
-		this.idDelivery = idDelivery;
-	}
-
-	/**
-	 * Setter
-	 * @param dureeDelivery
-	 */
-	public void setDureeDelivery(Integer dureeDelivery) {
-		this.dureeDelivery = dureeDelivery;
-	}
 
 }

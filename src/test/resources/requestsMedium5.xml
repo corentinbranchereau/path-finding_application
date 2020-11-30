@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE planningRequest SYSTEM ".\dtd\requetes.dtd">
+<!DOCTYPE planningRequest SYSTEM "./dtd/requetes.dtd">
 <planningRequest>
     <depot address="4150019167" departureTime="8:0:0" />
     <request pickupAddress="21992645" deliveryAddress="55444215" pickupDuration="360" deliveryDuration="480" />
