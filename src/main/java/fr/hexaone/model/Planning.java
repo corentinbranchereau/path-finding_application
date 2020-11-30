@@ -53,16 +53,6 @@ public class Planning{
     protected List<Trajet> listeTrajets;
 
     /**
-     * Dates des passages des demandes en fonction de leur id
-     */
-    protected Map<Long, Date> datesPassage;
-    
-    /**
-     * Dates des sorties des demandes en fonction de leur id
-     */
-    protected Map<Long, Date> datesSorties;
-
-    /**
      * Duree totale de la tournée
      */
     protected double dureeTotale;
@@ -70,7 +60,7 @@ public class Planning{
     /**
 	 * Map permettant d'identifier les chemins les plus courts à partir d'un identifiant (String) 
 	 */
-    protected Map<String, Trajet> cheminsLesPlusCourts;
+    protected Map<String, Trajet> TrajetsLesPlusCourts;
 
     /**
      * Comparateur afin de classer les chromosomes au sein d'une population dans
@@ -173,20 +163,21 @@ public class Planning{
 
         for (Demande demande : demandesOrdonnees) {
             Long newId = demande.idIntersection;
-            Trajet trajet = cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId);
+            Trajet trajet = TrajetsLesPlusCourts.get(prevIntersectionId + "|" + newId);
             listeTrajets.add(trajet);
             prevIntersectionId = newId;
 
             duree += trajet.poids*3600. / 15.;
             demande.setDateArrivee(new Date(tempsDebut + (long)duree));
-            duree += demande.duree;
+            duree += demande.duree*1000;
             demande.setDateDepart(new Date(tempsDebut + (long)duree));
         }
 
-        Trajet trajet = cheminsLesPlusCourts.get(prevIntersectionId + "|" + idDepot);
+        Trajet trajet = TrajetsLesPlusCourts.get(prevIntersectionId + "|" + idDepot);
         listeTrajets.add(trajet);
         duree += trajet.getPoids()*3600. / 15.;
         dateFin = new Date(tempsDebut + (long)duree);
+        dureeTotale = duree;
     }
     
     /**
@@ -200,7 +191,7 @@ public class Planning{
      * Prérequis :
      *  - Avoir les demandes ordonnées.
      */
-    private void recalculerTournee() {
+    public void recalculerTournee() {
         //Recalcule tous les plus courts trajets des demandes
         List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
         intersectionsSpeciales.add(carte.intersections.get(idDepot));
@@ -238,13 +229,13 @@ public class Planning{
      * intersections en paramètre
      * @param intersections
      */
-    private void calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
+    public void calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
 
         // Préparation
 
         Map<Long,Intersection> allIntersections = carte.getIntersections();
 
-        this.cheminsLesPlusCourts = new HashMap<String, Trajet>();
+        TrajetsLesPlusCourts = new HashMap<String, Trajet>();
 
         // Calcul de tous les chemins les plus courts n fois avec dijkstra
 
@@ -290,7 +281,7 @@ public class Planning{
 
             for (Intersection i : intersections) {
                 String key = sourceId + i.getId();
-                this.cheminsLesPlusCourts.put(key, new Trajet(i.getCheminLePlusCourt(), i.getDistance()));
+                TrajetsLesPlusCourts.put(key, new Trajet(i.getCheminLePlusCourt(), i.getDistance()));
             }
 
             allIntersections.forEach((id, intersection) -> {
@@ -304,7 +295,7 @@ public class Planning{
      * @param unsettledIntersections
      * @return lowestDistanceIntersection : l'intersection la plus proche
      */
-    private Intersection getLowestDistanceIntersection(Set<Intersection> unsettledIntersections) {
+    public Intersection getLowestDistanceIntersection(Set<Intersection> unsettledIntersections) {
         Intersection lowestDistanceIntersection = null;
         double lowestDistance = Double.MAX_VALUE;
         for (Intersection intersection : unsettledIntersections) {
@@ -324,7 +315,7 @@ public class Planning{
      * @param sourceIntersection
      * @param seg
      */
-    private void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh,
+    public void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh,
             Intersection sourceIntersection, Segment seg) {
         Double sourceDistance = sourceIntersection.getDistance();
         if (sourceDistance + edgeWeigh < evaluationIntersection.getDistance()) {
@@ -347,7 +338,7 @@ public class Planning{
      *
      * @param demandes
      */
-    private List<Demande> ordonnerLesDemandes(List<Demande> demandes) {
+    public List<Demande> ordonnerLesDemandes(List<Demande> demandes) {
 
     	//initialisation des constantes de l'algo génétique
 
@@ -521,17 +512,17 @@ public class Planning{
      *
      * @param chromosome que l'on teste
      */
-    private double cout(List<Demande> chromosome) {
+    public double cout(List<Demande> chromosome) {
 
         double somme = 0;
         Long prevIntersectionId = idDepot;
 
         for (Demande demande: chromosome) {
-            Long newId = demande.getIdDemande();
-            somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
+            Long newId = demande.getIdIntersection();
+            somme += TrajetsLesPlusCourts.get(prevIntersectionId + "|" + newId).getPoids();
             prevIntersectionId = newId;
         }
-        somme += cheminsLesPlusCourts.get(prevIntersectionId + "|" + idDepot).getPoids();
+        somme += TrajetsLesPlusCourts.get(prevIntersectionId + "|" + idDepot).getPoids();
 
         return somme;
     }
@@ -541,7 +532,7 @@ public class Planning{
      *
      * @param demandes
      */
-    private List<Demande> genererChromosomeAleatoire(List<Demande> demandes) {
+    public List<Demande> genererChromosomeAleatoire(List<Demande> demandes) {
         // Copie de la liste des demandes
         List<Demande> shuffleList = new ArrayList<Demande>(demandes);
 
@@ -560,7 +551,7 @@ public class Planning{
      * @param chromosome que l'on teste
      * @param requetes   liste des requêtes
      */
-    private Boolean verifierPop(List<Demande> chromosome) {
+    public Boolean verifierPop(List<Demande> chromosome) {
 
         ArrayList<Demande> collecteRealisee = new ArrayList<Demande>();
 
@@ -589,7 +580,7 @@ public class Planning{
      * @param chromosome que l'on teste
      * @param requetes   liste des requêtes
      */
-    private List<Demande> mutationLocalSearch(List<Demande> chromosome, double coutIni) {
+    public List<Demande> mutationLocalSearch(List<Demande> chromosome, double coutIni) {
 
         Boolean amelioration = true;
         double coutMin = coutIni;
@@ -641,7 +632,7 @@ public class Planning{
      * @param requetes
      * @param chromosome
      */
-    private List<Demande> correctionCrossover(List<Demande> chromosome) {
+    public List<Demande> correctionCrossover(List<Demande> chromosome) {
         List<Pair<Integer,Integer>> aSwap  = new ArrayList<Pair<Integer,Integer>>();
 
         Integer posLivraison = 0;
@@ -669,7 +660,7 @@ public class Planning{
      * @param population à tester
      * @param ecart      maximum
      */
-    private Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart) {
+    public Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart) {
         Pair<List<Demande>, Double> chromPres = null;
         for (Pair<List<Demande>,Double> chrom : population) {
             if (chromPres != null && Math.abs(chrom.getValue1() - chromPres.getValue1()) < ecart) {
@@ -687,7 +678,7 @@ public class Planning{
      * @param ecart        maximum
      * @param valeurEnfant
      */
-    private Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart, double valeurEnfant) {
+    public Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart, double valeurEnfant) {
         for (Pair<List<Demande>,Double> chrom : population) {
             if (Math.abs(chrom.getValue1() - valeurEnfant) < ecart) {
                 return false;
@@ -702,7 +693,7 @@ public class Planning{
      * @param depot
      * @param requetes
      */
-    private List<Demande> crossoverOX(List<Demande> P1, List<Demande> P2, int i, int j) {
+    public List<Demande> crossoverOX(List<Demande> P1, List<Demande> P2, int i, int j) {
 
         List<Demande> child = new ArrayList<Demande>();
 
@@ -752,7 +743,7 @@ public class Planning{
      * @param a
      * @param b
      */
-    private int max(int a, int b) {
+    public int max(int a, int b) {
 
         if (a > b) {
             return a;
@@ -767,7 +758,7 @@ public class Planning{
      * @param a
      * @param b
      */
-    private int min(int a, int b) {
+    public int min(int a, int b) {
 
         if (a < b) {
             return a;
@@ -829,22 +820,6 @@ public class Planning{
         this.listeTrajets = listeTrajets;
     }
 
-    public Map<Long, Date> getDatesPassage() {
-        return datesPassage;
-    }
-
-    public void setDatesPassage(Map<Long, Date> datesPassage) {
-        this.datesPassage = datesPassage;
-    }
-
-    public Map<Long, Date> getDatesSorties() {
-        return datesSorties;
-    }
-
-    public void setDatesSorties(Map<Long, Date> datesSorties) {
-        this.datesSorties = datesSorties;
-    }
-
     public double getDureeTotale() {
         return dureeTotale;
     }
@@ -853,12 +828,20 @@ public class Planning{
         this.dureeTotale = dureeTotale;
     }
 
-    public Map<String, Trajet> getCheminsLesPlusCourts() {
-        return cheminsLesPlusCourts;
+    public Map<String, Trajet> getTrajetsLesPlusCourts() {
+        return TrajetsLesPlusCourts;
     }
 
-    public void setCheminsLesPlusCourts(Map<String, Trajet> cheminsLesPlusCourts) {
-        this.cheminsLesPlusCourts = cheminsLesPlusCourts;
+    public void setTrajetsLesPlusCourts(Map<String, Trajet> TrajetsLesPlusCourts) {
+        this.TrajetsLesPlusCourts = TrajetsLesPlusCourts;
+    }
+
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
 
 }
