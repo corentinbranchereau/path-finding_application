@@ -137,7 +137,7 @@ public class VueTextuelle {
 
                 Demande depot = new Demande(TypeIntersection.DEPOT, planning.getIdDepot(), depotName, null, null);
                 depot.setDateDepart(planning.getDateDebut());
-                depot.setDateArrivee(planning.getDateDebut());
+                depot.setDateArrivee(planning.getDateFin());
 
                 // listeDemandes.add(depot);
 
