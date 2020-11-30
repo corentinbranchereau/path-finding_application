@@ -87,7 +87,21 @@ public class XMLDeserializer {
                         idDelivery = Long.parseLong(requeteTag.getAttribute("deliveryAddress"));
                 int pickupDuration = Integer.parseInt(requeteTag.getAttribute("pickupDuration")),
                         deliveryDuration = Integer.parseInt(requeteTag.getAttribute("deliveryDuration"));
-                listeRequetes.add(new Requete(idPickup, pickupDuration, idDelivery, deliveryDuration));
+                String nomPickup = "";
+                for(Segment s : planning.getCarte().getIntersections().get(idPickup).getSegmentsArrivants()){
+                    if(!s.getNom().isEmpty()) {
+                        nomPickup = s.getNom();
+                        break;
+                    }
+                }
+                String nomDelivery = null;
+                for(Segment s : planning.getCarte().getIntersections().get(idDelivery).getSegmentsArrivants()){
+                    if(!s.getNom().isEmpty()) {
+                        nomDelivery = s.getNom();
+                        break;
+                    }
+                }
+                listeRequetes.add(new Requete(idPickup, pickupDuration, nomPickup, idDelivery, deliveryDuration, nomDelivery));
             }
             planning.setIdDepot(idDepot);
             planning.setDateDebut(dateDebut);
