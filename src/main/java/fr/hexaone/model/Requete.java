@@ -29,13 +29,15 @@ public class Requete {
      * @param idDelivery
      * @param dureeDelivery
      */
-    public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery, String nomDelivery) {
-        demandeCollecte = new Demande(TypeIntersection.COLLECTE,idPickup,nomPickup,dureePickup);
-        demandeLivraison = new Demande(TypeIntersection.LIVRAISON,idDelivery,nomDelivery,dureeDelivery);
+    public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery,
+            String nomDelivery) {
+        demandeCollecte = new Demande(TypeIntersection.COLLECTE, idPickup, nomPickup, dureePickup, this);
+        demandeLivraison = new Demande(TypeIntersection.LIVRAISON, idDelivery, nomDelivery, dureeDelivery, this);
     }
 
     /**
      * Getter
+     * 
      * @return La demande de collecte
      */
     public Demande getDemandeCollecte() {
@@ -44,6 +46,7 @@ public class Requete {
 
     /**
      * Setter
+     * 
      * @param demandeCollecte La demande de collecte
      */
     public void setDemandeCollecte(Demande demandeCollecte) {
@@ -52,6 +55,7 @@ public class Requete {
 
     /**
      * Getter
+     * 
      * @return La demande de livraison
      */
     public Demande getDemandeLivraison() {
@@ -60,6 +64,7 @@ public class Requete {
 
     /**
      * Setter
+     * 
      * @param demandeLivraison La demande de livraison
      */
     public void setDemandeLivraison(Demande demandeLivraison) {
