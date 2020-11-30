@@ -144,6 +144,10 @@ public class VueTextuelle {
 
                 // TODO FAIRE AVEC LES DEMANDES 
                 // planning.getDemandesOrdonnes
+
+                for (Demande demande : planning.getDemandesOrdonnees()) {
+                        listeDemandes.add(demande);
+                }
                 
                 // parcours des requêtes
                 // for (Requete requete : planning.getRequetes()) {
