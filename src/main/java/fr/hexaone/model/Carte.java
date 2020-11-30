@@ -23,14 +23,16 @@ import org.javatuples.Pair;
  */
 public class Carte {
 
-    // Créer une nouvelle map entre les nouveaux points des requetes et les intersections de la map
+    // Créer une nouvelle map entre les nouveaux points des requetes et les
+    // intersections de la map
     // map<Long,Long> inter requete -> inter carte
     // map<Intersection,List<Intersection>> inter carte -> list inter requete
-    //     ou directement list dans une intersection
+    // ou directement list dans une intersection
 
-	/**
-	 * Map permettant d'identifier les chemins les plus courts à partir d'un identifiant (String) 
-	 */
+    /**
+     * Map permettant d'identifier les chemins les plus courts à partir d'un
+     * identifiant (String)
+     */
     protected Map<String, Trajet> cheminsLesPlusCourts;
     /**
      * Map permettant d'identifier les intersections à partir de leur id
@@ -40,7 +42,6 @@ public class Carte {
      * id du dépot
      */
     protected Long depotId;
-
 
     /**
      * Comparateur d'intersections en fonction de la distance
@@ -91,11 +92,11 @@ public class Carte {
 
         List<Intersection> specialIntersections = new ArrayList<Intersection>();
         specialIntersections.add(intersections.get(depotId));
-       
+
         for (Requete r : requetes) {
-            specialIntersections.add(intersections.get(r.getIdDelivery()));
-            specialIntersections.add(intersections.get(r.getIdPickup()));
-            
+            specialIntersections.add(intersections.get(r.getDemandeLivraison().getIdIntersection()));
+            specialIntersections.add(intersections.get(r.getDemandeCollecte().getIdIntersection()));
+
         }
 
         this.cheminsLesPlusCourts = new HashMap<String, Trajet>();
@@ -103,7 +104,7 @@ public class Carte {
         // Calcul de tous les chemins les plus courts n fois avec dijkstra
 
         for (Intersection source : specialIntersections) {
-        	
+
             source.setDistance(0.);
 
             Set<Intersection> settledIntersections = new HashSet<Intersection>();
@@ -155,6 +156,7 @@ public class Carte {
 
     /**
      * Retourne l'intersection avec la distance la plus faible
+     * 
      * @param unsettledIntersections
      * @return
      */
@@ -173,6 +175,7 @@ public class Carte {
 
     /**
      * Calcule les distances minimales
+     * 
      * @param evaluationIntersection
      * @param edgeWeigh
      * @param sourceIntersection
@@ -188,7 +191,6 @@ public class Carte {
         }
     }
 
-
     /**
      * Algorithme génétique permettant de trouver le melleure tournée
      *
@@ -197,7 +199,7 @@ public class Carte {
      */
     public List<Long> trouverMeilleureTournee(List<Requete> requetes) {
 
-    	//initialisation des paramètres maximums de l'algo génétique
+        // initialisation des paramètres maximums de l'algo génétique
 
         int sigma = 30; // Nb chromosomes max dans une population
         double delta = 3;// Minimum d'ecart entre les valeurs dans la population
@@ -205,18 +207,17 @@ public class Carte {
         int nMax = 10000;// Nb max d'itérations pour générer une pop initiale
         int alphamax = 30000;// Nb max de crossovers productifs
         int BetaMax = 10000;// Nb max de crossosovers sans améliorer la solution
-        int maxIter = 1000;//Nb max d'iterations d'affilé à ne pas trouver de solution
+        int maxIter = 1000;// Nb max d'iterations d'affilé à ne pas trouver de solution
 
-
-        //création de la population
+        // création de la population
         List<Pair<List<Long>, Double>> population = new ArrayList<Pair<List<Long>, Double>>();
 
-        //1er élément de la population obtenu avec du 2-opt
+        // 1er élément de la population obtenu avec du 2-opt
         List<Long> chr1 = this.genererChromosomeAleatoire(requetes);
         chr1 = this.mutationLocalSearch(chr1, cout(chr1), requetes);
         population.add(new Pair<>(chr1, cout(chr1)));
 
-        //initialisation des variables
+        // initialisation des variables
         int k = 1;
         int nbEssais = 0;
         int iter = 0;
@@ -226,20 +227,20 @@ public class Carte {
 
         Random rand = new Random();
 
-        //génération aléatoire de la population initiale
+        // génération aléatoire de la population initiale
         while (k <= sigma && nbEssais <= nMax) {
             k++;
             nbEssais = 0;
 
             do {
-            	//on essaie de générer un chromosome aléatoire avec un nombre max d'essais
+                // on essaie de générer un chromosome aléatoire avec un nombre max d'essais
                 nbEssais++;
                 List<Long> chr = genererChromosomeAleatoire(requetes);
                 cost = cout(chr);
                 chrom = new Pair<>(chr, cost);
             } while (nbEssais <= nMax && !espacePopulation(population, delta, cost));
             if (nbEssais <= nMax) {
-            	//la génération a réussi
+                // la génération a réussi
                 population.add(chrom);
             }
         }
@@ -247,7 +248,7 @@ public class Carte {
             sigma = k - 1;
         }
 
-        //tri par ordre coissant de cout la population
+        // tri par ordre coissant de cout la population
         Collections.sort(population, ComparatorChromosome);
 
         /*
@@ -271,7 +272,7 @@ public class Carte {
             indexP1 = 0;
             indexP2 = 0;
 
-            //génération aléatoire de 2 indices i et j < poulation.size()
+            // génération aléatoire de 2 indices i et j < poulation.size()
             for (int i = 0; i < 2; i++) {
 
                 i1 = rand.nextInt(population.size());
@@ -292,7 +293,7 @@ public class Carte {
 
             int choiceChild = rand.nextInt(2);
 
-            //génération des enfants : un seul survit aléatoirement
+            // génération des enfants : un seul survit aléatoirement
             List<Long> child;
 
             if (choiceChild == 0) {
@@ -305,10 +306,10 @@ public class Carte {
                         rand.nextInt(population.get(0).getValue0().size()));
             }
 
-            //correction des contraintes de précédence sur l'enfant
+            // correction des contraintes de précédence sur l'enfant
             child = correctionCrossover(child, requetes);
 
-            //nb aléatoire compris entre sigma/2 et sigma
+            // nb aléatoire compris entre sigma/2 et sigma
             int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
 
             double costChild = cout(child);
@@ -322,7 +323,7 @@ public class Carte {
                 population.get(kRand).setAt1(Integer.MIN_VALUE);
 
                 if (this.espacePopulation(population, delta, costChild)) {
-                	//si les contraintes d'espacement sont vérifiés avec le nouvel enfant
+                    // si les contraintes d'espacement sont vérifiés avec le nouvel enfant
                     child = M;
                     costChild = cout(child);
                 }
@@ -336,15 +337,15 @@ public class Carte {
 
             if (this.espacePopulation(population, delta, costChild)) {
 
-            	// itération productive
-            	alpha++;
+                // itération productive
+                alpha++;
                 iter = 0;
 
                 population.remove(kRand);
                 population.add(new Pair<>(child, costChild));
 
                 if (costChild >= population.get(0).getValue1()) {
-                	//pas d'amélioration de la meilleure solution
+                    // pas d'amélioration de la meilleure solution
                     beta++;
 
                 } else {
@@ -355,7 +356,7 @@ public class Carte {
             }
 
             else {
-            	//l'enfant n'est pas acceptable dans la population
+                // l'enfant n'est pas acceptable dans la population
                 population.get(kRand).setAt1(ancienCout);
                 iter++;
             }
@@ -399,11 +400,11 @@ public class Carte {
         while (amelioration == true) {
             amelioration = false;
 
-            //parcours des paires de chromosomes
+            // parcours des paires de chromosomes
             for (int i = 1; i < chromosome.size() - 2; i++) {
                 for (int j = 1; j < chromosome.size() - 2; j++) {
                     if (i != j && j != i - 1 && j != i + 1) {
-                    	//recherche 2-opt
+                        // recherche 2-opt
                         long u = chromosome.get(i);
                         long v = chromosome.get(j);
                         long x = chromosome.get(i + 1);
@@ -416,7 +417,7 @@ public class Carte {
                             double cout = cout(chromosome);
 
                             if (cout < coutMin) {
-                            	//solution avec meilleur coût : on la garde
+                                // solution avec meilleur coût : on la garde
                                 coutMin = cout;
                                 amelioration = true;
                                 break;
@@ -427,7 +428,7 @@ public class Carte {
                     }
                 }
                 if (amelioration == true) {
-                	//on recommence le processus
+                    // on recommence le processus
                     break;
                 }
             }
@@ -449,11 +450,11 @@ public class Carte {
             Boolean livraison = false;
             Boolean collecte = false;
             for (Long c : chromosome) {
-            	//vérifie qu'un point de collecte n'est pas après sa livraison
+                // vérifie qu'un point de collecte n'est pas après sa livraison
                 if (livraison == true && collecte == true) {
                     break;
                 }
-                if (c == r.getIdUniquePickup()) {
+                if (c == r.getDemandeCollecte().getIdDemande()) {
                     collecte = true;
                     if (livraison == false) {
                         continue;
@@ -462,7 +463,7 @@ public class Carte {
                     }
                 }
 
-                if (c == r.getIdUniqueDelivery()) {
+                if (c == r.getDemandeLivraison().getIdDemande()) {
                     livraison = true;
 
                     if (collecte == false) {
@@ -534,11 +535,11 @@ public class Carte {
             shuffleList = new ArrayList<Long>();
 
             for (Requete r : requetes) {
-                shuffleList.add(r.getIdUniquePickup());
-                shuffleList.add(r.getIdUniqueDelivery());
+                shuffleList.add(r.getDemandeCollecte().getIdDemande());
+                shuffleList.add(r.getDemandeLivraison().getIdDemande());
             }
 
-            //réarrangement aléatoire de la population
+            // réarrangement aléatoire de la population
             Collections.shuffle(shuffleList);
         } while (!verifierPop(shuffleList, requetes));
 
@@ -576,7 +577,7 @@ public class Carte {
 
         int c = 0;
 
-        //suite d'opérations réalisées afin de faire le croisement
+        // suite d'opérations réalisées afin de faire le croisement
         while (c < P1.size()) {
             c++;
             if (k >= P1.size()) {
@@ -609,13 +610,13 @@ public class Carte {
 
         for (Requete r : requetes) {
 
-            int indiceCollecte = chromosome.indexOf(r.getIdUniquePickup());
-            int indiceLivraison = chromosome.indexOf(r.getIdUniqueDelivery());
+            int indiceCollecte = chromosome.indexOf(r.getDemandeCollecte().getIdDemande());
+            int indiceLivraison = chromosome.indexOf(r.getDemandeLivraison().getIdDemande());
 
             if (indiceLivraison < indiceCollecte) {
-            	//la livraison est après la collecte : on inverse les 2 points
+                // la livraison est après la collecte : on inverse les 2 points
                 long id = chromosome.get(indiceCollecte);
-                chromosome.set(indiceCollecte, r.getIdUniqueDelivery());
+                chromosome.set(indiceCollecte, r.getDemandeLivraison().getIdDemande());
                 chromosome.set(indiceLivraison, id);
             }
         }

@@ -225,4 +225,13 @@ public class Demande {
         this.dateArriveeProperty = new SimpleStringProperty(heureString + "h" + minutesString);
     }
 
+    /**
+     * setter
+     * 
+     * @param idIntersection
+     */
+    public void setIdIntersection(Long idIntersection) {
+        this.idIntersection = idIntersection;
+    }
+
 }
