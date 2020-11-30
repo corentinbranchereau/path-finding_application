@@ -352,8 +352,8 @@ public class VueGraphique {
         List<Color> couleursDejaPresentes = new LinkedList<Color>();
 
         for (Requete requete : planning.getRequetes()) {
-            Intersection collecte = carte.getIntersections().get(requete.getIdPickup());
-            Intersection livraison = carte.getIntersections().get(requete.getIdDelivery());
+            Intersection collecte = carte.getIntersections().get(requete.getDemandeCollecte().getIdIntersection());
+            Intersection livraison = carte.getIntersections().get(requete.getDemandeLivraison().getIdIntersection());
 
             Point2D coordCollecte = longLatToXY(collecte.getLongitude(), collecte.getLatitude());
             coordCollecte = adapterCoordonnees(coordCollecte.getX(), coordCollecte.getY());
@@ -465,7 +465,7 @@ public class VueGraphique {
             // Ajoute un handler pour augmenter la taille de l'intersection lors du survol
             entry.getValue().setOnMouseEntered(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(3.5D);
                         entry.getValue().setFill(Color.INDIANRED);
                     }
@@ -474,7 +474,7 @@ public class VueGraphique {
 
             entry.getValue().setOnMouseExited(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(2D);
                         entry.getValue().setFill(Color.GRAY);
                     }
@@ -486,8 +486,8 @@ public class VueGraphique {
     /**
      * Sélectionne une intersection
      */
-    public void selectionneIntersection (Long idIntersection){
-        if(!listIntersectionsSelectionnees.contains(idIntersection)){
+    public void selectionneIntersection(Long idIntersection) {
+        if (!listIntersectionsSelectionnees.contains(idIntersection)) {
             listIntersectionsSelectionnees.add(idIntersection);
             mapIntersections.get(idIntersection).setFill(Color.RED);
             mapIntersections.get(idIntersection).setRadius(4D);
@@ -497,8 +497,8 @@ public class VueGraphique {
     /**
      * Déselectionne une intersection
      */
-    public void deselectionneIntersection(Long idIntersection){
-        if(listIntersectionsSelectionnees.contains(idIntersection)){
+    public void deselectionneIntersection(Long idIntersection) {
+        if (listIntersectionsSelectionnees.contains(idIntersection)) {
             listIntersectionsSelectionnees.remove(idIntersection);
             mapIntersections.get(idIntersection).setFill(Color.GRAY);
             mapIntersections.get(idIntersection).setRadius(2D);
@@ -508,8 +508,8 @@ public class VueGraphique {
     /**
      * Déselectionne la totalité des intersections sélectionnées
      */
-    public void nettoyerIntersectionsSelectionnees(){
-        for(Long l : listIntersectionsSelectionnees){
+    public void nettoyerIntersectionsSelectionnees() {
+        for (Long l : listIntersectionsSelectionnees) {
             this.deselectionneIntersection(l);
         }
     }
