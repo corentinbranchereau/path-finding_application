@@ -183,7 +183,7 @@ public class Fenetre {
                             this.fenetreControleur.getAnchorPaneGraphique().getHeight()));
 
             // On affiche le canvas devant les autres composants graphiques
-            // ! this.fenetreControleur.getCanvas().setViewOrder(-1);
+            this.fenetreControleur.getCanvas().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getPaneDessin().setOnScroll(new EventHandler<ScrollEvent>() {
