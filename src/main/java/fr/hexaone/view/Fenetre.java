@@ -151,8 +151,8 @@ public class Fenetre {
     public Fenetre(Stage stage, Controleur controleur) {
         this.stage = stage;
         this.controleur = controleur;
-        this.vueGraphique = new VueGraphique();
         this.vueTextuelle = new VueTextuelle(this);
+        this.vueGraphique = new VueGraphique(this);
         this.mapCouleurRequete = new HashMap<>();
     }
 
@@ -492,4 +492,15 @@ public class Fenetre {
         this.listeDemandes = list;
     }
 
+    /**
+     * Méthode permettant de sélectionner (highlight) une requête, à la fois dans la
+     * vue graphique et la vue textuelle
+     * 
+     * @param requete La requête à sélectionner
+     */
+    public void selectionnerRequete(Requete requete) {
+        // TODO : highlight dans la vue textuelle
+        this.vueGraphique.retirerHighlightExistantRequete();
+        this.vueGraphique.highlightRequete(requete);
+    }
 }

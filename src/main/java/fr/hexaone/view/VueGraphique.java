@@ -8,11 +8,13 @@ import java.util.Map;
 
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
+import fr.hexaone.model.TypeIntersection;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -25,6 +27,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -111,16 +114,48 @@ public class VueGraphique {
     protected List<Long> listIntersectionsSelectionnees;
 
     /**
+     * La fenêtre de l'application à laquelle est reliée la vue graphique
+     */
+    protected Fenetre fenetre;
+
+    /**
+     * Map qui permet de relier un objet Requête avec la paire d'objets graphiques
+     * (Rectangle et Circle) représentant les points de collecte et de livraison de
+     * la requête
+     */
+    protected Map<Requete, Pair<Node, Node>> mapRequeteNode;
+
+    /**
+     * Paire d'objets graphiques qui a été sélectionnée/highlight
+     */
+    protected Pair<Node, Node> noeudsHighlight;
+
+    /**
+     * Variable définissant la taille d'un noeud (élément graphique) de demande
+     * (collecte ou livraison)
+     */
+    protected final double TAILLE_NOEUD_DEMANDE = 5;
+
+    /**
+     * Variable définissant la taille d'un noeud (élément graphique) de demande
+     * (collecte ou livraison) qui a été sélectionné/highlight
+     */
+    protected final double TAILLE_NOEUD_HIGHLIGHT = 10;
+
+    /**
      * Liste qui contient les lignes (élément graphique) composant les trajets
      * affichés sur la carte
      */
     protected List<Line> listeLignesTrajets = new ArrayList<>();
 
     /**
-     * Constructeur de VueGraphique.
+     * Constructeur de VueGraphique
+     * 
+     * @param fenetre La fenêtre de l'application à laquelle est reliée la vue
+     *                graphique
      */
-    public VueGraphique() {
-
+    public VueGraphique(Fenetre fenetre) {
+        this.fenetre = fenetre;
     }
 
     /**
@@ -323,6 +358,9 @@ public class VueGraphique {
 
         nettoyerCarte();
 
+        // Initialisation de la map reliant les requêtes aux objets graphiques
+        this.mapRequeteNode = new HashMap<>();
+
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
         Point2D coordDepot = longLatToXY(depot.getLongitude(), depot.getLatitude());
@@ -397,14 +435,33 @@ public class VueGraphique {
             mapCouleurRequete.put(requete, couleur);
 
             // Pour le point de collecte, on crée un carré
-            Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
+            Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - this.TAILLE_NOEUD_DEMANDE,
+                    coordCollecte.getY() - this.TAILLE_NOEUD_DEMANDE, this.TAILLE_NOEUD_DEMANDE * 2,
+                    this.TAILLE_NOEUD_DEMANDE * 2);
             rectangleCollecte.setFill(couleur);
 
             // Pour le point de livraison on crée un rond
-            Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
+            Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(),
+                    this.TAILLE_NOEUD_DEMANDE);
             cercleLivraison.setFill(couleur);
 
             this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
+
+            // Ajout des handlers sur les demandes
+            rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    fenetre.selectionnerRequete(requete);
+                }
+            });
+
+            cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    fenetre.selectionnerRequete(requete);
+                }
+            });
+
+            // Ajout des 2 objets graphiques et de la requête à la map
+            this.mapRequeteNode.put(requete, new Pair<Node, Node>(rectangleCollecte, cercleLivraison));
         }
     }
 
@@ -532,5 +589,53 @@ public class VueGraphique {
 
     public double getPADDING_CARTE() {
         return PADDING_CARTE;
+    }
+
+    /**
+     * Méthode permettant de désélectionner la requête (point de collecte et de
+     * livraison) actuellement sélectionnée
+     */
+    public void retirerHighlightExistantRequete() {
+        if (this.noeudsHighlight != null) {
+            Rectangle rectangleCollecte = (Rectangle) this.noeudsHighlight.getKey();
+            Circle cercleLivraison = (Circle) this.noeudsHighlight.getValue();
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_DEMANDE);
+        }
+    }
+
+    /**
+     * Méthode permettant de sélectionner/highlight une requête (point de collecte
+     * et de livraison). Si la requête à highlighter est déjà sélectionnée, on ne la
+     * resélectionne pas
+     * 
+     * @param requete La requête à sélectionner
+     */
+    public void highlightRequete(Requete requete) {
+        Pair<Node, Node> paireRequete = this.mapRequeteNode.get(requete);
+
+        if (this.noeudsHighlight != paireRequete) {
+            // On highlight uniquement si on a cliqué sur une requête différente de celle
+            // déjà highlight : cela permet de désélectionner une requête sélectionnée en
+            // recliquant dessus
+            Rectangle rectangleCollecte = (Rectangle) paireRequete.getKey();
+            Circle cercleLivraison = (Circle) paireRequete.getValue();
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_HIGHLIGHT);
+
+            this.noeudsHighlight = paireRequete;
+        } else {
+            this.noeudsHighlight = null;
+        }
     }
 }
