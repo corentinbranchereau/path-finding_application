@@ -55,8 +55,7 @@ public class EtatTourneeCalcule implements State {
 
     @Override
     public void supprimerRequete(Controleur c, Demande demande) {
-        System.out.println("OK");
-        // ! c.planning.getRequetes().remove(demande.getRequete());
+        c.planning.getRequetes().remove(demande.getRequete());
         // TODO : re calculer le planning
     }
 }
