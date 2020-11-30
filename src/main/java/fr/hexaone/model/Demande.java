@@ -1,53 +1,74 @@
 package fr.hexaone.model;
 
+import java.util.Date;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
 public class Demande {
 
-    protected Integer type; // 0 : dépot, 1: collecte, 2: livraison
+    private static Long increment = (long) 0;
+
+    protected TypeIntersection typeIntersection;
+
+    protected Long idDemande;
 
     protected Long idIntersection;
 
-    protected StringProperty nomIntersection;
+    protected StringProperty nomIntersectionProperty;
 
-    protected StringProperty dateArrivee;
+    protected StringProperty dateArriveeProperty;
 
-    protected StringProperty dateDepart;
+    protected StringProperty dateDepartProperty;
+
+    protected Date dateArrivee;
+
+    protected Date dateDepart;
+
+    protected Integer duree;
 
     protected Color couleur;
 
-    public Demande(Integer type, Long idIntersection, String nomIntersection, String dateArrivee, String dateDepart) {
-        this.type = type;
+    public Demande(TypeIntersection type, Long idIntersection, String nomIntersection, Integer duree) {
+        this.idDemande = increment;
+        increment++;
         this.idIntersection = idIntersection;
-        this.dateArrivee = new SimpleStringProperty(dateArrivee);
-        this.dateDepart = new SimpleStringProperty(dateDepart);
-        this.nomIntersection = new SimpleStringProperty(nomIntersection);
+        this.typeIntersection = type;
+        this.duree = duree;
+        this.dateArriveeProperty = null;
+        this.dateDepartProperty = null;
+        this.dateArrivee = null;
+        this.dateDepart = null;
+        this.nomIntersectionProperty = new SimpleStringProperty(nomIntersection);
 
     }
 
-    public StringProperty getNomIntersection() {
-        return nomIntersection;
+    public StringProperty getNomIntersectionProperty() {
+        return nomIntersectionProperty;
     }
 
-    public StringProperty getDateArrivee() {
-        return dateArrivee;
+    public StringProperty getDateArriveeProperty() {
+        return dateArriveeProperty;
     }
 
-    public StringProperty getDateDepart() {
-        return dateDepart;
+    public StringProperty getDateDepartProperty() {
+        return dateDepartProperty;
     }
 
-    public StringProperty getType() {
-        if (type == 0)
+    public StringProperty getTypeProperty() {
+        if (typeIntersection == TypeIntersection.DEPOT)
             return new SimpleStringProperty("★ dépot");
-        if (type == 1)
+        if (typeIntersection == TypeIntersection.COLLECTE)
             return new SimpleStringProperty("■ collecte");
-        if (type == 2)
+        if (typeIntersection == TypeIntersection.LIVRAISON)
             return new SimpleStringProperty("● livraison");
 
         return new SimpleStringProperty("");
+    }
+
+    public String getNomIntersection() {
+        return nomIntersectionProperty.getValue();
     }
 
 }
