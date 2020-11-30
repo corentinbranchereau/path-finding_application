@@ -12,20 +12,20 @@ import javafx.scene.paint.Color;
 public class Requete {
 
     /**
-     * 
+     * Demande associée à la collecte
      */
-    protected Demande pickup;
+    protected Demande demandeCollecte;
 
     /**
-     * 
+     * Demande associée à la livraison
      */
-    protected Demande delivery;
+    protected Demande demandeLivraison;
 
     /**
      * 
      */
     protected Color couleur;
-    
+
     /**
      * Constructeur de Requete
      *
@@ -34,36 +34,45 @@ public class Requete {
      * @param idDelivery
      * @param dureeDelivery
      */
-    public Requete(long idPickup, int dureePickup, long idDelivery, int dureeDelivery) {
-        // this.idPickup = idPickup;
-        // this.dureePickup = dureePickup;
-        // this.idDelivery = idDelivery;
-        // this.dureeDelivery = dureeDelivery;
+    public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery,
+            String nomDelivery) {
+        demandeCollecte = new Demande(TypeIntersection.COLLECTE, idPickup, nomPickup, dureePickup, this);
+        demandeLivraison = new Demande(TypeIntersection.LIVRAISON, idDelivery, nomDelivery, dureeDelivery, this);
     }
 
-    public Demande getPickup() {
-        return pickup;
+    /**
+     * Getter
+     * 
+     * @return La demande de collecte
+     */
+    public Demande getDemandeCollecte() {
+        return demandeCollecte;
     }
 
-    public void setPickup(Demande pickup) {
-        this.pickup = pickup;
+    /**
+     * Setter
+     * 
+     * @param demandeCollecte La demande de collecte
+     */
+    public void setDemandeCollecte(Demande demandeCollecte) {
+        this.demandeCollecte = demandeCollecte;
     }
 
-    public Demande getDelivery() {
-        return delivery;
+    /**
+     * Getter
+     * 
+     * @return La demande de livraison
+     */
+    public Demande getDemandeLivraison() {
+        return demandeLivraison;
     }
 
-    public void setDelivery(Demande delivery) {
-        this.delivery = delivery;
+    /**
+     * Setter
+     * 
+     * @param demandeLivraison La demande de livraison
+     */
+    public void setDemandeLivraison(Demande demandeLivraison) {
+        this.demandeLivraison = demandeLivraison;
     }
-
-    public Color getCouleur() {
-        return couleur;
-    }
-
-    public void setCouleur(Color couleur) {
-        this.couleur = couleur;
-    }
-
-
 }

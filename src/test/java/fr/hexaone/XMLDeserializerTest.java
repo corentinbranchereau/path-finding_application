@@ -12,15 +12,12 @@ import fr.hexaone.utils.exception.FileBadExtensionException;
 import fr.hexaone.utils.exception.IllegalAttributException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,9 +195,9 @@ public class XMLDeserializerTest {
             Long idPickupTest = 1400900990L, idDeliveryTest = 208769083L;
             int pickupDurationTest = 180, deliveryDurationTest = 240;
             for (Requete requete : planning.getRequetes()) {
-                if (requete.getIdPickup() == idPickupTest && requete.getIdDelivery() == idDeliveryTest
-                        && requete.getDureePickup() == pickupDurationTest
-                        && requete.getDureeDelivery() == deliveryDurationTest)
+                if (requete.getDemandeCollecte().getIdIntersection() == idPickupTest && requete.getDemandeLivraison().getIdIntersection() == idDeliveryTest
+                        && requete.getDemandeCollecte().getDuree() == pickupDurationTest
+                        && requete.getDemandeLivraison().getDuree() == deliveryDurationTest)
                     testPresence = true;
             }
             assertTrue(testPresence);

@@ -139,7 +139,7 @@ public class Fenetre {
     /**
      * Liste observable des demandes
      */
-    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+    protected ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
     /**
      * Constructeur de Fenetre
@@ -152,7 +152,7 @@ public class Fenetre {
         this.stage = stage;
         this.controleur = controleur;
         this.vueGraphique = new VueGraphique();
-        this.vueTextuelle = new VueTextuelle();
+        this.vueTextuelle = new VueTextuelle(this);
         this.mapCouleurRequete = new HashMap<>();
     }
 
@@ -207,7 +207,6 @@ public class Fenetre {
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getPaneDessin().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
-                    System.out.println(event.getTextDeltaY());
                     double facteurZoom = 0.0;
                     if (event.getTextDeltaY() > 0) {
                         // Zoom
@@ -379,142 +378,6 @@ public class Fenetre {
         }
     }
 
-    public void afficherRequetesTextuelles(Planning planning, Carte carte) {
-        this.listeDemandes = creerListeDemandes(planning, carte);
-        try {
-            // Load textual tab.
-            FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
-
-            // Set person overview into the center of root layout.
-            this.fenetreControleur.getScrollPane().setContent(personOverview);
-
-            RequetesControleurFXML controlleurRequete = loader.getController();
-            controlleurRequete.setFenetre(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Méthode qui crée les objets demande à la réception d'un planning
-     * 
-     * @param planning le planning
-     * @param carte    la carte
-     * @return une liste observable de demandes
-     */
-    public ObservableList<Demande> creerListeDemandes(Planning planning, Carte carte) {
-
-        ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
-
-        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
-        Pair<String, String> horaire = getStringFromDate(planning, planning.getDateDebut());
-        String heure = horaire.getKey();
-        String minutes = horaire.getValue();
-
-        Demande depot = new Demande(0, planning.getIdDepot(), depotName, heure + "h" + minutes, heure + "h" + minutes);
-        listeDemandes.add(depot);
-
-        // parcours des requêtes
-        for (Requete requete : planning.getRequetes()) {
-
-            String nomCollecte = getNomIntersection(planning, carte,
-                    carte.getIntersections().get(requete.getIdPickup()));
-            String nomLivraison = getNomIntersection(planning, carte,
-                    carte.getIntersections().get(requete.getIdDelivery()));
-
-            Date dateArriveeCollecte = planning.getDatesPassage()
-                    .get(carte.getIntersections().get(requete.getIdPickup()));
-            Date dateDepartCollecte = planning.getDatesSorties()
-                    .get(carte.getIntersections().get(requete.getIdPickup()));
-            Pair<String, String> horaireArriveeCollecte = getStringFromDate(planning, dateArriveeCollecte);
-            Pair<String, String> horaireDepartCollecte = getStringFromDate(planning, dateDepartCollecte);
-            String heureArriveeCollecte = horaireArriveeCollecte.getKey();
-            String minutesArriveeCollecte = horaireArriveeCollecte.getValue();
-            String heureDepartCollecte = horaireDepartCollecte.getKey();
-            String minutesDepartCollecte = horaireDepartCollecte.getValue();
-
-            Date dateArriveeLivraison = planning.getDatesPassage()
-                    .get(carte.getIntersections().get(requete.getIdDelivery()));
-            Date dateDepartLivraison = planning.getDatesSorties()
-                    .get(carte.getIntersections().get(requete.getIdDelivery()));
-            Pair<String, String> horaireArriveeLivraison = getStringFromDate(planning, dateArriveeLivraison);
-            Pair<String, String> horaireDepartLivraison = getStringFromDate(planning, dateDepartLivraison);
-            String heureArriveeLivraison = horaireArriveeLivraison.getKey();
-            String minutesArriveeLivraison = horaireArriveeLivraison.getValue();
-            String heureDepartLivraison = horaireDepartLivraison.getKey();
-            String minutesDepartLivraison = horaireDepartLivraison.getValue();
-
-            Demande collecte = new Demande(1, requete.getIdPickup(), nomCollecte,
-                    heureArriveeCollecte + "h" + minutesArriveeCollecte,
-                    heureDepartCollecte + "h" + minutesDepartCollecte);
-            Demande livraion = new Demande(2, requete.getIdDelivery(), nomLivraison,
-                    heureArriveeLivraison + "h" + minutesArriveeLivraison,
-                    heureDepartLivraison + "h" + minutesDepartLivraison);
-
-            listeDemandes.add(collecte);
-            listeDemandes.add(livraion);
-        }
-
-        Date dateRetourDepot = planning.getDatesPassage().get(carte.getIntersections().get(planning.getIdDepot()));
-        Pair<String, String> horaireRetourDepot = getStringFromDate(planning, dateRetourDepot);
-        String heureRetourDepot = horaireRetourDepot.getKey();
-        String minutesRetourDepot = horaireRetourDepot.getValue();
-
-        Demande fin = new Demande(0, planning.getIdDepot(), depotName, heureRetourDepot + "h" + minutesRetourDepot,
-                heureRetourDepot + "h" + minutesRetourDepot);
-
-        listeDemandes.add(fin);
-
-        return listeDemandes;
-    }
-
-    /**
-     * Méthode permettant d'associer un nom à une intersection à partir des noms de
-     * rues qui lui sont adjacentes
-     * 
-     * @param planning     le planning contenant le dépot
-     * @param carte        la carte contenant le nom des intersections
-     * @param intersection l'intersection dont on cherche le nom
-     * @return String: le nom de la rue du dépot
-     */
-    private String getNomIntersection(Planning planning, Carte carte, Intersection intersection) {
-
-        Set<Segment> segments = intersection.getSegmentsPartants();
-        String nomIntersection = "";
-        if (!segments.isEmpty()) {
-            Iterator<Segment> iterateurSegments = segments.iterator();
-            nomIntersection = iterateurSegments.next().getNom();
-            while ((nomIntersection.isBlank() || nomIntersection.isEmpty()) && iterateurSegments.hasNext()) {
-                nomIntersection = iterateurSegments.next().getNom();
-            }
-        }
-        return nomIntersection;
-    }
-
-    /**
-     * Méthode permettant récupérer l'heure de sous forme de String au format
-     * Pair<Heure, Minute>
-     * 
-     * @param planning le planning
-     * @param horaire  la date
-     * @return une pair contenant l'heure et les minutes sous forme de String
-     */
-    private Pair<String, String> getStringFromDate(Planning planning, Date horaire) {
-
-        Calendar date = Calendar.getInstance();
-        date.setTime(horaire);
-        int heure = date.get(Calendar.HOUR_OF_DAY);
-        String heureString = heure < 10 ? ("0" + heure) : String.valueOf(heure);
-        int minutes = date.get(Calendar.MINUTE);
-        String minutesString = minutes < 10 ? ("0" + minutes) : String.valueOf(minutes);
-
-        return new Pair<String, String>(heureString, minutesString);
-    }
-
     /**
      * Renvoie le controleur JavaFX de la fenêtre
      * 
@@ -612,6 +475,15 @@ public class Fenetre {
      */
     public ObservableList<Demande> getListeDemandes() {
         return listeDemandes;
+    }
+
+    /**
+     * setter
+     * 
+     * @param list
+     */
+    public void setListeDemandes(ObservableList<Demande> list) {
+        this.listeDemandes = list;
     }
 
 }

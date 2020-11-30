@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
@@ -112,6 +113,10 @@ public interface State {
      */
     default void lancerCalcul(Controleur c) {
         System.out.println("handleClicBoutonCalcul [default state implementation]");
+    }
+
+    default void supprimerRequete(Controleur c, Demande demande) {
+        System.out.println("supprimerRequete [default state implementation]");
     }
 
     /**

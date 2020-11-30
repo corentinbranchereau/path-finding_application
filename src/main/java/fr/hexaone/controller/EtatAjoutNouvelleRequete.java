@@ -1,6 +1,7 @@
 package fr.hexaone.controller;
 
 import fr.hexaone.model.Requete;
+import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
@@ -25,16 +26,16 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
-        if(idPickup!=null && idPickup.equals(idIntersection)){
+        if (idPickup != null && idPickup.equals(idIntersection)) {
             c.getFenetre().getVueGraphique().deselectionneIntersection(idIntersection);
             idPickup = null;
-        } else if (idDelivery!=null && idDelivery.equals(idIntersection)){
+        } else if (idDelivery != null && idDelivery.equals(idIntersection)) {
             c.getFenetre().getVueGraphique().deselectionneIntersection(idIntersection);
             idDelivery = null;
-        } else if(idPickup == null){
+        } else if (idPickup == null) {
             c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
             idPickup = idIntersection;
-        } else if(idDelivery == null){
+        } else if (idDelivery == null) {
             c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
             idDelivery = idIntersection;
         }
@@ -89,15 +90,28 @@ public class EtatAjoutNouvelleRequete implements State {
             return;
         }
 
-        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery,
-                Integer.parseInt(deliveryDurationField));
+        String nomPickup = "";
+        for (Segment s : c.getCarte().getIntersections().get(idPickup).getSegmentsArrivants()) {
+            if (!s.getNom().isEmpty()) {
+                nomPickup = s.getNom();
+                break;
+            }
+        }
+        String nomDelivery = null;
+        for (Segment s : c.getCarte().getIntersections().get(idDelivery).getSegmentsArrivants()) {
+            if (!s.getNom().isEmpty()) {
+                nomDelivery = s.getNom();
+                break;
+            }
+        }
+        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), nomPickup, idDelivery,
+                Integer.parseInt(deliveryDurationField), nomDelivery);
         c.getPlanning().ajouterRequete(nouvelleRequete);
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte(),
-                c.getFenetre().getMapCouleurRequete());
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         this.annuler(c);
 
@@ -129,6 +143,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
     /**
      * Setter de l'idPickup
+     * 
      * @param idPickup
      */
     public void setIdPickup(Long idPickup) {
@@ -137,6 +152,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
     /**
      * Setter de l'idDelivery
+     * 
      * @param idDelivery
      */
     public void setIdDelivery(Long idDelivery) {

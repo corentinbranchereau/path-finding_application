@@ -1,5 +1,6 @@
 package fr.hexaone.controller;
 
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Trajet;
 import javafx.scene.paint.Color;
 
@@ -17,7 +18,8 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void lancerCalcul(Controleur c) {
-        c.getPlanning().calculerTournee();
+        c.getPlanning().calculerMeilleurTournee();
+        c.getFenetre().getVueGraphique().effacerTrajets();
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
@@ -26,7 +28,7 @@ public class EtatTourneeCalcule implements State {
         // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
         // c.getCarte(),
         // c.getFenetre().getMapCouleurRequete());
-        c.getFenetre().afficherRequetesTextuelles(c.getPlanning(), c.getCarte());
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
     }
 
     /**
@@ -48,5 +50,11 @@ public class EtatTourneeCalcule implements State {
         c.etatAjoutNouvelleRequete.setIdDelivery(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatCourant(c.etatAjoutNouvelleRequete);
+    }
+
+    @Override
+    public void supprimerRequete(Controleur c, Demande demande) {
+        c.planning.getRequetes().remove(demande.getRequete());
+        // TODO : re calculer le planning
     }
 }

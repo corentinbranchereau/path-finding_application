@@ -1,5 +1,7 @@
 package fr.hexaone.view;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -9,14 +11,18 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
+import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -34,17 +40,15 @@ public class VueTextuelle {
         /**
          * Item de la fenêtre où s'affiche la vue textuelle
          */
+        protected Fenetre fenetre;
+
         protected TextFlow zoneTexte;
-
-        private ObservableList<String> requetesString = FXCollections.observableArrayList();
-
-        private ObservableList<Text> requetesView = FXCollections.observableArrayList();
 
         /**
          * constructeur
          */
-        public VueTextuelle() {
-
+        public VueTextuelle(Fenetre fenetre) {
+                this.fenetre = fenetre;
         }
 
         /**
@@ -75,18 +79,16 @@ public class VueTextuelle {
                 // parcours des requêtes
                 for (Requete requete : planning.getRequetes()) {
 
-                        String nomCollecte = getNomIntersection(planning, carte,
-                                        carte.getIntersections().get(requete.getIdPickup()));
-                        String nomLivraison = getNomIntersection(planning, carte,
-                                        carte.getIntersections().get(requete.getIdDelivery()));
+                        String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
+                        String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
 
                         Text titreText = new Text("Requête " + i + ": \r\n");
                         Text collecteIcon = new Text("     ■ ");
                         Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-                                        + String.valueOf(requete.getDureePickup()) + "s" + "\r\n");
+                                        + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
                         Text livraisonIcon = new Text("     ● ");
                         Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-                                        + String.valueOf(requete.getDureeDelivery()) + "s" + "\r\n\n");
+                                        + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
                         i++;
 
                         collecteIcon.setFill(mapCouleurRequete.get(requete));
@@ -97,118 +99,82 @@ public class VueTextuelle {
                 }
         }
 
+        public void afficherPlanning(Planning planning, Carte carte) {
+                ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
+                fenetre.setListeDemandes(listeDemandes);
+                try {
+                        // Load textual tab.
+                        FXMLLoader loader = new FXMLLoader();
+                        FileInputStream inputFichierFxml = new FileInputStream(
+                                        "src/main/java/fr/hexaone/view/requetes.fxml");
+                        AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+
+                        // Set person overview into the center of root layout.
+                        this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
+
+                        RequetesControleurFXML controlleurRequete = loader.getController();
+                        controlleurRequete.setFenetre(fenetre);
+
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+
+        }
+
         /**
-         * Méthode qui permet d'afficher le planning dans la vue textuelle une fois que
-         * le trajet le plus court a été calculé
-         * 
-         * @param planning          le planning contenant les horaires de passage
-         * @param carte             la carte avec les segments et intersections
-         * @param mapCouleurRequete les couleurs associées aux requetes
+         * Méthode qui crée les objets demande à la réception d'un planning
+         *
+         * @param planning le planning
+         * @param carte    la carte
+         * @return une liste observable de demandes
          */
-        public void afficherPlanning(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+        public ObservableList<Demande> creerListeDemandes(Planning planning, Carte carte) {
 
-                // On vide le zone de texte au cas où des choses sont déjà affichées dedans
-                this.zoneTexte.getChildren().clear();
+                ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-                // récupération du nom du dépot
                 String depotName = getNomIntersection(planning, carte,
                                 carte.getIntersections().get(planning.getIdDepot()));
 
-                // récupération de l'heure de départ
-                Pair<String, String> horaire = getStringFromDate(planning, planning.getDateDebut());
-                String heure = horaire.getKey();
-                String minutes = horaire.getValue();
+                Demande depot = new Demande(TypeIntersection.DEPOT, planning.getIdDepot(), depotName, null, null);
+                depot.setDateDepart(planning.getDateDebut());
+                depot.setDateArrivee(planning.getDateDebut());
 
-                // écriture du point et de l'heure de départ
-                Text texteDepot = new Text(" ★ Départ : " + depotName + " à " + heure + 'h' + minutes + "\r\n\r\n");
-                texteDepot.setFill(Color.RED);
-                this.zoneTexte.getChildren().add(texteDepot);
-
-                LinkedHashMap<Text, Date> ordrePassageTrie = new LinkedHashMap<Text, Date>();
+                // listeDemandes.add(depot);
 
                 // parcours des requêtes
                 for (Requete requete : planning.getRequetes()) {
 
-                        String nomCollecte = getNomIntersection(planning, carte,
-                                        carte.getIntersections().get(requete.getIdPickup()));
-                        String nomLivraison = getNomIntersection(planning, carte,
-                                        carte.getIntersections().get(requete.getIdDelivery()));
+                        Demande collecte = requete.getDemandeCollecte();
+                        Demande livraison = requete.getDemandeLivraison();
 
-                        Date dateArriveeCollecte = planning.getDatesPassage().get(requete.getIdUniquePickup());
-                                        //.get(carte.getIntersections().get(requete.getIdPickup()));
-                        Date dateDepartCollecte = planning.getDatesSorties().get(requete.getIdUniquePickup());
-                                       // .get(carte.getIntersections().get(requete.getIdPickup()));
-                        Pair<String, String> horaireArriveeCollecte = getStringFromDate(planning, dateArriveeCollecte);
-                        Pair<String, String> horaireDepartCollecte = getStringFromDate(planning, dateDepartCollecte);
-                        String heureArriveeCollecte = horaireArriveeCollecte.getKey();
-                        String minutesArriveeCollecte = horaireArriveeCollecte.getValue();
-                        String heureDepartCollecte = horaireDepartCollecte.getKey();
-                        String minutesDepartCollecte = horaireDepartCollecte.getValue();
+                        // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
+                        // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
 
-                        Date dateArriveeLivraison = planning.getDatesPassage().get(requete.getIdUniqueDelivery());
-                                        //.get(carte.getIntersections().get(requete.getIdDelivery()));
-                        Date dateDepartLivraison = planning.getDatesSorties().get(requete.getIdUniqueDelivery());
-                                        //.get(carte.getIntersections().get(requete.getIdDelivery()));
-                        Pair<String, String> horaireArriveeLivraison = getStringFromDate(planning,
-                                        dateArriveeLivraison);
-                        Pair<String, String> horaireDepartLivraison = getStringFromDate(planning, dateDepartLivraison);
-                        String heureArriveeLivraison = horaireArriveeLivraison.getKey();
-                        String minutesArriveeLivraison = horaireArriveeLivraison.getValue();
-                        String heureDepartLivraison = horaireDepartLivraison.getKey();
-                        String minutesDepartLivraison = horaireDepartLivraison.getValue();
+                        Date dateArriveeCollecte = planning.getDatesPassage()
+                                        .get(requete.getDemandeCollecte().getIdIntersection());
+                        Date dateDepartCollecte = planning.getDatesSorties()
+                                        .get(requete.getDemandeCollecte().getIdIntersection());
+                        Date dateArriveeLivraison = planning.getDatesPassage()
+                                        .get(requete.getDemandeLivraison().getIdIntersection());
+                        Date dateDepartLivraison = planning.getDatesSorties()
+                                        .get(requete.getDemandeLivraison().getIdIntersection());
 
-                        Text collecteText = new Text("     ■ Collecte : " + nomCollecte + " - Heure arrivée : "
-                                        + heureArriveeCollecte + "h" + minutesArriveeCollecte + " | Heure départ : "
-                                        + heureDepartCollecte + "h" + minutesDepartCollecte + "\r\n");
+                        if (dateDepartCollecte != null)
+                                collecte.setDateDepart(dateDepartCollecte);
+                        if (dateArriveeCollecte != null)
+                                collecte.setDateArrivee(dateArriveeCollecte);
+                        if (dateDepartLivraison != null)
+                                livraison.setDateDepart(dateDepartLivraison);
+                        if (dateArriveeLivraison != null)
+                                livraison.setDateArrivee(dateArriveeLivraison);
 
-                        Text livraisonText = new Text("     ● Livraison : " + nomLivraison + " - Heure arrivée "
-                                        + heureArriveeLivraison + "h" + minutesArriveeLivraison + " | Heure départ : "
-                                        + heureDepartLivraison + "h" + minutesDepartLivraison + "\r\n");
-
-                        collecteText.setFill(mapCouleurRequete.get(requete));
-                        livraisonText.setFill(mapCouleurRequete.get(requete));
-
-                        ordrePassageTrie.put(collecteText, dateArriveeCollecte);
-                        ordrePassageTrie.put(livraisonText, dateArriveeLivraison);
+                        listeDemandes.add(collecte);
+                        listeDemandes.add(livraison);
                 }
 
-                ordrePassageTrie = getRequetesTrieesParDatePassage(ordrePassageTrie);
+                // listeDemandes.add(fin);
 
-                // formatage de la listview
-                for (Text t : ordrePassageTrie.keySet()) {
-                        // this.zoneTexte.getChildren().add(t);
-                        requetesString.add(t.getText());
-                        requetesView.add(t);
-                }
-                // requetesString.forEach(requetes -> requetesView.add(new Text(requetes)));
-
-                ListView<String> requetesList = new ListView<>(requetesString);
-                requetesList.setCellFactory(param -> new RequetesCell(requetesView));
-                requetesList.setPrefHeight(600);
-                requetesList.setPrefWidth(370);
-                this.zoneTexte.getChildren().add(requetesList);
-
-                Date dateRetourDepot = planning.getDatesPassage().get(planning.getIdUniqueDepot());
-                                //.get(carte.getIntersections().get(planning.getIdDepot()));
-                Pair<String, String> horaireRetourDepot = getStringFromDate(planning, dateRetourDepot);
-                String heureRetourDepot = horaireRetourDepot.getKey();
-                String minutesRetourDepot = horaireRetourDepot.getValue();
-                Text retourDepotText = new Text("\r\n ★ Retour : " + depotName + " à " + heureRetourDepot + 'h'
-                                + minutesRetourDepot + "\r\n\r\n");
-                retourDepotText.setFill(Color.RED);
-                this.zoneTexte.getChildren().add(retourDepotText);
-
-                double dureeTotale = planning.getDureeTotale() / 1000; // en secondes
-                int heuresDureeTotale = (int) dureeTotale / 3600;
-                int minutesDureeTotale = ((int) dureeTotale % 3600) / 60;
-                String heuresDureeTotaleString = heuresDureeTotale < 10 ? "0" + heuresDureeTotale
-                                : String.valueOf(heuresDureeTotale);
-                String minutesDureeTotaleString = minutesDureeTotale < 10 ? "0" + minutesDureeTotale
-                                : String.valueOf(minutesDureeTotale);
-                Text dureeTotaleText = new Text("Durée totale de la tournée : " + heuresDureeTotaleString + "h"
-                                + minutesDureeTotaleString);
-                dureeTotaleText.setFill(Color.BLACK);
-                this.zoneTexte.getChildren().add(dureeTotaleText);
+                return listeDemandes;
         }
 
         /**

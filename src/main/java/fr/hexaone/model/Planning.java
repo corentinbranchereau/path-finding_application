@@ -36,7 +36,7 @@ public class Planning{
      * Liste des requêtes en rapport avec la demande client
      */
     protected List<Requete> requetes;
-    
+
     /**
      * Liste des ids uniques d'intersections constituant la tournée
      */
@@ -47,7 +47,7 @@ public class Planning{
      */
     protected Carte carte;
 
-	/**
+    /**
      * liste de tous les trajets composant la tournée
      */
     protected List<Trajet> listeTrajets;
@@ -94,11 +94,22 @@ public class Planning{
     ///////////////////////////////
 
     /**
-     * Constructeur du planning 
+     * Constructeur du planning
+     * 
      * @param carte
      */
     public Planning(Carte carte) {
         this.requetes = new ArrayList<>();
+        this.carte=carte;
+    }
+    
+    /**
+     * Constructeur du planning
+     * 
+     * @param carte
+     */
+    public Planning(Carte carte, List<Requete> requetes) {
+        this.requetes = requetes;
         this.carte=carte;
     }
 
@@ -125,8 +136,8 @@ public class Planning{
         List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
         intersectionsSpeciales.add(carte.intersections.get(idDepot));
         for (Requete r : requetes) {
-            intersectionsSpeciales.add(carte.intersections.get(r.getPickup().getIdIntersection()));
-            intersectionsSpeciales.add(carte.intersections.get(r.getDelivery().getIdIntersection()));
+            intersectionsSpeciales.add(carte.intersections.get(r.getDemandeCollecte().getIdIntersection()));
+            intersectionsSpeciales.add(carte.intersections.get(r.getDemandeLivraison().getIdIntersection()));
             
         }
         calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
@@ -134,8 +145,8 @@ public class Planning{
         //recherche de la melleure tournéee
         List<Demande> demandes = new ArrayList<Demande>();
         for (Requete requete : requetes) {
-            demandes.add(requete.pickup);
-            demandes.add(requete.delivery);
+            demandes.add(requete.getDemandeCollecte());
+            demandes.add(requete.getDemandeLivraison());
         }
         demandesOrdonnees = ordonnerLesDemandes(demandes); //ordonnerLesDemandes
 
@@ -189,7 +200,7 @@ public class Planning{
      * Prérequis :
      *  - Avoir les demandes ordonnées.
      */
-    public void recalculerTournee() {
+    private void recalculerTournee() {
         //Recalcule tous les plus courts trajets des demandes
         List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
         intersectionsSpeciales.add(carte.intersections.get(idDepot));
@@ -202,8 +213,22 @@ public class Planning{
         ordonnerLesTrajetsEtLesDates();
     }
 
-    
+    /**
+     * Ajouter une requete après avoir déja calculer la 
+     * meilleure tournée.
+     */
+    public void ajouterRequete(Requete requete) {
 
+        requetes.add(requete);
+
+        demandesOrdonnees.add(requete.demandeCollecte);
+        demandesOrdonnees.add(requete.demandeLivraison);
+
+        recalculerTournee();
+    }
+
+    
+    
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
     ///////////////////////////////////////////////
@@ -213,7 +238,7 @@ public class Planning{
      * intersections en paramètre
      * @param intersections
      */
-    public void calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
+    private void calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
 
         // Préparation
 
@@ -322,7 +347,7 @@ public class Planning{
      *
      * @param demandes
      */
-    public List<Demande> ordonnerLesDemandes(List<Demande> demandes) {
+    private List<Demande> ordonnerLesDemandes(List<Demande> demandes) {
 
     	//initialisation des constantes de l'algo génétique
 
@@ -496,7 +521,7 @@ public class Planning{
      *
      * @param chromosome que l'on teste
      */
-    public double cout(List<Demande> chromosome) {
+    private double cout(List<Demande> chromosome) {
 
         double somme = 0;
         Long prevIntersectionId = idDepot;
@@ -516,7 +541,7 @@ public class Planning{
      *
      * @param demandes
      */
-    public List<Demande> genererChromosomeAleatoire(List<Demande> demandes) {
+    private List<Demande> genererChromosomeAleatoire(List<Demande> demandes) {
         // Copie de la liste des demandes
         List<Demande> shuffleList = new ArrayList<Demande>(demandes);
 
@@ -535,15 +560,15 @@ public class Planning{
      * @param chromosome que l'on teste
      * @param requetes   liste des requêtes
      */
-    public Boolean verifierPop(List<Demande> chromosome) {
+    private Boolean verifierPop(List<Demande> chromosome) {
 
         ArrayList<Demande> collecteRealisee = new ArrayList<Demande>();
 
         for (Demande demande : chromosome) {
-            if ( demande.getType() == Demande.TYPE_COLLECTE ){
+            if ( demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
                 collecteRealisee.add(demande);
-            } else if ( demande.getType() == Demande.TYPE_COLLECTE ){
-                Demande collecte = demande.getRequete().getPickup();
+            } else if ( demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                Demande collecte = demande.getRequete().getDemandeCollecte();
                 if ( collecteRealisee.contains(collecte) ){
                     collecteRealisee.remove(collecte);
                 } else {
@@ -564,7 +589,7 @@ public class Planning{
      * @param chromosome que l'on teste
      * @param requetes   liste des requêtes
      */
-    public List<Demande> mutationLocalSearch(List<Demande> chromosome, double coutIni) {
+    private List<Demande> mutationLocalSearch(List<Demande> chromosome, double coutIni) {
 
         Boolean amelioration = true;
         double coutMin = coutIni;
@@ -616,13 +641,13 @@ public class Planning{
      * @param requetes
      * @param chromosome
      */
-    public List<Demande> correctionCrossover(List<Demande> chromosome) {
+    private List<Demande> correctionCrossover(List<Demande> chromosome) {
         List<Pair<Integer,Integer>> aSwap  = new ArrayList<Pair<Integer,Integer>>();
 
         Integer posLivraison = 0;
         for (Demande demande : chromosome) {
-            if ( demande.getType() == Demande.TYPE_LIVRAISON ) {
-                Integer posCollecte = chromosome.indexOf(demande.getRequete().getPickup());
+            if ( demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                Integer posCollecte = chromosome.indexOf(demande.getRequete().getDemandeCollecte());
                 if (posLivraison < posCollecte ) {
                     aSwap.add( new Pair<Integer,Integer>(posCollecte,posLivraison) );
                 }
@@ -644,7 +669,7 @@ public class Planning{
      * @param population à tester
      * @param ecart      maximum
      */
-    public Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart) {
+    private Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart) {
         Pair<List<Demande>, Double> chromPres = null;
         for (Pair<List<Demande>,Double> chrom : population) {
             if (chromPres != null && Math.abs(chrom.getValue1() - chromPres.getValue1()) < ecart) {
@@ -662,7 +687,7 @@ public class Planning{
      * @param ecart        maximum
      * @param valeurEnfant
      */
-    public Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart, double valeurEnfant) {
+    private Boolean espacePopulation(List<Pair<List<Demande>, Double>> population, double ecart, double valeurEnfant) {
         for (Pair<List<Demande>,Double> chrom : population) {
             if (Math.abs(chrom.getValue1() - valeurEnfant) < ecart) {
                 return false;
@@ -677,7 +702,7 @@ public class Planning{
      * @param depot
      * @param requetes
      */
-    public List<Demande> crossoverOX(List<Demande> P1, List<Demande> P2, int i, int j) {
+    private List<Demande> crossoverOX(List<Demande> P1, List<Demande> P2, int i, int j) {
 
         List<Demande> child = new ArrayList<Demande>();
 

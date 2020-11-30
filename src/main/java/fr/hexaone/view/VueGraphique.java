@@ -1,5 +1,6 @@
 package fr.hexaone.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ import fr.hexaone.model.Trajet;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -22,6 +24,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -108,6 +111,12 @@ public class VueGraphique {
     protected List<Long> listIntersectionsSelectionnees;
 
     /**
+     * Liste qui contient les lignes (élément graphique) composant les trajets
+     * affichés sur la carte
+     */
+    protected List<Line> listeLignesTrajets = new ArrayList<>();
+
+    /**
      * Constructeur de VueGraphique.
      */
     public VueGraphique() {
@@ -163,6 +172,24 @@ public class VueGraphique {
         double adaptationX = this.paddingGlobal + ((x - this.minX) * this.ratioGlobal);
         double adaptationY = this.paneDessin.getHeight() - this.paddingGlobal - ((y - this.minY) * this.ratioGlobal);
         return new Point2D(adaptationX, adaptationY);
+    }
+
+    /**
+     * Méthode permettant de n'affichant que la carte en enlevant toutes les
+     * requêtes dessinées dessus
+     */
+    public void nettoyerCarte() {
+        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
+    }
+
+    /**
+     * Méthode qui permet d'effacer les trajets affichés dans la vue graphique
+     */
+    public void effacerTrajets() {
+        for (Line l : this.listeLignesTrajets) {
+            this.paneDessin.getChildren().remove(l);
+        }
+        this.listeLignesTrajets.clear();
     }
 
     /**
@@ -258,6 +285,25 @@ public class VueGraphique {
                 // intersections
                 ligneSegment.setViewOrder(2);
 
+                // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+                Tooltip tooltipNomRue = new Tooltip(s.getNom());
+                tooltipNomRue.setShowDelay(new Duration(0));
+                tooltipNomRue.setHideDelay(new Duration(0));
+                Tooltip.install(ligneSegment, tooltipNomRue);
+
+                // Ajoute un handler pour augmenter la taille de la route lors du survol
+                ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                    }
+                });
+
+                ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                    }
+                });
+
                 this.listeNoeudsCarte.add(ligneSegment);
                 this.paneDessin.getChildren().add(ligneSegment);
             }
@@ -275,9 +321,7 @@ public class VueGraphique {
         // On réinitialise la map d'association Requete <-> Couleur
         mapCouleurRequete.clear();
 
-        // On redéfinie les éléments contenus dans le pane de dessin pour n'afficher que
-        // la carte (on enlève donc les précédentes requêtes s'il y en a)
-        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
+        nettoyerCarte();
 
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
@@ -308,8 +352,8 @@ public class VueGraphique {
         List<Color> couleursDejaPresentes = new LinkedList<Color>();
 
         for (Requete requete : planning.getRequetes()) {
-            Intersection collecte = carte.getIntersections().get(requete.getIdPickup());
-            Intersection livraison = carte.getIntersections().get(requete.getIdDelivery());
+            Intersection collecte = carte.getIntersections().get(requete.getDemandeCollecte().getIdIntersection());
+            Intersection livraison = carte.getIntersections().get(requete.getDemandeLivraison().getIdIntersection());
 
             Point2D coordCollecte = longLatToXY(collecte.getLongitude(), collecte.getLatitude());
             coordCollecte = adapterCoordonnees(coordCollecte.getX(), coordCollecte.getY());
@@ -398,6 +442,7 @@ public class VueGraphique {
             ligneSegment.setViewOrder(2);
 
             this.paneDessin.getChildren().add(ligneSegment);
+            this.listeLignesTrajets.add(ligneSegment);
         }
 
         // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
@@ -406,7 +451,7 @@ public class VueGraphique {
     /**
      * Attache les EventHandler aux intersections de la carte chargée afin de
      * préparer la sélection d'intersection
-     * 
+     *
      * @param controleur Le controleur de l'application
      */
     public void attacherHandlerIntersection(Controleur controleur) {
@@ -420,7 +465,7 @@ public class VueGraphique {
             // Ajoute un handler pour augmenter la taille de l'intersection lors du survol
             entry.getValue().setOnMouseEntered(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(3.5D);
                         entry.getValue().setFill(Color.INDIANRED);
                     }
@@ -429,7 +474,7 @@ public class VueGraphique {
 
             entry.getValue().setOnMouseExited(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    if(!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(2D);
                         entry.getValue().setFill(Color.GRAY);
                     }
@@ -441,8 +486,8 @@ public class VueGraphique {
     /**
      * Sélectionne une intersection
      */
-    public void selectionneIntersection (Long idIntersection){
-        if(!listIntersectionsSelectionnees.contains(idIntersection)){
+    public void selectionneIntersection(Long idIntersection) {
+        if (!listIntersectionsSelectionnees.contains(idIntersection)) {
             listIntersectionsSelectionnees.add(idIntersection);
             mapIntersections.get(idIntersection).setFill(Color.RED);
             mapIntersections.get(idIntersection).setRadius(4D);
@@ -452,8 +497,8 @@ public class VueGraphique {
     /**
      * Déselectionne une intersection
      */
-    public void deselectionneIntersection(Long idIntersection){
-        if(listIntersectionsSelectionnees.contains(idIntersection)){
+    public void deselectionneIntersection(Long idIntersection) {
+        if (listIntersectionsSelectionnees.contains(idIntersection)) {
             listIntersectionsSelectionnees.remove(idIntersection);
             mapIntersections.get(idIntersection).setFill(Color.GRAY);
             mapIntersections.get(idIntersection).setRadius(2D);
@@ -463,8 +508,8 @@ public class VueGraphique {
     /**
      * Déselectionne la totalité des intersections sélectionnées
      */
-    public void nettoyerIntersectionsSelectionnees(){
-        for(Long l : listIntersectionsSelectionnees){
+    public void nettoyerIntersectionsSelectionnees() {
+        for (Long l : listIntersectionsSelectionnees) {
             this.deselectionneIntersection(l);
         }
     }

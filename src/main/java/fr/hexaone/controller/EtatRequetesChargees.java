@@ -18,7 +18,8 @@ public class EtatRequetesChargees implements State {
         @Override
         public void lancerCalcul(Controleur c) {
                 // c.getPlanning().setCarte(c.getCarte());
-                c.getPlanning().calculerTournee();
+                c.getPlanning().calculerMeilleurTournee();
+                c.getFenetre().getVueGraphique().effacerTrajets();
                 for (Trajet trajet : c.getPlanning().getListeTrajets()) {
                         Color couleur = Color.color(Math.random(), Math.random(), Math.random());
                         c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
@@ -27,7 +28,7 @@ public class EtatRequetesChargees implements State {
                 // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
                 // c.getCarte(),
                 // c.getFenetre().getMapCouleurRequete());
-                c.getFenetre().afficherRequetesTextuelles(c.getPlanning(), c.getCarte());
+                c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
                 c.setEtatCourant(c.etatTourneeCalcule);
                 c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
         }

@@ -8,6 +8,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 
 public class RequetesControleurFXML {
@@ -30,16 +31,16 @@ public class RequetesControleurFXML {
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getType());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getTypeProperty());
         typeColumn.setSortable(false);
 
-        arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArrivee());
+        arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArriveeProperty());
         arriveeColumn.setSortable(true);
 
-        departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepart());
+        departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
         departColumn.setSortable(false);
 
-        adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersection());
+        adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
         adresseColumn.setSortable(false);
 
         demandeTable.setRowFactory(tv -> {
@@ -90,6 +91,15 @@ public class RequetesControleurFXML {
                     event.consume();
                 }
             });
+
+            // TODO : check que le click droit permet bien de récupérer la Demande
+            // "selectionnée"
+            row.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
+                }
+            });
+
             return row;
         });
 
