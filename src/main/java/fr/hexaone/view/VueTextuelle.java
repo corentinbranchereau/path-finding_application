@@ -135,9 +135,9 @@ public class VueTextuelle {
                                         carte.getIntersections().get(requete.getIdDelivery()));
 
                         Date dateArriveeCollecte = planning.getDatesPassage().get(requete.getIdUniquePickup());
-                                        //.get(carte.getIntersections().get(requete.getIdPickup()));
+                        // .get(carte.getIntersections().get(requete.getIdPickup()));
                         Date dateDepartCollecte = planning.getDatesSorties().get(requete.getIdUniquePickup());
-                                       // .get(carte.getIntersections().get(requete.getIdPickup()));
+                        // .get(carte.getIntersections().get(requete.getIdPickup()));
                         Pair<String, String> horaireArriveeCollecte = getStringFromDate(planning, dateArriveeCollecte);
                         Pair<String, String> horaireDepartCollecte = getStringFromDate(planning, dateDepartCollecte);
                         String heureArriveeCollecte = horaireArriveeCollecte.getKey();
@@ -146,9 +146,9 @@ public class VueTextuelle {
                         String minutesDepartCollecte = horaireDepartCollecte.getValue();
 
                         Date dateArriveeLivraison = planning.getDatesPassage().get(requete.getIdUniqueDelivery());
-                                        //.get(carte.getIntersections().get(requete.getIdDelivery()));
+                        // .get(carte.getIntersections().get(requete.getIdDelivery()));
                         Date dateDepartLivraison = planning.getDatesSorties().get(requete.getIdUniqueDelivery());
-                                        //.get(carte.getIntersections().get(requete.getIdDelivery()));
+                        // .get(carte.getIntersections().get(requete.getIdDelivery()));
                         Pair<String, String> horaireArriveeLivraison = getStringFromDate(planning,
                                         dateArriveeLivraison);
                         Pair<String, String> horaireDepartLivraison = getStringFromDate(planning, dateDepartLivraison);
@@ -189,7 +189,7 @@ public class VueTextuelle {
                 this.zoneTexte.getChildren().add(requetesList);
 
                 Date dateRetourDepot = planning.getDatesPassage().get(planning.getIdUniqueDepot());
-                                //.get(carte.getIntersections().get(planning.getIdDepot()));
+                // .get(carte.getIntersections().get(planning.getIdDepot()));
                 Pair<String, String> horaireRetourDepot = getStringFromDate(planning, dateRetourDepot);
                 String heureRetourDepot = horaireRetourDepot.getKey();
                 String minutesRetourDepot = horaireRetourDepot.getValue();

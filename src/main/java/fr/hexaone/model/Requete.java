@@ -1,5 +1,7 @@
 package fr.hexaone.model;
 
+import java.awt.*;
+
 /**
  * Objet permettant de modéliser une requête, c'est à dire avec un point de
  * retrait (PICKUP) et un point de livraison (DELIVERY)
@@ -10,34 +12,14 @@ package fr.hexaone.model;
 public class Requete {
 
     /**
-     * Id de l'intersection spéciale de type collecte
+     * Demande associée à la collecte
      */
-    protected long idPickup;
+    protected Demande demandeCollecte;
 
     /**
-     * Durée du pickup
+     * Demande associée à la livraison
      */
-    protected Integer dureePickup;
-
-    /**
-     * Id l'intersection spéciale de type point de livraison
-     */
-    protected long idDelivery;
-
-    /**
-     * Durée du delivery
-     */
-    protected Integer dureeDelivery;
-
-    /**
-     * Id l'intersection spéciale de type point de livraison
-     */
-    protected long idUniquePickup;
-
-    /**
-     * Id l'intersection spéciale de type point de livraison
-     */
-    protected long idUniqueDelivery;
+    protected Demande demandeLivraison;
 
     /**
      * Constructeur de Requete
@@ -47,108 +29,40 @@ public class Requete {
      * @param idDelivery
      * @param dureeDelivery
      */
-    public Requete(long idPickup, int dureePickup, long idDelivery, int dureeDelivery) {
-        this.idPickup = idPickup;
-        this.dureePickup = dureePickup;
-        this.idDelivery = idDelivery;
-        this.dureeDelivery = dureeDelivery;
-    }
-
-
-	/**
-     * Getter
-     * 
-     * @return L'id de l'intersection de Pickup
-     */
-    public long getIdPickup() {
-        return idPickup;
+    public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery, String nomDelivery) {
+        demandeCollecte = new Demande(TypeIntersection.COLLECTE,idPickup,nomPickup,dureePickup);
+        demandeLivraison = new Demande(TypeIntersection.LIVRAISON,idDelivery,nomDelivery,dureeDelivery);
     }
 
     /**
      * Getter
-     * 
-     * @return Durée du pickup
+     * @return La demande de collecte
      */
-    public Integer getDureePickup() {
-        return dureePickup;
-    }
-
-    /**
-     * Getter
-     * 
-     * @return L'id de l'intersection de delivery
-     */
-    public long getIdDelivery() {
-        return idDelivery;
-    }
-
-    /**
-     * Getter
-     * 
-     * @return Durée du delivery
-     */
-    public Integer getDureeDelivery() {
-        return dureeDelivery;
-    }
-
-    /**
-     * Getter
-     */
-    public long getIdUniquePickup() {
-        return idUniquePickup;
+    public Demande getDemandeCollecte() {
+        return demandeCollecte;
     }
 
     /**
      * Setter
+     * @param demandeCollecte La demande de collecte
      */
-    public void setIdUniquePickup(long idUniquePickup) {
-        this.idUniquePickup = idUniquePickup;
+    public void setDemandeCollecte(Demande demandeCollecte) {
+        this.demandeCollecte = demandeCollecte;
     }
 
     /**
      * Getter
+     * @return La demande de livraison
      */
-    public long getIdUniqueDelivery() {
-        return idUniqueDelivery;
+    public Demande getDemandeLivraison() {
+        return demandeLivraison;
     }
 
     /**
      * Setter
+     * @param demandeLivraison La demande de livraison
      */
-    public void setIdUniqueDelivery(long idUniqueDelivery) {
-        this.idUniqueDelivery = idUniqueDelivery;
+    public void setDemandeLivraison(Demande demandeLivraison) {
+        this.demandeLivraison = demandeLivraison;
     }
-    
-    /**
-     * Setter
-     * @param idPickup
-     */
-    public void setIdPickup(long idPickup) {
-		this.idPickup = idPickup;
-	}
-
-    /**
-     * Setter
-     * @param dureePickup
-     */
-	public void setDureePickup(Integer dureePickup) {
-		this.dureePickup = dureePickup;
-	}
-
-	/**
-	 * Getter
-	 * @param idDelivery
-	 */
-	public void setIdDelivery(long idDelivery) {
-		this.idDelivery = idDelivery;
-	}
-
-	/**
-	 * Setter
-	 * @param dureeDelivery
-	 */
-	public void setDureeDelivery(Integer dureeDelivery) {
-		this.dureeDelivery = dureeDelivery;
-	}
-
 }

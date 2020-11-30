@@ -1,6 +1,7 @@
 package fr.hexaone.controller;
 
 import fr.hexaone.model.Requete;
+import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
@@ -88,9 +89,22 @@ public class EtatAjoutNouvelleRequete implements State {
             alert.show();
             return;
         }
-
-        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), idDelivery,
-                Integer.parseInt(deliveryDurationField));
+        
+        String nomPickup = "";
+        for(Segment s : c.getCarte().getIntersections().get(idPickup).getSegmentsArrivants()){
+            if(!s.getNom().isEmpty()) {
+                nomPickup = s.getNom();
+                break;
+            }
+        }
+        String nomDelivery = null;
+        for(Segment s : c.getCarte().getIntersections().get(idDelivery).getSegmentsArrivants()){
+            if(!s.getNom().isEmpty()) {
+                nomDelivery = s.getNom();
+                break;
+            }
+        }
+        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), nomPickup, idDelivery, Integer.parseInt(deliveryDurationField), nomDelivery);
         c.getPlanning().ajouterRequete(nouvelleRequete);
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());

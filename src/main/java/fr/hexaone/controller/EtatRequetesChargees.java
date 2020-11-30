@@ -12,17 +12,18 @@ import javafx.scene.paint.Color;
  */
 public class EtatRequetesChargees implements State {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void lancerCalcul(Controleur c) {
-                // c.getPlanning().setCarte(c.getCarte());
-                c.getPlanning().calculerTournee();
-                for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-                        Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-                        c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-                }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void lancerCalcul(Controleur c) {
+        // c.getPlanning().setCarte(c.getCarte());
+        c.getPlanning().calculerTournee();
+        c.getFenetre().getVueGraphique().effacerTrajets();
+        for (Trajet trajet : c.getPlanning().getListeTrajets()) {
+            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+            c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
+        }
 
                 // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
                 // c.getCarte(),
