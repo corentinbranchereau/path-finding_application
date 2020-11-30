@@ -207,7 +207,6 @@ public class Fenetre {
             // Ajoute une fonctionnalité de zoom sur la carte
             this.fenetreControleur.getPaneDessin().setOnScroll(new EventHandler<ScrollEvent>() {
                 public void handle(ScrollEvent event) {
-                    System.out.println(event.getTextDeltaY());
                     double facteurZoom = 0.0;
                     if (event.getTextDeltaY() > 0) {
                         // Zoom
