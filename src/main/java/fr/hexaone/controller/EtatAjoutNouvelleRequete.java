@@ -117,6 +117,8 @@ public class EtatAjoutNouvelleRequete implements State {
         this.annuler(c);
 
         // TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
+        // c.fenetre.getVueTextuelle().afficherNouvelleRequeteVueTextuelle(nouvelleRequete,
+        // mapCouleurRequete);
     }
 
     /**
