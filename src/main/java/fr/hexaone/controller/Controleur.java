@@ -63,6 +63,11 @@ public class Controleur {
     public EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
+     * Etat ou on peut modifier l'ordre des requêtes dans le planning
+     */
+    public EtatModifierPlanning etatModifierPlanning;
+
+    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -76,6 +81,7 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
+        this.etatModifierPlanning = new EtatModifierPlanning();
         setEtatCourant(etatInitial);
     }
 
@@ -145,6 +151,10 @@ public class Controleur {
      */
     public void annuler() {
         etatCourant.annuler(this);
+    }
+
+    public void modifierPlanning() {
+        etatCourant.modifierPlanning(this);
     }
 
     /**

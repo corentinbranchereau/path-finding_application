@@ -129,11 +129,12 @@ public class EtatAjoutNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         idPickup = null;

@@ -31,5 +31,6 @@ public class EtatRequetesChargees implements State {
                 c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
                 c.setEtatCourant(c.etatTourneeCalcule);
                 c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+                c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
         }
 }

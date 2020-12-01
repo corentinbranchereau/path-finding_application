@@ -46,6 +46,7 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
         c.etatAjoutNouvelleRequete.setIdPickup(null);
         c.etatAjoutNouvelleRequete.setIdDelivery(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
@@ -56,5 +57,15 @@ public class EtatTourneeCalcule implements State {
     public void supprimerRequete(Controleur c, Demande demande) {
         c.planning.getRequetes().remove(demande.getRequete());
         // TODO : re calculer le planning
+    }
+
+    @Override
+    /**
+     * {@inheritDoc}
+     */
+    public void modifierPlanning(Controleur c) {
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Valider");
+        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
+        c.setEtatCourant(c.etatModifierPlanning);
     }
 }

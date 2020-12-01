@@ -20,6 +20,7 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -42,7 +43,15 @@ public class VueTextuelle {
          */
         protected Fenetre fenetre;
 
+        /**
+         * zone de texte ou afficher les requetes
+         */
         protected TextFlow zoneTexte;
+
+        /**
+         * controlleur du tableau de requetes
+         */
+        protected RequetesControleurFXML requetesControleur;
 
         /**
          * constructeur
@@ -65,15 +74,12 @@ public class VueTextuelle {
                 String depotName = getNomIntersection(planning, carte,
                                 carte.getIntersections().get(planning.getIdDepot()));
 
-                // récupération de l'heure de départ
-                Pair<String, String> horaire = getStringFromDate(planning, planning.getDateDebut());
-                String heure = horaire.getKey();
-                String minutes = horaire.getValue();
-
                 // écriture du point et de l'heure de départ
-                Text texteDepot = new Text(" ★ Départ : " + depotName + " à " + heure + 'h' + minutes + "\r\n\r\n");
+                Text texteDepot = new Text(" ★ Départ : " + depotName + " à "
+                                + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
                 texteDepot.setFill(Color.RED);
-                this.zoneTexte.getChildren().add(texteDepot);
+                fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+                fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
                 int i = 1;
 
                 // parcours des requêtes
@@ -100,6 +106,8 @@ public class VueTextuelle {
         }
 
         public void afficherPlanning(Planning planning, Carte carte) {
+                // TODO : Passer la logique applicative dans planning,e t récupérer la
+                // listeDemande dans planning
                 ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
                 fenetre.setListeDemandes(listeDemandes);
                 try {
@@ -109,11 +117,22 @@ public class VueTextuelle {
                                         "src/main/java/fr/hexaone/view/requetes.fxml");
                         AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
 
+                        String depotName = getNomIntersection(planning, carte,
+                                        carte.getIntersections().get(planning.getIdDepot()));
+
+                        String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
+                                        + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
+                                        + getStringFromDate(planning.getDateFin());
+
+                        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+                        fenetre.getFenetreControleur().getDepotTextInformation().getChildren()
+                                        .add(new Text(depotString));
+
                         // Set person overview into the center of root layout.
                         this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
 
-                        RequetesControleurFXML controlleurRequete = loader.getController();
-                        controlleurRequete.setFenetre(fenetre);
+                        this.requetesControleur = loader.getController();
+                        requetesControleur.setFenetre(fenetre);
 
                 } catch (IOException e) {
                         e.printStackTrace();
@@ -132,55 +151,9 @@ public class VueTextuelle {
 
                 ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-                String depotName = getNomIntersection(planning, carte,
-                                carte.getIntersections().get(planning.getIdDepot()));
-
-                Demande depot = new Demande(TypeIntersection.DEPOT, planning.getIdDepot(), depotName, null, null);
-                depot.setDateDepart(planning.getDateDebut());
-                depot.setDateArrivee(planning.getDateFin());
-
-                // listeDemandes.add(depot);
-
-
-                // TODO FAIRE AVEC LES DEMANDES 
-                // planning.getDemandesOrdonnes
-
                 for (Demande demande : planning.getDemandesOrdonnees()) {
                         listeDemandes.add(demande);
                 }
-                
-                // parcours des requêtes
-                // for (Requete requete : planning.getRequetes()) {
-
-                //         Demande collecte = requete.getDemandeCollecte();
-                //         Demande livraison = requete.getDemandeLivraison();
-
-                //         // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-                //         // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
-
-                //         Date dateArriveeCollecte = planning.getDatesPassage()
-                //                         .get(requete.getDemandeCollecte().getIdIntersection());
-                //         Date dateDepartCollecte = planning.getDatesSorties()
-                //                         .get(requete.getDemandeCollecte().getIdIntersection());
-                //         Date dateArriveeLivraison = planning.getDatesPassage()
-                //                         .get(requete.getDemandeLivraison().getIdIntersection());
-                //         Date dateDepartLivraison = planning.getDatesSorties()
-                //                         .get(requete.getDemandeLivraison().getIdIntersection());
-
-                //         if (dateDepartCollecte != null)
-                //                 collecte.setDateDepart(dateDepartCollecte);
-                //         if (dateArriveeCollecte != null)
-                //                 collecte.setDateArrivee(dateArriveeCollecte);
-                //         if (dateDepartLivraison != null)
-                //                 livraison.setDateDepart(dateDepartLivraison);
-                //         if (dateArriveeLivraison != null)
-                //                 livraison.setDateArrivee(dateArriveeLivraison);
-
-                //         listeDemandes.add(collecte);
-                //         listeDemandes.add(livraison);
-                // }
-
-                // listeDemandes.add(fin);
 
                 return listeDemandes;
         }
@@ -242,7 +215,7 @@ public class VueTextuelle {
          * @param horaire  la date
          * @return une pair contenant l'heure et les minutes sous forme de String
          */
-        private Pair<String, String> getStringFromDate(Planning planning, Date horaire) {
+        private String getStringFromDate(Date horaire) {
 
                 Calendar date = Calendar.getInstance();
                 date.setTime(horaire);
@@ -251,23 +224,11 @@ public class VueTextuelle {
                 int minutes = date.get(Calendar.MINUTE);
                 String minutesString = minutes < 10 ? ("0" + minutes) : String.valueOf(minutes);
 
-                return new Pair<String, String>(heureString, minutesString);
+                return heureString + "h" + minutesString;
         }
 
-        /**
-         * Méthode qui permet de trier une Map selon la date passée en valeur
-         * 
-         * @param unSortedMap
-         * @return
-         */
-        private LinkedHashMap<Text, Date> getRequetesTrieesParDatePassage(Map<Text, Date> unSortedMap) {
-
-                // LinkedHashMap preserve the ordering of elements in which they are inserted
-                LinkedHashMap<Text, Date> sortedMap = new LinkedHashMap<>();
-
-                unSortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue())
-                                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
-
-                return sortedMap;
+        public RequetesControleurFXML getRequetesControleur() {
+                return requetesControleur;
         }
+
 }

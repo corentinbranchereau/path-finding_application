@@ -173,4 +173,11 @@ public interface State {
     default void annuler(Controleur c) {
         System.out.println("annuler [default state implementation]");
     }
+
+    /**
+     * méthode qui permet de passer dans l'état de modification de planning
+     */
+    default void modifierPlanning(Controleur c) {
+        System.out.println("modifierPlanning [default state implementation]");
+    }
 }

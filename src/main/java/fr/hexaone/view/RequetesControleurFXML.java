@@ -28,6 +28,8 @@ public class RequetesControleurFXML {
 
     protected Fenetre fenetre;
 
+    protected Boolean draggable = false;
+
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -44,27 +46,33 @@ public class RequetesControleurFXML {
         adresseColumn.setSortable(false);
 
         demandeTable.setRowFactory(tv -> {
-            TableRow<Demande> row = new TableRow<>();
+            TableRow<Demande> row = new TableRow<Demande>() {
+                // @Override
+                // protected void updateItem(Demande item, boolean empty) {
+                // super.updateItem(item, empty);
+                // setStyle("-fx-background-color: #baffba;");
+
+                // }
+            };
 
             row.setOnDragDetected(event -> {
-                if (!row.isEmpty()) {
+                if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
-                    if (index != 0 && index != demandeTable.getItems().size() - 1) {
-                        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                        db.setDragView(row.snapshot(null, null));
-                        ClipboardContent cc = new ClipboardContent();
-                        cc.put(SERIALIZED_MIME_TYPE, index);
-                        db.setContent(cc);
-                    }
+
+                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(row.snapshot(null, null));
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(SERIALIZED_MIME_TYPE, index);
+                    db.setContent(cc);
+
                     event.consume();
                 }
             });
 
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()
-                            && row.getIndex() != 0 && row.getIndex() != demandeTable.getItems().size() - 1) {
+                if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -73,7 +81,7 @@ public class RequetesControleurFXML {
 
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
 
@@ -95,7 +103,7 @@ public class RequetesControleurFXML {
             // TODO : check que le click droit permet bien de récupérer la Demande
             // "selectionnée"
             row.setOnMouseClicked(event -> {
-                if (event.getButton() == MouseButton.SECONDARY) {
+                if (event.getButton() == MouseButton.SECONDARY && !draggable) {
                     fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
                 }
             });
@@ -190,6 +198,24 @@ public class RequetesControleurFXML {
         demandeTable.sort();
         arriveeColumn.setSortable(false);
 
+    }
+
+    /**
+     * Set if the columns can be dragged or not
+     * 
+     * @param draggable
+     */
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
+    }
+
+    /**
+     * get if the columns are draggable
+     * 
+     * @return boolean
+     */
+    public Boolean getDraggable() {
+        return draggable;
     }
 
 }
