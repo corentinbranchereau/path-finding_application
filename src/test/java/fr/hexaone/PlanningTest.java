@@ -481,20 +481,23 @@ public class PlanningTest {
       *   - genererChromosomeAleatoire
       *   - verifierPop
       */
-    // @Test
-    // public void test_genererChromosome() {
+     @Test
+     public void test_genererChromosome() {
 
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-
-	//     requetes.add(new Requete((long)1,0,(long)3,0));
-	//     requetes.add(new Requete((long)4,0,(long)9,0));
-	//     requetes.add(new Requete((long)5,0,(long)7,0));
-    	
-    //     List<Long> chromosome=carte.genererChromosomeAleatoire(requetes) ;
+	     List<Demande> demandes = new ArrayList<Demande>();
+	    	
+	     Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
+	     Demande d2=new Demande(TypeIntersection.LIVRAISON,(long)3,"",(Integer)0,null);
+	     Demande d3=new Demande(TypeIntersection.COLLECTE,(long)4,"",(Integer)0,null);
+	     Demande d4=new Demande(TypeIntersection.LIVRAISON,(long)9,"",(Integer)0,null);
+	     Demande d5=new Demande(TypeIntersection.COLLECTE,(long)5,"",(Integer)0,null);
+	     Demande d6=new Demande(TypeIntersection.LIVRAISON,(long)7,"",(Integer)0,null);
+	     
+         List<Demande> chromosome=planning.genererChromosomeAleatoire(demandes) ;
         
-    //     assert (carte.verifierPop(chromosome, requetes) == true);
+         assert (planning.verifierPop(demandes) == true);
         
-    // }
+     }
     
     /**
      * Méthode de test de la boucle principale de l'algorithme génétique
