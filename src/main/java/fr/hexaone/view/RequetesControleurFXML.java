@@ -1,7 +1,13 @@
 package fr.hexaone.view;
 
+import java.util.Map;
+
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
+import javafx.scene.control.Cell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -10,6 +16,8 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class RequetesControleurFXML {
 
@@ -47,12 +55,28 @@ public class RequetesControleurFXML {
 
         demandeTable.setRowFactory(tv -> {
             TableRow<Demande> row = new TableRow<Demande>() {
-                // @Override
-                // protected void updateItem(Demande item, boolean empty) {
-                // super.updateItem(item, empty);
-                // setStyle("-fx-background-color: #baffba;");
+                @Override
+                public void updateIndex(int i) {
+                    super.updateIndex(i);
+                    doUpdateItem(getItem());
+                }
 
-                // }
+                @Override
+                protected void updateItem(Demande item, boolean empty) {
+                    super.updateItem(item, empty);
+                    doUpdateItem(item);
+                }
+
+                protected void doUpdateItem(Demande item) {
+                    if (item != null) {
+                        Map<Requete, Color> mapCouleur = fenetre.getMapCouleurRequete();
+                        Color couleur = mapCouleur.get(item.getRequete());
+                        if (getChildren().size() > 0) {
+                            ((Cell) getChildren().get(0)).setTextFill(couleur);
+                        }
+                        setTextFill(couleur);
+                    }
+                }
             };
 
             row.setOnDragDetected(event -> {
@@ -111,6 +135,7 @@ public class RequetesControleurFXML {
             return row;
         });
 
+        typeColumn.setPrefWidth(typeColumn.getPrefWidth() + 1);
         // Listen for selection changes and show the person details when changed.
         // personTable.getSelectionModel().selectedItemProperty()
         // .addListener((observable, oldValue, newValue) ->
