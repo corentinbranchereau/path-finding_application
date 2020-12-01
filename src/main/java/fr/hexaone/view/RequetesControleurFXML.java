@@ -1,5 +1,7 @@
 package fr.hexaone.view;
 
+import java.lang.ModuleLayer.Controller;
+
 import fr.hexaone.model.Demande;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -96,7 +98,8 @@ public class RequetesControleurFXML {
             // "selectionnée"
             row.setOnMouseClicked(event -> {
                 if (event.getButton() == MouseButton.SECONDARY) {
-                    fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
+                    fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
+                    //fenetre.controleur.supprimerRequete();
                 }
             });
 

@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
+import fr.hexaone.model.Requete;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
 import fr.hexaone.utils.exception.FileBadExtensionException;
@@ -116,7 +117,7 @@ public interface State {
     }
 
     default void supprimerRequete(Controleur c, Demande demande) {
-        System.out.println("supprimerRequete [default state implementation]");
+        System.out.println("Il faut avoir calculé la tournée pour supprimer des requetes");
     }
 
     /**
