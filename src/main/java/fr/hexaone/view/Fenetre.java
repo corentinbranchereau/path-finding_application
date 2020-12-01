@@ -362,7 +362,6 @@ public class Fenetre {
             fenetreControleur.getBoutonSupprimerRequete().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.supprimerRequete();
-                    ;
                 }
             });
 

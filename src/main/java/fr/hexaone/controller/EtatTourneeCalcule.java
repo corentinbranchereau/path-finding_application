@@ -90,6 +90,8 @@ public class EtatTourneeCalcule implements State {
             c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
             // TODO Supprimer la requete de l'observable list de Coco ?
             // afficherSuppressionRequeteVueTextuelle(requete);
+
+            c.resetDemandeSelectionnee();
         }
     }
 }
