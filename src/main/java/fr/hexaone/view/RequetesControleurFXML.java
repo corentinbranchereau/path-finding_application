@@ -153,9 +153,7 @@ public class RequetesControleurFXML {
             });
 
             row.setOnMouseClicked(event -> {
-                if (event.getButton() == MouseButton.SECONDARY && !draggable) {
-                    // fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
-                }
+                fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
             });
 
             return row;
