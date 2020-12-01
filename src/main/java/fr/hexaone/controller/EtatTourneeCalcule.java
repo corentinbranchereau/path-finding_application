@@ -101,6 +101,9 @@ public class EtatTourneeCalcule implements State {
      * {@inheritDoc}
      */
     public void modifierPlanning(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Valider");
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
         c.setEtatCourant(c.etatModifierPlanning);

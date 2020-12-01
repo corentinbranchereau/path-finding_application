@@ -28,6 +28,9 @@ public class EtatModifierPlanning implements State {
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(false);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(false);
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Modifier l'ordre");
         List<Demande> nouvelOrdre = new ArrayList<Demande>();
