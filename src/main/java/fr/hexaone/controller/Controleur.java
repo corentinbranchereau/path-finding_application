@@ -156,6 +156,22 @@ public class Controleur {
     }
 
     /**
+     * Réinitialise la saisie de l'utilisateur.
+     */
+    public void resetDemandeSelectionnee() {
+        demandeSelectionnee = null;
+    }
+
+    /**
+     * Sélectionne une demande dans la vue textuelle de l'application.
+     * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
+     */
+    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
+        this.demandeSelectionnee = demandeSelectionnee;
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
+    }
+
+    /**
      * Renvoie la fenêtre de l'application.
      * 
      * @return La fenêtre de l'application
@@ -207,20 +223,5 @@ public class Controleur {
      */
     public void setCarte(Carte carte) {
         this.carte = carte;
-    }
-
-    /**
-     * TODO Vérifer si nécessaire Permet de déselectionner une demande
-     */
-    public void resetDemandeSelectionnee() {
-        demandeSelectionnee = null;
-    }
-
-    /**
-     * TODO Vérifer si nécessaire Permet de selectionner un requete
-     */
-    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
     }
 }
