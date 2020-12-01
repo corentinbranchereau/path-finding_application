@@ -547,44 +547,45 @@ public class PlanningTest {
         
     }
     
-    // /**
-    //  * Méthode de test de la boucle principale de l'algorithme génétique
-    //  * 
-    //  * Précondition :
-    //  *   - calculerLesCheminsLesPlusCourts
-    //  *   - cout
-    //  *   - mutationLocalSearch
-    //  *   - genererChromosomeAleatoire
-    //  *   - verifierPop
-    //  *   - correctionCrossover
-    //  */
-    // @Test
-    // public void test_trouverMeilleureTournee_normal() {
+    /**
+      * Méthode de test de la boucle principale de l'algorithme génétique
+      * 
+      * Précondition :
+      *   - calculerLesCheminsLesPlusCourts
+      *   - cout
+      *   - mutationLocalSearch
+      *   - genererChromosomeAleatoire
+      *   - verifierPop
+      *   - correctionCrossover
+      */
+     @Test
+     public void test_trouverMeilleureTournee_normal() {
 
-    //     // Création d'un grap simple
-    //     createGraph();
+         // Création d'un grap simple
 
-    //     // Création des requetes
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-    //     requetes.add(new Requete(3,5,5,5));
-    //     requetes.add(new Requete(6,5,8,5));
-    //     requetes.add(new Requete(9,5,4,5));
+         // Création des requetes
+     	List<Requete> requetes = new ArrayList<Requete>();
+     	 
+     	Requete requete1 = new Requete(3,5,"",5,5,"");
+     	Requete requete2 = new Requete(6,5,"",8,5,"");
+     	Requete requete3 = new Requete(9,5,"",4,5,"");
+     	
+     	requetes.add(requete1);
+     	requetes.add(requete2);
+     	requetes.add(requete3);
+	 	
+	    //Calcul des chemins les plus courts
+	    planning.calculerLesTrajetsLesPlusCourts(createGraph());
+	    planning.setIdDepot(0L);
+	    planning.setDateDebut(new Date(0));
+	    planning.setRequetes(requetes);
+	
+	    //recherche de la meilleur solution
+	    planning.calculerMeilleurTournee();
+	
+	    assert(planning.cout(planning.getDemandesOrdonnees())<=81.0);
         
-    //     //Calcul des chemins les plus courts
-    //     carte.calculerLesTrajetsLesPlusCourts(requetes);
-
-    //     Planning planning = new Planning(carte);
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-
-    //     planning.generateNewId();
-
-    //     //recherche de la meilleur solution
-    //     List<Long> bestSolution=carte.trouverMeilleureTournee(requetes);
-
-    //     assert(carte.cout(bestSolution)<=81.0);
-        
-    // }
+     }
 
     /**
      * Méthode de test pour vérifier les horraires de la tournée calculés
