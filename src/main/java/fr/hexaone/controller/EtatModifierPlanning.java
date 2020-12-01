@@ -36,12 +36,11 @@ public class EtatModifierPlanning implements State {
         }
         c.getPlanning().setDemandesOrdonnees(nouvelOrdre);
         c.getPlanning().recalculerTournee();
-        // c.getFenetre().getVueGraphique().effacerTrajets();
-        // for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-        // Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-        // c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet,
-        // couleur);
-        // }
+        c.getFenetre().getVueGraphique().effacerTrajets();
+        for (Trajet trajet : c.getPlanning().getListeTrajets()) {
+            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+            c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
+        }
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
         c.setEtatCourant(c.etatTourneeCalcule);
     }
