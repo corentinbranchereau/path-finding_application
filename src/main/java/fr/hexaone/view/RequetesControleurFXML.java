@@ -22,6 +22,9 @@ import javafx.scene.paint.Paint;
 
 public class RequetesControleurFXML {
 
+    /**
+     * le tableau
+     */
     @FXML
     protected TableView<Demande> demandeTable;
     @FXML
@@ -37,8 +40,15 @@ public class RequetesControleurFXML {
 
     protected Fenetre fenetre;
 
+    /**
+     * définit si les cases du tableau peuvent être déplacées ou non
+     */
     protected Boolean draggable = false;
 
+    /**
+     * Méthode qui se lance après le constructeur, une fois les éléments FXML
+     * chargés On définit les règles d'affichage du tableau
+     */
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -230,6 +240,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * définit la fenetre, mais également associe les items du tableau, et les trie
+     * 
      * @param fenetre the fenetre to set
      */
     public void setFenetre(Fenetre fenetre) {

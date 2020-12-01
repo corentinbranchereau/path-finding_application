@@ -158,6 +158,11 @@ public class VueTextuelle {
                 return listeDemandes;
         }
 
+        public void effacerVueTextuelle() {
+                this.zoneTexte.getChildren().clear();
+                this.fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        }
+
         /**
          * Méthode qui permet d'afficher le popup demande nouvelle livraison dans la vue
          * textuelle
