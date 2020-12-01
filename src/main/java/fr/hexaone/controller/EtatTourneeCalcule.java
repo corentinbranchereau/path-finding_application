@@ -52,6 +52,7 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
         c.etatAjoutNouvelleRequete.setIdPickup(null);
         c.etatAjoutNouvelleRequete.setIdDelivery(null);

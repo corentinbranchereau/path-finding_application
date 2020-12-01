@@ -114,7 +114,8 @@ public class EtatAjoutNouvelleRequete implements State {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
-        c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte,nouvelleRequete,c.getFenetre().getMapCouleurRequete());
+        c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte, nouvelleRequete,
+                c.getFenetre().getMapCouleurRequete());
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         this.annuler(c);
@@ -125,6 +126,7 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void annuler(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
