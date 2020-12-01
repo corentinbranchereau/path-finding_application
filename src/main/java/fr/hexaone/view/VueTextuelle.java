@@ -82,26 +82,53 @@ public class VueTextuelle {
                 fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
                 int i = 1;
 
+                ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+
                 // parcours des requêtes
                 for (Requete requete : planning.getRequetes()) {
 
-                        String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-                        String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
+                        listeDemandes.add(requete.getDemandeCollecte());
+                        listeDemandes.add(requete.getDemandeLivraison());
+                        // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
+                        // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
 
-                        Text titreText = new Text("Requête " + i + ": \r\n");
-                        Text collecteIcon = new Text("     ■ ");
-                        Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-                                        + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
-                        Text livraisonIcon = new Text("     ● ");
-                        Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-                                        + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
-                        i++;
+                        // Text titreText = new Text("Requête " + i + ": \r\n");
+                        // Text collecteIcon = new Text(" ■ ");
+                        // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
+                        // + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
+                        // Text livraisonIcon = new Text(" ● ");
+                        // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
+                        // + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
+                        // i++;
 
-                        collecteIcon.setFill(mapCouleurRequete.get(requete));
-                        livraisonIcon.setFill(mapCouleurRequete.get(requete));
+                        // collecteIcon.setFill(mapCouleurRequete.get(requete));
+                        // livraisonIcon.setFill(mapCouleurRequete.get(requete));
 
-                        this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText, livraisonIcon,
-                                        livraisonText);
+                        // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
+                        // livraisonIcon,
+                        // livraisonText);
+                }
+                fenetre.setListeDemandes(listeDemandes);
+
+                try {
+                        // Load textual tab.
+                        FXMLLoader loader = new FXMLLoader();
+                        FileInputStream inputFichierFxml = new FileInputStream(
+                                        "src/main/java/fr/hexaone/view/requetes.fxml");
+                        AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+
+                        // Set person overview into the center of root layout.
+                        this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
+
+                        this.requetesControleur = loader.getController();
+                        requetesControleur.getArriveeColumn()
+                                        .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
+                        requetesControleur.getArriveeColumn().setText("Durée");
+                        requetesControleur.getDepartColumn().setVisible(false);
+                        requetesControleur.setFenetre(fenetre);
+
+                } catch (IOException e) {
+                        e.printStackTrace();
                 }
         }
 
