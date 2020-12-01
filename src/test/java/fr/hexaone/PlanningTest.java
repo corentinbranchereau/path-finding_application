@@ -314,46 +314,55 @@ public class PlanningTest {
      }
     
      /**
-    //  * Méthode de test de la vérification de la génération d'un chromosome enfant
-    //  */
-    // @Test
-    // public void test_crossoverOX() {
+      * Méthode de test de la vérification de la génération d'un chromosome enfant
+      */
+     @Test
+     public void test_crossoverOX() {
 
-    // 	List<Long> P1 = new ArrayList<Long>();
-    // 	List<Long> P2 = new ArrayList<Long>();
+     	List<Demande> P1 = new ArrayList<Demande>();
+    	List<Demande> P2 = new ArrayList<Demande>();
     	
-    // 	P1.add((long)1);
-    // 	P1.add((long)3);
-    // 	P1.add((long)2);
-    // 	P1.add((long)6);
-    // 	P1.add((long)4);
-    // 	P1.add((long)5);
-    // 	P1.add((long)9);
-    // 	P1.add((long)7);
-    // 	P1.add((long)8);
+    	Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
+    	Demande d2=new Demande(TypeIntersection.COLLECTE,(long)2,"",(Integer)0,null);
+    	Demande d3=new Demande(TypeIntersection.COLLECTE,(long)3,"",(Integer)0,null);
+    	Demande d4=new Demande(TypeIntersection.COLLECTE,(long)4,"",(Integer)0,null);
+    	Demande d5=new Demande(TypeIntersection.COLLECTE,(long)5,"",(Integer)0,null);
+    	Demande d6=new Demande(TypeIntersection.COLLECTE,(long)6,"",(Integer)0,null);
+    	Demande d7=new Demande(TypeIntersection.COLLECTE,(long)7,"",(Integer)0,null);
+    	Demande d8=new Demande(TypeIntersection.COLLECTE,(long)8,"",(Integer)0,null);
+    	Demande d9=new Demande(TypeIntersection.COLLECTE,(long)9,"",(Integer)0,null);
     	
-    // 	P2.add((long)3);
-    // 	P2.add((long)7);
-    // 	P2.add((long)8);
-    // 	P2.add((long)1);
-    // 	P2.add((long)4);
-    // 	P2.add((long)9);
-    // 	P2.add((long)2);
-    // 	P2.add((long)5);
-    // 	P2.add((long)6);
+    	P1.add(d1);
+    	P1.add(d3);
+    	P1.add(d2);
+    	P1.add(d6);
+    	P1.add(d4);
+    	P1.add(d5);
+    	P1.add(d9);
+    	P1.add(d7);
+    	P1.add(d8);
     	
+    	P2.add(d3);
+    	P2.add(d7);
+    	P2.add(d8);
+    	P2.add(d1);
+    	P2.add(d4);
+    	P2.add(d9);
+    	P2.add(d2);
+    	P2.add(d5);
+    	P2.add(d6);
     	
-    //     List<Long> enfant=carte.crossoverOX(P1,P2,3,5); 
-     
-    //     int[]res= {8,1,9,6,4,5,2,3,7};
+        List<Demande> enfant=planning.crossoverOX(P1,P2,3,5); 
+         
+        int[]res= {8,1,9,6,4,5,2,3,7};
         
-    //     for(int i=0;i<enfant.size();i++) {
-    //     	assert((long)res[i]==enfant.get(i));
-    //     }
+        for(int i=0;i<enfant.size();i++) {
+        	assert((long)res[i]==enfant.get(i).getIdIntersection());
+        }
 
-    // }
+     }
     
-
+     
     /**
      * Méthode de test pour vérifier le calul du coup total d'une tournée
      * 

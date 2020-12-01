@@ -701,7 +701,7 @@ public class Planning{
         for (int k = 0; k < P1.size(); k++) {
             child.add(null);
         }
-
+        
         int max = max(i, j);
         int min = min(i, j);
 
@@ -726,6 +726,7 @@ public class Planning{
             if (p >= P1.size()) {
                 p = 0;
             }
+            
             if (intersectionsVus.contains(P2.get(k))) {
                 k++;
                 continue;
