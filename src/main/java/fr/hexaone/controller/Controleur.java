@@ -1,11 +1,13 @@
 package fr.hexaone.controller;
 
 import fr.hexaone.view.Fenetre;
+import fr.hexaone.view.RequetesControleurFXML;
 import javafx.stage.Stage;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
+import fr.hexaone.model.Requete;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
@@ -30,6 +32,12 @@ public class Controleur {
      * Planning actuel de l'application
      */
     protected Planning planning;
+
+    /**
+     * Demande seclectionné par l'utilisateur après un clic sur la vue graphique ou
+     * textuelle
+     */
+    protected Demande demandeSelectionnee;
 
     /**
      * Etat courant du design pattern STATE
@@ -120,8 +128,8 @@ public class Controleur {
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
-    public void supprimerRequete(Demande demande) {
-        etatCourant.supprimerRequete(this, demande);
+    public void supprimerRequete() {
+        etatCourant.supprimerRequete(this, demandeSelectionnee);
     }
 
     /**
@@ -155,6 +163,22 @@ public class Controleur {
 
     public void modifierPlanning() {
         etatCourant.modifierPlanning(this);
+    }
+
+    /**
+     * Réinitialise la saisie de l'utilisateur.
+     */
+    public void resetDemandeSelectionnee() {
+        demandeSelectionnee = null;
+    }
+
+    /**
+     * Sélectionne une demande dans la vue textuelle de l'application.
+     * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
+     */
+    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
+        this.demandeSelectionnee = demandeSelectionnee;
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
     }
 
     /**

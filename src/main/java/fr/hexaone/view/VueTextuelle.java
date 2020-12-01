@@ -175,7 +175,36 @@ public class VueTextuelle {
          * Méthode qui permet d'afficher la nouvelle demande de livraison sur la vue
          * textuelle
          */
-        public void afficherNouvelleRequeteVueTextuelle() {
+        public void afficherNouvelleRequeteVueTextuelle(Requete nouvelleRequete,
+                        Map<Requete, Color> mapCouleurRequete) {
+                // TODO
+                // String nomCollecte =
+                // nouvelleRequete.getDemandeCollecte().getNomIntersection();
+                // String nomLivraison =
+                // nouvelleRequete.getDemandeLivraison().getNomIntersection();
+
+                // Text titreText = new Text("Requête " + i + ": \r\n");
+                // Text collecteIcon = new Text(" ■ ");
+                // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
+                // + String.valueOf(nouvelleRequete.getDemandeCollecte().getDuree()) + "s" +
+                // "\r\n");
+                // Text livraisonIcon = new Text(" ● ");
+                // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
+                // + String.valueOf(nouvelleRequete.getDemandeLivraison().getDuree()) + "s" +
+                // "\r\n\n");
+
+                // collecteIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
+                // livraisonIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
+
+                // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
+                // livraisonIcon,
+                // livraisonText);
+        }
+
+        /**
+         * Méthode qui permet de supprimer la demande de livraison sur la vue textuelle
+         */
+        public void afficherSuppressionRequeteVueTextuelle() {
                 // TODO
         }
 

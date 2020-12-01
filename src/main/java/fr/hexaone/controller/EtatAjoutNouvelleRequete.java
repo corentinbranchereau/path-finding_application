@@ -106,17 +106,18 @@ public class EtatAjoutNouvelleRequete implements State {
         }
         Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), nomPickup, idDelivery,
                 Integer.parseInt(deliveryDurationField), nomDelivery);
+
         c.getPlanning().ajouterRequete(nouvelleRequete);
+
         c.getFenetre().getVueGraphique().effacerTrajets();
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
+
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         this.annuler(c);
-
-        // TODO : Ajouter notre nouvelle requête à l'observable liste de Corentin
     }
 
     /**

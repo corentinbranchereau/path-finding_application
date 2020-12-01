@@ -359,6 +359,12 @@ public class Fenetre {
                 }
             });
 
+            fenetreControleur.getBoutonSupprimerRequete().setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    controleur.supprimerRequete();
+                }
+            });
+
             fenetreControleur.getBoutonValider().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
 

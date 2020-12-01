@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 import fr.hexaone.model.Segment;
+import fr.hexaone.utils.exception.BadFileTypeException;
 import fr.hexaone.utils.exception.IllegalAttributException;
+import fr.hexaone.utils.exception.RequestOutOfMapException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -34,9 +36,9 @@ public class XMLDeserializer {
      * @param carte La carte où charger les données.
      * @param xml   Le document XML bien formé contenant les données.
      */
-    public static void loadCarte(Carte carte, Document xml) throws IllegalAttributException {
+    public static void loadCarte(Carte carte, Document xml) throws IllegalAttributException, BadFileTypeException {
         Map<Long, Intersection> intersections = carte.getIntersections();
-
+        if(xml.getElementsByTagName("map").getLength()==0) throw new BadFileTypeException("Le fichier XML chargé n'est pas de type map.");
         try{
             // Charger les intersections
             NodeList ns = xml.getElementsByTagName("intersection");
@@ -72,7 +74,8 @@ public class XMLDeserializer {
      * @param planning Le planning où charger les données.
      * @param xml      Le fichier XML bien formé contenant les données.
      */
-    public static void loadRequete(Document xml, Planning planning) throws IllegalAttributException {
+    public static void loadRequete(Document xml, Planning planning) throws IllegalAttributException, BadFileTypeException, RequestOutOfMapException {
+        if(xml.getElementsByTagName("planningRequest").getLength()==0) throw new BadFileTypeException("Le fichier XML chargé n'est pas de type request.");
         try {
             // Récupèrer le depot
             Element depotTag = (Element) xml.getElementsByTagName("depot").item(0);
@@ -88,6 +91,8 @@ public class XMLDeserializer {
                 int pickupDuration = Integer.parseInt(requeteTag.getAttribute("pickupDuration")),
                         deliveryDuration = Integer.parseInt(requeteTag.getAttribute("deliveryDuration"));
                 String nomPickup = "";
+                if(!(planning.getCarte().getIntersections().containsKey(idPickup) && planning.getCarte().getIntersections().containsKey(idDelivery))) throw new RequestOutOfMapException("Une requête du fichier XML n'est pas disponible dans la carte chargée.");
+
                 for(Segment s : planning.getCarte().getIntersections().get(idPickup).getSegmentsArrivants()){
                     if(!s.getNom().isEmpty()) {
                         nomPickup = s.getNom();

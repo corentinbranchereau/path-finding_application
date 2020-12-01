@@ -1,6 +1,7 @@
 package fr.hexaone.view;
 
 import java.util.Map;
+import java.lang.ModuleLayer.Controller;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
@@ -151,11 +152,9 @@ public class RequetesControleurFXML {
                 }
             });
 
-            // TODO : check que le click droit permet bien de récupérer la Demande
-            // "selectionnée"
             row.setOnMouseClicked(event -> {
                 if (event.getButton() == MouseButton.SECONDARY && !draggable) {
-                    fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
+                    // fenetre.controleur.supprimerRequete(demandeTable.getSelectionModel().getSelectedItem());
                 }
             });
 
