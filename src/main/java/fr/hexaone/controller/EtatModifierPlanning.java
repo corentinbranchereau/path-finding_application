@@ -27,7 +27,6 @@ public class EtatModifierPlanning implements State {
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Modifier l'ordre");
         List<Demande> nouvelOrdre = new ArrayList<Demande>();
         for (Demande demande : c.getFenetre().getListeDemandes()) {
-            System.out.println(demande.getDateDepartProperty().get());
             nouvelOrdre.add(demande);
         }
         c.getPlanning().setDemandesOrdonnees(nouvelOrdre);

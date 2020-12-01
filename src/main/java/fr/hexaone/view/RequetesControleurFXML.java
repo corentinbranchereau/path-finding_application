@@ -4,6 +4,7 @@ import java.util.Map;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
+import fr.hexaone.model.TypeIntersection;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
@@ -107,19 +108,35 @@ public class RequetesControleurFXML {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+                    int droppedIndex = row.getIndex();
 
-                    int dropIndex;
-
-                    if (row.isEmpty()) {
-                        dropIndex = demandeTable.getItems().size();
+                    Demande draggedDemande = demandeTable.getItems().get(draggedIndex);
+                    Demande draggedDemandeOpposee;
+                    if (draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeLivraison();
                     } else {
-                        dropIndex = row.getIndex();
+                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeCollecte();
                     }
-                    demandeTable.getItems().add(dropIndex, draggedPerson);
+                    int draggedIndexOposee = demandeTable.getItems().indexOf(draggedDemandeOpposee);
 
-                    event.setDropCompleted(true);
-                    demandeTable.getSelectionModel().select(dropIndex);
+                    if ((draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE
+                            && droppedIndex < draggedIndexOposee)
+                            || (draggedDemande.getTypeIntersection() == TypeIntersection.LIVRAISON
+                                    && droppedIndex > draggedIndexOposee)) {
+                        Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+
+                        int dropIndex;
+
+                        if (row.isEmpty()) {
+                            dropIndex = demandeTable.getItems().size();
+                        } else {
+                            dropIndex = row.getIndex();
+                        }
+                        demandeTable.getItems().add(dropIndex, draggedPerson);
+
+                        event.setDropCompleted(true);
+                        demandeTable.getSelectionModel().select(dropIndex);
+                    }
                     event.consume();
                 }
             });
