@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import fr.hexaone.utils.exception.BadFileTypeException;
-import fr.hexaone.utils.exception.DTDValidationException;
-import fr.hexaone.utils.exception.IllegalAttributException;
+import fr.hexaone.utils.exception.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -16,7 +14,6 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
-import fr.hexaone.utils.exception.FileBadExtensionException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -107,6 +104,8 @@ public interface State {
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
             } catch (BadFileTypeException e){
+                System.out.println(e.getMessage());
+            } catch (RequestOutOfMapException e){
                 System.out.println(e.getMessage());
             }
         } else {

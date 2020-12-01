@@ -7,10 +7,7 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
-import fr.hexaone.utils.exception.BadFileTypeException;
-import fr.hexaone.utils.exception.DTDValidationException;
-import fr.hexaone.utils.exception.FileBadExtensionException;
-import fr.hexaone.utils.exception.IllegalAttributException;
+import fr.hexaone.utils.exception.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -265,6 +262,26 @@ public class XMLDeserializerTest {
     public void shouldLoadRequestThrowBadFileTypeException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, IllegalArgumentException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         assertThrows(BadFileTypeException.class, () -> { XMLDeserializer.loadRequete(xml, planning); });
+    }
+
+    /**
+     * Test le chargement de requêtes dont une ou plusieurs n'est pas disponible dans la
+     * carte actuellement chargée.
+     * Une RequestOutOfMapException est levée.
+     * @throws SAXException
+     * @throws FileBadExtensionException
+     * @throws DTDValidationException
+     * @throws IOException
+     * @throws IllegalArgumentException
+     * @throws BadFileTypeException
+     */
+    @Test
+    public void shouldLoadRequestThrowRequestOutOfMapException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, BadFileTypeException, RequestOutOfMapException, IllegalAttributException {
+        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
+        XMLDeserializer.loadCarte(carte, xml);
+        xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsLarge9.xml");
+        Document finalXml = xml;
+        assertThrows(RequestOutOfMapException.class, () -> { XMLDeserializer.loadRequete(finalXml,planning); });
     }
 
     @AfterEach
