@@ -444,44 +444,6 @@ public class VueGraphique {
             this.paneDessin.getChildren().add(ligneSegment);
             this.listeLignesTrajets.add(ligneSegment);
         }
-    }
-
-    /**
-     * Cette méthode permet de dessiner le trajet passé en paramètre avec la couleur
-     * choisie.
-     * 
-     * @param carte   La carte actuelle de l'application, contenant les
-     *                intersections
-     * @param trajet  Le trajet à dessiner
-     * @param couleur La couleur du trajet
-     */
-    public void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
-        // On parcourt tous les segments composant le trajet
-        for (Segment segment : trajet.getListeSegments()) {
-            // On calcule les coordonnées du départ et de l'arrivée
-            Intersection depart = carte.getIntersections().get(segment.getDepart());
-
-            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
-            coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
-
-            Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
-
-            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
-            coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
-
-            // On crée une ligne pour le segment
-            Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
-                    coordArrivee.getY());
-            ligneSegment.setStroke(couleur);
-            ligneSegment.setStrokeWidth(3.0);
-
-            // On change le "viewOrder" pour que les trajets apparaissent derrière les
-            // intersections
-            ligneSegment.setViewOrder(2);
-
-            this.paneDessin.getChildren().add(ligneSegment);
-            this.listeLignesTrajets.add(ligneSegment);
-        }
 
         // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
     }
