@@ -1,5 +1,6 @@
 package fr.hexaone;
 
+import fr.hexaone.model.AlgoTSP;
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Intersection;
@@ -249,9 +250,9 @@ public class PlanningTest {
         Requete r2 = new Requete(4,0,"",9,0,"");
         Requete r3 = new Requete(5,0,"",7,0,"");
 
-        List<Demande> demandes1 = new ArrayList<Demande>();
-        List<Demande> demandes2 = new ArrayList<Demande>();
-        List<Demande> demandes3 = new ArrayList<Demande>();
+        List<Object> demandes1 = new ArrayList<Object>();
+        List<Object> demandes2 = new ArrayList<Object>();
+        List<Object> demandes3 = new ArrayList<Object>();
 
         demandes1.add(r1.getDemandeCollecte());
         demandes1.add(r2.getDemandeCollecte());
@@ -273,11 +274,12 @@ public class PlanningTest {
         demandes2.add(r2.getDemandeLivraison());
         demandes2.add(r3.getDemandeCollecte());
         demandes2.add(r3.getDemandeLivraison());
-
-
-        assert (planning.verifierPop(demandes1) == true);
-        assert (planning.verifierPop(demandes2) == false);
-        assert (planning.verifierPop(demandes3) == true);
+        
+        AlgoTSP algo=new AlgoTSP(null,null);
+        
+        assert (algo.verifierPop(demandes1) == true);
+        assert (algo.verifierPop(demandes2) == false);
+        assert (algo.verifierPop(demandes3) == true);
 
     }
 
@@ -287,10 +289,9 @@ public class PlanningTest {
      @Test
     public void test_espacePopulation() {
 
-     	List<Demande> listIntersections1 = new ArrayList<Demande>();
-        List<Demande> listIntersections2 = new ArrayList<Demande>();
-        List<Demande> listIntersections3 = new ArrayList<Demande>();
-
+     	List<Object> listIntersections1 = new ArrayList<Object>();
+        List<Object> listIntersections2 = new ArrayList<Object>();
+        List<Object> listIntersections3 = new ArrayList<Object>();
 
         for (int i = 0; i < 10; i++) {
             listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i,"",(Integer)0,null));
@@ -299,7 +300,7 @@ public class PlanningTest {
 
         }
 
-        List<Pair<List<Demande>, Double>> pop = new ArrayList<Pair<List<Demande>, Double>>();
+        List<Pair<List<Object>, Double>> pop = new ArrayList<Pair<List<Object>, Double>>();
 
         pop.add(new Pair<>(listIntersections1, 1.0));
 
@@ -307,9 +308,10 @@ public class PlanningTest {
 
         pop.add(new Pair<>(listIntersections3, 8.0));
 
-       assert (planning.espacePopulation(pop, 10) == false);
-
-       assert (planning.espacePopulation(pop, 1) == true);
+        AlgoTSP algo=new AlgoTSP(null,null);
+        
+       assert (algo.espacePopulation(pop, 10.0) == false);
+       assert (algo.espacePopulation(pop, 1.0) == true);
 
      }
 
@@ -319,8 +321,8 @@ public class PlanningTest {
      @Test
      public void test_crossoverOX() {
 
-     	List<Demande> P1 = new ArrayList<Demande>();
-    	List<Demande> P2 = new ArrayList<Demande>();
+     	List<Object> P1 = new ArrayList<Object>();
+    	List<Object> P2 = new ArrayList<Object>();
 
     	Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
     	Demande d2=new Demande(TypeIntersection.COLLECTE,(long)2,"",(Integer)0,null);
@@ -352,12 +354,14 @@ public class PlanningTest {
     	P2.add(d5);
     	P2.add(d6);
 
-        List<Demande> enfant=planning.crossoverOX(P1,P2,3,5);
+    	AlgoTSP algo=new AlgoTSP(null,null);
+    	
+        List<Object> enfant=algo.crossoverOX(P1,P2,3,5);
 
         int[]res= {8,1,9,6,4,5,2,3,7};
 
         for(int i=0;i<enfant.size();i++) {
-        	assert((long)res[i]==enfant.get(i).getIdIntersection());
+        	assert((long)res[i]==((Demande)enfant.get(i)).getIdIntersection());
         }
 
      }
@@ -391,11 +395,13 @@ public class PlanningTest {
         //Calcul des chemins les plus courts
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
-        List<Demande> chromosome = new ArrayList<Demande>();
+        List<Object> chromosome = new ArrayList<Object>();
     	chromosome.add(requetes.get(0).getDemandeCollecte());
         chromosome.add(requetes.get(0).getDemandeLivraison());
+        
+        AlgoTSP algo=new AlgoTSP(0L,planning.getTrajetsLesPlusCourts());
 
-        Double cout = planning.cout(chromosome);
+        Double cout = algo.cout(chromosome);
 
         assert(cout == 5);
     }
@@ -430,11 +436,13 @@ public class PlanningTest {
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
 
-        List<Demande> chromosome = new ArrayList<Demande>();
+        List<Object> chromosome = new ArrayList<Object>();
     	chromosome.add(requetes.get(0).getDemandeCollecte());
         chromosome.add(requetes.get(0).getDemandeLivraison());
 
-        Double cout = planning.cout(chromosome);
+        AlgoTSP algo=new AlgoTSP(0L,planning.getTrajetsLesPlusCourts());
+
+        Double cout = algo.cout(chromosome);
 
         assert(cout >= Double.MAX_VALUE);
     }
@@ -461,16 +469,20 @@ public class PlanningTest {
          planning2.setIdDepot(0L);
          planning2.setRequetes(requetes);
 
-	     List<Demande> P1 = new ArrayList<Demande>();
+	     List<Object> P1 = new ArrayList<Object>();
 
      	 P1.add(new Demande(TypeIntersection.COLLECTE,(long)3,"",(Integer)0,null));
      	 P1.add(new Demande(TypeIntersection.LIVRAISON,(long)5,"",(Integer)0,null));
+     	 
+    	 
+      	 AlgoTSP algo=new AlgoTSP(0L,planning2.getTrajetsLesPlusCourts());
 
-     	 double cout1=planning2.cout(P1);
+     	 double cout1=algo.cout(P1);
+   
 
-	     List<Demande> mutation=planning2.mutationLocalSearch(P1,cout1);
+	     List<Object> mutation=algo.mutationLocalSearch(P1,cout1);
 
-	     assert(planning2.cout(mutation)<=cout1);
+	     assert(algo.cout(mutation)<=cout1);
 
      }
 
@@ -484,7 +496,7 @@ public class PlanningTest {
      @Test
      public void test_genererChromosome() {
 
-	     List<Demande> demandes = new ArrayList<Demande>();
+	     List<Object> demandes = new ArrayList<Object>();
 
 	     Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
 	     Demande d2=new Demande(TypeIntersection.LIVRAISON,(long)3,"",(Integer)0,null);
@@ -493,9 +505,11 @@ public class PlanningTest {
 	     Demande d5=new Demande(TypeIntersection.COLLECTE,(long)5,"",(Integer)0,null);
 	     Demande d6=new Demande(TypeIntersection.LIVRAISON,(long)7,"",(Integer)0,null);
 
-         List<Demande> chromosome=planning.genererChromosomeAleatoire(demandes) ;
+	     AlgoTSP algo=new AlgoTSP(0L,null);
+	     
+         List<Object> chromosome=algo.genererChromosomeAleatoire(demandes) ;
 
-         assert (planning.verifierPop(demandes) == true);
+         assert (algo.verifierPop(demandes) == true);
 
      }
 
@@ -582,8 +596,8 @@ public class PlanningTest {
 
 	    //recherche de la meilleur solution
 	    planning.calculerMeilleurTournee();
-
-	    assert(planning.cout(planning.getDemandesOrdonnees())<=81.0);
+	    
+	    assert(planning.getDureeTotale()<=49442.0);
 
      }
 
