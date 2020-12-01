@@ -439,50 +439,48 @@ public class PlanningTest {
         assert(cout >= Double.MAX_VALUE);
     }
     
-    // /**
-    //  * Méthode de test de la mutation avec recherche locale
-    //  * 
-    //  * Préconditions :
-    //  *   - calculerLesCheminsLesPlusCourts
-    //  */
-    // @Test
-    // public void test_MutationLocalSearch() {
+    /**
+      * Méthode de test de la mutation avec recherche locale
+      * 
+      * Préconditions :
+      *   - calculerLesCheminsLesPlusCourts
+      */
+     @Test
+     public void test_MutationLocalSearch() {
     	 
-    // 	//Création d'un graphe
-    //     createSimpleGraph();
-
-    //     //Création des requetes
-    //     List<Requete> requetes = new ArrayList<Requete>();
-    //     requetes.add(new Requete(1,5,3,5));
+     	//Création d'un graphe
         
-    //     //Calcul des chemins les plus courts
-    //     carte.calculerLesTrajetsLesPlusCourts(requetes);
+         //Création des requetes
+         List<Requete> requetes = new ArrayList<Requete>();
+         Requete requete = new Requete(1,5,"",3,5,"");
+         
+         Planning planning2 = new Planning(carte);
+         //Calcul des chemins les plus courts
+         planning2.calculerLesTrajetsLesPlusCourts(createGraph());
 
-    //     Planning planning = new Planning(carte);
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
+         planning2.setIdDepot(0L);
+         planning2.setRequetes(requetes);
 
-    //     planning.generateNewId();
+	     List<Demande> P1 = new ArrayList<Demande>();
 
-	//     List<Long> P1 = new ArrayList<Long>();
+     	 P1.add(new Demande(TypeIntersection.COLLECTE,(long)3,"",(Integer)0,null));
+     	 P1.add(new Demande(TypeIntersection.LIVRAISON,(long)5,"",(Integer)0,null));
+     	 
+     	 double cout1=planning2.cout(P1);
 
-    // 	P1.add(0L);
-    // 	P1.add(1L);
-
-	//     List<Long> mutation=carte.mutationLocalSearch(P1, carte.cout(P1), requetes);
-
-	    
-	//     assert(carte.cout(mutation)<=carte.cout(P1));
+	     List<Demande> mutation=planning2.mutationLocalSearch(P1,cout1);
+	     
+	     assert(planning2.cout(mutation)<=cout1);
         
-    // }
+     }
 
-    // /**
-    //  * Méthode de test pour la vérification de la génération d'un chromosome aléatoire
-    //  * 
-    //  * Préconditions :
-    //  *   - genererChromosomeAleatoire
-    //  *   - verifierPop
-    //  */
+     /**
+      * Méthode de test pour la vérification de la génération d'un chromosome aléatoire
+      * 
+      * Préconditions :
+      *   - genererChromosomeAleatoire
+      *   - verifierPop
+      */
     // @Test
     // public void test_genererChromosome() {
 
@@ -875,10 +873,12 @@ public class PlanningTest {
     /**
      * Méthode pour créer un graphe orienté simple avec 4 intersections
      */
-    private void createSimpleGraph() {
+    private List<Intersection> createSimpleGraph() {
         
         planning.setIdDepot(0L);
 
+        ArrayList<Intersection> intersections=new ArrayList<Intersection>();
+        
         Intersection i0 = new Intersection(0, 0, 0);
         Intersection i1 = new Intersection(1, 0, 0);
         Intersection i2 = new Intersection(2, 0, 0);
@@ -920,6 +920,15 @@ public class PlanningTest {
         carte.getIntersections().put(i1.getId(), i1);
         carte.getIntersections().put(i2.getId(), i2);
         carte.getIntersections().put(i3.getId(), i3);
+        
+
+        intersections.add(i0);
+        intersections.add(i1);
+        intersections.add(i2);
+        intersections.add(i3);
+        
+        return intersections;
+
 
         
     }
@@ -927,7 +936,7 @@ public class PlanningTest {
     /**
      * Méthode pour créer un graphe non orienté avec 10 intersections
      */
-    private void createGraph() {
+    private List<Intersection> createGraph() {
         //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
         
         planning.setIdDepot(0L);
@@ -1083,7 +1092,21 @@ public class PlanningTest {
         carte.getIntersections().put(i7.getId(), i7);
         carte.getIntersections().put(i8.getId(), i8);
         carte.getIntersections().put(i9.getId(), i9);
-
+        
+        ArrayList<Intersection> intersections=new ArrayList<Intersection>();
+        
+        intersections.add(i0);
+        intersections.add(i1);
+        intersections.add(i2);
+        intersections.add(i3);
+        intersections.add(i4);
+        intersections.add(i5);
+        intersections.add(i6);
+        intersections.add(i7);
+        intersections.add(i8);
+        intersections.add(i9);
+        
+        return intersections;
         
     }
 
