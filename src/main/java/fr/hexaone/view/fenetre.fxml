@@ -57,6 +57,11 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Button>
+                  <Button fx:id="boutonSupprimerRequete" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Supprimer une requete" disable="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Button>
                   <GridPane alignment="center" hgap="10" vgap="10">
                      <padding>
                         <Insets top="0" right="0" bottom="10" left="0" />

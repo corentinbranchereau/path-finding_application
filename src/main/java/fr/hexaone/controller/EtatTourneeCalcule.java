@@ -1,7 +1,13 @@
 package fr.hexaone.controller;
 
+import java.util.Optional;
+
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 
 /**
@@ -54,7 +60,28 @@ public class EtatTourneeCalcule implements State {
 
     @Override
     public void supprimerRequete(Controleur c, Demande demande) {
-        c.planning.getRequetes().remove(demande.getRequete());
-        // TODO : re calculer le planning
+
+        if (demande == null) {
+            System.out.println("Il faut sélectionner une requete avant.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Il faut selectionner une requete avant.");
+            alert.show();
+            return;
+        }
+
+        Requete requete = demande.getRequete();
+
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Supprimer la requete ?");
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer la requete (demande de collecte et de livraison) ?");
+
+        Optional<ButtonType> decision = alert.showAndWait();
+        if (decision.get() == ButtonType.OK) {
+            c.planning.supprimerRequete(requete);
+            // TODO refresh la vue textuelle et la vue graphique
+        }
     }
 }
