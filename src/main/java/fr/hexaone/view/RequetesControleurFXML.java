@@ -1,6 +1,8 @@
 package fr.hexaone.view;
 
 import java.lang.ModuleLayer.Controller;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.hexaone.model.Demande;
 import javafx.fxml.FXML;
@@ -30,6 +32,11 @@ public class RequetesControleurFXML {
 
     protected Fenetre fenetre;
 
+    /**
+     * Liste qui contient toutes les lignes du tableau de la vue textuelle
+     */
+    protected List<TableRow<Demande>> listeLignes = new ArrayList<>();
+
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -47,6 +54,9 @@ public class RequetesControleurFXML {
 
         demandeTable.setRowFactory(tv -> {
             TableRow<Demande> row = new TableRow<>();
+
+            // On ajoute la liste au tableau
+            this.listeLignes.add(row);
 
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty()) {
@@ -190,4 +200,12 @@ public class RequetesControleurFXML {
 
     }
 
+    /**
+     * Renvoie la liste des lignes du tableau de la vue textuelle
+     * 
+     * @return La liste des lignes du tableau
+     */
+    public List<TableRow<Demande>> getListeLignes() {
+        return listeLignes;
+    }
 }

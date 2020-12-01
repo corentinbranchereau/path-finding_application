@@ -21,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -43,6 +44,22 @@ public class VueTextuelle {
         protected Fenetre fenetre;
 
         protected TextFlow zoneTexte;
+
+        /**
+         * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
+         */
+        protected RequetesControleurFXML requetesControleurFXML;
+
+        /**
+         * Représente la paire de lignes (collecte et livraison) qui est
+         * sélectionnée/highlight
+         */
+        protected Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
+
+        /**
+         * Couleur de l'highlight des lignes dans le tableau
+         */
+        protected final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
 
         /**
          * constructeur
@@ -112,8 +129,8 @@ public class VueTextuelle {
                         // Set person overview into the center of root layout.
                         this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
 
-                        RequetesControleurFXML controlleurRequete = loader.getController();
-                        controlleurRequete.setFenetre(fenetre);
+                        this.requetesControleurFXML = loader.getController();
+                        this.requetesControleurFXML.setFenetre(fenetre);
 
                 } catch (IOException e) {
                         e.printStackTrace();
@@ -261,5 +278,50 @@ public class VueTextuelle {
                                 .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
 
                 return sortedMap;
+        }
+
+        /**
+         * Méthode permettant de désélectionner la requête (point de collecte et de
+         * livraison) actuellement sélectionnée (représentée par une paire de ligne dans
+         * le tableau de la vue textuelle)
+         */
+        public void retirerHighlightExistantRequete() {
+                if (this.lignesHighlight != null) {
+                        this.lignesHighlight.getKey().setStyle("");
+                        this.lignesHighlight.getValue().setStyle("");
+                }
+        }
+
+        /**
+         * Méthode permettant de sélectionner/highlight la paire de lignes
+         * correspondante à une requête (point de collecte et de livraison). Si cette
+         * paire de lignes est déjà highlightée, on ne la resélectionne pas
+         * 
+         * @param requete La requête à sélectionner
+         */
+        public void highlightRequete(Requete requete) {
+                TableRow<Demande> ligneCollecte = null;
+                TableRow<Demande> ligneLivraison = null;
+                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
+                        if (row.getItem() == requete.getDemandeCollecte()) {
+                                ligneCollecte = row;
+                        } else if (row.getItem() == requete.getDemandeLivraison()) {
+                                ligneLivraison = row;
+                        }
+                }
+
+                if (ligneCollecte != null && ligneLivraison != null) {
+                        if (this.lignesHighlight == null || (this.lignesHighlight.getKey() != ligneCollecte
+                                        && this.lignesHighlight.getValue() != ligneLivraison)) {
+                                ligneCollecte.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
+                                ligneLivraison.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
+                                this.lignesHighlight = new Pair<TableRow<Demande>, TableRow<Demande>>(ligneCollecte,
+                                                ligneLivraison);
+                        } else {
+                                this.lignesHighlight = null;
+                        }
+                } else {
+                        System.err.println("Erreur lors de la sélection d'une requête (vue textuelle)");
+                }
         }
 }

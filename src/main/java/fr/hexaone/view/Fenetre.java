@@ -502,5 +502,8 @@ public class Fenetre {
         // TODO : highlight dans la vue textuelle
         this.vueGraphique.retirerHighlightExistantRequete();
         this.vueGraphique.highlightRequete(requete);
+
+        this.vueTextuelle.retirerHighlightExistantRequete();
+        this.vueTextuelle.highlightRequete(requete);
     }
 }
