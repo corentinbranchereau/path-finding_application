@@ -225,8 +225,10 @@ public class XMLDeserializerTest {
             for (Requete requete : planning.getRequetes()) {
                 if (requete.getDemandeCollecte().getIdIntersection().equals(idPickupTest) && requete.getDemandeLivraison().getIdIntersection().equals(idDeliveryTest)
                         && requete.getDemandeCollecte().getDuree() == pickupDurationTest
-                        && requete.getDemandeLivraison().getDuree() == deliveryDurationTest)
+                        && requete.getDemandeLivraison().getDuree() == deliveryDurationTest) {
                     testPresence = true;
+                    break;
+                }
             }
             assertTrue(testPresence);
         } catch (Exception e) {
