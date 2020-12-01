@@ -7,6 +7,7 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
+import fr.hexaone.utils.exception.BadFileTypeException;
 import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
 import fr.hexaone.utils.exception.IllegalAttributException;
@@ -60,7 +61,7 @@ public class XMLDeserializerTest {
      * nombre d'intersections
      */
     @Test
-    public void shouldLoadCarteWithGoodSize() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException {
+    public void shouldLoadCarteWithGoodSize() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         assertEquals(308, carte.getIntersections().size());
@@ -71,7 +72,7 @@ public class XMLDeserializerTest {
      * présence d'une intersection précise
      */
     @Test
-    public void shouldLoadCarteContainsExactKey() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException {
+    public void shouldLoadCarteContainsExactKey() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         assertTrue(carte.getIntersections().containsKey(54803122L));
@@ -82,7 +83,7 @@ public class XMLDeserializerTest {
      * propriétés d'une intersection
      */
     @Test
-    public void shouldLoadCarteContainsExactIntersection() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException {
+    public void shouldLoadCarteContainsExactIntersection() throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Intersection intersection = carte.getIntersections().get(26086124L);
@@ -98,7 +99,7 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadCarteContainsExactNumberOfSegmentsArrivant()
-            throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException {
+            throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Set<Segment> segmentsArrivants = carte.getIntersections().get(26086128L).getSegmentsArrivants();
@@ -111,7 +112,7 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadCarteContainsExactNumberOfSegmentsPartants()
-            throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException {
+            throws FileBadExtensionException, SAXException, IOException, DTDValidationException, IllegalAttributException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
         XMLDeserializer.loadCarte(carte, xml);
         Set<Segment> segmentsPartants = carte.getIntersections().get(459797866L).getSegmentsPartants();
@@ -125,11 +126,27 @@ public class XMLDeserializerTest {
      * @throws FileBadExtensionException
      * @throws DTDValidationException
      * @throws IOException
+     * @throws BadFileTypeException
      */
     @Test
-    public void shouldLoadCarteThrowIllegalAttributException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException {
+    public void shouldLoadCarteThrowIllegalAttributException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMapIllegalAttributError.xml");
         assertThrows(IllegalAttributException.class, () -> { XMLDeserializer.loadCarte(carte, xml); });
+    }
+
+    /**
+     * Test le chargement d'une carte dont le type est mauvais (Requete).
+     * Une BadFileTypeException est levée.
+     * @throws SAXException
+     * @throws FileBadExtensionException
+     * @throws DTDValidationException
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
+    @Test
+    public void shouldLoadCarteThrowBadFileTypeException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, IllegalArgumentException {
+        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmall2.xml");
+        assertThrows(BadFileTypeException.class, () -> { XMLDeserializer.loadCarte(carte, xml); });
     }
 
     /**
@@ -213,11 +230,27 @@ public class XMLDeserializerTest {
      * @throws FileBadExtensionException
      * @throws DTDValidationException
      * @throws IOException
+     * @throws BadFileTypeException
      */
     @Test
-    public void shouldLoadRequestThrowIllegalAttributException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException {
+    public void shouldLoadRequestThrowIllegalAttributException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, BadFileTypeException {
         Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallIllegalAttributError.xml");
         assertThrows(IllegalAttributException.class, () -> { XMLDeserializer.loadRequete(xml, planning); });
+    }
+
+    /**
+     * Test le chargement de requêtes dont le type est mauvais (map).
+     * Une BadFileTypeException est levée.
+     * @throws SAXException
+     * @throws FileBadExtensionException
+     * @throws DTDValidationException
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
+    @Test
+    public void shouldLoadRequestThrowBadFileTypeException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, IllegalArgumentException {
+        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/smallMap.xml");
+        assertThrows(BadFileTypeException.class, () -> { XMLDeserializer.loadRequete(xml, planning); });
     }
 
     @AfterEach
