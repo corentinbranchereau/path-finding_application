@@ -157,9 +157,12 @@ public class XMLDeserializerTest {
     public void shouldLoadRequete() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsLarge9.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/largeMap.xml");
+            XMLDeserializer.loadCarte(carte,xml);
+            xml = xmlFileOpener.open("./src/test/resources/requestsLarge9.xml");
             XMLDeserializer.loadRequete(xml, planning);
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
@@ -172,12 +175,15 @@ public class XMLDeserializerTest {
     public void shouldLoadRequeteDepot() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/largeMap.xml");
+            XMLDeserializer.loadCarte(carte,xml);
+            xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, planning);
             assertAll("DepotProperties", () -> assertEquals(4150019167L, planning.getIdDepot()),
                     () -> assertEquals(planning.getDateDebut().compareTo(new SimpleDateFormat("H:m:s").parse("8:0:0")),
                             0));
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
@@ -190,10 +196,13 @@ public class XMLDeserializerTest {
     public void shouldLoadRequeteWithGoodNumberOfRequete() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/largeMap.xml");
+            XMLDeserializer.loadCarte(carte,xml);
+            xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, planning);
             assertEquals(5, planning.getRequetes().size());
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
@@ -206,19 +215,22 @@ public class XMLDeserializerTest {
     public void shouldLoadRequeteWithExactRequete() {
         try {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
-            Document xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
+            Document xml = xmlFileOpener.open("./src/test/resources/largeMap.xml");
+            XMLDeserializer.loadCarte(carte,xml);
+            xml = xmlFileOpener.open("./src/test/resources/requestsMedium5.xml");
             XMLDeserializer.loadRequete(xml, planning);
             boolean testPresence = false;
             Long idPickupTest = 1400900990L, idDeliveryTest = 208769083L;
             int pickupDurationTest = 180, deliveryDurationTest = 240;
             for (Requete requete : planning.getRequetes()) {
-                if (requete.getDemandeCollecte().getIdIntersection() == idPickupTest && requete.getDemandeLivraison().getIdIntersection() == idDeliveryTest
+                if (requete.getDemandeCollecte().getIdIntersection().equals(idPickupTest) && requete.getDemandeLivraison().getIdIntersection().equals(idDeliveryTest)
                         && requete.getDemandeCollecte().getDuree() == pickupDurationTest
                         && requete.getDemandeLivraison().getDuree() == deliveryDurationTest)
                     testPresence = true;
             }
             assertTrue(testPresence);
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
