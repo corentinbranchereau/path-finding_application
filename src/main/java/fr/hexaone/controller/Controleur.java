@@ -221,7 +221,6 @@ public class Controleur {
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
         this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue
-        // graphique
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
     }
 }

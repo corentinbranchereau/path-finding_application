@@ -81,14 +81,14 @@ public class EtatTourneeCalcule implements State {
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
             c.planning.supprimerRequete(requete);
-            // TODO refresh la vue textuelle et la vue graphique
+
             c.getFenetre().getVueGraphique().effacerTrajets();
             for (Trajet trajet : c.getPlanning().getListeTrajets()) {
                 Color couleur = Color.color(Math.random(), Math.random(), Math.random());
                 c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
             }
             c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-            // TODO Supprimer la requete de l'observable list de Coco ?
+            // TODO : Retirer les icônes de la vue Graphique
             // afficherSuppressionRequeteVueTextuelle(requete);
 
             c.resetDemandeSelectionnee();
