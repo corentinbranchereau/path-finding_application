@@ -7,6 +7,7 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
+import fr.hexaone.model.TypeIntersection;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -280,39 +281,39 @@ public class PlanningTest {
         
     }
 
-    // /**
-    //  * Méthode de test pour la vérification de l'espacement minimum des coûts pour une population
-    //  */
-    // @Test
-    // public void test_espacePopulation() {
+    /**
+      * Méthode de test pour la vérification de l'espacement minimum des coûts pour une population
+     */
+     @Test
+    public void test_espacePopulation() {
 
+     	List<Demande> listIntersections1 = new ArrayList<Demande>();
+        List<Demande> listIntersections2 = new ArrayList<Demande>();
+        List<Demande> listIntersections3 = new ArrayList<Demande>();
+
+
+        for (int i = 0; i < 10; i++) {
+            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i,"",(Integer)0,null));
+            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i*i,"",(Integer)0,null));
+            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i*i*i,"",(Integer)0,null));
+
+        }
         
+        List<Pair<List<Demande>, Double>> pop = new ArrayList<Pair<List<Demande>, Double>>();
 
-    // 	List<Long> listIntersections1 = new ArrayList<Long>();
-    //     List<Long> listIntersections2 = new ArrayList<Long>();
-    //     List<Long> listIntersections3 = new ArrayList<Long>();
+        pop.add(new Pair<>(listIntersections1, 1.0));
 
-    //     for (int i = 0; i < 10; i++) {
-    //         listIntersections1.add((long)i);
-    //         listIntersections2.add((long)i*i);
-    //         listIntersections3.add((long)i*i*i);
-    //     }
+        pop.add(new Pair<>(listIntersections2, 3.0));
 
-    //     List<Pair<List<Long>, Double>> pop = new ArrayList<Pair<List<Long>, Double>>();
+        pop.add(new Pair<>(listIntersections3, 8.0));
 
-    //     pop.add(new Pair<>(listIntersections1, 1.0));
+       assert (planning.espacePopulation(pop, 10) == false);
 
-    //     pop.add(new Pair<>(listIntersections2, 3.0));
+       assert (planning.espacePopulation(pop, 1) == true);
 
-    //     pop.add(new Pair<>(listIntersections3, 8.0));
-
-    //     assert (carte.espacePopulation(pop, 10) == false);
-
-    //     assert (carte.espacePopulation(pop, 1) == true);
-
-    // }
+     }
     
-    // /**
+     /**
     //  * Méthode de test de la vérification de la génération d'un chromosome enfant
     //  */
     // @Test

@@ -666,6 +666,7 @@ public class Planning{
             if (chromPres != null && Math.abs(chrom.getValue1() - chromPres.getValue1()) < ecart) {
                 return false;
             }
+            chromPres=chrom;
         }
         return true;
     }
