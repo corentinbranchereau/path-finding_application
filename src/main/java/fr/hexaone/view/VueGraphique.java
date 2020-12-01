@@ -344,63 +344,8 @@ public class VueGraphique {
         etoileDepot.setFill(Color.RED);
         this.paneDessin.getChildren().add(etoileDepot);
 
-        // Liste des couleurs qui auront été générées aléatoirement
-        List<Color> couleursDejaPresentes = new LinkedList<Color>();
-
         for (Requete requete : planning.getRequetes()) {
-            Intersection collecte = carte.getIntersections().get(requete.getDemandeCollecte().getIdIntersection());
-            Intersection livraison = carte.getIntersections().get(requete.getDemandeLivraison().getIdIntersection());
-
-            Point2D coordCollecte = longLatToXY(collecte.getLongitude(), collecte.getLatitude());
-            coordCollecte = adapterCoordonnees(coordCollecte.getX(), coordCollecte.getY());
-
-            Point2D coordLivraison = longLatToXY(livraison.getLongitude(), livraison.getLatitude());
-            coordLivraison = adapterCoordonnees(coordLivraison.getX(), coordLivraison.getY());
-
-            // On va générer une couleur aléatoire qui est suffisament différente des
-            // couleurs déjà présentes (cela est déterminé grâce à la constante
-            // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
-            // claire.
-            boolean couleurSimilairePresente;
-            int maxIterations = 1000;
-            int nbIterations = 0;
-            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-            do {
-                nbIterations++;
-                couleurSimilairePresente = false;
-                // On vérifie que la couleur ne soit pas trop claire
-                if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
-                        && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
-                    couleur = Color.color(couleur.getRed() - 0.2, couleur.getGreen() - 0.2, couleur.getBlue() - 0.2);
-                }
-
-                for (Color c : couleursDejaPresentes) {
-                    // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
-                    // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
-                    double sommeDiffComposantes = Math.abs(c.getRed() - couleur.getRed())
-                            + Math.abs(c.getGreen() - couleur.getGreen()) + Math.abs(c.getBlue() - couleur.getBlue());
-                    if (sommeDiffComposantes < VALEUR_SEUIL_DIFF_COULEUR) {
-                        couleur = Color.color(Math.random(), Math.random(), Math.random());
-                        couleurSimilairePresente = true;
-                        break;
-                    }
-                }
-            } while (couleurSimilairePresente && nbIterations < maxIterations);
-
-            couleursDejaPresentes.add(couleur);
-
-            // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(requete, couleur);
-
-            // Pour le point de collecte, on crée un carré
-            Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
-            rectangleCollecte.setFill(couleur);
-
-            // Pour le point de livraison on crée un rond
-            Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
-            cercleLivraison.setFill(couleur);
-
-            this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
+            afficherNouvelleRequete(carte,requete,mapCouleurRequete);
         }
     }
 
@@ -446,7 +391,9 @@ public class VueGraphique {
 
     /**
      * Cette méthode permet de dessiner une nouvelle requête dans le pane
-     * de la vue graphique
+     * de la vue graphique.
+     * @param carte    La carte actuelle de l'application
+     * @param mapCouleurRequete La Map contenant les associations entre une requête et sa couleur.
      */
     public void afficherNouvelleRequete(Carte carte, Requete requete, Map<Requete, Color> mapCouleurRequete){
         Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
@@ -460,6 +407,31 @@ public class VueGraphique {
         Point2D coordLivraison = longLatToXY(livraison.getLongitude(), livraison.getLatitude());
         coordLivraison = adapterCoordonnees(coordLivraison.getX(), coordLivraison.getY());
 
+        //On génère une couleur aléatoire assez différente
+        Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+        // On ajoute l'association Requete <-> Couleur dans la map
+        mapCouleurRequete.put(requete, couleur);
+
+        // Pour le point de collecte, on crée un carré
+        Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
+        rectangleCollecte.setFill(couleur);
+
+        // Pour le point de livraison on crée un rond
+        Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
+        cercleLivraison.setFill(couleur);
+
+        this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
+
+    }
+
+    /**
+     * Génère une couleur aléatoire assez différente de celles présent dans la liste
+     * passée en paramètre
+     *
+     *
+     */
+    protected Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes){
         // On va générer une couleur aléatoire qui est suffisament différente des
         // couleurs déjà présentes (cela est déterminé grâce à la constante
         // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
@@ -489,22 +461,8 @@ public class VueGraphique {
                 }
             }
         } while (couleurSimilairePresente && nbIterations < maxIterations);
-
-        // On ajoute l'association Requete <-> Couleur dans la map
-        mapCouleurRequete.put(requete, couleur);
-
-        // Pour le point de collecte, on crée un carré
-        Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
-        rectangleCollecte.setFill(couleur);
-
-        // Pour le point de livraison on crée un rond
-        Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
-        cercleLivraison.setFill(couleur);
-
-        this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
-
+        return couleur;
     }
-    
 
     /**
      * Attache les EventHandler aux intersections de la carte chargée afin de
