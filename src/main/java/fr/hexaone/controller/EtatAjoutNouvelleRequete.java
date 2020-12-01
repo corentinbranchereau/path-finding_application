@@ -114,7 +114,7 @@ public class EtatAjoutNouvelleRequete implements State {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
-
+        c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte,nouvelleRequete,c.getFenetre().getMapCouleurRequete());
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         this.annuler(c);
