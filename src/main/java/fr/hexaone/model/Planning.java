@@ -53,7 +53,7 @@ public class Planning{
     protected List<Trajet> listeTrajets;
 
     /**
-     * Duree totale de la tournée
+     * Duree totale de la tournée en secondes
      */
     protected double dureeTotale;
 

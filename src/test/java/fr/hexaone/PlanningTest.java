@@ -639,7 +639,7 @@ public class PlanningTest {
         assert(d2 == 3*3600/15 + 8000 );
     }
 
-    // }
+    
     
     // /**
     //  * Méthode pour tester la création des tournée avec des mêmes
@@ -712,40 +712,49 @@ public class PlanningTest {
 
     // }
     
-    // /**
-    //  * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
-    //  */
-    // @Test
-    // public void test_modifier_requetes_intersection() {
-    // 	 // Création d'un graphe
-    //     createGraph();
+     /**
+      * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
+      */
+     @Test
+     public void test_modifier_requetes_intersection() {
+     	 // Création d'un graphe
+         createGraph();
 
-    //     // Création des requetes
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-     
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(4,5,9,5));
-    //     requetes.add(new Requete(6,5,8,5));
-       
-    //     Planning planning = new Planning(carte);
-        
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
+         // Création des requetes
+     	List<Requete> requetes = new ArrayList<Requete>();
+     	
+     	 requetes.add(new Requete(1,5,"",3,5,""));
+     	 requetes.add(new Requete(4,5,"",9,5,""));
+     	 requetes.add(new Requete(6,5,"",8,5,""));
 
-    //     planning.calculerTournee();
+         Planning planning1= new Planning(carte);
+         
+         planning1.setIdDepot(0L);
+         planning1.setRequetes(requetes);
+         Date d = new Date(0);
+         planning1.setDateDebut(d);
 
-    //     double dureeAvantChangement=planning.getDureeTotale();
+         planning1.calculerMeilleurTournee();
 
-    //     //modfication du du point de livraison de la 1 ère requête
-    //     Requete r1=requetes.get(0);
-    //     planning.modifierRequeteLieu(r1.getIdUniqueDelivery(),7);
+         double dureeAvantChangement=planning1.getDureeTotale();
+         
+         List<Demande> demandes=planning1.getDemandesOrdonnees();
+         
+         int index=0;
+         for(Demande dem : demandes) {
+        	 if(dem.getIdIntersection()==(long)3) {
+        		 break;
+        	 }
+        	 index++;
+         }
+         
+         demandes.get(index).setIdIntersection((long)7);
+         planning1.recalculerTournee();
 
-    //     //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
-    //     assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-0.48)<0.001);
+         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+         assert(Math.abs(planning1.getDureeTotale()-dureeAvantChangement-0.48*1000)<0.001);
 
-    // }
+     }
     
     // /**
     //  * Méthode pour tester la modification d'une requête en changeant le durée de livraison
