@@ -34,8 +34,8 @@ public class Controleur {
     protected Planning planning;
 
     /**
-     * Demande seclectionné par l'utilisateur après un clic sur la 
-     * vue graphique ou textuelle
+     * Demande seclectionné par l'utilisateur après un clic sur la vue graphique ou
+     * textuelle
      */
     protected Demande demandeSelectionnee;
 
@@ -124,7 +124,6 @@ public class Controleur {
      */
     public void supprimerRequete() {
         etatCourant.supprimerRequete(this, demandeSelectionnee);
-        //TODO refresh la vue textuelle et la vue graphique
     }
 
     /**
@@ -211,19 +210,18 @@ public class Controleur {
     }
 
     /**
-     * TODO Vérifer si nécessaire
-     * Permet de déselectionner une demande
+     * TODO Vérifer si nécessaire Permet de déselectionner une demande
      */
     public void resetDemandeSelectionnee() {
         demandeSelectionnee = null;
     }
 
     /**
-     * TODO Vérifer si nécessaire
-     * Permet de selectionner un requete
+     * TODO Vérifer si nécessaire Permet de selectionner un requete
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
         this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue
+        // graphique
     }
 }

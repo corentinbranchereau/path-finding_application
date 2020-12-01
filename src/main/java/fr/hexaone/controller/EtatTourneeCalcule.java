@@ -60,8 +60,8 @@ public class EtatTourneeCalcule implements State {
 
     @Override
     public void supprimerRequete(Controleur c, Demande demande) {
-        
-        if ( demande == null ) {
+
+        if (demande == null) {
             System.out.println("Il faut sélectionner une requete avant.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Mauvaise sélection");
@@ -80,7 +80,8 @@ public class EtatTourneeCalcule implements State {
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
-            c.planning.supprimerRequete(requete);;
+            c.planning.supprimerRequete(requete);
+            // TODO refresh la vue textuelle et la vue graphique
         }
     }
 }

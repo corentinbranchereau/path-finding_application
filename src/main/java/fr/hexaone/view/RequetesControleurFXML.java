@@ -94,13 +94,8 @@ public class RequetesControleurFXML {
                 }
             });
 
-            // TODO : check que le click droit permet bien de récupérer la Demande
-            // "selectionnée"
             row.setOnMouseClicked(event -> {
-                if (event.getButton() == MouseButton.SECONDARY) {
-                    fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
-                    //fenetre.controleur.supprimerRequete();
-                }
+                fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
             });
 
             return row;
