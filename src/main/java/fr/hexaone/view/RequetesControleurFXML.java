@@ -86,12 +86,12 @@ public class RequetesControleurFXML {
         // Create ContextMenu
         contextMenu = new ContextMenu();
 
-        MenuItem item1 = new MenuItem("Menu Item 1");
+        MenuItem item1 = new MenuItem("Supprimer ce point");
         item1.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-
+                fenetre.getControleur().supprimerRequete();
             }
         });
         MenuItem item2 = new MenuItem("Menu Item 2");
@@ -104,7 +104,7 @@ public class RequetesControleurFXML {
         });
 
         // Add MenuItem to ContextMenu
-        contextMenu.getItems().addAll(item1, item2);
+        contextMenu.getItems().addAll(item1);
 
         // When user right-click on Circle
 
@@ -140,7 +140,7 @@ public class RequetesControleurFXML {
 
                 @Override
                 public void handle(ContextMenuEvent event) {
-
+                    fenetre.controleur.setDemandeSelectionnee(row.getItem());
                     contextMenu.show(row, event.getScreenX(), event.getScreenY());
                 }
             });
