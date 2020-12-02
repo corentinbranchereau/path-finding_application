@@ -3,9 +3,11 @@ package fr.hexaone.view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
@@ -180,11 +182,13 @@ public class VueGraphique {
             if (planning.getListeTrajets() != null) {
                 // Affichage des trajets
                 for (Trajet trajet : planning.getListeTrajets()) {
+                    // TODO : mieux gérer les couleurs des trajets
                     Color couleur = Color.color(Math.random(), Math.random(), Math.random());
                     afficherTrajet(planning.getCarte(), trajet, couleur);
                 }
 
                 // Affichage de la demande sélectionnée et de la demande associée
+                // TODO : actuellement ne marche pas avant d'avoir calculé --> à voir
                 if (demandeSelectionnee != null) {
                     Requete requeteAssociee = demandeSelectionnee.getRequete();
 
@@ -311,6 +315,31 @@ public class VueGraphique {
         double paddingHauteur = (this.paneDessin.getHeight() - (this.ratioGlobal * this.maxY)) / 2;
 
         this.paddingGlobal = Math.min(paddingLargeur, paddingHauteur);
+    }
+
+    /**
+     * Méthode qui permet de générer des couleurs pour chaque requête de la liste
+     * passée en paramètre. Les couleurs générées seront les plus différentes
+     * possibles les unes des autres et ne seront pas trop claires (meilleure
+     * visibilité)
+     * 
+     * @param requetes La liste des requêtes pour lesquelles il faut générer des
+     *                 couleurs
+     */
+    public void genererCouleursRequetes(List<Requete> requetes) {
+        // On réinitialise la map d'association Requete <-> Couleur
+        this.fenetre.getMapCouleurRequete().clear();
+
+        Set<Color> couleursDejaPresentes = new HashSet<>();
+
+        for (Requete requete : requetes) {
+            Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(requete, couleur);
+
+            couleursDejaPresentes.add(couleur);
+        }
     }
 
     /**
@@ -460,9 +489,6 @@ public class VueGraphique {
      * @param idDepot  L'identifiant du dépôt
      */
     private void afficherDemandes(List<Demande> demandes, Carte carte, Long idDepot) {
-        // On réinitialise la map d'association Requete <-> Couleur
-        this.fenetre.getMapCouleurRequete().clear();
-
         // Initialisation de la map reliant les demandes aux objets graphiques
         this.mapDemandeNoeud = new HashMap<>();
 
@@ -504,22 +530,21 @@ public class VueGraphique {
      * @param demande La demande devant être dessinée
      */
     private void afficherDemande(Carte carte, Demande demande) {
-        Collection<Color> couleursDejaPresentes = this.fenetre.getMapCouleurRequete().values();
-
         Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
 
         Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
         coord = adapterCoordonnees(coord.getX(), coord.getY());
 
-        // On regarde si une couleur existe déjà pour la requête
-        Color couleur = null;
-        if (demande.getRequete() != null) {
-            couleur = this.fenetre.getMapCouleurRequete().get(demande.getRequete());
-        }
+        Color couleur = this.fenetre.mapCouleurRequete.get(demande.getRequete());
 
         if (couleur == null) {
-            // On génère une couleur aléatoire assez différente
+            // La couleur n'a pas été trouvée (par exemple c'est une requête que
+            // l'utilisateur a ajouté)
+            Collection<Color> couleursDejaPresentes = this.fenetre.getMapCouleurRequete().values();
             couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(demande.getRequete(), couleur);
         }
 
         if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {

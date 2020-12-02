@@ -108,6 +108,9 @@ public interface State {
                 Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath());
                 XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
+                // On génère des couleurs pour les requêtes
+                c.getFenetre().getVueGraphique().genererCouleursRequetes(c.getPlanning().getRequetes());
+
                 // On affiche les requêtes chargées dans la vue graphique et la vue textuelle
                 c.rafraichirVues();
 
