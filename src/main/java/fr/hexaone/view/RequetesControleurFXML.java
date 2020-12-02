@@ -105,7 +105,10 @@ public class RequetesControleurFXML {
             });
 
             row.setOnMouseClicked(event -> {
-                fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
+                if (row.getItem() != null) {
+                    fenetre.controleur.setDemandeSelectionnee(row.getItem());
+                }
+                this.demandeTable.getSelectionModel().clearSelection();
             });
 
             return row;

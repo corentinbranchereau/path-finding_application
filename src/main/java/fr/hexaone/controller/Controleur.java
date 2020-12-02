@@ -164,11 +164,22 @@ public class Controleur {
 
     /**
      * Sélectionne une demande dans la vue textuelle de l'application.
+     * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
+        if (this.demandeSelectionnee != null) {
+            this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
+            this.fenetre.getVueTextuelle().enleverHighlightDemande();
+        }
+
+        if (this.demandeSelectionnee == demandeSelectionnee) {
+            this.demandeSelectionnee = null;
+        } else {
+            this.demandeSelectionnee = demandeSelectionnee;
+            this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
+            this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
+        }
     }
 
     /**
@@ -223,5 +234,14 @@ public class Controleur {
      */
     public void setCarte(Carte carte) {
         this.carte = carte;
+    }
+
+    /**
+     * Renvoie la demande actuellement sélectionnée
+     * 
+     * @return La demande qui est sélectionnée
+     */
+    public Demande getDemandeSelectionnee() {
+        return demandeSelectionnee;
     }
 }

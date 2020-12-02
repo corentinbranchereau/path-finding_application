@@ -493,17 +493,11 @@ public class Fenetre {
     }
 
     /**
-     * Méthode permettant de sélectionner (highlight) une requête, à la fois dans la
-     * vue graphique et la vue textuelle
+     * Renvoie le controleur de l'application
      * 
-     * @param requete La requête à sélectionner
+     * @return Le controleur
      */
-    public void selectionnerRequete(Requete requete) {
-        // TODO : highlight dans la vue textuelle
-        this.vueGraphique.retirerHighlightExistantRequete();
-        this.vueGraphique.highlightRequete(requete);
-
-        this.vueTextuelle.retirerHighlightExistantRequete();
-        this.vueTextuelle.highlightRequete(requete);
+    public Controleur getControleur() {
+        return controleur;
     }
 }

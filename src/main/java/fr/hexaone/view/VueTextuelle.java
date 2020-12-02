@@ -62,6 +62,12 @@ public class VueTextuelle {
         protected final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
 
         /**
+         * Variable définissant l'opacité appliquée lors de l'highlight d'une ligne
+         * secondaire (ligne en lien avec la ligne actuellement sélectionnée)
+         */
+        protected final double OPACITE_DEMANDE_LIEE = 0.3;
+
+        /**
          * constructeur
          */
         public VueTextuelle(Fenetre fenetre) {
@@ -281,47 +287,36 @@ public class VueTextuelle {
         }
 
         /**
-         * Méthode permettant de désélectionner la requête (point de collecte et de
-         * livraison) actuellement sélectionnée (représentée par une paire de ligne dans
-         * le tableau de la vue textuelle)
+         * Méthode permettant de désélectionner la demande actuellement sélectionnée
          */
-        public void retirerHighlightExistantRequete() {
-                if (this.lignesHighlight != null) {
-                        this.lignesHighlight.getKey().setStyle("");
-                        this.lignesHighlight.getValue().setStyle("");
+        public void enleverHighlightDemande() {
+                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
+                        row.setStyle("");
                 }
         }
 
         /**
-         * Méthode permettant de sélectionner/highlight la paire de lignes
-         * correspondante à une requête (point de collecte et de livraison). Si cette
-         * paire de lignes est déjà highlightée, on ne la resélectionne pas
+         * Méthode permettant de sélectionner (highlight) une demande dans le tableau
          * 
-         * @param requete La requête à sélectionner
+         * @param demande La demande à sélectionner
          */
-        public void highlightRequete(Requete requete) {
-                TableRow<Demande> ligneCollecte = null;
-                TableRow<Demande> ligneLivraison = null;
-                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
-                        if (row.getItem() == requete.getDemandeCollecte()) {
-                                ligneCollecte = row;
-                        } else if (row.getItem() == requete.getDemandeLivraison()) {
-                                ligneLivraison = row;
-                        }
+        public void highlightDemande(Demande demande) {
+                Demande demandeLiee = null;
+                if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                        demandeLiee = demande.getRequete().getDemandeLivraison();
+                } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                        demandeLiee = demande.getRequete().getDemandeCollecte();
                 }
 
-                if (ligneCollecte != null && ligneLivraison != null) {
-                        if (this.lignesHighlight == null || (this.lignesHighlight.getKey() != ligneCollecte
-                                        && this.lignesHighlight.getValue() != ligneLivraison)) {
-                                ligneCollecte.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
-                                ligneLivraison.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
-                                this.lignesHighlight = new Pair<TableRow<Demande>, TableRow<Demande>>(ligneCollecte,
-                                                ligneLivraison);
-                        } else {
-                                this.lignesHighlight = null;
+                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
+                        if (row.getItem() == demande) {
+                                row.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
+                        } else if (row.getItem() == demandeLiee) {
+                                Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
+                                row.setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + ","
+                                                + 255 * couleur.getGreen() + "," + 255 * couleur.getBlue() + ", "
+                                                + this.OPACITE_DEMANDE_LIEE + ")");
                         }
-                } else {
-                        System.err.println("Erreur lors de la sélection d'une requête (vue textuelle)");
                 }
         }
 }
