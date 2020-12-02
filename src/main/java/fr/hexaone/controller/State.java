@@ -120,7 +120,7 @@ public interface State {
         System.out.println("handleClicBoutonCalcul [default state implementation]");
     }
 
-    default void supprimerRequete(Controleur c, Demande demande) {
+    default void supprimerDemande(Controleur c, Demande demande) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des requetes");
     }
 
