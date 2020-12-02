@@ -177,6 +177,10 @@ public class Controleur {
      * Réinitialise la saisie de l'utilisateur.
      */
     public void resetDemandeSelectionnee() {
+        if (this.demandeSelectionnee != null) {
+            this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
+            this.fenetre.getVueTextuelle().enleverHighlightDemande();
+        }
         demandeSelectionnee = null;
     }
 
