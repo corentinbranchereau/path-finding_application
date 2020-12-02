@@ -29,7 +29,7 @@ public class ListOfCommands {
      */
     public ListOfCommands(){
         i=-1;
-        l = new LinkedList<Command>();
+        l = new LinkedList<>();
     }
 
     /**
@@ -56,7 +56,6 @@ public class ListOfCommands {
      * Rétablir la dernière commande réalisée, si elle existe.
      */
     public void redo(){
-        //TODO : Check if there's a command to redo ?
         if(l.get(++i) != null)
             l.get(i).doCommand();
         else --i;
