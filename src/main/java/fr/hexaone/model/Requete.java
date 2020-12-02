@@ -41,6 +41,22 @@ public class Requete {
     }
 
     /**
+     * Constructeur de Requete pour une unique demande
+     *
+     * @param id
+     * @param duree
+     * @param nom
+     * @param typeIntersection
+     */
+    public Requete(long id, int duree, String nom, TypeIntersection typeIntersection) {
+        if(typeIntersection==TypeIntersection.COLLECTE){
+            demandeCollecte = new Demande(TypeIntersection.COLLECTE, id, nom, duree, this);
+        } else if (typeIntersection==TypeIntersection.LIVRAISON){
+            demandeLivraison = new Demande(TypeIntersection.LIVRAISON, id, nom, duree, this);
+        }
+    }
+
+    /**
      * Getter
      * 
      * @return La demande de collecte

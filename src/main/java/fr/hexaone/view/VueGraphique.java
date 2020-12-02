@@ -4,11 +4,13 @@ import java.util.*;
 
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Intersection;
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
+import fr.hexaone.model.TypeIntersection;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -21,6 +23,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -107,16 +110,54 @@ public class VueGraphique {
     protected List<Long> listIntersectionsSelectionnees;
 
     /**
+     * La fenêtre de l'application à laquelle est reliée la vue graphique
+     */
+    protected Fenetre fenetre;
+
+    /**
+     * Map qui permet de relier un objet Demande à sa représentation graphique
+     * (carré ou rond)
+     */
+    protected Map<Demande, Node> mapDemandeNoeud;
+
+    /**
+     * Paire d'objets graphiques qui a été sélectionnée/highlight
+     */
+    protected Pair<Node, Node> noeudsHighlight;
+
+    /**
+     * Variable définissant la taille d'un noeud (élément graphique) de demande
+     * (collecte ou livraison)
+     */
+    protected final double TAILLE_NOEUD_DEMANDE = 5;
+
+    /**
+     * Variable définissant la taille d'un noeud (élément graphique) de demande
+     * (collecte ou livraison) qui a été sélectionné/highlight
+     */
+    protected final double TAILLE_NOEUD_HIGHLIGHT = 10;
+
+    /**
+     * Variable définissant la taille d'un noeud (élément graphique) secondaire,
+     * c'est-à-dire le point de collecte pour une livraison et inversement, dont
+     * l'autre noeud a été highlight
+     */
+    protected final double TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT = 8;
+
+    /**
      * Liste qui contient les lignes (élément graphique) composant les trajets
      * affichés sur la carte
      */
     protected List<Line> listeLignesTrajets = new ArrayList<>();
 
     /**
-     * Constructeur de VueGraphique.
+     * Constructeur de VueGraphique
+     * 
+     * @param fenetre La fenêtre de l'application à laquelle est reliée la vue
+     *                graphique
      */
-    public VueGraphique() {
-
+    public VueGraphique(Fenetre fenetre) {
+        this.fenetre = fenetre;
     }
 
     /**
@@ -319,6 +360,9 @@ public class VueGraphique {
 
         nettoyerCarte();
 
+        // Initialisation de la map reliant les demandes aux objets graphiques
+        this.mapDemandeNoeud = new HashMap<>();
+
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(planning.getIdDepot());
         Point2D coordDepot = longLatToXY(depot.getLongitude(), depot.getLatitude());
@@ -345,7 +389,7 @@ public class VueGraphique {
         this.paneDessin.getChildren().add(etoileDepot);
 
         for (Requete requete : planning.getRequetes()) {
-            afficherNouvelleRequete(carte,requete,mapCouleurRequete);
+            afficherNouvelleRequete(carte, requete, mapCouleurRequete);
         }
     }
 
@@ -382,6 +426,25 @@ public class VueGraphique {
             // intersections
             ligneSegment.setViewOrder(2);
 
+            // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+            Tooltip tooltipNomRue = new Tooltip(segment.getNom());
+            tooltipNomRue.setShowDelay(new Duration(0));
+            tooltipNomRue.setHideDelay(new Duration(0));
+            Tooltip.install(ligneSegment, tooltipNomRue);
+
+            // Ajoute un handler pour augmenter la taille de la route lors du survol
+            ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                }
+            });
+
+            ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                }
+            });
+
             this.paneDessin.getChildren().add(ligneSegment);
             this.listeLignesTrajets.add(ligneSegment);
         }
@@ -390,12 +453,15 @@ public class VueGraphique {
     }
 
     /**
-     * Cette méthode permet de dessiner une nouvelle requête dans le pane
-     * de la vue graphique.
-     * @param carte    La carte actuelle de l'application
-     * @param mapCouleurRequete La Map contenant les associations entre une requête et sa couleur.
+     * Cette méthode permet de dessiner une nouvelle requête dans le pane de la vue
+     * graphique.
+     * 
+     * @param carte             La carte actuelle de l'application
+     * @param requete           La requete devant être dessiné
+     * @param mapCouleurRequete La Map contenant les associations entre une requête
+     *                          et sa couleur.
      */
-    public void afficherNouvelleRequete(Carte carte, Requete requete, Map<Requete, Color> mapCouleurRequete){
+    public void afficherNouvelleRequete(Carte carte, Requete requete, Map<Requete, Color> mapCouleurRequete) {
         Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
 
         Intersection collecte = carte.getIntersections().get(requete.getDemandeCollecte().getIdIntersection());
@@ -407,7 +473,7 @@ public class VueGraphique {
         Point2D coordLivraison = longLatToXY(livraison.getLongitude(), livraison.getLatitude());
         coordLivraison = adapterCoordonnees(coordLivraison.getX(), coordLivraison.getY());
 
-        //On génère une couleur aléatoire assez différente
+        // On génère une couleur aléatoire assez différente
         Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
 
         // On ajoute l'association Requete <-> Couleur dans la map
@@ -423,15 +489,73 @@ public class VueGraphique {
 
         this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
 
+        // Ajout des handlers sur les demandes
+        rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                fenetre.getControleur().setDemandeSelectionnee(requete.getDemandeCollecte());
+            }
+        });
+
+        cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                fenetre.getControleur().setDemandeSelectionnee(requete.getDemandeLivraison());
+            }
+        });
+
+        // Ajout des des demandes et de leur objet graphique à la map
+        this.mapDemandeNoeud.put(requete.getDemandeCollecte(), rectangleCollecte);
+        this.mapDemandeNoeud.put(requete.getDemandeLivraison(), cercleLivraison);
+    }
+
+    /**
+     * Cette méthode permet de dessiner une nouvelle demande dans le pane de la vue
+     * graphique.
+     * 
+     * @param carte             La carte actuelle de l'application
+     * @param demande           La demande devant être dessinée
+     * @param mapCouleurRequete La Map contenant les associations entre une requête
+     *                          et sa couleur.
+     */
+    public void afficherNouvelleDemande(Carte carte, Demande demande, Map<Requete, Color> mapCouleurRequete) {
+        Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
+
+        Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
+
+        Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
+        coord = adapterCoordonnees(coord.getX(), coord.getY());
+
+        // On génère une couleur aléatoire assez différente
+        Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+            // PICKUP
+            // Pour le point de collecte, on crée un carré
+            Rectangle rectangleCollecte = new Rectangle(coord.getX() - 5, coord.getY() - 5, 10, 10);
+            rectangleCollecte.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(demande.getRequete(),couleur);
+
+            this.paneDessin.getChildren().addAll(rectangleCollecte);
+
+        } else {
+            // DELIVERY
+            // Pour le point de livraison on crée un rond
+            Circle cercleLivraison = new Circle(coord.getX(), coord.getY(), 5);
+            cercleLivraison.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(demande.getRequete(),couleur);
+
+            this.paneDessin.getChildren().addAll(cercleLivraison);
+        }
     }
 
     /**
      * Génère une couleur aléatoire assez différente de celles présent dans la liste
      * passée en paramètre
-     *
-     *
      */
-    protected Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes){
+    protected Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes) {
         // On va générer une couleur aléatoire qui est suffisament différente des
         // couleurs déjà présentes (cela est déterminé grâce à la constante
         // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
@@ -530,23 +654,126 @@ public class VueGraphique {
         }
     }
 
+    /**
+     * Getter
+     * 
+     * @return Le minX
+     */
     public double getMinX() {
         return minX;
     }
 
+    /**
+     * Getter
+     * 
+     * @return Le maxX
+     */
     public double getMaxX() {
         return maxX;
     }
 
+    /**
+     * Getter
+     * 
+     * @return Le minY
+     */
     public double getMinY() {
         return minY;
     }
 
+    /**
+     * Getter
+     * 
+     * @return Le maxY
+     */
     public double getMaxY() {
         return maxY;
     }
 
+    /**
+     * Getter
+     * 
+     * @return Le padding de la carte
+     */
     public double getPADDING_CARTE() {
         return PADDING_CARTE;
+    }
+
+    /**
+     * Méthode permettant de désélectionner la demande actuellement sélectionnée
+     */
+    public void enleverHighlightDemande(Demande demande) {
+        Node n = this.mapDemandeNoeud.get(demande);
+
+        if (n instanceof Rectangle) {
+            // Demande de collecte
+            Rectangle rectangleCollecte = (Rectangle) n;
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+
+            // On récupère le noeud livraison lié à ce noeud collecte
+            Circle cercleLivraison = (Circle) this.mapDemandeNoeud.get(demande.getRequete().getDemandeLivraison());
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_DEMANDE);
+        } else if (n instanceof Circle) {
+            // Demande de livraison
+            Circle cercleLivraison = (Circle) n;
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_DEMANDE);
+
+            // On récupère le noeud collecte lié à ce noeud livraison
+            Rectangle rectangleCollecte = (Rectangle) this.mapDemandeNoeud
+                    .get(demande.getRequete().getDemandeCollecte());
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
+            rectangleCollecte.setX(
+                    rectangleCollecte.getX() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+            rectangleCollecte.setY(
+                    rectangleCollecte.getY() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+        }
+    }
+
+    /**
+     * Méthode permettant de sélectionner (highlight) une demande sur la carte
+     * 
+     * @param demande La demande à sélectionner
+     */
+    public void highlightDemande(Demande demande) {
+        Node n = this.mapDemandeNoeud.get(demande);
+
+        if (n instanceof Rectangle) {
+            // Demande de collecte
+            Rectangle rectangleCollecte = (Rectangle) n;
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+
+            // On récupère le noeud livraison lié à ce noeud collecte
+            Circle cercleLivraison = (Circle) this.mapDemandeNoeud.get(demande.getRequete().getDemandeLivraison());
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+        } else if (n instanceof Circle) {
+            // Demande de livraison
+            Circle cercleLivraison = (Circle) n;
+
+            cercleLivraison.setRadius(this.TAILLE_NOEUD_HIGHLIGHT);
+
+            // On récupère le noeud collecte lié à ce noeud livraison
+            Rectangle rectangleCollecte = (Rectangle) this.mapDemandeNoeud
+                    .get(demande.getRequete().getDemandeCollecte());
+
+            rectangleCollecte.setWidth(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
+            rectangleCollecte.setHeight(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
+            rectangleCollecte.setX(
+                    rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+            rectangleCollecte.setY(
+                    rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+        }
     }
 }

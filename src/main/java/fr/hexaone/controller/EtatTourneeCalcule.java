@@ -3,7 +3,6 @@ package fr.hexaone.controller;
 import java.util.Optional;
 
 import fr.hexaone.model.Demande;
-import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -80,6 +79,9 @@ public class EtatTourneeCalcule implements State {
         c.setEtatAjoutNouvelleRequete();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void supprimerDemande(Controleur c, Demande demande) {
 
@@ -115,10 +117,10 @@ public class EtatTourneeCalcule implements State {
         }
     }
 
-    @Override
     /**
      * {@inheritDoc}
      */
+    @Override
     public void modifierPlanning(Controleur c) {
         c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);

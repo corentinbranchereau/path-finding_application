@@ -3,6 +3,8 @@ package fr.hexaone.view;
 import java.util.Map;
 import java.util.Optional;
 import java.lang.ModuleLayer.Controller;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
@@ -51,6 +53,11 @@ public class RequetesControleurFXML {
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
     protected Fenetre fenetre;
+
+    /**
+     * Liste qui contient toutes les lignes du tableau de la vue textuelle
+     */
+    protected List<TableRow<Demande>> listeLignes = new ArrayList<>();
 
     /**
      * définit si les cases du tableau peuvent être déplacées ou non
@@ -127,6 +134,8 @@ public class RequetesControleurFXML {
                 }
             };
 
+            // On ajoute la liste au tableau
+            this.listeLignes.add(row);
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
                 @Override
@@ -217,12 +226,16 @@ public class RequetesControleurFXML {
                         demandeTable.getSelectionModel().select(dropIndex);
                     }
                     event.consume();
+
+                    this.fenetre.getVueTextuelle().rechargerHighlight();
                 }
             });
 
             row.setOnMouseClicked(event -> {
-                fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
-
+                if (row.getItem() != null) {
+                    fenetre.controleur.setDemandeSelectionnee(row.getItem());
+                }
+                this.demandeTable.getSelectionModel().clearSelection();
             });
 
             return row;
@@ -318,6 +331,15 @@ public class RequetesControleurFXML {
         demandeTable.sort();
         arriveeColumn.setSortable(false);
 
+    }
+
+    /**
+     * Renvoie la liste des lignes du tableau de la vue textuelle
+     * 
+     * @return La liste des lignes du tableau
+     */
+    public List<TableRow<Demande>> getListeLignes() {
+        return listeLignes;
     }
 
     /**

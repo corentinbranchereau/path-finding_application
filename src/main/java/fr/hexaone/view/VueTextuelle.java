@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -49,7 +50,24 @@ public class VueTextuelle {
         protected TextFlow zoneTexte;
 
         /**
-         * controlleur du tableau de requetes
+         * Représente la paire de lignes (collecte et livraison) qui est
+         * sélectionnée/highlight
+         */
+        protected Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
+
+        /**
+         * Couleur de l'highlight des lignes dans le tableau
+         */
+        protected final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
+
+        /**
+         * Variable définissant l'opacité appliquée lors de l'highlight d'une ligne
+         * secondaire (ligne en lien avec la ligne actuellement sélectionnée)
+         */
+        protected final double OPACITE_DEMANDE_LIEE = 0.3;
+
+        /**
+         * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
          */
         protected RequetesControleurFXML requetesControleur;
 
@@ -292,4 +310,49 @@ public class VueTextuelle {
                 return requetesControleur;
         }
 
+        /**
+         * Méthode permettant de désélectionner la demande actuellement sélectionnée
+         */
+        public void enleverHighlightDemande() {
+                for (TableRow<Demande> row : this.requetesControleur.getListeLignes()) {
+                        row.setStyle("");
+                }
+        }
+
+        /**
+         * Méthode permettant de sélectionner (highlight) une demande dans le tableau
+         * 
+         * @param demande La demande à sélectionner
+         */
+        public void highlightDemande(Demande demande) {
+                Demande demandeLiee = null;
+                if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                        demandeLiee = demande.getRequete().getDemandeLivraison();
+                } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                        demandeLiee = demande.getRequete().getDemandeCollecte();
+                }
+
+                int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande) + 1;
+                int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee) + 1;
+
+                this.requetesControleur.getListeLignes().get(indexDemande)
+                                .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
+
+                Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
+                this.requetesControleur.getListeLignes().get(indexDemandeLiee)
+                                .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + ","
+                                                + 255 * couleur.getGreen() + "," + 255 * couleur.getBlue() + ", "
+                                                + this.OPACITE_DEMANDE_LIEE + ")");
+        }
+
+        /**
+         * Permet de remettre le highlight au bon endroit (dans la vue textuelle) lors
+         * du drag and drop
+         */
+        public void rechargerHighlight() {
+                if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
+                        enleverHighlightDemande();
+                        highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
+                }
+        }
 }
