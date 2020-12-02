@@ -61,10 +61,6 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void ajoutNouvelleRequete(Controleur c) {
-        // TODO à faire dans l'init
-        // c.etatAjoutNouvelleRequete.setIdPickup(null);
-        // c.etatAjoutNouvelleRequete.setIdDelivery(null);
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatAjoutNouvelleRequete();
     }
 

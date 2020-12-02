@@ -1,6 +1,7 @@
 package fr.hexaone.controller.State;
 
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.controller.Command.AjouterRequeteCommand;
 import fr.hexaone.model.*;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
@@ -26,12 +27,16 @@ public class EtatAjoutNouvelleRequete implements State {
     @Override
     public void init(Controleur c) {
 
+        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
+
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
 
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
         c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
 
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
@@ -136,8 +141,9 @@ public class EtatAjoutNouvelleRequete implements State {
                 }
 
                 Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
-                c.getPlanning().ajouterRequete(nouvelleRequete);
-                c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.getCarte(), nouvelleRequete, c.getFenetre().getMapCouleurRequete());
+                AjouterRequeteCommand ajouterRequeteCommand = new AjouterRequeteCommand(c.getPlanning(), nouvelleRequete);
+                ajouterRequeteCommand.doCommand();
+                //c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.getCarte(), nouvelleRequete, c.getFenetre().getMapCouleurRequete());
 
             } else {
                 //Pickup or Delivery

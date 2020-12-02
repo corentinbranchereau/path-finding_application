@@ -225,7 +225,7 @@ public class Planning{
     }
 
     /**
-     * Ajouter une requete après avoir déja calculer la 
+     * Ajouter une requete après avoir déja calculé la 
      * meilleure tournée.
      */
     public void ajouterRequete(Requete requete) {
