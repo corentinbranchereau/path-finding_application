@@ -1,22 +1,37 @@
 package fr.hexaone.view;
 
+import java.util.Map;
+import java.util.Optional;
 import java.lang.ModuleLayer.Controller;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
+import fr.hexaone.model.TypeIntersection;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Cell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class RequetesControleurFXML {
 
+    /**
+     * le tableau
+     */
     @FXML
     protected TableView<Demande> demandeTable;
     @FXML
@@ -37,6 +52,15 @@ public class RequetesControleurFXML {
      */
     protected List<TableRow<Demande>> listeLignes = new ArrayList<>();
 
+    /**
+     * définit si les cases du tableau peuvent être déplacées ou non
+     */
+    protected Boolean draggable = false;
+
+    /**
+     * Méthode qui se lance après le constructeur, une fois les éléments FXML
+     * chargés On définit les règles d'affichage du tableau
+     */
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -53,30 +77,52 @@ public class RequetesControleurFXML {
         adresseColumn.setSortable(false);
 
         demandeTable.setRowFactory(tv -> {
-            TableRow<Demande> row = new TableRow<>();
+            TableRow<Demande> row = new TableRow<Demande>() {
+                @Override
+                public void updateIndex(int i) {
+                    super.updateIndex(i);
+                    doUpdateItem(getItem());
+                }
+
+                @Override
+                protected void updateItem(Demande item, boolean empty) {
+                    super.updateItem(item, empty);
+                    doUpdateItem(item);
+                }
+
+                protected void doUpdateItem(Demande item) {
+                    if (item != null) {
+                        Map<Requete, Color> mapCouleur = fenetre.getMapCouleurRequete();
+                        Color couleur = mapCouleur.get(item.getRequete());
+                        if (getChildren().size() > 0) {
+                            ((Cell) getChildren().get(0)).setTextFill(couleur);
+                        }
+                        setTextFill(couleur);
+                    }
+                }
+            };
 
             // On ajoute la liste au tableau
             this.listeLignes.add(row);
 
             row.setOnDragDetected(event -> {
-                if (!row.isEmpty()) {
+                if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
-                    if (index != 0 && index != demandeTable.getItems().size() - 1) {
-                        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                        db.setDragView(row.snapshot(null, null));
-                        ClipboardContent cc = new ClipboardContent();
-                        cc.put(SERIALIZED_MIME_TYPE, index);
-                        db.setContent(cc);
-                    }
+
+                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(row.snapshot(null, null));
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(SERIALIZED_MIME_TYPE, index);
+                    db.setContent(cc);
+
                     event.consume();
                 }
             });
 
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()
-                            && row.getIndex() != 0 && row.getIndex() != demandeTable.getItems().size() - 1) {
+                if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -85,21 +131,60 @@ public class RequetesControleurFXML {
 
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+                    int droppedIndex = row.getIndex();
+                    Boolean doDrop = false;
 
-                    int dropIndex;
-
-                    if (row.isEmpty()) {
-                        dropIndex = demandeTable.getItems().size();
+                    Demande draggedDemande = demandeTable.getItems().get(draggedIndex);
+                    Demande draggedDemandeOpposee;
+                    if (draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeLivraison();
                     } else {
-                        dropIndex = row.getIndex();
+                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeCollecte();
                     }
-                    demandeTable.getItems().add(dropIndex, draggedPerson);
+                    if (draggedDemandeOpposee != null) {
+                        int draggedIndexOposee = demandeTable.getItems().indexOf(draggedDemandeOpposee);
 
-                    event.setDropCompleted(true);
-                    demandeTable.getSelectionModel().select(dropIndex);
+                        if ((draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE
+                                && droppedIndex < draggedIndexOposee)
+                                || (draggedDemande.getTypeIntersection() == TypeIntersection.LIVRAISON
+                                        && droppedIndex > draggedIndexOposee)) {
+                            doDrop = true;
+
+                        } else {
+                            Alert alert = new Alert(AlertType.CONFIRMATION);
+                            alert.setTitle(" Déplacer ce point ?");
+                            alert.setHeaderText(null);
+                            alert.setContentText(
+                                    "Vous êtes sur le point de placer un point de livraison avant sa collecte. Continuer ?");
+
+                            Optional<ButtonType> decision = alert.showAndWait();
+                            if (decision.get() == ButtonType.OK) {
+                                doDrop = true;
+                            } else {
+                                doDrop = false;
+                            }
+                        }
+                    } else {
+                        doDrop = false;
+                    }
+
+                    if (doDrop) {
+                        Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+
+                        int dropIndex;
+
+                        if (row.isEmpty()) {
+                            dropIndex = demandeTable.getItems().size();
+                        } else {
+                            dropIndex = row.getIndex();
+                        }
+                        demandeTable.getItems().add(dropIndex, draggedPerson);
+
+                        event.setDropCompleted(true);
+                        demandeTable.getSelectionModel().select(dropIndex);
+                    }
                     event.consume();
 
                     this.fenetre.getVueTextuelle().rechargerHighlight();
@@ -116,6 +201,7 @@ public class RequetesControleurFXML {
             return row;
         });
 
+        typeColumn.setPrefWidth(typeColumn.getPrefWidth() + 1);
         // Listen for selection changes and show the person details when changed.
         // personTable.getSelectionModel().selectedItemProperty()
         // .addListener((observable, oldValue, newValue) ->
@@ -193,6 +279,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * définit la fenetre, mais également associe les items du tableau, et les trie
+     * 
      * @param fenetre the fenetre to set
      */
     public void setFenetre(Fenetre fenetre) {
@@ -213,4 +301,23 @@ public class RequetesControleurFXML {
     public List<TableRow<Demande>> getListeLignes() {
         return listeLignes;
     }
+
+    /**
+     * Set if the columns can be dragged or not
+     * 
+     * @param draggable
+     */
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
+    }
+
+    /**
+     * get if the columns are draggable
+     * 
+     * @return boolean
+     */
+    public Boolean getDraggable() {
+        return draggable;
+    }
+
 }

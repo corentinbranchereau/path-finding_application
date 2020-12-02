@@ -35,6 +35,7 @@ public class EtatTourneeCalcule implements State {
         // c.getCarte(),
         // c.getFenetre().getMapCouleurRequete());
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
     }
 
     /**
@@ -52,6 +53,8 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
         c.etatAjoutNouvelleRequete.setIdPickup(null);
         c.etatAjoutNouvelleRequete.setIdDelivery(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
@@ -59,7 +62,7 @@ public class EtatTourneeCalcule implements State {
     }
 
     @Override
-    public void supprimerRequete(Controleur c, Demande demande) {
+    public void supprimerDemande(Controleur c, Demande demande) {
 
         if (demande == null) {
             System.out.println("Il faut sélectionner une requete avant.");
@@ -71,16 +74,14 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        Requete requete = demande.getRequete();
-
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Supprimer la requete ?");
         alert.setHeaderText(null);
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer la requete (demande de collecte et de livraison) ?");
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer la demande ? Le point associé peut être orphelin.");
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
-            c.planning.supprimerRequete(requete);
+            c.planning.supprimerDemande(demande);
 
             c.getFenetre().getVueGraphique().effacerTrajets();
             for (Trajet trajet : c.getPlanning().getListeTrajets()) {
@@ -93,5 +94,18 @@ public class EtatTourneeCalcule implements State {
 
             c.resetDemandeSelectionnee();
         }
+    }
+
+    @Override
+    /**
+     * {@inheritDoc}
+     */
+    public void modifierPlanning(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Valider");
+        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
+        c.setEtatCourant(c.etatModifierPlanning);
     }
 }

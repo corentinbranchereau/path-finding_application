@@ -71,6 +71,11 @@ public class Controleur {
     public EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
+     * Etat ou on peut modifier l'ordre des requêtes dans le planning
+     */
+    public EtatModifierPlanning etatModifierPlanning;
+
+    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -84,6 +89,7 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
+        this.etatModifierPlanning = new EtatModifierPlanning();
         setEtatCourant(etatInitial);
     }
 
@@ -103,6 +109,7 @@ public class Controleur {
      */
     public void chargerRequetes() {
         etatCourant.chargerRequetes(this);
+        etatCourant.init(this);
     }
 
     /**
@@ -122,8 +129,15 @@ public class Controleur {
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
+    public void supprimerDemande() {
+        // etatCourant.supprimerDemande(this, demandeSelectionnee);
+    }
+
+    /**
+     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     */
     public void supprimerRequete() {
-        etatCourant.supprimerRequete(this, demandeSelectionnee);
+        etatCourant.supprimerDemande(this, demandeSelectionnee);
     }
 
     /**
@@ -155,6 +169,10 @@ public class Controleur {
         etatCourant.annuler(this);
     }
 
+    public void modifierPlanning() {
+        etatCourant.modifierPlanning(this);
+    }
+
     /**
      * Réinitialise la saisie de l'utilisateur.
      */
@@ -168,18 +186,9 @@ public class Controleur {
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        if (this.demandeSelectionnee != null) {
-            this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-            this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        }
-
-        if (this.demandeSelectionnee == demandeSelectionnee) {
-            this.demandeSelectionnee = null;
-        } else {
-            this.demandeSelectionnee = demandeSelectionnee;
-            this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
-            this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
-        }
+        this.demandeSelectionnee = demandeSelectionnee;
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue
+        // graphique
     }
 
     /**

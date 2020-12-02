@@ -88,10 +88,10 @@ public class Demande {
     }
 
     public void setIdDemande(Long idDemande) {
-		this.idDemande = idDemande;
-	}
+        this.idDemande = idDemande;
+    }
 
-	/**
+    /**
      * getter nomIntersection
      * 
      * @return StringProperty nomIntersectionProperty
@@ -145,6 +145,15 @@ public class Demande {
     /**
      * getter
      * 
+     * @return duree sous forme StringProperty
+     */
+    public StringProperty getDureeProperty() {
+        return new SimpleStringProperty(duree + "s");
+    }
+
+    /**
+     * getter
+     * 
      * @return Date
      */
     public Date getDateDepart() {
@@ -175,6 +184,15 @@ public class Demande {
      */
     public Integer getDuree() {
         return duree;
+    }
+
+    /**
+     * setter
+     * 
+     * @return Integer
+     */
+    public void setDuree(Integer duree) {
+        this.duree = duree;
     }
 
     /**

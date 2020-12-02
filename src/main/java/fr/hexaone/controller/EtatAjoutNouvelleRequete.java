@@ -1,8 +1,10 @@
 package fr.hexaone.controller;
 
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Segment;
 import fr.hexaone.model.Trajet;
+import fr.hexaone.model.TypeIntersection;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 
@@ -104,18 +106,22 @@ public class EtatAjoutNouvelleRequete implements State {
                 break;
             }
         }
-        Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), nomPickup, idDelivery,
-                Integer.parseInt(deliveryDurationField), nomDelivery);
+        //Requete nouvelleRequete = new Requete(idPickup, Integer.parseInt(pickUpDurationField), nomPickup, idDelivery,
+        //        Integer.parseInt(deliveryDurationField), nomDelivery);
+        Demande nouvelleDemande = new Demande(TypeIntersection.COLLECTE, idPickup, nomPickup, Integer.parseInt(pickUpDurationField), null); 
 
-        c.getPlanning().ajouterRequete(nouvelleRequete);
+        c.getPlanning().ajouterDemande(nouvelleDemande);
 
         c.getFenetre().getVueGraphique().effacerTrajets();
         for (Trajet trajet : c.getPlanning().getListeTrajets()) {
             Color couleur = Color.color(Math.random(), Math.random(), Math.random());
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
+        // TODO refresh vue textuelle et vue graphique
 
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+        //c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte, nouvelleRequete,
+        //        c.getFenetre().getMapCouleurRequete());
+        //c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         this.annuler(c);
     }
@@ -125,6 +131,7 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void annuler(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
@@ -135,6 +142,7 @@ public class EtatAjoutNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         idPickup = null;

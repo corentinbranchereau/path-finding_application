@@ -20,6 +20,7 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TextArea;
@@ -43,12 +44,10 @@ public class VueTextuelle {
          */
         protected Fenetre fenetre;
 
-        protected TextFlow zoneTexte;
-
         /**
-         * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
+         * zone de texte ou afficher les requetes
          */
-        protected RequetesControleurFXML requetesControleurFXML;
+        protected TextFlow zoneTexte;
 
         /**
          * Représente la paire de lignes (collecte et livraison) qui est
@@ -66,6 +65,11 @@ public class VueTextuelle {
          * secondaire (ligne en lien avec la ligne actuellement sélectionnée)
          */
         protected final double OPACITE_DEMANDE_LIEE = 0.3;
+
+        /**
+         * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
+         */
+        protected RequetesControleurFXML requetesControleur;
 
         /**
          * constructeur
@@ -88,43 +92,42 @@ public class VueTextuelle {
                 String depotName = getNomIntersection(planning, carte,
                                 carte.getIntersections().get(planning.getIdDepot()));
 
-                // récupération de l'heure de départ
-                Pair<String, String> horaire = getStringFromDate(planning, planning.getDateDebut());
-                String heure = horaire.getKey();
-                String minutes = horaire.getValue();
-
                 // écriture du point et de l'heure de départ
-                Text texteDepot = new Text(" ★ Départ : " + depotName + " à " + heure + 'h' + minutes + "\r\n\r\n");
+                Text texteDepot = new Text(" ★ Départ : " + depotName + " à "
+                                + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
                 texteDepot.setFill(Color.RED);
-                this.zoneTexte.getChildren().add(texteDepot);
+                fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+                fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
                 int i = 1;
+
+                ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
                 // parcours des requêtes
                 for (Requete requete : planning.getRequetes()) {
 
-                        String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-                        String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
+                        listeDemandes.add(requete.getDemandeCollecte());
+                        listeDemandes.add(requete.getDemandeLivraison());
+                        // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
+                        // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
 
-                        Text titreText = new Text("Requête " + i + ": \r\n");
-                        Text collecteIcon = new Text("     ■ ");
-                        Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-                                        + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
-                        Text livraisonIcon = new Text("     ● ");
-                        Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-                                        + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
-                        i++;
+                        // Text titreText = new Text("Requête " + i + ": \r\n");
+                        // Text collecteIcon = new Text(" ■ ");
+                        // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
+                        // + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
+                        // Text livraisonIcon = new Text(" ● ");
+                        // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
+                        // + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
+                        // i++;
 
-                        collecteIcon.setFill(mapCouleurRequete.get(requete));
-                        livraisonIcon.setFill(mapCouleurRequete.get(requete));
+                        // collecteIcon.setFill(mapCouleurRequete.get(requete));
+                        // livraisonIcon.setFill(mapCouleurRequete.get(requete));
 
-                        this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText, livraisonIcon,
-                                        livraisonText);
+                        // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
+                        // livraisonIcon,
+                        // livraisonText);
                 }
-        }
-
-        public void afficherPlanning(Planning planning, Carte carte) {
-                ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
                 fenetre.setListeDemandes(listeDemandes);
+
                 try {
                         // Load textual tab.
                         FXMLLoader loader = new FXMLLoader();
@@ -135,8 +138,46 @@ public class VueTextuelle {
                         // Set person overview into the center of root layout.
                         this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
 
-                        this.requetesControleurFXML = loader.getController();
-                        this.requetesControleurFXML.setFenetre(fenetre);
+                        this.requetesControleur = loader.getController();
+                        requetesControleur.getArriveeColumn()
+                                        .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
+                        requetesControleur.getArriveeColumn().setText("Durée");
+                        requetesControleur.getDepartColumn().setVisible(false);
+                        requetesControleur.setFenetre(fenetre);
+
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+
+        public void afficherPlanning(Planning planning, Carte carte) {
+                // TODO : Passer la logique applicative dans planning,e t récupérer la
+                // listeDemande dans planning
+                ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
+                fenetre.setListeDemandes(listeDemandes);
+                try {
+                        // Load textual tab.
+                        FXMLLoader loader = new FXMLLoader();
+                        FileInputStream inputFichierFxml = new FileInputStream(
+                                        "src/main/java/fr/hexaone/view/requetes.fxml");
+                        AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+
+                        String depotName = getNomIntersection(planning, carte,
+                                        carte.getIntersections().get(planning.getIdDepot()));
+
+                        String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
+                                        + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
+                                        + getStringFromDate(planning.getDateFin());
+
+                        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+                        fenetre.getFenetreControleur().getDepotTextInformation().getChildren()
+                                        .add(new Text(depotString));
+
+                        // Set person overview into the center of root layout.
+                        this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
+
+                        this.requetesControleur = loader.getController();
+                        requetesControleur.setFenetre(fenetre);
 
                 } catch (IOException e) {
                         e.printStackTrace();
@@ -155,20 +196,16 @@ public class VueTextuelle {
 
                 ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-                String depotName = getNomIntersection(planning, carte,
-                                carte.getIntersections().get(planning.getIdDepot()));
-
-                Demande depot = new Demande(TypeIntersection.DEPOT, planning.getIdDepot(), depotName, null, null);
-                depot.setDateDepart(planning.getDateDebut());
-                depot.setDateArrivee(planning.getDateFin());
-
-                // listeDemandes.add(depot);
-
                 for (Demande demande : planning.getDemandesOrdonnees()) {
                         listeDemandes.add(demande);
                 }
 
                 return listeDemandes;
+        }
+
+        public void effacerVueTextuelle() {
+                this.zoneTexte.getChildren().clear();
+                this.fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         }
 
         /**
@@ -257,7 +294,7 @@ public class VueTextuelle {
          * @param horaire  la date
          * @return une pair contenant l'heure et les minutes sous forme de String
          */
-        private Pair<String, String> getStringFromDate(Planning planning, Date horaire) {
+        private String getStringFromDate(Date horaire) {
 
                 Calendar date = Calendar.getInstance();
                 date.setTime(horaire);
@@ -266,31 +303,18 @@ public class VueTextuelle {
                 int minutes = date.get(Calendar.MINUTE);
                 String minutesString = minutes < 10 ? ("0" + minutes) : String.valueOf(minutes);
 
-                return new Pair<String, String>(heureString, minutesString);
+                return heureString + "h" + minutesString;
         }
 
-        /**
-         * Méthode qui permet de trier une Map selon la date passée en valeur
-         * 
-         * @param unSortedMap
-         * @return
-         */
-        private LinkedHashMap<Text, Date> getRequetesTrieesParDatePassage(Map<Text, Date> unSortedMap) {
-
-                // LinkedHashMap preserve the ordering of elements in which they are inserted
-                LinkedHashMap<Text, Date> sortedMap = new LinkedHashMap<>();
-
-                unSortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue())
-                                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
-
-                return sortedMap;
+        public RequetesControleurFXML getRequetesControleur() {
+                return requetesControleur;
         }
 
         /**
          * Méthode permettant de désélectionner la demande actuellement sélectionnée
          */
         public void enleverHighlightDemande() {
-                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
+                for (TableRow<Demande> row : this.requetesControleur.getListeLignes()) {
                         row.setStyle("");
                 }
         }
@@ -308,15 +332,14 @@ public class VueTextuelle {
                         demandeLiee = demande.getRequete().getDemandeCollecte();
                 }
 
-                int indexDemande = this.requetesControleurFXML.getDemandeTable().getItems().indexOf(demande) + 1;
-                int indexDemandeLiee = this.requetesControleurFXML.getDemandeTable().getItems().indexOf(demandeLiee)
-                                + 1;
+                int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande) + 1;
+                int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee) + 1;
 
-                this.requetesControleurFXML.getListeLignes().get(indexDemande)
+                this.requetesControleur.getListeLignes().get(indexDemande)
                                 .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
 
                 Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
-                this.requetesControleurFXML.getListeLignes().get(indexDemandeLiee)
+                this.requetesControleur.getListeLignes().get(indexDemandeLiee)
                                 .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + ","
                                                 + 255 * couleur.getGreen() + "," + 255 * couleur.getBlue() + ", "
                                                 + this.OPACITE_DEMANDE_LIEE + ")");

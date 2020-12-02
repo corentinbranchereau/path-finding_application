@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -130,6 +131,27 @@ public class FenetreControleurFXML {
      */
     @FXML
     protected ScrollPane textScrollPane;
+
+    /**
+     * l'endroit ou on écrit les informations sur le dépot
+     */
+    @FXML
+    protected TextFlow depotTextInformation;
+
+    /**
+     * bouton qui permet de passer dans l'état modifier planning
+     */
+    @FXML
+    protected Button boutonModifierPlanning;
+
+    /**
+     * renvoie le bouton permettant de passer dans l'etat modifier planning
+     * 
+     * @return le bouton
+     */
+    public Button getboutonModifierPlanning() {
+        return boutonModifierPlanning;
+    }
 
     /**
      * Renvoie l'item du menu permettant de charger une carte.
@@ -286,6 +308,10 @@ public class FenetreControleurFXML {
      */
     public AnchorPane getAnchorPaneGraphique() {
         return anchorPaneGraphique;
+    }
+
+    public TextFlow getDepotTextInformation() {
+        return depotTextInformation;
     }
 
     public Pane getPaneDessin() {
