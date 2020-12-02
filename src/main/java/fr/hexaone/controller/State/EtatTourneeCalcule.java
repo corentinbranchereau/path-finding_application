@@ -83,16 +83,17 @@ public class EtatTourneeCalcule implements State {
 
         //TODO : Créer un marqeur car point orphelin
 
-        SupprimerDemandeCommand supprimerDemandeCommand = new SupprimerDemandeCommand(c.getPlanning(), demande);
-        supprimerDemandeCommand.doCommand();
+        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
 
         //TODO : ça doit être fait dans le refresh de la vue
+
         // c.getFenetre().getVueGraphique().effacerTrajets();
         // for (Trajet trajet : c.getPlanning().getListeTrajets()) {
         //     Color couleur = Color.color(Math.random(), Math.random(), Math.random());
         //     c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         // }
         // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+
         // // TODO : Retirer les icônes de la vue Graphique
         // // afficherSuppressionRequeteVueTextuelle(requete);
         
