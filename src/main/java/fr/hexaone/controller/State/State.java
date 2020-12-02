@@ -1,9 +1,11 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import fr.hexaone.controller.Command.ListOfCommands;
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.utils.exception.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -32,6 +34,22 @@ public interface State {
      * Cette méthode permet d'initaliser l'état
      */
     void init(Controleur c);
+
+    /**
+     * Annuler la dernière commande (design pattern COMMAND) via un undo
+     */
+    default void undo(ListOfCommands l){
+        l.undo();
+        System.out.println("UNDO - [default state implementation]");
+    }
+
+    /**
+     * Rétablir la dernière commande (design pattern COMMAND) via un redo
+     */
+    default void redo(ListOfCommands l){
+        l.redo();
+        System.out.println("REDO - [default state implementation]");
+    }
 
     /**
      * Cette méthode permet de charger et d'afficher une carte

@@ -1,5 +1,6 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.*;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
@@ -137,7 +138,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
                 c.getPlanning().ajouterRequete(nouvelleRequete);
 
-                c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte, nouvelleRequete, c.getFenetre().getMapCouleurRequete());
+                c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.getCarte(), nouvelleRequete, c.getFenetre().getMapCouleurRequete());
 
             } else {
                 //Pickup or Delivery
@@ -159,7 +160,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 }
                 c.getPlanning().ajouterDemande(nouvelleDemande);
 
-                c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.carte, nouvelleDemande, c.getFenetre().getMapCouleurRequete());
+                c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.getCarte(), nouvelleDemande, c.getFenetre().getMapCouleurRequete());
             }
 
             c.getFenetre().getVueGraphique().effacerTrajets();

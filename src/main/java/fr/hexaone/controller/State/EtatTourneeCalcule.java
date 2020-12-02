@@ -1,7 +1,8 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
 import java.util.Optional;
 
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
@@ -90,7 +91,7 @@ public class EtatTourneeCalcule implements State {
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
-            c.planning.supprimerDemande(demande);
+            c.getPlanning().supprimerDemande(demande);
 
             c.getFenetre().getVueGraphique().effacerTrajets();
             for (Trajet trajet : c.getPlanning().getListeTrajets()) {
