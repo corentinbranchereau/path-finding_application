@@ -13,12 +13,22 @@ import javafx.scene.paint.Color;
 public class EtatRequetesChargees implements State {
 
         /**
-        * {@inheritDoc}
-        */
-        @Override
-        public void init(Controleur c){
-                c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(true);
-        }
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+    }
 
         /**
          * {@inheritDoc}
@@ -38,9 +48,10 @@ public class EtatRequetesChargees implements State {
                 // c.getFenetre().getMapCouleurRequete());
                 c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
                 c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-                c.setEtatCourant(c.etatTourneeCalcule);
+                c.setEtatTourneeCalcule();
                 c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
                 c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(false);
                 c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
+                
         }
 }

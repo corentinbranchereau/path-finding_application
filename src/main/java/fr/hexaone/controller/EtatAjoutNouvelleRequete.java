@@ -27,6 +27,24 @@ public class EtatAjoutNouvelleRequete implements State {
      * {@inheritDoc}
      */
     @Override
+    public void init(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
         if (idPickup != null && idPickup.equals(idIntersection)) {
             c.getFenetre().getVueGraphique().deselectionneIntersection(idIntersection);
@@ -148,7 +166,7 @@ public class EtatAjoutNouvelleRequete implements State {
         idPickup = null;
         idDelivery = null;
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-        c.setEtatCourant(c.etatTourneeCalcule);
+        c.setEtatTourneeCalcule();
     }
 
     /**

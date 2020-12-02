@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
 import javafx.application.Platform;
@@ -32,9 +31,7 @@ public interface State {
     /**
      * Cette méthode permet d'initaliser l'état
      */
-    default void init(Controleur c){
-        System.out.println("init [default state implementation]");
-    }
+    public void init(Controleur c);
 
     /**
      * Cette méthode permet de charger et d'afficher une carte
@@ -61,7 +58,7 @@ public interface State {
                 // On adapte la taille de la fenêtre en fonction de la taille finale de la carte
                 c.getFenetre().adapterTailleFenetre();
 
-                c.setEtatCourant(c.etatCarteChargee);
+                c.setEtatCarteChargee();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
             } catch (FileBadExtensionException e) {
@@ -99,7 +96,7 @@ public interface State {
                 c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getCarte(),
                         c.getFenetre().getMapCouleurRequete());
 
-                c.setEtatCourant(c.etatRequetesChargees);
+                c.setEtatRequetesChargees();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de requêtes : " + e);
             } catch (FileBadExtensionException e) {

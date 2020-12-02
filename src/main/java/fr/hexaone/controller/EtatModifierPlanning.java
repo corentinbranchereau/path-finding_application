@@ -24,6 +24,25 @@ public class EtatModifierPlanning implements State {
      * {@inheritDoc}
      */
     @Override
+    public void init(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void modifierPlanning(Controleur c) {
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
@@ -45,7 +64,7 @@ public class EtatModifierPlanning implements State {
             c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         }
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-        c.setEtatCourant(c.etatTourneeCalcule);
+        c.setEtatTourneeCalcule();
     }
 
     /**
@@ -61,7 +80,7 @@ public class EtatModifierPlanning implements State {
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
             c.getFenetre().getVueTextuelle().effacerVueTextuelle();
-            c.setEtatCourant(c.etatInitial);
+            c.setEtatInitial();
             c.chargerCarte();
         } else {
             // Rien
@@ -81,7 +100,7 @@ public class EtatModifierPlanning implements State {
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
             c.getFenetre().getVueTextuelle().effacerVueTextuelle();
-            c.setEtatCourant(c.etatCarteChargee);
+            c.setEtatCarteChargee();
             c.chargerRequetes();
         } else {
             // Rien

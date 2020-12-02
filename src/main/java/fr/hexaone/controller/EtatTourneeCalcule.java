@@ -23,6 +23,24 @@ public class EtatTourneeCalcule implements State {
      * {@inheritDoc}
      */
     @Override
+    public void init(Controleur c) {
+        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void lancerCalcul(Controleur c) {
         c.getPlanning().calculerMeilleurTournee();
         c.getFenetre().getVueGraphique().effacerTrajets();
@@ -43,22 +61,23 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void ajoutNouvelleRequete(Controleur c) {
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
-        c.etatAjoutNouvelleRequete.setIdPickup(null);
-        c.etatAjoutNouvelleRequete.setIdDelivery(null);
+        // c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
+        // c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
+        // c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
+        // c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
+        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
+        // c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
+        // c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
+        // c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
+        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
+        // c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        // c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
+        // c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
+        // TODO à faire dans l'init
+        // c.etatAjoutNouvelleRequete.setIdPickup(null);
+        // c.etatAjoutNouvelleRequete.setIdDelivery(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-        c.setEtatCourant(c.etatAjoutNouvelleRequete);
+        c.setEtatAjoutNouvelleRequete();
     }
 
     @Override
@@ -106,6 +125,6 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Valider");
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
-        c.setEtatCourant(c.etatModifierPlanning);
+        c.setEtatModifierPlanning();
     }
 }

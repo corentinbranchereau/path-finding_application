@@ -47,33 +47,33 @@ public class Controleur {
     /**
      * Etat initial de l'application du design pattern STATE
      */
-    public EtatInitial etatInitial;
+    private EtatInitial etatInitial;
 
     /**
      * Etat carte chargée du design pattern STATE
      */
-    public EtatCarteChargee etatCarteChargee;
+    private EtatCarteChargee etatCarteChargee;
 
     /**
      * Etat requête chargées du design pattern STATE
      */
-    public EtatRequetesChargees etatRequetesChargees;
+    private EtatRequetesChargees etatRequetesChargees;
 
     /**
      * Etat tournée calculée du design pattern STATE
      */
-    public EtatTourneeCalcule etatTourneeCalcule;
+    private EtatTourneeCalcule etatTourneeCalcule;
 
     /**
      * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
      * requête du design pattern STATE
      */
-    public EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
+    private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
      * Etat ou on peut modifier l'ordre des requêtes dans le planning
      */
-    public EtatModifierPlanning etatModifierPlanning;
+    private EtatModifierPlanning etatModifierPlanning;
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
@@ -244,4 +244,36 @@ public class Controleur {
     public void setCarte(Carte carte) {
         this.carte = carte;
     }
+
+    public void setEtatInitial() {
+        etatInitial.init(this);
+        etatCourant = etatInitial;
+    }
+
+    public void setEtatCarteChargee() {
+        etatCarteChargee.init(this);
+        etatCourant = etatCarteChargee;
+    }
+
+    public void setEtatRequetesChargees() {
+        etatRequetesChargees.init(this);
+        etatCourant = etatRequetesChargees;
+    }
+
+    public void setEtatTourneeCalcule() {
+        etatTourneeCalcule.init(this);
+        etatCourant = etatTourneeCalcule;
+    }
+
+    public void setEtatAjoutNouvelleRequete() {
+        etatAjoutNouvelleRequete.init(this);
+        etatCourant = etatAjoutNouvelleRequete;
+    }
+
+    public void setEtatModifierPlanning() {
+        etatModifierPlanning.init(this);
+        etatCourant = etatModifierPlanning;
+    }
+
+    
 }
