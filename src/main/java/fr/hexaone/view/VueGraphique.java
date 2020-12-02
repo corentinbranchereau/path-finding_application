@@ -187,7 +187,7 @@ public class VueGraphique {
         // Affichage des demandes sur la carte
         if (planning.getDemandesOrdonnees() != null ){
             // Affichage des demandes sur la carte
-
+            
             if (planning.getListeTrajets() != null) {
                 // Affichage des trajets 
 

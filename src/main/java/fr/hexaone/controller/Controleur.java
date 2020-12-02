@@ -113,7 +113,7 @@ public class Controleur {
     public void rafraichirVues() {
         fenetre.getVueGraphique().rafraichir(planning, demandeSelectionnee);
         fenetre.getVueTextuelle().rafraichir(planning,demandeSelectionnee);
-        demandeSelectionnee = null;
+        //demandeSelectionnee = null;
     }
 
     /**
