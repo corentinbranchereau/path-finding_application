@@ -534,7 +534,7 @@ public class VueGraphique {
             rectangleCollecte.setFill(couleur);
 
             // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(demande.getRequete(),couleur);
+            mapCouleurRequete.put(demande.getRequete(), couleur);
 
             this.paneDessin.getChildren().addAll(rectangleCollecte);
 
@@ -545,7 +545,7 @@ public class VueGraphique {
             cercleLivraison.setFill(couleur);
 
             // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(demande.getRequete(),couleur);
+            mapCouleurRequete.put(demande.getRequete(), couleur);
 
             this.paneDessin.getChildren().addAll(cercleLivraison);
         }
