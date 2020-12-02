@@ -91,7 +91,7 @@ public class EtatTourneeCalcule implements State {
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
-            c.planning.supprimerDemande(demande);
+            c.getPlanning().supprimerDemande(demande);
 
             c.getFenetre().getVueGraphique().effacerTrajets();
             for (Trajet trajet : c.getPlanning().getListeTrajets()) {
