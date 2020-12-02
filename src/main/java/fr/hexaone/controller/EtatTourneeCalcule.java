@@ -73,8 +73,6 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        Requete requete = demande.getRequete();
-
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Supprimer la requete ?");
         alert.setHeaderText(null);
@@ -82,7 +80,7 @@ public class EtatTourneeCalcule implements State {
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
-            c.planning.supprimerRequete(requete);
+            c.planning.supprimerDemande(demande);
 
             c.getFenetre().getVueGraphique().effacerTrajets();
             for (Trajet trajet : c.getPlanning().getListeTrajets()) {

@@ -217,12 +217,8 @@ public class Planning{
      * Ajouter une requete après avoir déja calculer la 
      * meilleure tournée.
      */
-    public void ajouterRequete(Requete requete) {
-
-        requetes.add(requete);
-
-        demandesOrdonnees.add(requete.demandeCollecte);
-        demandesOrdonnees.add(requete.demandeLivraison);
+    public void ajouterDemande(Demande demande) {
+        demandesOrdonnees.add(demande);
 
         recalculerTournee();
     }
@@ -230,10 +226,8 @@ public class Planning{
     /**
      * Supprimer une requete de la tournée et regénère les trajets ordonées
      */
-    public void supprimerRequete(Requete requete) {
-        requetes.remove(requete);
-        demandesOrdonnees.remove(requete.getDemandeCollecte());
-        demandesOrdonnees.remove(requete.getDemandeLivraison());
+    public void supprimerDemande(Demande demande) {
+        demandesOrdonnees.remove(demande);
 
         ordonnerLesTrajetsEtLesDates();
 
