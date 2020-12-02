@@ -109,6 +109,7 @@ public class Controleur {
      */
     public void chargerRequetes() {
         etatCourant.chargerRequetes(this);
+        etatCourant.init(this);
     }
 
     /**
@@ -181,11 +182,13 @@ public class Controleur {
 
     /**
      * Sélectionne une demande dans la vue textuelle de l'application.
+     * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
         this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue
+        // graphique
     }
 
     /**

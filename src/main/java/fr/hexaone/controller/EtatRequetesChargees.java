@@ -13,6 +13,14 @@ import javafx.scene.paint.Color;
 public class EtatRequetesChargees implements State {
 
         /**
+        * {@inheritDoc}
+        */
+        @Override
+        public void init(Controleur c){
+                c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(true);
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
@@ -33,5 +41,6 @@ public class EtatRequetesChargees implements State {
                 c.setEtatCourant(c.etatTourneeCalcule);
                 c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
                 c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(false);
+                c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         }
 }

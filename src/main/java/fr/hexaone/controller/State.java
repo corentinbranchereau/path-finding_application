@@ -30,6 +30,13 @@ import javafx.stage.FileChooser;
 public interface State {
 
     /**
+     * Cette méthode permet d'initaliser l'état
+     */
+    default void init(Controleur c){
+        System.out.println("init [default state implementation]");
+    }
+
+    /**
      * Cette méthode permet de charger et d'afficher une carte
      */
     default void chargerCarte(Controleur c) {
