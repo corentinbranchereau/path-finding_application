@@ -1,5 +1,11 @@
 package fr.hexaone.controller.Command;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.hexaone.model.Planning;
+import fr.hexaone.model.Requete;
+
 /**
  * Commande de suppression de requête en suivant le design pattern COMMAND.
  *
@@ -8,10 +14,17 @@ package fr.hexaone.controller.Command;
  */
 public class SupprimerRequeteCommand implements Command{
 
+    private Requete requete;
+    private Planning planning;
+    List<Integer> positions;
+
     /**
      * Constructeur de la suppression de requête
      */
-    public SupprimerRequeteCommand(){
+    public SupprimerRequeteCommand(Requete requete, Planning planning) {
+        this.requete = requete;
+        this.planning = planning;
+        positions = new ArrayList<>();
         //TODO --> Préparer la commande (les demandes à retirer etc...)
     }
 
@@ -20,7 +33,7 @@ public class SupprimerRequeteCommand implements Command{
      */
     @Override
     public void doCommand() {
-
+        positions = planning.supprimerRequete(requete);
     }
 
     /**
@@ -28,6 +41,6 @@ public class SupprimerRequeteCommand implements Command{
      */
     @Override
     public void undoCommand() {
-
+        planning.ajouterRequete(requete, positions);
     }
 }

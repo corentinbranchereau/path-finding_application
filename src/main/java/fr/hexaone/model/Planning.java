@@ -1,5 +1,6 @@
 package fr.hexaone.model;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import org.javatuples.Pair;
@@ -237,6 +238,19 @@ public class Planning{
     }
 
     /**
+     * Ajouter une requete après avoir déja calculer la 
+     * meilleure tournée.
+     */
+    public void ajouterRequete(Requete requete, List<Integer> positions) {
+        requetes.add(requete);
+
+        demandesOrdonnees.add(positions.get(0), requete.getDemandeCollecte());
+        demandesOrdonnees.add(positions.get(1), requete.getDemandeLivraison());
+
+        recalculerTournee();
+    }
+
+    /**
      * Supprimer une requete de la tournée et regénère les trajets ordonées
      */
     public void supprimerDemande(Demande demande) {
@@ -249,9 +263,15 @@ public class Planning{
 
     /**
      * Supprimer une requete de la tournée et regénère les trajets ordonées
+     * @return la position de la collecte et de la livraison
      */
-    public void supprimerRequete(Requete requete) {
+    public List<Integer> supprimerRequete(Requete requete) {
         requetes.remove(requete);
+
+        List<Integer> positions = new ArrayList<Integer>();
+
+        positions.add(demandesOrdonnees.indexOf(requete.getDemandeCollecte()));
+        positions.add(demandesOrdonnees.indexOf(requete.getDemandeLivraison()));
 
         demandesOrdonnees.remove(requete.getDemandeCollecte());
         demandesOrdonnees.remove(requete.getDemandeLivraison());
@@ -259,6 +279,8 @@ public class Planning{
         ordonnerLesTrajetsEtLesDates();
 
         System.out.println(demandesOrdonnees.size());
+
+        return positions;
     }
     
     /**
