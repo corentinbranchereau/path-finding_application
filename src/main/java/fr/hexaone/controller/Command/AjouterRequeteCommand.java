@@ -2,8 +2,6 @@ package fr.hexaone.controller.Command;
 
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Commande d'ajout de requête en suivant le design pattern COMMAND.
@@ -15,7 +13,6 @@ public class AjouterRequeteCommand implements Command{
 
     private Planning planning;
     private Requete requete;
-    List<Integer> positions;
 
     /**
      * Constructeur de l'ajout de requête
@@ -23,7 +20,6 @@ public class AjouterRequeteCommand implements Command{
     public AjouterRequeteCommand(Planning planning, Requete requete){
         this.planning = planning;
         this.requete = requete;
-        positions = new ArrayList<>();
     }
 
     /**
@@ -39,6 +35,6 @@ public class AjouterRequeteCommand implements Command{
      */
     @Override
     public void undoCommand() {
-        positions = planning.supprimerRequete(requete);
+        planning.supprimerRequete(requete);
     }
 }
