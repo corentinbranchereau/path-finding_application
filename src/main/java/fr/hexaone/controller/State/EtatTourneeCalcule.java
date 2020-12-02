@@ -1,7 +1,5 @@
 package fr.hexaone.controller.State;
 
-import java.util.Optional;
-
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.SupprimerDemandeCommand;
 import fr.hexaone.model.Demande;
@@ -86,14 +84,12 @@ public class EtatTourneeCalcule implements State {
         c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
 
         //TODO : ça doit être fait dans le refresh de la vue
-
         // c.getFenetre().getVueGraphique().effacerTrajets();
         // for (Trajet trajet : c.getPlanning().getListeTrajets()) {
         //     Color couleur = Color.color(Math.random(), Math.random(), Math.random());
         //     c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
         // }
         // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-
         // // TODO : Retirer les icônes de la vue Graphique
         // // afficherSuppressionRequeteVueTextuelle(requete);
         
@@ -105,7 +101,9 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c) {
-        // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
-        // c.setEtatModifierPlanning();
+        //! Etat Useless
+        //c.setEtatModifierPlanning();
+        //TODO : Mettre au propre le drag and drop selon MVC
+        //c.getListOfCommands().add(new ModifierPlanningCommand(...));
     }
 }
