@@ -9,15 +9,20 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.TypeIntersection;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Cell;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -40,6 +45,8 @@ public class RequetesControleurFXML {
     protected TableColumn<Demande, String> departColumn;
     @FXML
     protected TableColumn<Demande, String> adresseColumn;
+
+    protected ContextMenu contextMenu;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
@@ -69,6 +76,31 @@ public class RequetesControleurFXML {
         adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
         adresseColumn.setSortable(false);
 
+        // Create ContextMenu
+        contextMenu = new ContextMenu();
+
+        MenuItem item1 = new MenuItem("Menu Item 1");
+        item1.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        MenuItem item2 = new MenuItem("Menu Item 2");
+        item2.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        // Add MenuItem to ContextMenu
+        contextMenu.getItems().addAll(item1, item2);
+
+        // When user right-click on Circle
+
         demandeTable.setRowFactory(tv -> {
             TableRow<Demande> row = new TableRow<Demande>() {
                 @Override
@@ -94,6 +126,15 @@ public class RequetesControleurFXML {
                     }
                 }
             };
+
+            row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+
+                @Override
+                public void handle(ContextMenuEvent event) {
+
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
 
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
@@ -181,6 +222,7 @@ public class RequetesControleurFXML {
 
             row.setOnMouseClicked(event -> {
                 fenetre.controleur.setDemandeSelectionnee(demandeTable.getSelectionModel().getSelectedItem());
+
             });
 
             return row;
@@ -294,6 +336,15 @@ public class RequetesControleurFXML {
      */
     public Boolean getDraggable() {
         return draggable;
+    }
+
+    /**
+     * Menu contextuel qui apparait au clic droit sur une demande
+     * 
+     * @return
+     */
+    public ContextMenu getContextMenu() {
+        return contextMenu;
     }
 
 }
