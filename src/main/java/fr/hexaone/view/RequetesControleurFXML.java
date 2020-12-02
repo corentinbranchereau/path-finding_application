@@ -101,6 +101,8 @@ public class RequetesControleurFXML {
                     event.setDropCompleted(true);
                     demandeTable.getSelectionModel().select(dropIndex);
                     event.consume();
+
+                    this.fenetre.getVueTextuelle().rechargerHighlight();
                 }
             });
 

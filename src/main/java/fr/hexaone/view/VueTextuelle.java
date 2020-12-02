@@ -308,15 +308,24 @@ public class VueTextuelle {
                         demandeLiee = demande.getRequete().getDemandeCollecte();
                 }
 
-                for (TableRow<Demande> row : this.requetesControleurFXML.getListeLignes()) {
-                        if (row.getItem() == demande) {
-                                row.setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
-                        } else if (row.getItem() == demandeLiee) {
-                                Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
-                                row.setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + ","
+                int indexDemande = this.requetesControleurFXML.getDemandeTable().getItems().indexOf(demande) + 1;
+                int indexDemandeLiee = this.requetesControleurFXML.getDemandeTable().getItems().indexOf(demandeLiee)
+                                + 1;
+
+                this.requetesControleurFXML.getListeLignes().get(indexDemande)
+                                .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
+
+                Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
+                this.requetesControleurFXML.getListeLignes().get(indexDemandeLiee)
+                                .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + ","
                                                 + 255 * couleur.getGreen() + "," + 255 * couleur.getBlue() + ", "
                                                 + this.OPACITE_DEMANDE_LIEE + ")");
-                        }
+        }
+
+        public void rechargerHighlight() {
+                if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
+                        enleverHighlightDemande();
+                        highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
                 }
         }
 }
