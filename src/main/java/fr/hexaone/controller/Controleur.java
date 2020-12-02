@@ -17,6 +17,12 @@ import fr.hexaone.model.Planning;
 public class Controleur {
 
     /**
+     * Liste de commandes conforme au dessing pattern COMMAND
+     * pour l'implémentation de l'undo/redo
+     */
+    private ListOfCommands l;
+
+    /**
      * Gère l'affichage de l'application (Vue du MVC)
      */
     protected Fenetre fenetre;
@@ -83,6 +89,20 @@ public class Controleur {
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
         setEtatInitial();
+    }
+
+    /**
+     * Annuler la dernière commande (design pattern COMMAND) via un undo
+     */
+    public void undo(){
+        etatCourant.undo(l);
+    }
+
+    /**
+     * Rétablir la dernière commande (design pattern COMMAND) via un redo
+     */
+    public void redo(){
+        etatCourant.redo(l);
     }
 
     /**
