@@ -48,8 +48,8 @@ public class EtatAjoutNouvelleRequete implements State {
         //Erreurs de saisies et sélections
         TypeIntersection typeIntersection = null;
         if(idIntersection1 == null && idIntersection2 == null) {
-            System.out.println("Il faut sélectionner aumoins une intersection.");
-            alertHelper("Mauvaise sélection", "Il faut selectionner aumoins une intersection.", Alert.AlertType.ERROR);
+            System.out.println("Il faut sélectionner au moins une intersection.");
+            alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.", Alert.AlertType.ERROR);
             return;
         } else if(idIntersection1!=null && idIntersection2!=null) {
             if (pickUpDurationField.isEmpty()) {
