@@ -111,9 +111,7 @@ public class Controleur {
      * Méthode permettant de rafraichir les vues après des modifications dans le modèle
      */
     public void rafraichirVues() {
-        fenetre.getVueGraphique().rafraichir(planning, demandeSelectionnee);
-        fenetre.getVueTextuelle().rafraichir(planning,demandeSelectionnee);
-        //demandeSelectionnee = null;
+        fenetre.rafraichir(planning, demandeSelectionnee);
     }
 
     /**

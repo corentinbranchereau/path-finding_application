@@ -391,6 +391,14 @@ public class Fenetre {
     }
 
     /**
+     * Permer de rafraichir la fenetre
+     */
+    public void rafraichir(Planning planning, Demande demandeSelectionnee) {
+        vueGraphique.rafraichir(planning, demandeSelectionnee);
+        vueTextuelle.rafraichir(planning, demandeSelectionnee);
+    }
+
+    /**
      * Renvoie le controleur JavaFX de la fenêtre
      * 
      * @return Le controleur JavaFX de la fenêtre
