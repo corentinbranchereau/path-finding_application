@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.* ?>
 <?import javafx.geometry.* ?>
 <?import javafx.scene.control.* ?>
@@ -72,7 +78,7 @@
                         </Button>
                      </children>
                   </HBox>
-                  <Button fx:id="boutonSupprimerRequete" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Supprimer une requete" disable="true">
+                  <Button fx:id="boutonSupprimerRequete" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Supprimer une requete" visible="false">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
