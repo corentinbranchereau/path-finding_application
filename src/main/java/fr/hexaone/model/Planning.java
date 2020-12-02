@@ -214,11 +214,22 @@ public class Planning{
     }
 
     /**
-     * Ajouter une requete après avoir déja calculer la 
+     * Ajouter une demande seule après avoir déja calculer la 
      * meilleure tournée.
      */
     public void ajouterDemande(Demande demande) {
         demandesOrdonnees.add(demande);
+
+        recalculerTournee();
+    }
+
+    /**
+     * Ajouter une requete après avoir déja calculer la 
+     * meilleure tournée.
+     */
+    public void ajouterRequete(Requete requete) {
+        demandesOrdonnees.add(requete.getDemandeCollecte());
+        demandesOrdonnees.add(requete.getDemandeLivraison());
 
         recalculerTournee();
     }

@@ -128,8 +128,15 @@ public class Controleur {
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
+    public void supprimerDemande() {
+        // etatCourant.supprimerDemande(this, demandeSelectionnee);
+    }
+
+    /**
+     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     */
     public void supprimerRequete() {
-        etatCourant.supprimerRequete(this, demandeSelectionnee);
+        etatCourant.supprimerDemande(this, demandeSelectionnee);
     }
 
     /**
