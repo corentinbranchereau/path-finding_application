@@ -129,8 +129,15 @@ public class Controleur {
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
+    public void supprimerDemande() {
+        // etatCourant.supprimerDemande(this, demandeSelectionnee);
+    }
+
+    /**
+     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     */
     public void supprimerRequete() {
-        etatCourant.supprimerRequete(this, demandeSelectionnee);
+        etatCourant.supprimerDemande(this, demandeSelectionnee);
     }
 
     /**
@@ -175,11 +182,13 @@ public class Controleur {
 
     /**
      * Sélectionne une demande dans la vue textuelle de l'application.
+     * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
         this.demandeSelectionnee = demandeSelectionnee;
-        // TODO afficher la demande selectionnee sur la vue textuelle et la vue graphique
+        // TODO afficher la demande selectionnee sur la vue textuelle et la vue
+        // graphique
     }
 
     /**

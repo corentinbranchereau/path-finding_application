@@ -62,7 +62,7 @@ public class EtatTourneeCalcule implements State {
     }
 
     @Override
-    public void supprimerRequete(Controleur c, Demande demande) {
+    public void supprimerDemande(Controleur c, Demande demande) {
 
         if (demande == null) {
             System.out.println("Il faut sélectionner une requete avant.");
@@ -77,7 +77,7 @@ public class EtatTourneeCalcule implements State {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Supprimer la requete ?");
         alert.setHeaderText(null);
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer la requete (demande de collecte et de livraison) ?");
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer la demande ? Le point associé peut être orphelin.");
 
         Optional<ButtonType> decision = alert.showAndWait();
         if (decision.get() == ButtonType.OK) {
