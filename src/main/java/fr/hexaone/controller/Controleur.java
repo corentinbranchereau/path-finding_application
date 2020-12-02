@@ -111,7 +111,7 @@ public class Controleur {
      * Méthode permettant de rafraichir les vues après des modifications dans le modèle
      */
     public void rafraichirVues() {
-        // TODO mettre les méthodes pour réafficher les vues.
+        fenetre.rafraichir(planning, demandeSelectionnee);
     }
 
     /**
@@ -121,6 +121,7 @@ public class Controleur {
      */
     public void chargerCarte() {
         etatCourant.chargerCarte(this);
+        rafraichirVues();
     }
 
     /**
@@ -130,7 +131,7 @@ public class Controleur {
      */
     public void chargerRequetes() {
         etatCourant.chargerRequetes(this);
-        etatCourant.init(this);
+        rafraichirVues();
     }
 
     /**
@@ -145,13 +146,15 @@ public class Controleur {
      */
     public void lancerCalcul() {
         etatCourant.lancerCalcul(this);
+        rafraichirVues();
     }
 
     /**
      * Méthode gérant le clic sur le bouton lançant le calcul du planning
      */
     public void supprimerDemande() {
-        // etatCourant.supprimerDemande(this, demandeSelectionnee);
+        etatCourant.supprimerDemande(this, demandeSelectionnee);
+        rafraichirVues();
     }
 
     /**
@@ -159,6 +162,7 @@ public class Controleur {
      */
     public void supprimerRequete() {
         etatCourant.supprimerDemande(this, demandeSelectionnee);
+        rafraichirVues();
     }
 
     /**
@@ -167,6 +171,7 @@ public class Controleur {
      */
     public void ajouterNouvelleRequete() {
         etatCourant.ajoutNouvelleRequete(this);
+        rafraichirVues();
     }
 
     /**
@@ -174,6 +179,7 @@ public class Controleur {
      */
     public void selectionnerIntersection(Long idIntersection) {
         etatCourant.selectionnerIntersection(this, idIntersection);
+        rafraichirVues();
     }
 
     /**
@@ -181,6 +187,7 @@ public class Controleur {
      */
     public void valider(String pickUpDurationField, String deliveryDurationField) {
         etatCourant.valider(this, pickUpDurationField, deliveryDurationField);
+        rafraichirVues();
     }
 
     /**
@@ -188,21 +195,19 @@ public class Controleur {
      */
     public void annuler() {
         etatCourant.annuler(this);
+        rafraichirVues();
     }
 
     public void modifierPlanning() {
         etatCourant.modifierPlanning(this);
+        rafraichirVues();
     }
 
     /**
      * Réinitialise la saisie de l'utilisateur.
      */
     public void resetDemandeSelectionnee() {
-        if (this.demandeSelectionnee != null) {
-            this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-            this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        }
-        demandeSelectionnee = null;
+        rafraichirVues();
     }
 
     /**
@@ -211,18 +216,21 @@ public class Controleur {
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        if (this.demandeSelectionnee != null) {
-            this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-            this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        }
+        if (this.demandeSelectionnee == demandeSelectionnee) this.demandeSelectionnee = null;
+        else this.demandeSelectionnee = demandeSelectionnee;
+        rafraichirVues();
+        // if (this.demandeSelectionnee != null) {
+        //     this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
+        //     this.fenetre.getVueTextuelle().enleverHighlightDemande();
+        // }
 
-        if (this.demandeSelectionnee == demandeSelectionnee) {
-            this.demandeSelectionnee = null;
-        } else {
-            this.demandeSelectionnee = demandeSelectionnee;
-            this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
-            this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
-        }
+        // if (this.demandeSelectionnee == demandeSelectionnee) {
+        //     this.demandeSelectionnee = null;
+        // } else {
+        //     this.demandeSelectionnee = demandeSelectionnee;
+        //     this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
+        //     this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
+        // }
     }
 
     /**
