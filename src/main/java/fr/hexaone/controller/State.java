@@ -34,6 +34,22 @@ public interface State {
     void init(Controleur c);
 
     /**
+     * Annuler la dernière commande (design pattern COMMAND) via un undo
+     */
+    default void undo(ListOfCommands l){
+        l.undo();
+        System.out.println("UNDO - [default state implementation]");
+    }
+
+    /**
+     * Rétablir la dernière commande (design pattern COMMAND) via un redo
+     */
+    default void redo(ListOfCommands l){
+        l.redo();
+        System.out.println("REDO - [default state implementation]");
+    }
+
+    /**
      * Cette méthode permet de charger et d'afficher une carte
      */
     default void chargerCarte(Controleur c) {

@@ -9,7 +9,7 @@ import fr.hexaone.model.Planning;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
- * avec vue et modèle. Inclue le design pattern STATE.
+ * avec vue et modèle. Inclue le design pattern STATE et COMMAND.
  * 
  * @author HexaOne
  * @version 1.0
