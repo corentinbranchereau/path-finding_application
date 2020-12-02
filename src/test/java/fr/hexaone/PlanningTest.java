@@ -845,56 +845,57 @@ public class PlanningTest {
 
     // }
 
-    // /**
-    //  * Méthode pour tester l'ajout de requête après le calcul de la tournée
-    //  */
-    // @Test
-    // public void test_ajouter_requetes() {
-    // 	 // Création d'un graphe
-    //     createGraph();
+     /**
+      * Méthode pour tester l'ajout de requête après le calcul de la tournée
+      */
+     @Test
+    public void test_ajouter_requetes() {
+     	 // Création d'un graphe
+    	 
+    	createGraph();
 
-    //     // Création des requetes de référence
-    // 	List<Requete> requetes = new ArrayList<Requete>();
+         // Création des requetes de référence
+     	List<Requete> requetes = new ArrayList<Requete>();
+     	
+     	requetes.add(new Requete(1,5,"",3,5,""));
+     	requetes.add(new Requete(4,5,"",9,5,""));
+     	requetes.add(new Requete(6,5,"",8,5,""));
 
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(4,5,9,5));
-    //     requetes.add(new Requete(6,5,8,5));
+        Planning planning = new Planning(carte);
 
-    //     Planning planning = new Planning(carte);
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
 
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
+        planning.calculerMeilleurTournee();
+     
+        double dureeReference=planning.getDureeTotale();
 
-    //     planning.calculerTournee();
+         // Création des requetes de test
+     	List<Requete> requetesTest = new ArrayList<Requete>();
+     	
+     	requetesTest.add(new Requete(1,5,"",3,5,""));
+     	requetesTest.add(new Requete(4,5,"",9,5,""));
 
-    //     double dureeReference=planning.getDureeTotale();
+        Planning planningTest = new Planning(carte);
 
-    //     // Création des requetes de test
-    // 	List<Requete> requetesTest = new ArrayList<Requete>();
+        planningTest.setIdDepot(0L);
+        planningTest.setRequetes(requetesTest);
+        Date dTest = new Date(0);
+        planningTest.setDateDebut(dTest);
 
-    // 	requetesTest.add(new Requete(1,5,3,5));
-    //     requetesTest.add(new Requete(4,5,9,5));
+        planningTest.calculerMeilleurTournee();
+        
+        //ajout d'une nouvelle requête
 
-    //     Planning planningTest = new Planning(carte);
+        planningTest.ajouterRequete(new Requete(6,5,"",8,5,""));
 
-    //     planningTest.setIdDepot(0L);
-    //     planningTest.setRequetes(requetesTest);
-    //     Date dTest = new Date(0);
-    //     planningTest.setDateDebut(dTest);
+        //on vérifie si la durée totale du nouveau planning est cohérente
 
-    //     planningTest.calculerTournee();
+        assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
 
-    //     //ajout d'une nouvelle requête
-
-    //     planningTest.ajouterRequete(new Requete(6,5,8,5));
-
-    //     //on vérifie si la durée totale du nouveau planning est cohérente
-
-    //     assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
-
-    // }
+     }
 
 
     /**
