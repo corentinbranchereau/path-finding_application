@@ -426,6 +426,25 @@ public class VueGraphique {
             // intersections
             ligneSegment.setViewOrder(2);
 
+            // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+            Tooltip tooltipNomRue = new Tooltip(segment.getNom());
+            tooltipNomRue.setShowDelay(new Duration(0));
+            tooltipNomRue.setHideDelay(new Duration(0));
+            Tooltip.install(ligneSegment, tooltipNomRue);
+
+            // Ajoute un handler pour augmenter la taille de la route lors du survol
+            ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                }
+            });
+
+            ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                }
+            });
+
             this.paneDessin.getChildren().add(ligneSegment);
             this.listeLignesTrajets.add(ligneSegment);
         }
