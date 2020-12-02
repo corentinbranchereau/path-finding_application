@@ -296,6 +296,14 @@ public class Controleur {
         return demandeSelectionnee;
     }
 
+    /**
+     * Renvoie la liste des commandes du design pattern COMMAND.
+     * @return
+     */
+    public ListOfCommands getListOfCommands() {
+        return l;
+    }
+
     public void setEtatInitial() {
         etatInitial.init(this);
         etatCourant = etatInitial;
