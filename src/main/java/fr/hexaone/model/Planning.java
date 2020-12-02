@@ -228,6 +228,8 @@ public class Planning{
      * meilleure tournée.
      */
     public void ajouterRequete(Requete requete) {
+        requetes.add(requete);
+
         demandesOrdonnees.add(requete.getDemandeCollecte());
         demandesOrdonnees.add(requete.getDemandeLivraison());
 
@@ -245,6 +247,19 @@ public class Planning{
         System.out.println(demandesOrdonnees.size());
     }
 
+    /**
+     * Supprimer une requete de la tournée et regénère les trajets ordonées
+     */
+    public void supprimerRequete(Requete requete) {
+        requetes.remove(requete);
+
+        demandesOrdonnees.remove(requete.getDemandeCollecte());
+        demandesOrdonnees.remove(requete.getDemandeLivraison());
+
+        ordonnerLesTrajetsEtLesDates();
+
+        System.out.println(demandesOrdonnees.size());
+    }
     
     
     ///////////////////////////////////////////////
