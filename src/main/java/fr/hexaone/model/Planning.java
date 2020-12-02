@@ -55,7 +55,7 @@ public class Planning{
     /**
      * Duree totale de la tournée en secondes
      */
-    protected double dureeTotale;
+    protected Integer dureeTotale;
 
     /**
 	 * Map permettant d'identifier les chemins les plus courts à partir d'un identifiant (String) 
@@ -186,7 +186,7 @@ public class Planning{
         listeTrajets.add(trajet);
         duree += trajet.getPoids()*3600. / 15.;
         dateFin = new Date(tempsDebut + (long)duree);
-        dureeTotale = duree;
+        dureeTotale = (int)duree/1000;
     }
     
     /**
@@ -261,6 +261,39 @@ public class Planning{
         System.out.println(demandesOrdonnees.size());
     }
     
+    /**
+     * Modifer la durée d'une demande
+     */
+    public void modifierDemande(Demande demande, Integer duree) {
+        demande.setDuree(duree);
+
+        ordonnerLesTrajetsEtLesDates();
+    }
+
+    /**
+     * Modifer la durée d'une demande
+     */
+    public void modifierDemande(Demande demande, Long idIntersection) {
+        demande.setIdIntersection(idIntersection);
+
+        recalculerTournee();
+    }
+
+    /**
+     * Modifer la durée et l'intersection d'une demande
+     */
+    public void modifierDemande(Demande demande, Long idIntersection, Integer duree) {
+        demande.setIdIntersection(idIntersection);
+        demande.setDuree(duree);
+        
+        recalculerTournee();
+    }
+
+
+    /**
+     * 
+     * @param intersections
+     */
     
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
@@ -420,11 +453,11 @@ public class Planning{
         this.listeTrajets = listeTrajets;
     }
 
-    public double getDureeTotale() {
+    public Integer getDureeTotale() {
         return dureeTotale;
     }
 
-    public void setDureeTotale(double dureeTotale) {
+    public void setDureeTotale(Integer dureeTotale) {
         this.dureeTotale = dureeTotale;
     }
 

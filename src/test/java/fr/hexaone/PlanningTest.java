@@ -595,9 +595,11 @@ public class PlanningTest {
 	    planning.setRequetes(requetes);
 
 	    //recherche de la meilleur solution
-	    planning.calculerMeilleurTournee();
+        planning.calculerMeilleurTournee();
+        
+        int dureeTotal = (int)planning.getDureeTotale();
 	    
-	    assert(planning.getDureeTotale()<=49442.0);
+	    assert(dureeTotal==49);
 
      }
 
@@ -638,7 +640,7 @@ public class PlanningTest {
 
         assert(planning.getDateDebut().getTime() == 0);
         assert(planning.getDateFin().getTime() == (5*3600/15 + 8000));
-        assert(planning.getDureeTotale() == (5*3600/15 + 8000));
+        assert(planning.getDureeTotale() == (5*3600/15 + 8000)/1000);
 
         demande = demandes.get(0);
         d1 = demande.getDateArrivee().getTime();
@@ -729,46 +731,37 @@ public class PlanningTest {
      /**
       * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
       */
-     @Test
-     public void test_modifier_requetes_intersection() {
+    @Test
+    public void test_modifier_requetes_intersection() {
      	 // Création d'un graphe
-         createGraph();
+        createGraph();
 
          // Création des requetes
      	List<Requete> requetes = new ArrayList<Requete>();
 
-     	 requetes.add(new Requete(1,5,"",3,5,""));
-     	 requetes.add(new Requete(4,5,"",9,5,""));
-     	 requetes.add(new Requete(6,5,"",8,5,""));
+        Requete r1 = new Requete(1,5,"",3,5,"");
+     	requetes.add(r1);
+     	requetes.add(new Requete(4,5,"",9,5,""));
+     	requetes.add(new Requete(6,5,"",8,5,""));
 
-         Planning planning1= new Planning(carte);
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
 
-         planning1.setIdDepot(0L);
-         planning1.setRequetes(requetes);
-         Date d = new Date(0);
-         planning1.setDateDebut(d);
+        planning.calculerMeilleurTournee();
 
-         planning1.calculerMeilleurTournee();
+        Integer dureeAvantChangement=planning.getDureeTotale();
 
-         double dureeAvantChangement=planning1.getDureeTotale();
+        r1.getDemandeLivraison().setIdIntersection(7L);
+        planning.recalculerTournee();
 
-         List<Demande> demandes=planning1.getDemandesOrdonnees();
+        //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+        Integer nouvelleDureeTotale = planning.getDureeTotale();
+        assert(dureeAvantChangement == 49);
+        assert(nouvelleDureeTotale == 49);
 
-         int index=0;
-         for(Demande dem : demandes) {
-        	 if(dem.getIdIntersection()==(long)3) {
-        		 break;
-        	 }
-        	 index++;
-         }
-
-         demandes.get(index).setIdIntersection((long)7);
-         planning1.recalculerTournee();
-
-         //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
-         assert(Math.abs(planning1.getDureeTotale()-dureeAvantChangement-0.48*1000)<0.001);
-
-     }
+    }
 
     // /**
     //  * Méthode pour tester la modification d'une requête en changeant le durée de livraison
@@ -845,56 +838,57 @@ public class PlanningTest {
 
     // }
 
-    // /**
-    //  * Méthode pour tester l'ajout de requête après le calcul de la tournée
-    //  */
-    // @Test
-    // public void test_ajouter_requetes() {
-    // 	 // Création d'un graphe
-    //     createGraph();
+     /**
+      * Méthode pour tester l'ajout de requête après le calcul de la tournée
+      */
+     @Test
+    public void test_ajouter_requetes() {
+     	 // Création d'un graphe
+    	 
+    	createGraph();
 
-    //     // Création des requetes de référence
-    // 	List<Requete> requetes = new ArrayList<Requete>();
+         // Création des requetes de référence
+     	List<Requete> requetes = new ArrayList<Requete>();
+     	
+     	requetes.add(new Requete(1,5,"",3,5,""));
+     	requetes.add(new Requete(4,5,"",9,5,""));
+     	requetes.add(new Requete(6,5,"",8,5,""));
 
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(4,5,9,5));
-    //     requetes.add(new Requete(6,5,8,5));
+        Planning planning = new Planning(carte);
 
-    //     Planning planning = new Planning(carte);
+        planning.setIdDepot(0L);
+        planning.setRequetes(requetes);
+        Date d = new Date(0);
+        planning.setDateDebut(d);
 
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
+        planning.calculerMeilleurTournee();
+     
+        double dureeReference=planning.getDureeTotale();
 
-    //     planning.calculerTournee();
+         // Création des requetes de test
+     	List<Requete> requetesTest = new ArrayList<Requete>();
+     	
+     	requetesTest.add(new Requete(1,5,"",3,5,""));
+     	requetesTest.add(new Requete(4,5,"",9,5,""));
 
-    //     double dureeReference=planning.getDureeTotale();
+        Planning planningTest = new Planning(carte);
 
-    //     // Création des requetes de test
-    // 	List<Requete> requetesTest = new ArrayList<Requete>();
+        planningTest.setIdDepot(0L);
+        planningTest.setRequetes(requetesTest);
+        Date dTest = new Date(0);
+        planningTest.setDateDebut(dTest);
 
-    // 	requetesTest.add(new Requete(1,5,3,5));
-    //     requetesTest.add(new Requete(4,5,9,5));
+        planningTest.calculerMeilleurTournee();
+        
+        //ajout d'une nouvelle requête
 
-    //     Planning planningTest = new Planning(carte);
+        planningTest.ajouterRequete(new Requete(6,5,"",8,5,""));
 
-    //     planningTest.setIdDepot(0L);
-    //     planningTest.setRequetes(requetesTest);
-    //     Date dTest = new Date(0);
-    //     planningTest.setDateDebut(dTest);
+        //on vérifie si la durée totale du nouveau planning est cohérente
 
-    //     planningTest.calculerTournee();
+        assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
 
-    //     //ajout d'une nouvelle requête
-
-    //     planningTest.ajouterRequete(new Requete(6,5,8,5));
-
-    //     //on vérifie si la durée totale du nouveau planning est cohérente
-
-    //     assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
-
-    // }
+     }
 
 
     /**

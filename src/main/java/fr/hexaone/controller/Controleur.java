@@ -109,6 +109,7 @@ public class Controleur {
      */
     public void chargerRequetes() {
         etatCourant.chargerRequetes(this);
+        etatCourant.init(this);
     }
 
     /**
