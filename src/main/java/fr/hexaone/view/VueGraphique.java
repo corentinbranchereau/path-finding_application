@@ -3,12 +3,7 @@ package fr.hexaone.view;
 import java.util.*;
 
 import fr.hexaone.controller.Controleur;
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Segment;
-import fr.hexaone.model.Trajet;
+import fr.hexaone.model.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -393,6 +388,7 @@ public class VueGraphique {
      * Cette méthode permet de dessiner une nouvelle requête dans le pane
      * de la vue graphique.
      * @param carte    La carte actuelle de l'application
+     * @param requete La requete devant être dessiné
      * @param mapCouleurRequete La Map contenant les associations entre une requête et sa couleur.
      */
     public void afficherNouvelleRequete(Carte carte, Requete requete, Map<Requete, Color> mapCouleurRequete){
@@ -426,10 +422,50 @@ public class VueGraphique {
     }
 
     /**
+     * Cette méthode permet de dessiner une nouvelle demande dans le pane
+     * de la vue graphique.
+     * @param carte    La carte actuelle de l'application
+     * @param demande La demande devant être dessinée
+     * @param mapCouleurRequete La Map contenant les associations entre une requête et sa couleur.
+     */
+    public void afficherNouvelleDemande(Carte carte, Demande demande, Map<Requete, Color> mapCouleurRequete){
+        Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
+
+        Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
+
+        Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
+        coord = adapterCoordonnees(coord.getX(), coord.getY());
+
+        //On génère une couleur aléatoire assez différente
+        Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+        if(demande.getTypeIntersection()==TypeIntersection.COLLECTE){
+            //PICKUP
+            // Pour le point de collecte, on crée un carré
+            Rectangle rectangleCollecte = new Rectangle(coord.getX() - 5, coord.getY() - 5, 10, 10);
+            rectangleCollecte.setFill(couleur);
+
+            //On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(new Requete(demande.getIdIntersection(), demande.getDuree(), demande.getNomIntersection(), TypeIntersection.COLLECTE), couleur);
+
+            this.paneDessin.getChildren().addAll(rectangleCollecte);
+
+        } else {
+            //DELIVERY
+            // Pour le point de livraison on crée un rond
+            Circle cercleLivraison = new Circle(coord.getX(), coord.getY(), 5);
+            cercleLivraison.setFill(couleur);
+
+            //On ajoute l'association Requete <-> Couleur dans la map
+            mapCouleurRequete.put(new Requete(demande.getIdIntersection(), demande.getDuree(), demande.getNomIntersection(), TypeIntersection.LIVRAISON), couleur);
+
+            this.paneDessin.getChildren().addAll(cercleLivraison);
+        }
+    }
+
+    /**
      * Génère une couleur aléatoire assez différente de celles présent dans la liste
      * passée en paramètre
-     *
-     *
      */
     protected Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes){
         // On va générer une couleur aléatoire qui est suffisament différente des
@@ -530,22 +566,42 @@ public class VueGraphique {
         }
     }
 
+    /**
+     * Getter
+     * @return Le minX
+     */
     public double getMinX() {
         return minX;
     }
 
+    /**
+     * Getter
+     * @return Le maxX
+     */
     public double getMaxX() {
         return maxX;
     }
 
+    /**
+     * Getter
+     * @return Le minY
+     */
     public double getMinY() {
         return minY;
     }
 
+    /**
+     * Getter
+     * @return Le maxY
+     */
     public double getMaxY() {
         return maxY;
     }
 
+    /**
+     * Getter
+     * @return Le padding de la carte
+     */
     public double getPADDING_CARTE() {
         return PADDING_CARTE;
     }

@@ -3,7 +3,6 @@ package fr.hexaone.controller;
 import java.util.Optional;
 
 import fr.hexaone.model.Demande;
-import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -55,12 +54,15 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
-        c.etatAjoutNouvelleRequete.setIdPickup(null);
-        c.etatAjoutNouvelleRequete.setIdDelivery(null);
+        c.etatAjoutNouvelleRequete.setIdIntersection1(null);
+        c.etatAjoutNouvelleRequete.setIdIntersection2(null);
         c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatCourant(c.etatAjoutNouvelleRequete);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void supprimerDemande(Controleur c, Demande demande) {
 
@@ -96,10 +98,10 @@ public class EtatTourneeCalcule implements State {
         }
     }
 
-    @Override
     /**
      * {@inheritDoc}
      */
+    @Override
     public void modifierPlanning(Controleur c) {
         c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(true);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
