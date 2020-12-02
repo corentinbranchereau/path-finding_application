@@ -254,6 +254,11 @@ public class Demande {
         this.idIntersection = idIntersection;
     }
 
+    /**
+     * Renvoie le type de l'intersection
+     * 
+     * @return Le type de l'intersection
+     */
     public TypeIntersection getTypeIntersection() {
         return typeIntersection;
     }
@@ -261,5 +266,4 @@ public class Demande {
     public void setTypeIntersection(TypeIntersection typeIntersection) {
         this.typeIntersection = typeIntersection;
     }
-
 }

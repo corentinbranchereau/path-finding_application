@@ -85,62 +85,74 @@ public class EtatAjoutNouvelleRequete implements State {
         }
 
         //Gestion de l'ajout
-        if(typeIntersection==null){
+        try {
+            if (typeIntersection == null) {
 
-            if(!verifieDureeUtilisateur(pickUpDurationField) || !verifieDureeUtilisateur(deliveryDurationField)){
-                System.out.println("Les durées ne doivent contenir que des chiffres !");
-                alertHelper("Mauvaise saisie de durée", "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
-                return;
-            }
-
-            //Pickup & Delivery
-            String nomPickup = "";
-            for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
-                if (!s.getNom().isEmpty()) {
-                    nomPickup = s.getNom();
-                    break;
+                if (!verifieDureeUtilisateur(pickUpDurationField) || !verifieDureeUtilisateur(deliveryDurationField)) {
+                    System.out.println("Les durées ne doivent contenir que des chiffres !");
+                    alertHelper("Mauvaise saisie de durée", "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
+                    return;
                 }
-            }
-            String nomDelivery = "";
-            for (Segment s : c.getCarte().getIntersections().get(idIntersection2).getSegmentsArrivants()) {
-                if (!s.getNom().isEmpty()) {
-                    nomDelivery = s.getNom();
-                    break;
+
+                //Pickup & Delivery
+                String nomPickup = "";
+                for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
+                    if (!s.getNom().isEmpty()) {
+                        nomPickup = s.getNom();
+                        break;
+                    }
                 }
-            }
-
-            Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
-            c.getPlanning().ajouterRequete(nouvelleRequete);
-
-            c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte, nouvelleRequete, c.getFenetre().getMapCouleurRequete());
-
-        } else {
-            //Pickup or Delivery
-            String nom = null;
-            for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
-                if (!s.getNom().isEmpty()) {
-                    nom = s.getNom();
-                    break;
+                String nomDelivery = "";
+                for (Segment s : c.getCarte().getIntersections().get(idIntersection2).getSegmentsArrivants()) {
+                    if (!s.getNom().isEmpty()) {
+                        nomDelivery = s.getNom();
+                        break;
+                    }
                 }
+
+                Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
+                c.getPlanning().ajouterRequete(nouvelleRequete);
+
+                c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.carte, nouvelleRequete, c.getFenetre().getMapCouleurRequete());
+
+            } else {
+                //Pickup or Delivery
+                String nom = null;
+                for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
+                    if (!s.getNom().isEmpty()) {
+                        nom = s.getNom();
+                        break;
+                    }
+                }
+
+                Demande nouvelleDemande;
+                if (typeIntersection == TypeIntersection.COLLECTE) {
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.COLLECTE);
+                    nouvelleDemande = nouvelleRequete.getDemandeCollecte();
+                } else {
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.LIVRAISON);
+                    nouvelleDemande = nouvelleRequete.getDemandeLivraison();
+                }
+                c.getPlanning().ajouterDemande(nouvelleDemande);
+
+                c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.carte, nouvelleDemande, c.getFenetre().getMapCouleurRequete());
             }
 
-            Demande nouvelleDemande;
-            if(typeIntersection==TypeIntersection.COLLECTE) nouvelleDemande = new Demande(typeIntersection, idIntersection1, nom, Integer.parseInt(pickUpDurationField) , null);
-            else nouvelleDemande = new Demande(typeIntersection, idIntersection1, nom, Integer.parseInt(deliveryDurationField) , null);
-            c.getPlanning().ajouterDemande(nouvelleDemande);
+            c.getFenetre().getVueGraphique().effacerTrajets();
+            for (Trajet trajet : c.getPlanning().getListeTrajets()) {
+                Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+                c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
+            }
 
-            c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.carte, nouvelleDemande, c.getFenetre().getMapCouleurRequete());
+            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+
+        } catch (NumberFormatException e){
+            System.out.println("Les durées (en secondes) saisies sont incorrectes !");
+            alertHelper("Mauvaise saisie de durée", "Les durées (en secondes) saisies sont incorrectes !", Alert.AlertType.ERROR);
+            return;
+        } finally {
+            this.annuler(c);
         }
-
-        c.getFenetre().getVueGraphique().effacerTrajets();
-        for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-            c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-        }
-
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-
-        this.annuler(c);
     }
 
     /**

@@ -151,8 +151,8 @@ public class Fenetre {
     public Fenetre(Stage stage, Controleur controleur) {
         this.stage = stage;
         this.controleur = controleur;
-        this.vueGraphique = new VueGraphique();
         this.vueTextuelle = new VueTextuelle(this);
+        this.vueGraphique = new VueGraphique(this);
         this.mapCouleurRequete = new HashMap<>();
     }
 
@@ -446,6 +446,10 @@ public class Fenetre {
         this.getFenetreControleur().getPaneDessin().setScaleY(1);
     }
 
+    /**
+     * Méthode qui permet d'adapter la taille de la fenêtre en fonction de la taille
+     * de la carte affichée
+     */
     public void adapterTailleFenetre() {
         Point2D coordMin = this.vueGraphique.adapterCoordonnees(this.vueGraphique.getMinX(),
                 this.vueGraphique.getMinY());
@@ -468,6 +472,10 @@ public class Fenetre {
         this.stage.setHeight(this.stage.getHeight() - (this.hauteurInitialeCarte - hauteur));
     }
 
+    /**
+     * Méthode permettant de remettre la taille initiale (taille au lancement) de la
+     * fenêtre
+     */
     public void resetTailleFenetre() {
         this.fenetreControleur.getBordureCarte().setWidth(largeurInitialeCarte);
         this.fenetreControleur.getBordureCarte().setHeight(hauteurInitialeCarte);
@@ -498,4 +506,12 @@ public class Fenetre {
         this.listeDemandes = list;
     }
 
+    /**
+     * Renvoie le controleur de l'application
+     * 
+     * @return Le controleur
+     */
+    public Controleur getControleur() {
+        return controleur;
+    }
 }
