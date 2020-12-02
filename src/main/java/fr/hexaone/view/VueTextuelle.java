@@ -345,6 +345,10 @@ public class VueTextuelle {
                                                 + this.OPACITE_DEMANDE_LIEE + ")");
         }
 
+        /**
+         * Permet de remettre le highlight au bon endroit (dans la vue textuelle) lors
+         * du drag and drop
+         */
         public void rechargerHighlight() {
                 if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
                         enleverHighlightDemande();

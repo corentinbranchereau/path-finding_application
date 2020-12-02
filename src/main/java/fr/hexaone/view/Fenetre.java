@@ -446,6 +446,10 @@ public class Fenetre {
         this.getFenetreControleur().getPaneDessin().setScaleY(1);
     }
 
+    /**
+     * Méthode qui permet d'adapter la taille de la fenêtre en fonction de la taille
+     * de la carte affichée
+     */
     public void adapterTailleFenetre() {
         Point2D coordMin = this.vueGraphique.adapterCoordonnees(this.vueGraphique.getMinX(),
                 this.vueGraphique.getMinY());
@@ -468,6 +472,10 @@ public class Fenetre {
         this.stage.setHeight(this.stage.getHeight() - (this.hauteurInitialeCarte - hauteur));
     }
 
+    /**
+     * Méthode permettant de remettre la taille initiale (taille au lancement) de la
+     * fenêtre
+     */
     public void resetTailleFenetre() {
         this.fenetreControleur.getBordureCarte().setWidth(largeurInitialeCarte);
         this.fenetreControleur.getBordureCarte().setHeight(hauteurInitialeCarte);
