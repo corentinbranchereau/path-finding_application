@@ -126,10 +126,13 @@ public class EtatAjoutNouvelleRequete implements State {
                 }
 
                 Demande nouvelleDemande;
-                if (typeIntersection == TypeIntersection.COLLECTE)
-                    nouvelleDemande = new Demande(typeIntersection, idIntersection1, nom, Integer.parseInt(pickUpDurationField), null);
-                else
-                    nouvelleDemande = new Demande(typeIntersection, idIntersection1, nom, Integer.parseInt(deliveryDurationField), null);
+                if (typeIntersection == TypeIntersection.COLLECTE) {
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.COLLECTE);
+                    nouvelleDemande = nouvelleRequete.getDemandeCollecte();
+                } else {
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.LIVRAISON);
+                    nouvelleDemande = nouvelleRequete.getDemandeLivraison();
+                }
                 c.getPlanning().ajouterDemande(nouvelleDemande);
 
                 c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.carte, nouvelleDemande, c.getFenetre().getMapCouleurRequete());
