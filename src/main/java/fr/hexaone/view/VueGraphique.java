@@ -1,10 +1,14 @@
 package fr.hexaone.view;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-//import org.graalvm.compiler.nodes.java.ArrayLengthNode;
-
-import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Intersection;
@@ -93,13 +97,6 @@ public class VueGraphique {
     protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
 
     /**
-     * Liste contenant les intersections et les segments de la carte chargées sous
-     * forme d'élements graphiques. Cela est utile pour redessiner la carte en cas
-     * de changement de fichier de requêtes
-     */
-    protected List<Node> listeNoeudsCarte;
-
-    /**
      * Map contenant les intersections de la carte chargée mappée avec son ID. Cela
      * est utile afin de pouvoir sélectionner une intersection précise lors de la
      * modification de requêtes.
@@ -147,12 +144,6 @@ public class VueGraphique {
     protected final double TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT = 8;
 
     /**
-     * Liste qui contient les lignes (élément graphique) composant les trajets
-     * affichés sur la carte
-     */
-    protected List<Line> listeLignesTrajets = new ArrayList<>();
-
-    /**
      * Constructeur de VueGraphique
      * 
      * @param fenetre La fenêtre de l'application à laquelle est reliée la vue
@@ -163,67 +154,82 @@ public class VueGraphique {
     }
 
     /**
-     * Renvoie le pane de dessin de la vue graphique.
+     * Permet de redessiner la vue graphique en prenant en compte tous les éléments
+     * du modèles qui existent
      * 
-     * @return Le pane de dessin
+     * @param planning            Le planning actuel, dans lequel on retrouve les
+     *                            autres variables (carte, requêtes, etc.)
+     * @param demandeSelectionnee La demande qui a été sélectionnée par
+     *                            l'utilisateur
      */
-    public Pane getPaneDessin() {
-        return paneDessin;
-    }
-
-    /**
-     * Permet de définir un nouveau pane de dessin pour la vue graphique.
-     * 
-     * @param paneDessin Le nouveau pane de dessin
-     */
-    public void setPaneDessin(Pane paneDessin) {
-        this.paneDessin = paneDessin;
-    }
-
     public void rafraichir(Planning planning, Demande demandeSelectionnee) {
-        // Reinitialisation de la vue
+        // Réinitialisation de la vue
+        this.paneDessin.getChildren().clear();
 
-        if (planning == null) return;
+        if (planning == null)
+            return;
+
+        if (planning.getCarte() != null) {
+            // Affichage de la carte
+            afficherCarte(planning.getCarte());
+        }
+
         // Affichage des demandes sur la carte
-        if (planning.getDemandesOrdonnees() != null ){
+        if (planning.getDemandesOrdonnees() != null) {
             // Affichage des demandes sur la carte
-            
+            afficherDemandes(planning.getDemandesOrdonnees(), planning.getCarte(), planning.getIdDepot());
+
             if (planning.getListeTrajets() != null) {
-                // Affichage des trajets 
+                // Affichage des trajets
+                for (Trajet trajet : planning.getListeTrajets()) {
+                    // TODO : mieux gérer les couleurs des trajets
+                    Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+                    afficherTrajet(planning.getCarte(), trajet, couleur);
+                }
 
                 // Affichage de la demande sélectionnée et de la demande associée
+                // TODO : actuellement ne marche pas avant d'avoir calculé --> à voir
                 if (demandeSelectionnee != null) {
                     Requete requeteAssociee = demandeSelectionnee.getRequete();
-                    if(demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
+
+                    if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
                         // Mise en valeur forte de la collecte
+                        highlightDemande(demandeSelectionnee, false);
 
                         if (requeteAssociee != null && requeteAssociee.getDemandeLivraison() != null) {
                             Demande demandeAssociee = requeteAssociee.getDemandeLivraison();
                             // Mise en valeur faible de la livraison
+                            highlightDemande(demandeAssociee, true);
 
                         }
-                    } else if(demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                    } else if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
                         // Mise en valeur forte de la livraison
+                        highlightDemande(demandeSelectionnee, false);
 
                         if (requeteAssociee != null && requeteAssociee.getDemandeCollecte() != null) {
                             Demande demandeAssociee = requeteAssociee.getDemandeCollecte();
                             // Mise en valeur faible de la collecte
-                            
+                            highlightDemande(demandeAssociee, true);
                         }
                     } else {
-                        // Si on veut afficher un dépot sélectionné ( mais pas demandé ).
+                        // TODO : Mise en valeur du dépot
                     }
+
+                    // TODO : Mettre en valeur le trajet avant et après la demande sélectionnée
+                    int index = planning.getDemandesOrdonnees().indexOf(demandeSelectionnee);
+                    planning.getListeTrajets().get(index);
+                    planning.getListeTrajets().get(index + 1);
                 }
             }
-        } else if (planning.getRequetes() != null ) {
+        } else if (!planning.getRequetes().isEmpty()) {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
             List<Demande> demandes = new ArrayList<Demande>();
-            for (Requete requete: planning.getRequetes()) {
+            for (Requete requete : planning.getRequetes()) {
                 demandes.add(requete.getDemandeCollecte());
                 demandes.add(requete.getDemandeLivraison());
             }
             // Affichage des demandes
-
+            afficherDemandes(demandes, planning.getCarte(), planning.getIdDepot());
         }
     }
 
@@ -235,7 +241,7 @@ public class VueGraphique {
      * @param latitude  La latitude du point à convertir
      * @return Un point contenant la paire de coordonnées (x, y)
      */
-    public Point2D longLatToXY(double longitude, double latitude) {
+    private Point2D longLatToXY(double longitude, double latitude) {
         // Conversion de la longitude et latitude en radian
         longitude = longitude * Math.PI / 180;
         latitude = latitude * Math.PI / 180;
@@ -261,39 +267,12 @@ public class VueGraphique {
     }
 
     /**
-     * Méthode permettant de n'affichant que la carte en enlevant toutes les
-     * requêtes dessinées dessus
-     */
-    public void nettoyerCarte() {
-        this.paneDessin.getChildren().setAll(this.listeNoeudsCarte);
-    }
-
-    /**
-     * Méthode qui permet d'effacer les trajets affichés dans la vue graphique
-     */
-    public void effacerTrajets() {
-        for (Line l : this.listeLignesTrajets) {
-            this.paneDessin.getChildren().remove(l);
-        }
-        this.listeLignesTrajets.clear();
-    }
-
-    /**
-     * Cette méthode permet de dessiner la carte dans le pane de la vue graphique,
-     * en adaptant les coordonnées des éléments en fonction de la taille de ce pane,
-     * en respectant toutefois le ratio longitude/latitude des coordonnées pour ne
-     * pas avoir un effet "aplati"
+     * Méthode permettant de calculer les paramètres servant à adapter l'affichage
+     * de la carte dans la fenêtre et la taille de la fenêtre
      * 
-     * @param carte La carte à dessiner
+     * @param carte
      */
-    public void afficherCarte(Carte carte) {
-        this.listeNoeudsCarte = new LinkedList<>();
-        this.mapIntersections = new HashMap<>();
-        this.listIntersectionsSelectionnees = new LinkedList<>();
-
-        // On enlève tous les éléments graphiques déjà affichés (s'il y en a)
-        this.paneDessin.getChildren().clear();
-
+    public void calculAdaptationCarte(Carte carte) {
         // On va chercher les coordonnées (x, y) minimales et maximales
         this.minX = Double.MAX_VALUE;
         this.maxX = Double.MIN_VALUE;
@@ -336,8 +315,87 @@ public class VueGraphique {
         double paddingHauteur = (this.paneDessin.getHeight() - (this.ratioGlobal * this.maxY)) / 2;
 
         this.paddingGlobal = Math.min(paddingLargeur, paddingHauteur);
+    }
 
-        // On va maintenant parcourir la carte dans le but de dessiner les intersections
+    /**
+     * Méthode qui permet de générer des couleurs pour chaque requête de la liste
+     * passée en paramètre. Les couleurs générées seront les plus différentes
+     * possibles les unes des autres et ne seront pas trop claires (meilleure
+     * visibilité)
+     * 
+     * @param requetes La liste des requêtes pour lesquelles il faut générer des
+     *                 couleurs
+     */
+    public void genererCouleursRequetes(List<Requete> requetes) {
+        // On réinitialise la map d'association Requete <-> Couleur
+        this.fenetre.getMapCouleurRequete().clear();
+
+        Set<Color> couleursDejaPresentes = new HashSet<>();
+
+        for (Requete requete : requetes) {
+            Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(requete, couleur);
+
+            couleursDejaPresentes.add(couleur);
+        }
+    }
+
+    /**
+     * Génère une couleur aléatoire assez différente de celles présentes dans la
+     * liste passée en paramètre
+     * 
+     * @param couleursDejaPresentes La liste des couleurs déjà utilisées
+     * @return La couleur générée
+     */
+    private Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes) {
+        // On va générer une couleur aléatoire qui est suffisament différente des
+        // couleurs déjà présentes (cela est déterminé grâce à la constante
+        // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
+        // claire.
+        boolean couleurSimilairePresente;
+        int maxIterations = 1000;
+        int nbIterations = 0;
+        Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+        do {
+            nbIterations++;
+            couleurSimilairePresente = false;
+            // On vérifie que la couleur ne soit pas trop claire
+            if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
+                    && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
+                couleur = Color.color(couleur.getRed() - 0.2, couleur.getGreen() - 0.2, couleur.getBlue() - 0.2);
+            }
+
+            for (Color c : couleursDejaPresentes) {
+                // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
+                // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
+                double sommeDiffComposantes = Math.abs(c.getRed() - couleur.getRed())
+                        + Math.abs(c.getGreen() - couleur.getGreen()) + Math.abs(c.getBlue() - couleur.getBlue());
+                if (sommeDiffComposantes < VALEUR_SEUIL_DIFF_COULEUR) {
+                    couleur = Color.color(Math.random(), Math.random(), Math.random());
+                    couleurSimilairePresente = true;
+                    break;
+                }
+            }
+        } while (couleurSimilairePresente && nbIterations < maxIterations);
+        return couleur;
+    }
+
+    /**
+     * Cette méthode permet de dessiner la carte dans le pane de la vue graphique,
+     * en adaptant les coordonnées des éléments en fonction de la taille de ce pane,
+     * en respectant toutefois le ratio longitude/latitude des coordonnées pour ne
+     * pas avoir un effet "aplati"
+     * 
+     * @param carte La carte à dessiner
+     */
+    private void afficherCarte(Carte carte) {
+        // this.listeNoeudsCarte = new LinkedList<>();
+        this.mapIntersections = new HashMap<>();
+        this.listIntersectionsSelectionnees = new LinkedList<>();
+
+        // On parcourt la carte dans le but de dessiner les intersections
         // et les segments
         for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
             // On convertit la longitude et latitude en x et y
@@ -349,8 +407,36 @@ public class VueGraphique {
             Circle cercleIntersection = new Circle(coordXY.getX(), coordXY.getY(), 2);
             cercleIntersection.setFill(Color.GRAY);
 
+            // Ajout des handlers sur l'intersection
+            // Handler pour sélectionner l'intersection
+            cercleIntersection.setOnMousePressed(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    fenetre.getControleur().selectionnerIntersection(entry.getKey());
+                }
+            });
+
+            // Ajoute un handler pour augmenter la taille de l'intersection lors du survol
+            cercleIntersection.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                        cercleIntersection.setRadius(3.5D);
+                        cercleIntersection.setViewOrder(-1.0);
+                        cercleIntersection.setFill(Color.INDIANRED);
+                    }
+                }
+            });
+
+            cercleIntersection.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
+                        cercleIntersection.setRadius(2D);
+                        cercleIntersection.setViewOrder(0.0);
+                        cercleIntersection.setFill(Color.GRAY);
+                    }
+                }
+            });
+
             // On ajoute l'élément au dessin
-            this.listeNoeudsCarte.add(cercleIntersection);
             this.mapIntersections.put(entry.getKey(), cercleIntersection);
             this.paneDessin.getChildren().add(cercleIntersection);
 
@@ -390,30 +476,24 @@ public class VueGraphique {
                     }
                 });
 
-                this.listeNoeudsCarte.add(ligneSegment);
                 this.paneDessin.getChildren().add(ligneSegment);
             }
         }
     }
 
     /**
-     * Cette méthode permet de dessiner les requêtes dans le pane de la vue
-     * graphique.
+     * Affiche la liste des demandes passées en paramètres sur le pane de dessin
      * 
-     * @param planning Le planning actuel de l'application, contenant les requêtes
-     * @param carte    La carte actuelle de l'application
+     * @param demandes La liste des demandes à afficher
+     * @param carte    La carte actuellement chargée dans l'application
+     * @param idDepot  L'identifiant du dépôt
      */
-    public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
-        // On réinitialise la map d'association Requete <-> Couleur
-        mapCouleurRequete.clear();
-
-        nettoyerCarte();
-
+    private void afficherDemandes(List<Demande> demandes, Carte carte, Long idDepot) {
         // Initialisation de la map reliant les demandes aux objets graphiques
         this.mapDemandeNoeud = new HashMap<>();
 
         // Dessin du dépôt (sous la forme d'une étoile)
-        Intersection depot = carte.getIntersections().get(planning.getIdDepot());
+        Intersection depot = carte.getIntersections().get(idDepot);
         Point2D coordDepot = longLatToXY(depot.getLongitude(), depot.getLatitude());
         coordDepot = adapterCoordonnees(coordDepot.getX(), coordDepot.getY());
 
@@ -437,8 +517,79 @@ public class VueGraphique {
         etoileDepot.setFill(Color.RED);
         this.paneDessin.getChildren().add(etoileDepot);
 
-        for (Requete requete : planning.getRequetes()) {
-            afficherNouvelleRequete(carte, requete, mapCouleurRequete);
+        for (Demande demande : demandes) {
+            afficherDemande(carte, demande);
+        }
+    }
+
+    /**
+     * Cette méthode permet de dessiner une demande dans le pane de la vue
+     * graphique.
+     * 
+     * @param carte   La carte actuelle de l'application
+     * @param demande La demande devant être dessinée
+     */
+    private void afficherDemande(Carte carte, Demande demande) {
+        Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
+
+        Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
+        coord = adapterCoordonnees(coord.getX(), coord.getY());
+
+        Color couleur = this.fenetre.mapCouleurRequete.get(demande.getRequete());
+
+        if (couleur == null) {
+            // La couleur n'a pas été trouvée (par exemple c'est une requête que
+            // l'utilisateur a ajouté)
+            Collection<Color> couleursDejaPresentes = this.fenetre.getMapCouleurRequete().values();
+            couleur = genereCouleurAleatoire(couleursDejaPresentes);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(demande.getRequete(), couleur);
+        }
+
+        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+            // Collecte
+            // Pour le point de collecte, on crée un carré
+            Rectangle rectangleCollecte = new Rectangle(coord.getX() - 5, coord.getY() - 5, 10, 10);
+            rectangleCollecte.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(demande.getRequete(), couleur);
+
+            // On ajoute un handler pour sélectionner la demande
+            rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                }
+            });
+
+            // On ajoute l'association Demande <-> Noeud à la map
+            this.mapDemandeNoeud.put(demande, rectangleCollecte);
+
+            // On ajoute le point de collecte au pane de dessin
+            this.paneDessin.getChildren().addAll(rectangleCollecte);
+
+        } else {
+            // Livraison
+            // Pour le point de livraison on crée un rond
+            Circle cercleLivraison = new Circle(coord.getX(), coord.getY(), 5);
+            cercleLivraison.setFill(couleur);
+
+            // On ajoute l'association Requete <-> Couleur dans la map
+            this.fenetre.getMapCouleurRequete().put(demande.getRequete(), couleur);
+
+            // On ajoute un handler pour sélectionner la demande
+            cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                }
+            });
+
+            // On ajoute l'association Demande <-> Noeud à la map
+            this.mapDemandeNoeud.put(demande, cercleLivraison);
+
+            // On ajoute le point de livraison au pane de dessin
+            this.paneDessin.getChildren().addAll(cercleLivraison);
         }
     }
 
@@ -451,7 +602,7 @@ public class VueGraphique {
      * @param trajet  Le trajet à dessiner
      * @param couleur La couleur du trajet
      */
-    public void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
+    private void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
         // On parcourt tous les segments composant le trajet
         for (Segment segment : trajet.getListeSegments()) {
             // On calcule les coordonnées du départ et de l'arrivée
@@ -495,187 +646,13 @@ public class VueGraphique {
             });
 
             this.paneDessin.getChildren().add(ligneSegment);
-            this.listeLignesTrajets.add(ligneSegment);
-        }
-
-        // TODO : méthode ajouterRequete (permet l'ajout sur la vueGraphique)
-    }
-
-    /**
-     * Cette méthode permet de dessiner une nouvelle requête dans le pane de la vue
-     * graphique.
-     * 
-     * @param carte             La carte actuelle de l'application
-     * @param requete           La requete devant être dessiné
-     * @param mapCouleurRequete La Map contenant les associations entre une requête
-     *                          et sa couleur.
-     */
-    public void afficherNouvelleRequete(Carte carte, Requete requete, Map<Requete, Color> mapCouleurRequete) {
-        Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
-
-        Intersection collecte = carte.getIntersections().get(requete.getDemandeCollecte().getIdIntersection());
-        Intersection livraison = carte.getIntersections().get(requete.getDemandeLivraison().getIdIntersection());
-
-        Point2D coordCollecte = longLatToXY(collecte.getLongitude(), collecte.getLatitude());
-        coordCollecte = adapterCoordonnees(coordCollecte.getX(), coordCollecte.getY());
-
-        Point2D coordLivraison = longLatToXY(livraison.getLongitude(), livraison.getLatitude());
-        coordLivraison = adapterCoordonnees(coordLivraison.getX(), coordLivraison.getY());
-
-        // On génère une couleur aléatoire assez différente
-        Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
-
-        // On ajoute l'association Requete <-> Couleur dans la map
-        mapCouleurRequete.put(requete, couleur);
-
-        // Pour le point de collecte, on crée un carré
-        Rectangle rectangleCollecte = new Rectangle(coordCollecte.getX() - 5, coordCollecte.getY() - 5, 10, 10);
-        rectangleCollecte.setFill(couleur);
-
-        // Pour le point de livraison on crée un rond
-        Circle cercleLivraison = new Circle(coordLivraison.getX(), coordLivraison.getY(), 5);
-        cercleLivraison.setFill(couleur);
-
-        this.paneDessin.getChildren().addAll(rectangleCollecte, cercleLivraison);
-
-        // Ajout des handlers sur les demandes
-        rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                fenetre.getControleur().setDemandeSelectionnee(requete.getDemandeCollecte());
-            }
-        });
-
-        cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                fenetre.getControleur().setDemandeSelectionnee(requete.getDemandeLivraison());
-            }
-        });
-
-        // Ajout des des demandes et de leur objet graphique à la map
-        this.mapDemandeNoeud.put(requete.getDemandeCollecte(), rectangleCollecte);
-        this.mapDemandeNoeud.put(requete.getDemandeLivraison(), cercleLivraison);
-    }
-
-    /**
-     * Cette méthode permet de dessiner une nouvelle demande dans le pane de la vue
-     * graphique.
-     * 
-     * @param carte             La carte actuelle de l'application
-     * @param demande           La demande devant être dessinée
-     * @param mapCouleurRequete La Map contenant les associations entre une requête
-     *                          et sa couleur.
-     */
-    public void afficherNouvelleDemande(Carte carte, Demande demande, Map<Requete, Color> mapCouleurRequete) {
-        Collection<Color> couleursDejaPresentes = mapCouleurRequete.values();
-
-        Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
-
-        Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
-        coord = adapterCoordonnees(coord.getX(), coord.getY());
-
-        // On génère une couleur aléatoire assez différente
-        Color couleur = genereCouleurAleatoire(couleursDejaPresentes);
-
-        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
-            // PICKUP
-            // Pour le point de collecte, on crée un carré
-            Rectangle rectangleCollecte = new Rectangle(coord.getX() - 5, coord.getY() - 5, 10, 10);
-            rectangleCollecte.setFill(couleur);
-
-            // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(demande.getRequete(), couleur);
-
-            this.paneDessin.getChildren().addAll(rectangleCollecte);
-
-        } else {
-            // DELIVERY
-            // Pour le point de livraison on crée un rond
-            Circle cercleLivraison = new Circle(coord.getX(), coord.getY(), 5);
-            cercleLivraison.setFill(couleur);
-
-            // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(demande.getRequete(), couleur);
-
-            this.paneDessin.getChildren().addAll(cercleLivraison);
-        }
-    }
-
-    /**
-     * Génère une couleur aléatoire assez différente de celles présent dans la liste
-     * passée en paramètre
-     */
-    protected Color genereCouleurAleatoire(Collection<Color> couleursDejaPresentes) {
-        // On va générer une couleur aléatoire qui est suffisament différente des
-        // couleurs déjà présentes (cela est déterminé grâce à la constante
-        // VALEUR_SEUIL_DIFF_COULEUR). On regarde également si la couleur n'est pas trop
-        // claire.
-        boolean couleurSimilairePresente;
-        int maxIterations = 1000;
-        int nbIterations = 0;
-        Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-        do {
-            nbIterations++;
-            couleurSimilairePresente = false;
-            // On vérifie que la couleur ne soit pas trop claire
-            if (couleur.getRed() > VALEUR_SEUIL_COULEUR_CLAIRE && couleur.getGreen() > VALEUR_SEUIL_COULEUR_CLAIRE
-                    && couleur.getBlue() > VALEUR_SEUIL_COULEUR_CLAIRE) {
-                couleur = Color.color(couleur.getRed() - 0.2, couleur.getGreen() - 0.2, couleur.getBlue() - 0.2);
-            }
-
-            for (Color c : couleursDejaPresentes) {
-                // Pour déterminer si une couleur est proche d'une autre, on calcule la somme
-                // des valeurs absolues des différences entre les 3 composantes RVB des couleurs
-                double sommeDiffComposantes = Math.abs(c.getRed() - couleur.getRed())
-                        + Math.abs(c.getGreen() - couleur.getGreen()) + Math.abs(c.getBlue() - couleur.getBlue());
-                if (sommeDiffComposantes < VALEUR_SEUIL_DIFF_COULEUR) {
-                    couleur = Color.color(Math.random(), Math.random(), Math.random());
-                    couleurSimilairePresente = true;
-                    break;
-                }
-            }
-        } while (couleurSimilairePresente && nbIterations < maxIterations);
-        return couleur;
-    }
-
-    /**
-     * Attache les EventHandler aux intersections de la carte chargée afin de
-     * préparer la sélection d'intersection
-     *
-     * @param controleur Le controleur de l'application
-     */
-    public void attacherHandlerIntersection(Controleur controleur) {
-        for (Map.Entry<Long, Circle> entry : this.mapIntersections.entrySet()) {
-            entry.getValue().setOnMousePressed(new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent mouseEvent) {
-                    controleur.selectionnerIntersection(entry.getKey());
-                }
-            });
-
-            // Ajoute un handler pour augmenter la taille de l'intersection lors du survol
-            entry.getValue().setOnMouseEntered(new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
-                        entry.getValue().setRadius(3.5D);
-                        entry.getValue().setViewOrder(-1.0);
-                        entry.getValue().setFill(Color.INDIANRED);
-                    }
-                }
-            });
-
-            entry.getValue().setOnMouseExited(new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
-                        entry.getValue().setRadius(2D);
-                        entry.getValue().setViewOrder(0.0);
-                        entry.getValue().setFill(Color.GRAY);
-                    }
-                }
-            });
         }
     }
 
     /**
      * Sélectionne une intersection
+     * 
+     * @param idIntersection L'identifiant de l'intersection à sélectionner
      */
     public void selectionneIntersection(Long idIntersection) {
         if (!listIntersectionsSelectionnees.contains(idIntersection)) {
@@ -687,6 +664,8 @@ public class VueGraphique {
 
     /**
      * Déselectionne une intersection
+     * 
+     * @param idIntersection L'identifiant de l'intersection à sélectionner
      */
     public void deselectionneIntersection(Long idIntersection) {
         if (listIntersectionsSelectionnees.contains(idIntersection)) {
@@ -703,6 +682,68 @@ public class VueGraphique {
         for (Long l : listIntersectionsSelectionnees) {
             this.deselectionneIntersection(l);
         }
+    }
+
+    /**
+     * Méthode permettant de sélectionner (highlight) une demande sur la carte
+     * 
+     * @param demande La demande à sélectionner
+     */
+    private void highlightDemande(Demande demande, boolean attenuation) {
+        Node n = this.mapDemandeNoeud.get(demande);
+
+        if (n instanceof Rectangle) {
+            // Demande de collecte
+            Rectangle rectangleCollecte = (Rectangle) n;
+
+            if (attenuation) {
+                // Demande associée à celle sélectionnée
+                rectangleCollecte.setWidth(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
+                rectangleCollecte.setHeight(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
+                rectangleCollecte.setX(
+                        rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+                rectangleCollecte.setY(
+                        rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+
+            } else {
+                // Demande sélectionnée
+                rectangleCollecte.setWidth(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+                rectangleCollecte.setHeight(this.TAILLE_NOEUD_HIGHLIGHT * 2);
+                rectangleCollecte
+                        .setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+                rectangleCollecte
+                        .setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
+            }
+        } else if (n instanceof Circle) {
+            // Demande de livraison
+            Circle cercleLivraison = (Circle) n;
+
+            if (attenuation) {
+                // Demande associée à celle sélectionnée
+                cercleLivraison.setRadius(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
+            } else {
+                // Demande sélectionnée
+                cercleLivraison.setRadius(this.TAILLE_NOEUD_HIGHLIGHT);
+            }
+        }
+    }
+
+    /**
+     * Renvoie le pane de dessin de la vue graphique.
+     * 
+     * @return Le pane de dessin
+     */
+    public Pane getPaneDessin() {
+        return paneDessin;
+    }
+
+    /**
+     * Permet de définir un nouveau pane de dessin pour la vue graphique.
+     * 
+     * @param paneDessin Le nouveau pane de dessin
+     */
+    public void setPaneDessin(Pane paneDessin) {
+        this.paneDessin = paneDessin;
     }
 
     /**
@@ -748,83 +789,5 @@ public class VueGraphique {
      */
     public double getPADDING_CARTE() {
         return PADDING_CARTE;
-    }
-
-    /**
-     * Méthode permettant de désélectionner la demande actuellement sélectionnée
-     */
-    public void enleverHighlightDemande(Demande demande) {
-        Node n = this.mapDemandeNoeud.get(demande);
-
-        if (n instanceof Rectangle) {
-            // Demande de collecte
-            Rectangle rectangleCollecte = (Rectangle) n;
-
-            rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
-            rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
-            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
-            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
-
-            // On récupère le noeud livraison lié à ce noeud collecte
-            Circle cercleLivraison = (Circle) this.mapDemandeNoeud.get(demande.getRequete().getDemandeLivraison());
-
-            cercleLivraison.setRadius(this.TAILLE_NOEUD_DEMANDE);
-        } else if (n instanceof Circle) {
-            // Demande de livraison
-            Circle cercleLivraison = (Circle) n;
-
-            cercleLivraison.setRadius(this.TAILLE_NOEUD_DEMANDE);
-
-            // On récupère le noeud collecte lié à ce noeud livraison
-            Rectangle rectangleCollecte = (Rectangle) this.mapDemandeNoeud
-                    .get(demande.getRequete().getDemandeCollecte());
-
-            rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
-            rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
-            rectangleCollecte.setX(
-                    rectangleCollecte.getX() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
-            rectangleCollecte.setY(
-                    rectangleCollecte.getY() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
-        }
-    }
-
-    /**
-     * Méthode permettant de sélectionner (highlight) une demande sur la carte
-     * 
-     * @param demande La demande à sélectionner
-     */
-    public void highlightDemande(Demande demande) {
-        Node n = this.mapDemandeNoeud.get(demande);
-
-        if (n instanceof Rectangle) {
-            // Demande de collecte
-            Rectangle rectangleCollecte = (Rectangle) n;
-
-            rectangleCollecte.setWidth(this.TAILLE_NOEUD_HIGHLIGHT * 2);
-            rectangleCollecte.setHeight(this.TAILLE_NOEUD_HIGHLIGHT * 2);
-            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
-            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_HIGHLIGHT);
-
-            // On récupère le noeud livraison lié à ce noeud collecte
-            Circle cercleLivraison = (Circle) this.mapDemandeNoeud.get(demande.getRequete().getDemandeLivraison());
-
-            cercleLivraison.setRadius(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
-        } else if (n instanceof Circle) {
-            // Demande de livraison
-            Circle cercleLivraison = (Circle) n;
-
-            cercleLivraison.setRadius(this.TAILLE_NOEUD_HIGHLIGHT);
-
-            // On récupère le noeud collecte lié à ce noeud livraison
-            Rectangle rectangleCollecte = (Rectangle) this.mapDemandeNoeud
-                    .get(demande.getRequete().getDemandeCollecte());
-
-            rectangleCollecte.setWidth(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
-            rectangleCollecte.setHeight(this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT * 2);
-            rectangleCollecte.setX(
-                    rectangleCollecte.getX() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
-            rectangleCollecte.setY(
-                    rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
-        }
     }
 }

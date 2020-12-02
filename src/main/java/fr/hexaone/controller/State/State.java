@@ -38,7 +38,7 @@ public interface State {
     /**
      * Annuler la dernière commande (design pattern COMMAND) via un undo
      */
-    default void undo(ListOfCommands l){
+    default void undo(ListOfCommands l) {
         l.undo();
         System.out.println("UNDO - [default state implementation]");
     }
@@ -46,7 +46,7 @@ public interface State {
     /**
      * Rétablir la dernière commande (design pattern COMMAND) via un redo
      */
-    default void redo(ListOfCommands l){
+    default void redo(ListOfCommands l) {
         l.redo();
         System.out.println("REDO - [default state implementation]");
     }
@@ -61,17 +61,18 @@ public interface State {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
                 Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
-                c.setCarte(new Carte());
-                XMLDeserializer.loadCarte(c.getCarte(), xmlCarte);
+                Carte nouvelleCarte = new Carte();
+                Planning nouveauPlanning = new Planning(nouvelleCarte);
+                c.setPlanning(nouveauPlanning);
+                XMLDeserializer.loadCarte(c.getPlanning().getCarte(), xmlCarte);
 
                 // On réinitialise le zoom et la taille de la zone de dessin avant d'afficher la
                 // carte
                 c.getFenetre().resetZoom();
                 c.getFenetre().resetTailleFenetre();
 
-                c.getFenetre().getVueGraphique().afficherCarte(c.getCarte());
-
-                c.getFenetre().getVueGraphique().attacherHandlerIntersection(c);
+                c.getFenetre().getVueGraphique().calculAdaptationCarte(c.getPlanning().getCarte());
+                c.rafraichirVues();
 
                 // On adapte la taille de la fenêtre en fonction de la taille finale de la carte
                 c.getFenetre().adapterTailleFenetre();
@@ -87,7 +88,7 @@ public interface State {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-            } catch (BadFileTypeException e){
+            } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
             }
         } else {
@@ -105,13 +106,20 @@ public interface State {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
                 Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath());
-                c.setPlanning(new Planning(c.getCarte()));
                 XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
-                // On affiche requêtes chargées dans la vue graphique et la vue textuelle
-                c.getFenetre().getVueGraphique().afficherRequetes(c.getPlanning(), c.getCarte(),
-                        c.getFenetre().getMapCouleurRequete());
-                c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getCarte(),
+                // On génère des couleurs pour les requêtes
+                c.getFenetre().getVueGraphique().genererCouleursRequetes(c.getPlanning().getRequetes());
+
+                // TODO : effacer les trajets (la tournée) s'ils existent (si jamais
+                // précédemment calculé)
+
+                // On affiche les requêtes chargées dans la vue graphique et la vue textuelle
+                c.rafraichirVues();
+
+                // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
+                // textuelle sera prête
+                c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getPlanning().getCarte(),
                         c.getFenetre().getMapCouleurRequete());
 
                 c.setEtatRequetesChargees();
@@ -125,9 +133,9 @@ public interface State {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-            } catch (BadFileTypeException e){
+            } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
-            } catch (RequestOutOfMapException e){
+            } catch (RequestOutOfMapException e) {
                 System.out.println(e.getMessage());
             }
         } else {
