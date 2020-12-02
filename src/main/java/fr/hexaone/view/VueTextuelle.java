@@ -139,10 +139,10 @@ public class VueTextuelle {
                         this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
 
                         this.requetesControleur = loader.getController();
-                        requetesControleur.getArriveeColumn()
+                        requetesControleur.getDepartColumn()
                                         .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
-                        requetesControleur.getArriveeColumn().setText("Durée");
-                        requetesControleur.getDepartColumn().setVisible(false);
+                        requetesControleur.getDepartColumn().setText("Durée");
+                        requetesControleur.getArriveeColumn().setVisible(false);
                         requetesControleur.setFenetre(fenetre);
 
                 } catch (IOException e) {
