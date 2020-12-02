@@ -135,17 +135,7 @@ public interface State {
      * Cette méthode quitte l'application
      */
     default void quitterApplication(Controleur c) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Quitter l'application ?");
-        alert.setHeaderText(null);
-        alert.setContentText("Êtes-vous sûr de vouloir quitter l'application ?");
-
-        Optional<ButtonType> decision = alert.showAndWait();
-        if (decision.get() == ButtonType.OK) {
-            Platform.exit();
-        } else {
-            // Rien
-        }
+        Platform.exit();
     }
 
     /**
