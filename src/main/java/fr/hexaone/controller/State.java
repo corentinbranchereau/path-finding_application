@@ -31,7 +31,7 @@ public interface State {
     /**
      * Cette méthode permet d'initaliser l'état
      */
-    public void init(Controleur c);
+    void init(Controleur c);
 
     /**
      * Cette méthode permet de charger et d'afficher une carte
