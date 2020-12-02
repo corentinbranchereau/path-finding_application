@@ -1,6 +1,7 @@
 package fr.hexaone.controller.Command;
 
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Planning;
 
 /**
  * Commande de suppression de demande en suivant le design pattern COMMAND.
@@ -10,13 +11,14 @@ import fr.hexaone.model.Demande;
  */
 public class SupprimerDemandeCommand implements Command{
 
+    private Planning planning;
     private Demande demande;
 
     /**
      * Constructeur de la suppression de demande
      */
-    public SupprimerDemandeCommand(Demande demande){
-        //TODO --> Préparer la commande (la demande à retirer etc...)
+    public SupprimerDemandeCommand(Planning planning, Demande demande){
+        this.planning = planning;
         this.demande = demande;
     }
 
@@ -25,7 +27,7 @@ public class SupprimerDemandeCommand implements Command{
      */
     @Override
     public void doCommand() {
-
+        planning.supprimerDemande(demande);
     }
 
     /**

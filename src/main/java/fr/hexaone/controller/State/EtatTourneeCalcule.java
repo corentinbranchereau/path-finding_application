@@ -3,6 +3,7 @@ package fr.hexaone.controller.State;
 import java.util.Optional;
 
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.controller.Command.SupprimerDemandeCommand;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
@@ -80,26 +81,22 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Supprimer la requete ?");
-        alert.setHeaderText(null);
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer la demande ? Le point associé peut être orphelin.");
+        //TODO : Créer un marqeur car point orphelin
 
-        Optional<ButtonType> decision = alert.showAndWait();
-        if (decision.get() == ButtonType.OK) {
-            c.getPlanning().supprimerDemande(demande);
+        SupprimerDemandeCommand supprimerDemandeCommand = new SupprimerDemandeCommand(c.getPlanning(), demande);
+        supprimerDemandeCommand.doCommand();
 
-            c.getFenetre().getVueGraphique().effacerTrajets();
-            for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-                Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-                c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-            }
-            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-            // TODO : Retirer les icônes de la vue Graphique
-            // afficherSuppressionRequeteVueTextuelle(requete);
-
-            c.resetDemandeSelectionnee();
-        }
+        //TODO : ça doit être fait dans le refresh de la vue
+        // c.getFenetre().getVueGraphique().effacerTrajets();
+        // for (Trajet trajet : c.getPlanning().getListeTrajets()) {
+        //     Color couleur = Color.color(Math.random(), Math.random(), Math.random());
+        //     c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
+        // }
+        // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+        // // TODO : Retirer les icônes de la vue Graphique
+        // // afficherSuppressionRequeteVueTextuelle(requete);
+        
+        c.resetDemandeSelectionnee();
     }
 
     /**
