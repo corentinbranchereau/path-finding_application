@@ -515,8 +515,7 @@ public class VueGraphique {
             rectangleCollecte.setFill(couleur);
 
             // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(new Requete(demande.getIdIntersection(), demande.getDuree(),
-                    demande.getNomIntersection(), TypeIntersection.COLLECTE), couleur);
+            mapCouleurRequete.put(demande.getRequete(),couleur);
 
             this.paneDessin.getChildren().addAll(rectangleCollecte);
 
@@ -527,8 +526,7 @@ public class VueGraphique {
             cercleLivraison.setFill(couleur);
 
             // On ajoute l'association Requete <-> Couleur dans la map
-            mapCouleurRequete.put(new Requete(demande.getIdIntersection(), demande.getDuree(),
-                    demande.getNomIntersection(), TypeIntersection.LIVRAISON), couleur);
+            mapCouleurRequete.put(demande.getRequete(),couleur);
 
             this.paneDessin.getChildren().addAll(cercleLivraison);
         }

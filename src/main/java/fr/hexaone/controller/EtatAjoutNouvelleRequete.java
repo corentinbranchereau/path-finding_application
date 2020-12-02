@@ -130,7 +130,7 @@ public class EtatAjoutNouvelleRequete implements State {
                     Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.COLLECTE);
                     nouvelleDemande = nouvelleRequete.getDemandeCollecte();
                 } else {
-                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.LIVRAISON);
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(deliveryDurationField), nom, TypeIntersection.LIVRAISON);
                     nouvelleDemande = nouvelleRequete.getDemandeLivraison();
                 }
                 c.getPlanning().ajouterDemande(nouvelleDemande);
