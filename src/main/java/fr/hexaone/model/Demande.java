@@ -187,6 +187,15 @@ public class Demande {
     }
 
     /**
+     * setter
+     * 
+     * @return Integer
+     */
+    public void setDuree(Integer duree) {
+        this.duree = duree;
+    }
+
+    /**
      * getter
      * 
      * @return Long idDemande

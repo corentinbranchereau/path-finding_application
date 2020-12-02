@@ -261,6 +261,39 @@ public class Planning{
         System.out.println(demandesOrdonnees.size());
     }
     
+    /**
+     * Modifer la durée d'une demande
+     */
+    public void modifierDemande(Demande demande, Integer duree) {
+        demande.setDuree(duree);
+
+        ordonnerLesTrajetsEtLesDates();
+    }
+
+    /**
+     * Modifer la durée d'une demande
+     */
+    public void modifierDemande(Demande demande, Long idIntersection) {
+        demande.setIdIntersection(idIntersection);
+
+        recalculerTournee();
+    }
+
+    /**
+     * Modifer la durée et l'intersection d'une demande
+     */
+    public void modifierDemande(Demande demande, Long idIntersection, Integer duree) {
+        demande.setIdIntersection(idIntersection);
+        demande.setDuree(duree);
+        
+        recalculerTournee();
+    }
+
+
+    /**
+     * 
+     * @param intersections
+     */
     
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
