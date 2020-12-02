@@ -629,9 +629,10 @@ public class VueGraphique {
 
             rectangleCollecte.setWidth(this.TAILLE_NOEUD_DEMANDE * 2);
             rectangleCollecte.setHeight(this.TAILLE_NOEUD_DEMANDE * 2);
-            rectangleCollecte.setX(rectangleCollecte.getX() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT
-                    - this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT);
-            rectangleCollecte.setY(rectangleCollecte.getY() + this.TAILLE_NOEUD_DEMANDE - this.TAILLE_NOEUD_DEMANDE);
+            rectangleCollecte.setX(
+                    rectangleCollecte.getX() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
+            rectangleCollecte.setY(
+                    rectangleCollecte.getY() + this.TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT - this.TAILLE_NOEUD_DEMANDE);
         }
     }
 
