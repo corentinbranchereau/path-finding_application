@@ -45,16 +45,10 @@ public class EtatTourneeCalcule implements State {
     @Override
     public void lancerCalcul(Controleur c) {
         c.getPlanning().calculerMeilleurTournee();
-        c.getFenetre().getVueGraphique().effacerTrajets();
-        for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-            Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-            c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-        }
-
-        // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
-        // c.getCarte(),
-        // c.getFenetre().getMapCouleurRequete());
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+        c.rafraichirVues();
+        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
+        // textuelle sera prête
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
     }
 
     /**
@@ -81,22 +75,15 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        //TODO : Créer un marqeur car point orphelin
+        // TODO : Créer un marqeur car point orphelin
 
         c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
+        c.rafraichirVues();
 
-        //TODO : ça doit être fait dans le refresh de la vue
+        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
+        // textuelle sera prête
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
 
-        // c.getFenetre().getVueGraphique().effacerTrajets();
-        // for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-        //     Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-        //     c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-        // }
-        // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-
-        // // TODO : Retirer les icônes de la vue Graphique
-        // // afficherSuppressionRequeteVueTextuelle(requete);
-        
         c.resetDemandeSelectionnee();
     }
 

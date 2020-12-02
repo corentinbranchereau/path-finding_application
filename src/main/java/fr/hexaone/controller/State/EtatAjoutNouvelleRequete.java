@@ -47,7 +47,7 @@ public class EtatAjoutNouvelleRequete implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
-        
+
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
     }
 
@@ -76,79 +76,91 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void valider(Controleur c, String pickUpDurationField, String deliveryDurationField) {
-        //Erreurs de saisies et sélections
+        // Erreurs de saisies et sélections
         TypeIntersection typeIntersection = null;
-        if(idIntersection1 == null && idIntersection2 == null) {
+        if (idIntersection1 == null && idIntersection2 == null) {
             System.out.println("Il faut sélectionner au moins une intersection.");
             alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.", Alert.AlertType.ERROR);
             return;
-        } else if(idIntersection1!=null && idIntersection2!=null) {
+        } else if (idIntersection1 != null && idIntersection2 != null) {
             if (pickUpDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Collecte est vide !");
-                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !", Alert.AlertType.ERROR);
+                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !",
+                        Alert.AlertType.ERROR);
                 return;
             }
             if (deliveryDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Livraison est vide !");
-                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !", Alert.AlertType.ERROR);
+                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !",
+                        Alert.AlertType.ERROR);
                 return;
             }
-        } else if(idIntersection2==null){
-            if(!pickUpDurationField.isEmpty() && !deliveryDurationField.isEmpty()){
+        } else if (idIntersection2 == null) {
+            if (!pickUpDurationField.isEmpty() && !deliveryDurationField.isEmpty()) {
                 System.out.println("Il faut sélectionner deux intersections si l'on renseigne deux durées.");
-                alertHelper("Mauvaise sélection", "Il faut selectionner deux intersections si l'on renseigne deux durées.", Alert.AlertType.ERROR);
+                alertHelper("Mauvaise sélection",
+                        "Il faut selectionner deux intersections si l'on renseigne deux durées.",
+                        Alert.AlertType.ERROR);
                 return;
-            } else if(deliveryDurationField.isEmpty()){
+            } else if (deliveryDurationField.isEmpty()) {
                 typeIntersection = TypeIntersection.COLLECTE;
-                if(!verifieDureeUtilisateur(pickUpDurationField)){
+                if (!verifieDureeUtilisateur(pickUpDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée", "La durée de collecte (en seconde) ne doit contenir que des chiffres !", Alert.AlertType.ERROR);
+                    alertHelper("Mauvaise saisie de durée",
+                            "La durée de collecte (en seconde) ne doit contenir que des chiffres !",
+                            Alert.AlertType.ERROR);
                     return;
                 }
             } else {
                 typeIntersection = TypeIntersection.LIVRAISON;
-                if(!verifieDureeUtilisateur(deliveryDurationField)){
+                if (!verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée", "La durée de livraison (en seconde) ne doit contenir que des chiffres !", Alert.AlertType.ERROR);
+                    alertHelper("Mauvaise saisie de durée",
+                            "La durée de livraison (en seconde) ne doit contenir que des chiffres !",
+                            Alert.AlertType.ERROR);
                     return;
                 }
             }
         }
 
-        //Gestion de l'ajout
+        // Gestion de l'ajout
         try {
             if (typeIntersection == null) {
 
                 if (!verifieDureeUtilisateur(pickUpDurationField) || !verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("Les durées ne doivent contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée", "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
+                    alertHelper("Mauvaise saisie de durée",
+                            "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
                     return;
                 }
 
-                //Pickup & Delivery
+                // Pickup & Delivery
                 String nomPickup = "";
-                for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
+                for (Segment s : c.getPlanning().getCarte().getIntersections().get(idIntersection1)
+                        .getSegmentsArrivants()) {
                     if (!s.getNom().isEmpty()) {
                         nomPickup = s.getNom();
                         break;
                     }
                 }
                 String nomDelivery = "";
-                for (Segment s : c.getCarte().getIntersections().get(idIntersection2).getSegmentsArrivants()) {
+                for (Segment s : c.getPlanning().getCarte().getIntersections().get(idIntersection2)
+                        .getSegmentsArrivants()) {
                     if (!s.getNom().isEmpty()) {
                         nomDelivery = s.getNom();
                         break;
                     }
                 }
 
-                Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
+                Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup,
+                        idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
                 c.getListOfCommands().add(new AjouterRequeteCommand(c.getPlanning(), nouvelleRequete));
-                //c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.getCarte(), nouvelleRequete, c.getFenetre().getMapCouleurRequete());
 
             } else {
-                //Pickup or Delivery
+                // Pickup or Delivery
                 String nom = null;
-                for (Segment s : c.getCarte().getIntersections().get(idIntersection1).getSegmentsArrivants()) {
+                for (Segment s : c.getPlanning().getCarte().getIntersections().get(idIntersection1)
+                        .getSegmentsArrivants()) {
                     if (!s.getNom().isEmpty()) {
                         nom = s.getNom();
                         break;
@@ -157,28 +169,25 @@ public class EtatAjoutNouvelleRequete implements State {
 
                 Demande nouvelleDemande;
                 if (typeIntersection == TypeIntersection.COLLECTE) {
-                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom, TypeIntersection.COLLECTE);
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nom,
+                            TypeIntersection.COLLECTE);
                     nouvelleDemande = nouvelleRequete.getDemandeCollecte();
                 } else {
-                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(deliveryDurationField), nom, TypeIntersection.LIVRAISON);
+                    Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(deliveryDurationField), nom,
+                            TypeIntersection.LIVRAISON);
                     nouvelleDemande = nouvelleRequete.getDemandeLivraison();
                 }
                 c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
-                //c.getPlanning().ajouterDemande(nouvelleDemande);
-                //c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.getCarte(), nouvelleDemande, c.getFenetre().getMapCouleurRequete());
             }
 
-            c.getFenetre().getVueGraphique().effacerTrajets();
-            for (Trajet trajet : c.getPlanning().getListeTrajets()) {
-                Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-                c.getFenetre().getVueGraphique().afficherTrajet(c.getCarte(), trajet, couleur);
-            }
+            c.rafraichirVues();
 
-            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
 
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !", Alert.AlertType.ERROR);
+            alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+                    Alert.AlertType.ERROR);
             return;
         } finally {
             this.annuler(c);
@@ -216,11 +225,12 @@ public class EtatAjoutNouvelleRequete implements State {
 
     /**
      * Gère l'affichage de messages d'alertes dans l'application
-     * @param title Le titre de l'alerte
-     * @param message Le message contenu dans l'alerte
+     * 
+     * @param title     Le titre de l'alerte
+     * @param message   Le message contenu dans l'alerte
      * @param alertType Le type d'alerte souhaité
      */
-    public void alertHelper(String title, String message, Alert.AlertType alertType){
+    public void alertHelper(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -232,12 +242,11 @@ public class EtatAjoutNouvelleRequete implements State {
      * Vérification de l'entrée utilisateur sur les durées via une REGEX
      *
      */
-    public boolean verifieDureeUtilisateur(String durationField){
+    public boolean verifieDureeUtilisateur(String durationField) {
         String regex = "[0-9]+";
         Pattern p = Pattern.compile(regex);
         Matcher matcher = p.matcher(durationField);
         return matcher.matches();
     }
-
 
 }
