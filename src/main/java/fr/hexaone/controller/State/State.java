@@ -111,6 +111,9 @@ public interface State {
                 // On génère des couleurs pour les requêtes
                 c.getFenetre().getVueGraphique().genererCouleursRequetes(c.getPlanning().getRequetes());
 
+                // TODO : effacer les trajets (la tournée) s'ils existent (si jamais
+                // précédemment calculé)
+
                 // On affiche les requêtes chargées dans la vue graphique et la vue textuelle
                 c.rafraichirVues();
 
