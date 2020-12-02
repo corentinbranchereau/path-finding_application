@@ -1,13 +1,11 @@
 package fr.hexaone.controller;
 
 import fr.hexaone.view.Fenetre;
-import fr.hexaone.view.RequetesControleurFXML;
 import javafx.stage.Stage;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
@@ -71,11 +69,6 @@ public class Controleur {
     private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
-     * Etat ou on peut modifier l'ordre des requêtes dans le planning
-     */
-    private EtatModifierPlanning etatModifierPlanning;
-
-    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -89,8 +82,14 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
-        this.etatModifierPlanning = new EtatModifierPlanning();
         setEtatInitial();
+    }
+
+    /**
+     * Méthode permettant de rafraichir les vues après des modifications dans le modèle
+     */
+    public void rafraichirVues() {
+        // TODO mettre les méthodes pour réafficher les vues.
     }
 
     /**
@@ -291,11 +290,4 @@ public class Controleur {
         etatAjoutNouvelleRequete.init(this);
         etatCourant = etatAjoutNouvelleRequete;
     }
-
-    public void setEtatModifierPlanning() {
-        etatModifierPlanning.init(this);
-        etatCourant = etatModifierPlanning;
-    }
-
-    
 }

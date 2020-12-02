@@ -31,9 +31,10 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
+        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
     }
 
     /**
@@ -52,7 +53,6 @@ public class EtatTourneeCalcule implements State {
         // c.getCarte(),
         // c.getFenetre().getMapCouleurRequete());
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
     }
 
     /**
@@ -60,22 +60,10 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void ajoutNouvelleRequete(Controleur c) {
-        // c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
-        // c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
-        // c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
-        // c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
-        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
-        // c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        // c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        // c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
-        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
-        // c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
-        // c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
-        // c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
         // TODO à faire dans l'init
         // c.etatAjoutNouvelleRequete.setIdPickup(null);
         // c.etatAjoutNouvelleRequete.setIdDelivery(null);
-        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
+        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatAjoutNouvelleRequete();
     }
 
@@ -122,11 +110,7 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c) {
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setText("Valider");
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
-        c.setEtatModifierPlanning();
+        // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
+        // c.setEtatModifierPlanning();
     }
 }

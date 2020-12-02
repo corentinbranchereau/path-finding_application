@@ -4,7 +4,6 @@ import fr.hexaone.model.*;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,17 +24,24 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void init(Controleur c) {
+
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+
+        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
+
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
+        
+        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
     }
 
     /**
@@ -178,23 +184,9 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void annuler(Controleur c) {
-        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        idIntersection1 = null;
-        idIntersection2 = null;
-        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
+        // idIntersection1 = null;
+        // idIntersection2 = null;
+        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatTourneeCalcule();
     }
 

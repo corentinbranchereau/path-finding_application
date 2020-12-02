@@ -27,6 +27,15 @@ public class EtatInitial implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+
+        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
+        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(true);
+        
+        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+
     }
 
     /**

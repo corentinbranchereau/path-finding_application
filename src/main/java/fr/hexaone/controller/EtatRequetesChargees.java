@@ -28,6 +28,8 @@ public class EtatRequetesChargees implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
+        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        
     }
 
         /**
@@ -46,12 +48,12 @@ public class EtatRequetesChargees implements State {
                 // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(),
                 // c.getCarte(),
                 // c.getFenetre().getMapCouleurRequete());
-                c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
-                c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
+                // c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(false);
+                // c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
                 c.setEtatTourneeCalcule();
-                c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
-                c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(false);
-                c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
+                // c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
+                // c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setDisable(false);
+                // c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
                 
         }
 }
