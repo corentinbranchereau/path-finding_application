@@ -1,5 +1,6 @@
 package fr.hexaone.controller.State;
 
+import fr.hexaone.controller.Command.AjouterDemandeCommand;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.AjouterRequeteCommand;
 import fr.hexaone.model.*;
@@ -162,9 +163,9 @@ public class EtatAjoutNouvelleRequete implements State {
                     Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(deliveryDurationField), nom, TypeIntersection.LIVRAISON);
                     nouvelleDemande = nouvelleRequete.getDemandeLivraison();
                 }
-                c.getPlanning().ajouterDemande(nouvelleDemande);
-
-                c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.getCarte(), nouvelleDemande, c.getFenetre().getMapCouleurRequete());
+                c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
+                //c.getPlanning().ajouterDemande(nouvelleDemande);
+                //c.getFenetre().getVueGraphique().afficherNouvelleDemande(c.getCarte(), nouvelleDemande, c.getFenetre().getMapCouleurRequete());
             }
 
             c.getFenetre().getVueGraphique().effacerTrajets();
