@@ -19,7 +19,7 @@ import fr.hexaone.model.Planning;
 public class Controleur {
 
     /**
-     * Liste de commandes conforme au dessing pattern COMMAND
+     * Liste de commandes conforme au design pattern COMMAND
      * pour l'implémentation de l'undo/redo
      */
     private ListOfCommands l;
@@ -40,7 +40,7 @@ public class Controleur {
     protected Planning planning;
 
     /**
-     * Demande seclectionné par l'utilisateur après un clic sur la vue graphique ou
+     * Demande selectionnée par l'utilisateur après un clic sur la vue graphique ou
      * textuelle
      */
     protected Demande demandeSelectionnee;

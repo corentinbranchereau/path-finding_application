@@ -171,8 +171,8 @@ public class EtatAjoutNouvelleRequete implements State {
             c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getCarte());
 
         } catch (NumberFormatException e){
-            System.out.println("Les durées (en secondes) saisies sont incorrectes !");
-            alertHelper("Mauvaise saisie de durée", "Les durées (en secondes) saisies sont incorrectes !", Alert.AlertType.ERROR);
+            System.out.println("Les durées (en seconde) saisies sont incorrectes !");
+            alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !", Alert.AlertType.ERROR);
             return;
         } finally {
             this.annuler(c);
