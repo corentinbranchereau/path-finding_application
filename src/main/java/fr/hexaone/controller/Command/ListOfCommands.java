@@ -57,7 +57,8 @@ public class ListOfCommands {
      */
     public void redo(){
         //TODO : Check if there's a command to redo ?
-        i++;
-        l.get(i).doCommand();
+        if(l.get(++i) != null)
+            l.get(i).doCommand();
+        else --i;
     }
 }
