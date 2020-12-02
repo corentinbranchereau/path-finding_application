@@ -2,6 +2,7 @@ package fr.hexaone.view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -76,6 +77,56 @@ public class VueTextuelle {
          */
         public VueTextuelle(Fenetre fenetre) {
                 this.fenetre = fenetre;
+        }
+
+        /**
+         * Permet de réactualiser la vue textuelle après une modification du model
+         */
+        public void rafraichir(Planning planning, Demande demandeSelectionnee) {
+                // Reinitialisation de la vue
+
+        if (planning == null) return;
+                // Affichage des demandes sur la carte
+                if (planning.getDemandesOrdonnees() != null ){
+                // Affichage des demandes sur la carte
+
+                if (planning.getListeTrajets() != null) {
+                        // Affichage des trajets 
+
+                        // Affichage de la demande sélectionnée et de la demande associée
+                        if (demandeSelectionnee != null) {
+                        Requete requeteAssociee = demandeSelectionnee.getRequete();
+                        if(demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                                // Mise en valeur forte de la collecte
+
+                                if (requeteAssociee != null && requeteAssociee.getDemandeLivraison() != null) {
+                                Demande demandeAssociee = requeteAssociee.getDemandeLivraison();
+                                // Mise en valeur faible de la livraison
+
+                                }
+                        } else if(demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                                // Mise en valeur forte de la livraison
+
+                                if (requeteAssociee != null && requeteAssociee.getDemandeCollecte() != null) {
+                                Demande demandeAssociee = requeteAssociee.getDemandeCollecte();
+                                // Mise en valeur faible de la collecte
+                                
+                                }
+                        } else {
+                                // Si on veut afficher un dépot sélectionné ( mais pas demandé ).
+                        }
+                        }
+                }
+                } else if (planning.getRequetes() != null ) {
+                // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
+                List<Demande> demandes = new ArrayList<Demande>();
+                for (Requete requete: planning.getRequetes()) {
+                        demandes.add(requete.getDemandeCollecte());
+                        demandes.add(requete.getDemandeLivraison());
+                }
+                // Affichage des demandes
+
+                }
         }
 
         /**

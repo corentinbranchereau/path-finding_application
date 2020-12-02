@@ -111,15 +111,8 @@ public class Controleur {
      * Méthode permettant de rafraichir les vues après des modifications dans le modèle
      */
     public void rafraichirVues() {
-        // TODO mettre les méthodes pour réafficher les vues.
-        // if (this.demandeSelectionnee != null) {
-        //     this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-        //     this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        // }
-
-        // TODO : plutot implémenter avec la logique d'affichage directement dans ces méthodes.
-        // fenetre.getVueGraphique().rafraichir(planning);
-        // fenetre.getVueTextuelle().rafraichir(planning));
+        fenetre.getVueGraphique().rafraichir(planning, demandeSelectionnee);
+        fenetre.getVueTextuelle().rafraichir(planning,demandeSelectionnee);
         demandeSelectionnee = null;
     }
 
