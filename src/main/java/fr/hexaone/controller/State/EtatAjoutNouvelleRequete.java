@@ -137,7 +137,6 @@ public class EtatAjoutNouvelleRequete implements State {
 
                 Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup, idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
                 c.getPlanning().ajouterRequete(nouvelleRequete);
-
                 c.getFenetre().getVueGraphique().afficherNouvelleRequete(c.getCarte(), nouvelleRequete, c.getFenetre().getMapCouleurRequete());
 
             } else {
