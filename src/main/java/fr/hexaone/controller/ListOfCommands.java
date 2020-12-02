@@ -1,5 +1,7 @@
 package fr.hexaone.controller;
 
+import java.util.LinkedList;
+
 /**
  * Liste des commandes du design pattern Command afin de
  * gérer l'undo/redo
