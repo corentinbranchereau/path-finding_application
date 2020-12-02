@@ -607,6 +607,7 @@ public class VueGraphique {
                 public void handle(MouseEvent event) {
                     if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(3.5D);
+                        entry.getValue().setViewOrder(-1.0);
                         entry.getValue().setFill(Color.INDIANRED);
                     }
                 }
@@ -616,6 +617,7 @@ public class VueGraphique {
                 public void handle(MouseEvent event) {
                     if (!listIntersectionsSelectionnees.contains(entry.getKey())) {
                         entry.getValue().setRadius(2D);
+                        entry.getValue().setViewOrder(0.0);
                         entry.getValue().setFill(Color.GRAY);
                     }
                 }
