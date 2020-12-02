@@ -1,6 +1,7 @@
 package fr.hexaone.view;
 
 import java.util.Map;
+import java.util.Optional;
 import java.lang.ModuleLayer.Controller;
 
 import fr.hexaone.model.Demande;
@@ -9,10 +10,13 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Cell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -120,6 +124,7 @@ public class RequetesControleurFXML {
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     int droppedIndex = row.getIndex();
+                    Boolean doDrop = false;
 
                     Demande draggedDemande = demandeTable.getItems().get(draggedIndex);
                     Demande draggedDemandeOpposee;
@@ -128,12 +133,34 @@ public class RequetesControleurFXML {
                     } else {
                         draggedDemandeOpposee = draggedDemande.getRequete().getDemandeCollecte();
                     }
-                    int draggedIndexOposee = demandeTable.getItems().indexOf(draggedDemandeOpposee);
+                    if (draggedDemandeOpposee != null) {
+                        int draggedIndexOposee = demandeTable.getItems().indexOf(draggedDemandeOpposee);
 
-                    if ((draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE
-                            && droppedIndex < draggedIndexOposee)
-                            || (draggedDemande.getTypeIntersection() == TypeIntersection.LIVRAISON
-                                    && droppedIndex > draggedIndexOposee)) {
+                        if ((draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE
+                                && droppedIndex < draggedIndexOposee)
+                                || (draggedDemande.getTypeIntersection() == TypeIntersection.LIVRAISON
+                                        && droppedIndex > draggedIndexOposee)) {
+                            doDrop = true;
+
+                        } else {
+                            Alert alert = new Alert(AlertType.CONFIRMATION);
+                            alert.setTitle(" Déplacer ce point ?");
+                            alert.setHeaderText(null);
+                            alert.setContentText(
+                                    "Vous êtes sur le point de placer un point de livraison avant sa collecte. Continuer ?");
+
+                            Optional<ButtonType> decision = alert.showAndWait();
+                            if (decision.get() == ButtonType.OK) {
+                                doDrop = true;
+                            } else {
+                                doDrop = false;
+                            }
+                        }
+                    } else {
+                        doDrop = false;
+                    }
+
+                    if (doDrop) {
                         Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
 
                         int dropIndex;
