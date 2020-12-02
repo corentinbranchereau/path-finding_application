@@ -101,6 +101,22 @@ public class Planning{
         this.requetes = requetes;
         this.carte=carte;
     }
+    
+   /**
+    * Constructeur de copie 
+    * @param p
+    */
+    public Planning(Planning p) { 
+        idDepot = p.getIdDepot(); 
+        dureeTotale=p.getDureeTotale();
+        listeTrajets = new ArrayList<Trajet>(p.getListeTrajets());
+        requetes= new ArrayList<Requete>(p.getRequetes());
+        demandesOrdonnees= new ArrayList<Demande>(p.getDemandesOrdonnees());
+        dateDebut=new Date(p.getDateDebut().getTime());
+        dateFin=new Date(p.getDateFin().getTime());
+        
+        //copier la carte aussi ??? 
+    } 
 
     /**
      * Recherche de la tournée la plus rapide :
