@@ -1,5 +1,7 @@
 package fr.hexaone.controller;
 
+import fr.hexaone.controller.Command.ListOfCommands;
+import fr.hexaone.controller.State.*;
 import fr.hexaone.view.Fenetre;
 import javafx.stage.Stage;
 

@@ -1,5 +1,6 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.*;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;

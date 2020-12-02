@@ -1,7 +1,8 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
 import java.util.Optional;
 
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;

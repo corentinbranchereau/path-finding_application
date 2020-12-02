@@ -1,9 +1,11 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.State;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import fr.hexaone.controller.Command.ListOfCommands;
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.utils.exception.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

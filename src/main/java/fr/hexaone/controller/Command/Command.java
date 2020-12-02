@@ -1,4 +1,4 @@
-package fr.hexaone.controller;
+package fr.hexaone.controller.Command;
 
 /**
  * Interface implémentant le design pattern Command pour la gestion
