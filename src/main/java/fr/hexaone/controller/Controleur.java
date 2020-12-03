@@ -20,8 +20,8 @@ import fr.hexaone.model.Planning;
 public class Controleur {
 
     /**
-     * Liste de commandes conforme au design pattern COMMAND
-     * pour l'implémentation de l'undo/redo
+     * Liste de commandes conforme au design pattern COMMAND pour l'implémentation
+     * de l'undo/redo
      */
     private ListOfCommands l;
 
@@ -103,14 +103,14 @@ public class Controleur {
     /**
      * Annuler la dernière commande (design pattern COMMAND) via un undo
      */
-    public void undo(){
+    public void undo() {
         etatCourant.undo(l);
     }
 
     /**
      * Rétablir la dernière commande (design pattern COMMAND) via un redo
      */
-    public void redo(){
+    public void redo() {
         etatCourant.redo(l);
     }
 
@@ -233,16 +233,16 @@ public class Controleur {
             this.demandeSelectionnee = demandeSelectionnee;
         rafraichirVues(false);
         // if (this.demandeSelectionnee != null) {
-        //     this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-        //     this.fenetre.getVueTextuelle().enleverHighlightDemande();
+        // this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
+        // this.fenetre.getVueTextuelle().enleverHighlightDemande();
         // }
 
         // if (this.demandeSelectionnee == demandeSelectionnee) {
-        //     this.demandeSelectionnee = null;
+        // this.demandeSelectionnee = null;
         // } else {
-        //     this.demandeSelectionnee = demandeSelectionnee;
-        //     this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
-        //     this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
+        // this.demandeSelectionnee = demandeSelectionnee;
+        // this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
+        // this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
         // }
     }
 
@@ -256,12 +256,12 @@ public class Controleur {
     }
 
     // /**
-    //  * Change l'état courant par un SETTER du design pattern STATE
-    //  * 
-    //  * @param etatCourant L'état courant de l'application
-    //  */
+    // * Change l'état courant par un SETTER du design pattern STATE
+    // *
+    // * @param etatCourant L'état courant de l'application
+    // */
     // public void setEtatCourant(State etatCourant) {
-    //     this.etatCourant = etatCourant;
+    // this.etatCourant = etatCourant;
     // }
 
     /**
@@ -311,6 +311,7 @@ public class Controleur {
 
     /**
      * Renvoie la liste des commandes du design pattern COMMAND.
+     * 
      * @return
      */
     public ListOfCommands getListOfCommands() {

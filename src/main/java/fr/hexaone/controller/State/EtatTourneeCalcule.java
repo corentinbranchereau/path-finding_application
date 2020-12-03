@@ -113,9 +113,9 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c) {
-        //! Etat Useless
-        //c.setEtatModifierPlanning();
-        //TODO : Mettre au propre le drag and drop selon MVC
-        //c.getListOfCommands().add(new ModifierPlanningCommand(...));
+        // ! Etat Useless
+        // c.setEtatModifierPlanning();
+        // TODO : Mettre au propre le drag and drop selon MVC
+        // c.getListOfCommands().add(new ModifierPlanningCommand(...));
     }
 }
