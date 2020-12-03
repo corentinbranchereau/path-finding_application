@@ -67,12 +67,6 @@ public class FenetreControleurFXML {
     protected Button boutonNouvelleRequete;
 
     /**
-     * Bouton permettant de lancer le processus d'ajout d'une nouvelle requête.
-     */
-    @FXML
-    protected Button boutonSupprimerRequete;
-
-    /**
      * Label indiquant le champ permettant de préciser la durée de la collecte.
      */
     @FXML
@@ -223,15 +217,6 @@ public class FenetreControleurFXML {
      */
     public Button getBoutonNouvelleRequete() {
         return boutonNouvelleRequete;
-    }
-
-    /**
-     * Renvoie le bouton demandant l'ajout d'une requête.
-     *
-     * @return Le bouton demandant l'ajout d'une requête.
-     */
-    public Button getBoutonSupprimerRequete() {
-        return boutonSupprimerRequete;
     }
 
     /**
