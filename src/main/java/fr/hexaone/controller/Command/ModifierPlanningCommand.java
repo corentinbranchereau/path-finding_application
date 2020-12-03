@@ -15,7 +15,7 @@ import fr.hexaone.model.Planning;
  */
 public class ModifierPlanningCommand implements Command {
 
-    private List<Demande> demandes;
+    private Planning planning;
     int i;
     int j;
 
@@ -26,7 +26,9 @@ public class ModifierPlanningCommand implements Command {
     * @param j nouvel index dans la liste de demandes de l'arrivée du drag/drop
     */
     public ModifierPlanningCommand(Planning planning,int i, int j){
-        demandes=planning.getDemandesOrdonnees();
+        this.planning=planning;
+        this.i=i;
+        this.j=j;
     }
     
 
@@ -35,9 +37,12 @@ public class ModifierPlanningCommand implements Command {
      */
     @Override
     public void doCommand() {
+    	List<Demande> demandes=planning.getDemandesOrdonnees();
     	for(int k=i;k<j;k++) {
     		Collections.swap(demandes,k,k+1);
     	}
+    	planning.ordonnerLesTrajetsEtLesDates();
+    	
     }
 
     /**
@@ -45,9 +50,11 @@ public class ModifierPlanningCommand implements Command {
      */
     @Override
     public void undoCommand() {
+    	List<Demande> demandes=planning.getDemandesOrdonnees();
     	for(int k=j;k>i;k--) {
     		Collections.swap(demandes,k,k-1);
     	}
+    	planning.ordonnerLesTrajetsEtLesDates();
     	
     }
 }
