@@ -635,7 +635,7 @@ public class VueGraphique {
             Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
                     coordArrivee.getY());
             ligneSegment.setStroke(couleur);
-            ligneSegment.setStrokeWidth(3.0);
+            ligneSegment.setStrokeWidth(6.0);
 
             // On change le "viewOrder" pour que les trajets apparaissent derrière les
             // intersections
