@@ -19,6 +19,9 @@ public class SupprimerDemandeCommand implements Command{
 
     /**
      * Constructeur de la suppression de demande
+     * @param planning
+     * @param demande
+     * @param index de l'ajout dans la liste
      */
     public SupprimerDemandeCommand(Planning planning, Demande demande, int index){
         this.planning = planning;

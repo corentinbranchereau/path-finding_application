@@ -28,7 +28,7 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(true);
+        //c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
@@ -76,7 +76,8 @@ public class EtatTourneeCalcule implements State {
 
         // TODO : Créer un marqeur car point orphelin
 
-        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
+        //TODO : récupérer depuis la vue graphique/textuelle l'index 
+        //c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande,index));
 
         // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
         // textuelle sera prête
