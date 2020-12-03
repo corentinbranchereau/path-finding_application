@@ -44,110 +44,110 @@ public class VueGraphique {
      * Pane dans lequel sont dessinés les différents éléments (carte, segments,
      * etc.)
      */
-    protected Pane paneDessin;
+    private Pane paneDessin;
 
     /**
      * Coordonnée x minimale de la carte
      */
-    protected double minX = Double.MAX_VALUE;
+    private double minX = Double.MAX_VALUE;
 
     /**
      * Coordonnée x maximale de la carte
      */
-    protected double maxX = Double.MIN_VALUE;
+    private double maxX = Double.MIN_VALUE;
 
     /**
      * Coordonnée y minimale de la carte
      */
-    protected double minY = Double.MAX_VALUE;
+    private double minY = Double.MAX_VALUE;
 
     /**
      * Coordonnée y maximale de la carte
      */
-    protected double maxY = Double.MIN_VALUE;
+    private double maxY = Double.MIN_VALUE;
 
     /**
      * Padding utilisé pour le calcul de la largeur et de la longueur max de la
      * carte
      */
-    protected final double PADDING_CARTE = 10;
+    private final double PADDING_CARTE = 10;
 
     /**
      * Padding utilisé lors du dessin de la carte
      */
-    protected double paddingGlobal;
+    private double paddingGlobal;
 
     /**
      * Variable qui permet d'adapter les coordonnées en fonction du ratio de la
      * carte. Il sert notamment à ne pas avoir un effet "aplati" sur la carte
      */
-    protected double ratioGlobal;
+    private double ratioGlobal;
 
     /**
      * Constante qui permet de définir la valeur seuil que l'on souhaite comme
      * différence entre les couleurs générées aléatoirement pour les points de
      * collecte et de livraison
      */
-    protected final double VALEUR_SEUIL_DIFF_COULEUR = 0.9;
+    private final double VALEUR_SEUIL_DIFF_COULEUR = 0.9;
 
     /**
      * Constante qui permet de définir la valeur seuil permettant de déterminer si
      * une couleur est trop claire ou non
      */
-    protected final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
+    private final double VALEUR_SEUIL_COULEUR_CLAIRE = 0.7;
 
     /**
      * Map contenant les intersections de la carte chargée mappée avec son ID. Cela
      * est utile afin de pouvoir sélectionner une intersection précise lors de la
      * modification de requêtes.
      */
-    protected Map<Long, Circle> mapIntersections;
+    private Map<Long, Circle> mapIntersections;
 
     /**
      * Liste contenant l'id des intersections sélectionnées sur la carte
      */
-    protected List<Long> listIntersectionsSelectionnees;
+    private List<Long> listIntersectionsSelectionnees;
 
     /**
      * La fenêtre de l'application à laquelle est reliée la vue graphique
      */
-    protected Fenetre fenetre;
+    private Fenetre fenetre;
 
     /**
      * Map qui permet de relier un objet Demande à sa représentation graphique
      * (carré ou rond)
      */
-    protected Map<Demande, Node> mapDemandeNoeud;
+    private Map<Demande, Node> mapDemandeNoeud;
 
     /**
      * Paire d'objets graphiques qui a été sélectionnée/highlight
      */
-    protected Pair<Node, Node> noeudsHighlight;
+    private Pair<Node, Node> noeudsHighlight;
 
     /**
      * Variable définissant la taille d'un noeud (élément graphique) de demande
      * (collecte ou livraison)
      */
-    protected final double TAILLE_NOEUD_DEMANDE = 5;
+    private final double TAILLE_NOEUD_DEMANDE = 5;
 
     /**
      * Variable définissant la taille d'un noeud (élément graphique) de demande
      * (collecte ou livraison) qui a été sélectionné/highlight
      */
-    protected final double TAILLE_NOEUD_HIGHLIGHT = 10;
+    private final double TAILLE_NOEUD_HIGHLIGHT = 10;
 
     /**
      * Variable définissant la taille d'un noeud (élément graphique) secondaire,
      * c'est-à-dire le point de collecte pour une livraison et inversement, dont
      * l'autre noeud a été highlight
      */
-    protected final double TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT = 8;
+    private final double TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT = 8;
 
     /**
      * Taille de liste des noeuds correspondant au dessin de la carte (segments et
      * intersections)
      */
-    protected int tailleListeNoeudsCarte;
+    private int tailleListeNoeudsCarte;
 
     /**
      * Constructeur de VueGraphique
@@ -550,7 +550,7 @@ public class VueGraphique {
         Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
         coord = adapterCoordonnees(coord.getX(), coord.getY());
 
-        Color couleur = this.fenetre.mapCouleurRequete.get(demande.getRequete());
+        Color couleur = this.fenetre.getMapCouleurRequete().get(demande.getRequete());
 
         if (couleur == null) {
             // La couleur n'a pas été trouvée (par exemple c'est une requête que

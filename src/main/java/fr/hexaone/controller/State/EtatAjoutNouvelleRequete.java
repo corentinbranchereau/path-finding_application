@@ -19,7 +19,14 @@ import java.util.regex.Pattern;
  */
 public class EtatAjoutNouvelleRequete implements State {
 
+    /**
+     * L'id de l'intersection premièrement sélectionné
+     */
     private Long idIntersection1 = null;
+
+    /**
+     * L'id de l'intersection deuxièmement sélectionné
+     */
     private Long idIntersection2 = null;
 
     /**

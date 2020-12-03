@@ -43,34 +43,34 @@ public class VueTextuelle {
     /**
      * Item de la fenêtre où s'affiche la vue textuelle
      */
-    protected Fenetre fenetre;
+    private Fenetre fenetre;
 
     /**
      * zone de texte ou afficher les requetes
      */
-    protected TextFlow zoneTexte;
+    private TextFlow zoneTexte;
 
     /**
      * Représente la paire de lignes (collecte et livraison) qui est
      * sélectionnée/highlight
      */
-    protected Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
+    private Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
 
     /**
      * Couleur de l'highlight des lignes dans le tableau
      */
-    protected final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
+    private final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
 
     /**
      * Variable définissant l'opacité appliquée lors de l'highlight d'une ligne
      * secondaire (ligne en lien avec la ligne actuellement sélectionnée)
      */
-    protected final double OPACITE_DEMANDE_LIEE = 0.3;
+    private final double OPACITE_DEMANDE_LIEE = 0.3;
 
     /**
      * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
      */
-    protected RequetesControleurFXML requetesControleur;
+    private RequetesControleurFXML requetesControleur;
 
     /**
      * constructeur
@@ -120,7 +120,7 @@ public class VueTextuelle {
             }
         } else if (!planning.getRequetes().isEmpty()) {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
-            List<Demande> demandes = new ArrayList<Demande>();
+            List<Demande> demandes = new ArrayList<>();
             for (Requete requete : planning.getRequetes()) {
                 demandes.add(requete.getDemandeCollecte());
                 demandes.add(requete.getDemandeLivraison());
@@ -183,7 +183,7 @@ public class VueTextuelle {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
             FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+            AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.
             this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
@@ -209,7 +209,7 @@ public class VueTextuelle {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
             FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+            AnchorPane personOverview = loader.load(inputFichierFxml);
 
             String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
@@ -243,9 +243,7 @@ public class VueTextuelle {
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-        for (Demande demande : planning.getDemandesOrdonnees()) {
-            listeDemandes.add(demande);
-        }
+        listeDemandes.addAll(planning.getDemandesOrdonnees());
 
         return listeDemandes;
     }
@@ -334,8 +332,7 @@ public class VueTextuelle {
     /**
      * Méthode permettant récupérer l'heure de sous forme de String au format
      * Pair<Heure, Minute>
-     * 
-     * @param planning le planning
+     *
      * @param horaire  la date
      * @return une pair contenant l'heure et les minutes sous forme de String
      */

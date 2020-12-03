@@ -16,52 +16,52 @@ public class Demande {
     /**
      * le type d'intersection: COLLECTE, DELIVERY ou DEPOT
      */
-    protected TypeIntersection typeIntersection;
+    private TypeIntersection typeIntersection;
 
     /**
      * ID unique de la demande
      */
-    protected Long idDemande;
+    private Long idDemande;
 
     /**
      * id de l'intersection où se situe
      */
-    protected Long idIntersection;
+    private Long idIntersection;
 
     /**
      * propriété javafx symbolisant le nom de la rue associée à cette intersection
      */
-    protected StringProperty nomIntersectionProperty;
+    private StringProperty nomIntersectionProperty;
 
     /**
      * propriété javafx de la date d'arrivée au point sous forme "08h35"
      */
-    protected StringProperty dateArriveeProperty;
+    private StringProperty dateArriveeProperty;
 
     /**
      * propriété javafx de la date de départ au point sous forme "08h35"
      */
-    protected StringProperty dateDepartProperty;
+    private StringProperty dateDepartProperty;
 
     /**
      * Date d'arrivée au point
      */
-    protected Date dateArrivee;
+    private Date dateArrivee;
 
     /**
      * date de départ du point
      */
-    protected Date dateDepart;
+    private Date dateDepart;
 
     /**
      * Durée passée au point
      */
-    protected Integer duree;
+    private Integer duree;
 
     /**
      * Requête associée à cette demande
      */
-    protected Requete requete;
+    private Requete requete;
 
     /**
      * Constructeur de demande

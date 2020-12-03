@@ -49,7 +49,7 @@ import javafx.util.Pair;
 
 /**
  * Permet d'afficher la fenêtre d'IHM.
- * 
+ *
  * @author HexaOne
  * @version 1.0
  */
@@ -59,91 +59,91 @@ public class Fenetre {
     /**
      * Vue graphique de la fenêtre
      */
-    protected VueGraphique vueGraphique;
+    private VueGraphique vueGraphique;
 
     /**
      * Vue textuelle de la fenêtre
      */
-    protected VueTextuelle vueTextuelle;
+    private VueTextuelle vueTextuelle;
 
     /**
      * Controleur JavaFX servant à récupérer les références des éléments du fichier
      * FXML
      */
-    protected FenetreControleurFXML fenetreControleur;
+    private FenetreControleurFXML fenetreControleur;
 
     /**
      * Conteneur principal des éléments graphiques
      */
-    protected Stage stage;
+    private Stage stage;
 
     /**
      * Controleur gérant la logique de l'application
      */
-    protected Controleur controleur;
+    private Controleur controleur;
 
     /**
      * Variable indiquant la vitesse de l'animation de zoom
      */
-    protected final double VITESSE_ZOOM = 100;
+    private final double VITESSE_ZOOM = 100;
 
     /**
      * Map qui contient pour chaque requête sa couleur d'affichage
      */
-    protected Map<Requete, Color> mapCouleurRequete;
+    private Map<Requete, Color> mapCouleurRequete;
 
     /**
      * Coordonnée x du clic lors d'un "drag" pour déplacer la carte
      */
-    protected double origineDragSceneX;
+    private double origineDragSceneX;
 
     /**
      * Coordonnée y du clic lors d'un "drag" pour déplacer la carte
      */
-    protected double origineDragSceneY;
+    private double origineDragSceneY;
 
     /**
      * Translation x de la carte lors d'un "drag" pour la déplacer
      */
-    protected double origineDragTranslateX;
+    private double origineDragTranslateX;
 
     /**
      * Translation y de la carte lors d'un "drag" pour la déplacer
      */
-    protected double origineDragTranslateY;
+    private double origineDragTranslateY;
 
     /**
      * Largeur initiale de la carte (utile pour redonner à la carte sa taille
      * initiale)
      */
-    protected double largeurInitialeCarte;
+    private double largeurInitialeCarte;
 
     /**
      * Hauteur initiale de la carte (utile pour redonner à la carte sa taille
      * initiale)
      */
-    protected double hauteurInitialeCarte;
+    private double hauteurInitialeCarte;
 
     /**
      * Largeur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
      * initiale)
      */
-    protected double largeurInitialeStage;
+    private double largeurInitialeStage;
 
     /**
      * Hauteur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
      * initiale)
      */
-    protected double hauteurInitialeStage;
+    private double hauteurInitialeStage;
 
     /**
      * Liste observable des demandes
      */
-    protected ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
     /**
      * Constructeur de Fenetre
-     * 
+     *
      * @param stage      le conteneur principal des éléments graphiques de
      *                   l'application
      * @param controleur le controleur de l'application
@@ -164,10 +164,10 @@ public class Fenetre {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
             FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/fenetre.fxml");
-            Parent root = (Parent) loader.load(inputFichierFxml);
+            Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
-            fenetreControleur = (FenetreControleurFXML) loader.getController();
+            fenetreControleur = loader.getController();
 
             // on donne la zone de texte à la vue textuelle
             this.vueTextuelle.setZoneTexte(this.fenetreControleur.getZoneTexte());
@@ -205,192 +205,144 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getPaneDessin().setOnScroll(new EventHandler<ScrollEvent>() {
-                public void handle(ScrollEvent event) {
-                    double facteurZoom = 0.0;
-                    if (event.getTextDeltaY() > 0) {
-                        // Zoom
-                        facteurZoom = 2;
-                    } else {
-                        // Dézoom
-                        facteurZoom = 0.5;
-                    }
-
-                    Timeline timeline = new Timeline(60);
-                    double ancienScale = fenetreControleur.getPaneDessin().getScaleX();
-                    double nouveauScale = ancienScale * facteurZoom;
-                    double translationX = 0.0;
-                    double translationY = 0.0;
-
-                    if (nouveauScale <= 1) {
-                        // On ne peut pas plus dézoomer
-                        nouveauScale = 1;
-                        // On remet la carte à sa place initiale
-                        translationX = 0;
-                        translationY = 0;
-
-                    } else {
-                        // On ajuste le facteur de zoom
-                        facteurZoom = (nouveauScale / ancienScale) - 1;
-
-                        // On calcule la translation nécessaire pour centrer la carte à l'endroit du
-                        // zoom
-                        double xCentre = event.getSceneX();
-                        double yCentre = event.getSceneY();
-                        Bounds bounds = fenetreControleur.getPaneDessin()
-                                .localToScene(fenetreControleur.getPaneDessin().getBoundsInLocal());
-                        double deltaX = (xCentre - (bounds.getWidth() / 2 + bounds.getMinX()));
-                        double deltaY = (yCentre - (bounds.getHeight() / 2 + bounds.getMinY()));
-                        translationX = fenetreControleur.getPaneDessin().getTranslateX() - facteurZoom * deltaX;
-                        translationY = fenetreControleur.getPaneDessin().getTranslateY() - facteurZoom * deltaY;
-                    }
-
-                    // On utilise une timeline pour faire une animation de zoom/dézoom
-                    timeline.getKeyFrames().clear();
-                    timeline.getKeyFrames().addAll(
-                            new KeyFrame(Duration.millis(VITESSE_ZOOM),
-                                    new KeyValue(fenetreControleur.getPaneDessin().translateXProperty(), translationX)),
-                            new KeyFrame(Duration.millis(VITESSE_ZOOM),
-                                    new KeyValue(fenetreControleur.getPaneDessin().translateYProperty(), translationY)),
-                            new KeyFrame(Duration.millis(VITESSE_ZOOM),
-                                    new KeyValue(fenetreControleur.getPaneDessin().scaleXProperty(), nouveauScale)),
-                            new KeyFrame(Duration.millis(VITESSE_ZOOM),
-                                    new KeyValue(fenetreControleur.getPaneDessin().scaleYProperty(), nouveauScale)));
-                    timeline.play();
-                    // On consomme l'événement
-                    event.consume();
+            this.fenetreControleur.getPaneDessin().setOnScroll(event -> {
+                double facteurZoom;
+                if (event.getTextDeltaY() > 0) {
+                    // Zoom
+                    facteurZoom = 2;
+                } else {
+                    // Dézoom
+                    facteurZoom = 0.5;
                 }
+
+                Timeline timeline = new Timeline(60);
+                double ancienScale = fenetreControleur.getPaneDessin().getScaleX();
+                double nouveauScale = ancienScale * facteurZoom;
+                double translationX;
+                double translationY;
+
+                if (nouveauScale <= 1) {
+                    // On ne peut pas plus dézoomer
+                    nouveauScale = 1D;
+                    // On remet la carte à sa place initiale
+                    translationX = 0D;
+                    translationY = 0D;
+
+                } else {
+                    // On ajuste le facteur de zoom
+                    facteurZoom = (nouveauScale / ancienScale) - 1;
+
+                    // On calcule la translation nécessaire pour centrer la carte à l'endroit du
+                    // zoom
+                    double xCentre = event.getSceneX();
+                    double yCentre = event.getSceneY();
+                    Bounds bounds = fenetreControleur.getPaneDessin()
+                            .localToScene(fenetreControleur.getPaneDessin().getBoundsInLocal());
+                    double deltaX = (xCentre - (bounds.getWidth() / 2 + bounds.getMinX()));
+                    double deltaY = (yCentre - (bounds.getHeight() / 2 + bounds.getMinY()));
+                    translationX = fenetreControleur.getPaneDessin().getTranslateX() - facteurZoom * deltaX;
+                    translationY = fenetreControleur.getPaneDessin().getTranslateY() - facteurZoom * deltaY;
+                }
+
+                // On utilise une timeline pour faire une animation de zoom/dézoom
+                timeline.getKeyFrames().clear();
+                timeline.getKeyFrames().addAll(
+                        new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                new KeyValue(fenetreControleur.getPaneDessin().translateXProperty(), translationX)),
+                        new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                new KeyValue(fenetreControleur.getPaneDessin().translateYProperty(), translationY)),
+                        new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                new KeyValue(fenetreControleur.getPaneDessin().scaleXProperty(), nouveauScale)),
+                        new KeyFrame(Duration.millis(VITESSE_ZOOM),
+                                new KeyValue(fenetreControleur.getPaneDessin().scaleYProperty(), nouveauScale)));
+                timeline.play();
+                // On consomme l'événement
+                event.consume();
             });
 
             // Ajoute une fonctionnalité pour déplacer la carte avec la souris
-            this.fenetreControleur.getPaneDessin().setOnMousePressed(new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    // Lorsque la souris est pressée, on retient les coordonnées initiales et la
-                    // translation initiale de la carte pour ensuite la déplacer dans le cas d'un
-                    // "drag"
-                    origineDragSceneX = event.getSceneX();
-                    origineDragSceneY = event.getSceneY();
-                    origineDragTranslateX = ((Pane) (event.getSource())).getTranslateX();
-                    origineDragTranslateY = ((Pane) (event.getSource())).getTranslateY();
-                }
+            this.fenetreControleur.getPaneDessin().setOnMousePressed(event -> {
+                // Lorsque la souris est pressée, on retient les coordonnées initiales et la
+                // translation initiale de la carte pour ensuite la déplacer dans le cas d'un
+                // "drag"
+                origineDragSceneX = event.getSceneX();
+                origineDragSceneY = event.getSceneY();
+                origineDragTranslateX = ((Pane) (event.getSource())).getTranslateX();
+                origineDragTranslateY = ((Pane) (event.getSource())).getTranslateY();
             });
 
-            this.fenetreControleur.getPaneDessin().setOnMouseDragged(new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    // On calcule la translation à appliquer pour bouger la carte lors du "drag"
-                    double offsetX = event.getSceneX() - origineDragSceneX;
-                    double offsetY = event.getSceneY() - origineDragSceneY;
-                    double nouvelleTranslationX = origineDragTranslateX + offsetX;
-                    double nouvelleTranslationY = origineDragTranslateY + offsetY;
+            this.fenetreControleur.getPaneDessin().setOnMouseDragged(event -> {
+                // On calcule la translation à appliquer pour bouger la carte lors du "drag"
+                double offsetX = event.getSceneX() - origineDragSceneX;
+                double offsetY = event.getSceneY() - origineDragSceneY;
+                double nouvelleTranslationX = origineDragTranslateX + offsetX;
+                double nouvelleTranslationY = origineDragTranslateY + offsetY;
 
-                    // On calcule le delta x et le delta y que cela provoquerait
-                    double deltaX = (nouvelleTranslationX - fenetreControleur.getPaneDessin().getTranslateX());
-                    double deltaY = (nouvelleTranslationY - fenetreControleur.getPaneDessin().getTranslateY());
+                // On calcule le delta x et le delta y que cela provoquerait
+                double deltaX = (nouvelleTranslationX - fenetreControleur.getPaneDessin().getTranslateX());
+                double deltaY = (nouvelleTranslationY - fenetreControleur.getPaneDessin().getTranslateY());
 
-                    Bounds boundsInParent = ((Pane) (event.getSource())).getBoundsInParent();
+                Bounds boundsInParent = ((Pane) (event.getSource())).getBoundsInParent();
 
-                    // On vérifie qu'après la translation la carte est toujours dans les limites de
-                    // l'AnchorPane (sur l'axe x)
-                    if (boundsInParent.getMaxX() + deltaX >= fenetreControleur.getAnchorPaneGraphique().getWidth()
-                            && boundsInParent.getMinX() + deltaX <= 0) {
-                        // On translate la carte selon l'axe x
-                        ((Pane) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                // On vérifie qu'après la translation la carte est toujours dans les limites de
+                // l'AnchorPane (sur l'axe x)
+                if (boundsInParent.getMaxX() + deltaX >= fenetreControleur.getAnchorPaneGraphique().getWidth()
+                        && boundsInParent.getMinX() + deltaX <= 0) {
+                    // On translate la carte selon l'axe x
+                    ((Pane) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                } else {
+                    // On applique la translation maximale sans dépasser la bordure
+                    if (boundsInParent.getMaxX() + deltaX < fenetreControleur.getAnchorPaneGraphique().getWidth()) {
+                        nouvelleTranslationX = fenetreControleur.getAnchorPaneGraphique().getWidth()
+                                - boundsInParent.getMaxX() + fenetreControleur.getPaneDessin().getTranslateX();
                     } else {
-                        // On applique la translation maximale sans dépasser la bordure
-                        if (boundsInParent.getMaxX() + deltaX < fenetreControleur.getAnchorPaneGraphique().getWidth()) {
-                            nouvelleTranslationX = fenetreControleur.getAnchorPaneGraphique().getWidth()
-                                    - boundsInParent.getMaxX() + fenetreControleur.getPaneDessin().getTranslateX();
-                        } else {
-                            nouvelleTranslationX = fenetreControleur.getPaneDessin().getTranslateX()
-                                    - boundsInParent.getMinX();
-                        }
-                        ((Pane) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                        nouvelleTranslationX = fenetreControleur.getPaneDessin().getTranslateX()
+                                - boundsInParent.getMinX();
                     }
+                    ((Pane) (event.getSource())).setTranslateX(nouvelleTranslationX);
+                }
 
-                    // On vérifie qu'après la translation la carte est toujours dans les limites de
-                    // l'AnchorPane (sur l'axe y)
-                    if (boundsInParent.getMaxY() + deltaY >= fenetreControleur.getAnchorPaneGraphique().getHeight()
-                            && boundsInParent.getMinY() + deltaY <= 0) {
-                        // On translate la carte selon l'axe y
-                        ((Pane) (event.getSource())).setTranslateY(nouvelleTranslationY);
+                // On vérifie qu'après la translation la carte est toujours dans les limites de
+                // l'AnchorPane (sur l'axe y)
+                if (boundsInParent.getMaxY() + deltaY >= fenetreControleur.getAnchorPaneGraphique().getHeight()
+                        && boundsInParent.getMinY() + deltaY <= 0) {
+                    // On translate la carte selon l'axe y
+                    ((Pane) (event.getSource())).setTranslateY(nouvelleTranslationY);
+                } else {
+                    // On applique la translation maximale sans dépasser la bordure
+                    if (boundsInParent.getMaxY() + deltaY < fenetreControleur.getAnchorPaneGraphique()
+                            .getHeight()) {
+                        nouvelleTranslationY = fenetreControleur.getAnchorPaneGraphique().getHeight()
+                                - boundsInParent.getMaxY() + fenetreControleur.getPaneDessin().getTranslateY();
                     } else {
-                        // On applique la translation maximale sans dépasser la bordure
-                        if (boundsInParent.getMaxY() + deltaY < fenetreControleur.getAnchorPaneGraphique()
-                                .getHeight()) {
-                            nouvelleTranslationY = fenetreControleur.getAnchorPaneGraphique().getHeight()
-                                    - boundsInParent.getMaxY() + fenetreControleur.getPaneDessin().getTranslateY();
-                        } else {
-                            nouvelleTranslationY = fenetreControleur.getPaneDessin().getTranslateY()
-                                    - boundsInParent.getMinY();
-                        }
-                        ((Pane) (event.getSource())).setTranslateY(nouvelleTranslationY);
+                        nouvelleTranslationY = fenetreControleur.getPaneDessin().getTranslateY()
+                                - boundsInParent.getMinY();
                     }
+                    ((Pane) (event.getSource())).setTranslateY(nouvelleTranslationY);
                 }
             });
 
             // Définition des handlers sur les éléments du menu
-            fenetreControleur.getChargerCarteItem().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.chargerCarte();
-                }
-            });
+            fenetreControleur.getChargerCarteItem().setOnAction(event -> controleur.chargerCarte());
 
-            fenetreControleur.getChargerRequetesItem().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.chargerRequetes();
-                }
-            });
+            fenetreControleur.getChargerRequetesItem().setOnAction(event -> controleur.chargerRequetes());
 
-            fenetreControleur.getQuitterItem().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.quitterApplication();
-                }
-            });
+            fenetreControleur.getQuitterItem().setOnAction(event -> controleur.quitterApplication());
 
-            fenetreControleur.getBoutonLancer().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.lancerCalcul();
-                }
-            });
+            fenetreControleur.getBoutonLancer().setOnAction(event -> controleur.lancerCalcul());
 
-            fenetreControleur.getBoutonNouvelleRequete().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.ajouterNouvelleRequete();
-                }
-            });
+            fenetreControleur.getBoutonNouvelleRequete().setOnAction(event -> controleur.ajouterNouvelleRequete());
 
-            fenetreControleur.getBoutonValider().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
+            fenetreControleur.getBoutonValider().setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
+                    fenetreControleur.getDeliveryDurationField().getText()));
 
-                    controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
-                            fenetreControleur.getDeliveryDurationField().getText());
-                }
-            });
+            fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 
-            fenetreControleur.getBoutonAnnuler().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.annuler();
-                }
-            });
+            fenetreControleur.getboutonModifierPlanning().setOnAction(event -> controleur.modifierPlanning());
 
-            /*fenetreControleur.getboutonModifierPlanning().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.modifierPlanning();
-                }
-            });
-            */
-            
-            fenetreControleur.getUndoItem().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.undo();
-                }
-            });
-            
-            fenetreControleur.getRedoItem().setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent event) {
-                    controleur.redo();
-                }
-            });
+            fenetreControleur.getUndoItem().setOnAction(event -> controleur.undo());
+
+            fenetreControleur.getRedoItem().setOnAction(event -> controleur.redo());
 
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
@@ -399,7 +351,7 @@ public class Fenetre {
 
     /**
      * Permet de rafraichir la fenêtre
-     * 
+     *
      * @param planning            Le planning actuel de l'application, contenant les
      *                            objets du modèle à dessiner
      * @param demandeSelectionnee La demande qui a été sélectionnée (s'il y en a
@@ -414,7 +366,7 @@ public class Fenetre {
 
     /**
      * Renvoie le controleur JavaFX de la fenêtre
-     * 
+     *
      * @return Le controleur JavaFX de la fenêtre
      */
     public FenetreControleurFXML getFenetreControleur() {
@@ -423,7 +375,7 @@ public class Fenetre {
 
     /**
      * Renvoie le conteneur principal des éléments graphiques de la fenêtre
-     * 
+     *
      * @return Le conteneur graphique principal
      */
     public Stage getStage() {
@@ -432,7 +384,7 @@ public class Fenetre {
 
     /**
      * Renvoie la vue graphique de l'application.
-     * 
+     *
      * @return La vue graphique
      */
     public VueGraphique getVueGraphique() {
@@ -441,7 +393,7 @@ public class Fenetre {
 
     /**
      * Renvoie la vue textuelle de l'application.
-     * 
+     *
      * @return La vue textuelle
      */
     public VueTextuelle getVueTextuelle() {
@@ -450,7 +402,7 @@ public class Fenetre {
 
     /**
      * Renvoie la map d'association entre les requêtes et les couleurs
-     * 
+     *
      * @return La map d'association entre les requêtes et les couleurs
      */
     public Map<Requete, Color> getMapCouleurRequete() {
@@ -521,7 +473,7 @@ public class Fenetre {
 
     /**
      * setter
-     * 
+     *
      * @param list
      */
     public void setListeDemandes(ObservableList<Demande> list) {
@@ -530,7 +482,7 @@ public class Fenetre {
 
     /**
      * Renvoie le controleur de l'application
-     * 
+     *
      * @return Le controleur
      */
     public Controleur getControleur() {

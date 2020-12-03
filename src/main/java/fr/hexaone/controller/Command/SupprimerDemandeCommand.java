@@ -13,8 +13,19 @@ import fr.hexaone.model.Planning;
  */
 public class SupprimerDemandeCommand implements Command{
 
+    /**
+     * Le planning associé
+     */
     private Planning planning;
+
+    /**
+     * La demande à supprimer
+     */
     private Demande demande;
+
+    /**
+     * La position de la demande dans la liste des demandes
+     */
     private int index;
 
     /**

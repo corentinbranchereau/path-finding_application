@@ -12,12 +12,12 @@ public class Trajet {
     /**
      * liste de toutes les intersections représenant les chemins les plus courts
      */
-    protected List<Segment> listeSegments;
+    private List<Segment> listeSegments;
 
     /**
      * poids temporel total du trajet
      */
-    protected Double poids;
+    private Double poids;
 
     /**
      * constructeur de Trajet

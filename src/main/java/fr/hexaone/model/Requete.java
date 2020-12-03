@@ -14,17 +14,17 @@ public class Requete {
     /**
      * Demande associée à la collecte
      */
-    protected Demande demandeCollecte;
+    private Demande demandeCollecte;
 
     /**
      * Demande associée à la livraison
      */
-    protected Demande demandeLivraison;
+    private Demande demandeLivraison;
 
     /**
      * 
      */
-    protected Color couleur;
+    private Color couleur;
 
     /**
      * Constructeur de Requete

@@ -10,22 +10,22 @@ public class Segment {
     /**
      * longueur du segment
      */
-    protected double longueur;
+    private double longueur;
 
     /**
      * nom du segment
      */
-    protected String nom;
+    private String nom;
 
     /**
      * Id de l'intersection de départ
      */
-    protected Long idDepart;
+    private Long idDepart;
 
     /**
      * Id de l'intersection d'arrivée
      */
-    protected Long idArrivee;
+    private Long idArrivee;
 
     /**
      * constructeur de Segment

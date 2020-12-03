@@ -28,28 +28,28 @@ public class Controleur {
     /**
      * Gère l'affichage de l'application (Vue du MVC)
      */
-    protected Fenetre fenetre;
+    private Fenetre fenetre;
 
     /**
      * Carte actuelle de l'application
      */
-    protected Carte carte;
+    private Carte carte;
 
     /**
      * Planning actuel de l'application
      */
-    protected Planning planning;
+    private Planning planning;
 
     /**
      * Demande selectionnée par l'utilisateur après un clic sur la vue graphique ou
      * textuelle
      */
-    protected Demande demandeSelectionnee;
+    private Demande demandeSelectionnee;
 
     /**
      * Etat courant du design pattern STATE
      */
-    protected State etatCourant;
+    private State etatCourant;
 
     /**
      * Etat initial de l'application du design pattern STATE

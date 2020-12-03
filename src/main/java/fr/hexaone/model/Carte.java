@@ -14,7 +14,7 @@ public class Carte {
     /**
      * Map permettant d'identifier les intersections à partir de leur id
      */
-    protected Map<Long, Intersection> intersections;
+    private Map<Long, Intersection> intersections;
 
     /**
      * Constructeur par défaut de Carte

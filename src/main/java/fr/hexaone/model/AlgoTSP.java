@@ -21,12 +21,12 @@ public class AlgoTSP extends AlgoGenetique {
 	/**
 	 * Map permettant d'identifier les chemins les plus courts à partir d'un identifiant (String) 
 	 */
-    protected Map<String, Trajet> cheminsLesPlusCourts;
+    private Map<String, Trajet> cheminsLesPlusCourts;
     
     /**
      * id du dépot
      */
-    protected Long depotId;
+    private Long depotId;
 
     /**
      * Constructeur de AlgoTSP
@@ -60,7 +60,7 @@ public class AlgoTSP extends AlgoGenetique {
     /**
      * Renvoie une liste de chromosomes aléatoires (donc une liste d'intersections)
      *
-     * @param demandes
+     * @param objets
      */
     @Override
 	public List<Object> genererChromosomeAleatoire(List<Object> objets){
@@ -134,7 +134,6 @@ public class AlgoTSP extends AlgoGenetique {
      * précédence des requêtes Echange la place des couples <pickup,delivery> quand
      * ils sont inversés
      *
-     * @param requetes
      * @param chromosome
      */
     @Override
@@ -204,7 +203,6 @@ public class AlgoTSP extends AlgoGenetique {
      * sinon
      *
      * @param chromosome que l'on teste
-     * @param requetes   liste des requêtes
      */
     @Override
 	public Boolean verifierPop(List<Object> chromosome) {
@@ -233,7 +231,7 @@ public class AlgoTSP extends AlgoGenetique {
      * Mutation d'un chromosme grâce à un algorithme de recherche locale
      *
      * @param chromosome que l'on teste
-     * @param requetes   liste des requêtes
+     * @param coutIni coût initial
      */
     @Override
 	public List<Object> mutationLocalSearch(List<Object> chromosome, Double coutIni){
