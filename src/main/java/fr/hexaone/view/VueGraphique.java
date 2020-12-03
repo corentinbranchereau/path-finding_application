@@ -150,6 +150,21 @@ public class VueGraphique {
     private int tailleListeNoeudsCarte;
 
     /**
+     * Map qui contient pour chaque trajet sa couleur d'affichage
+     */
+    private Map<Trajet, Color> mapCouleurTrajet;
+
+    /**
+     * Angle Hue (modèle HSB) du début de l'intervalle des couleurs de trajets
+     */
+    private final double DEBUT_INTERVALLE_COULEURS_TRAJETS = 60;
+
+    /**
+     * Angle Hue (modèle HSB) de la fin de l'intervalle des couleurs de trajets
+     */
+    private final double FIN_INTERVALLE_COULEURS_TRAJETS = 180;
+
+    /**
      * Constructeur de VueGraphique
      * 
      * @param fenetre La fenêtre de l'application à laquelle est reliée la vue
@@ -193,11 +208,12 @@ public class VueGraphique {
             afficherDemandes(planning.getDemandesOrdonnees(), planning.getCarte(), planning.getIdDepot());
 
             if (planning.getListeTrajets() != null) {
+                // Génération des couleurs pour les trajets
+                genererCouleursTrajets(planning.getListeTrajets());
+
                 // Affichage des trajets
                 for (Trajet trajet : planning.getListeTrajets()) {
-                    // TODO : mieux gérer les couleurs des trajets
-                    Color couleur = Color.color(Math.random(), Math.random(), Math.random());
-                    afficherTrajet(planning.getCarte(), trajet, couleur);
+                    afficherTrajet(planning.getCarte(), trajet);
                 }
 
                 // Affichage de la demande sélectionnée et de la demande associée
@@ -352,6 +368,26 @@ public class VueGraphique {
             this.fenetre.getMapCouleurRequete().put(requete, couleur);
 
             couleursDejaPresentes.add(couleur);
+        }
+    }
+
+    /**
+     * Permet de générer une couleur par trajet en réalisant un dégradé entre
+     * l'angle (angle hue du modèle de couleurs HSB) de début et de fin définis
+     * 
+     * @param trajets La liste des trajets pour lesquels il faut générer des
+     *                couleurs
+     */
+    public void genererCouleursTrajets(List<Trajet> trajets) {
+        this.mapCouleurTrajet = new HashMap<>();
+
+        double intervalleAngle = this.FIN_INTERVALLE_COULEURS_TRAJETS - this.DEBUT_INTERVALLE_COULEURS_TRAJETS;
+        double pasIntervalle = intervalleAngle / trajets.size();
+
+        for (int i = 0; i < trajets.size(); i++) {
+            double angle = this.DEBUT_INTERVALLE_COULEURS_TRAJETS + i * pasIntervalle;
+            Color couleurTrajet = Color.hsb(angle, 1.0, 1.0);
+            this.mapCouleurTrajet.put(trajets.get(i), couleurTrajet);
         }
     }
 
@@ -617,7 +653,10 @@ public class VueGraphique {
      * @param trajet  Le trajet à dessiner
      * @param couleur La couleur du trajet
      */
-    private void afficherTrajet(Carte carte, Trajet trajet, Color couleur) {
+    private void afficherTrajet(Carte carte, Trajet trajet) {
+        // On récupère la couleur du trajet
+        Color couleur = this.mapCouleurTrajet.get(trajet);
+
         // On parcourt tous les segments composant le trajet
         for (Segment segment : trajet.getListeSegments()) {
             // On calcule les coordonnées du départ et de l'arrivée
