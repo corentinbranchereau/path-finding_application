@@ -27,6 +27,8 @@ public class ModifierPlanningCommand implements Command {
     */
     public ModifierPlanningCommand(Planning planning,int i, int j){
         demandes=planning.getDemandesOrdonnees();
+        this.i=i;
+        this.j=j;
     }
     
 
