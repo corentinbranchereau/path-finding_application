@@ -1,5 +1,7 @@
 package fr.hexaone.controller.Command;
 
+import java.util.List;
+
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 
@@ -13,13 +15,15 @@ public class SupprimerDemandeCommand implements Command{
 
     private Planning planning;
     private Demande demande;
+    private int index;
 
     /**
      * Constructeur de la suppression de demande
      */
-    public SupprimerDemandeCommand(Planning planning, Demande demande){
+    public SupprimerDemandeCommand(Planning planning, Demande demande, int index){
         this.planning = planning;
         this.demande = demande;
+        this.index=index;
     }
 
     /**
@@ -35,6 +39,8 @@ public class SupprimerDemandeCommand implements Command{
      */
     @Override
     public void undoCommand() {
+    	List<Demande>demandes=planning.getDemandesOrdonnees();
+    	demandes.add(index,demande);
 
     }
 }
