@@ -86,25 +86,23 @@ public class RequetesControleurFXML {
         // Create ContextMenu
         contextMenu = new ContextMenu();
 
-        MenuItem item1 = new MenuItem("Supprimer ce point");
-        item1.setOnAction(new EventHandler<ActionEvent>() {
-
+        MenuItem itemSuppDemande = new MenuItem("Supprimer cette demande");
+        itemSuppDemande.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fenetre.getControleur().supprimerDemande();
+            }
+        });
+        MenuItem itemSuppRequete = new MenuItem("Supprimer la requête associée");
+        itemSuppRequete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 fenetre.getControleur().supprimerRequete();
             }
         });
-        MenuItem item2 = new MenuItem("Menu Item 2");
-        item2.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
 
         // Add MenuItem to ContextMenu
-        contextMenu.getItems().addAll(item1);
+        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete);
 
         // When user right-click on Circle
 
