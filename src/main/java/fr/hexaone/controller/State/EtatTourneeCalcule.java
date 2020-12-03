@@ -45,7 +45,6 @@ public class EtatTourneeCalcule implements State {
     @Override
     public void lancerCalcul(Controleur c) {
         c.getPlanning().calculerMeilleurTournee();
-        c.rafraichirVues();
         // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
         // textuelle sera prête
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
@@ -78,7 +77,6 @@ public class EtatTourneeCalcule implements State {
         // TODO : Créer un marqeur car point orphelin
 
         c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
-        c.rafraichirVues();
 
         // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
         // textuelle sera prête

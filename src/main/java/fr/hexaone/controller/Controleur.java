@@ -115,10 +115,14 @@ public class Controleur {
     }
 
     /**
-     * Méthode permettant de rafraichir les vues après des modifications dans le modèle
+     * Méthode permettant de rafraichir les vues après des modifications dans le
+     * modèle
+     * 
+     * @param dessinerCarte Indique s'il y a besoin de redessiner les noeuds de la
+     *                      carte (segments et intersections)
      */
-    public void rafraichirVues() {
-        fenetre.rafraichir(planning, demandeSelectionnee);
+    public void rafraichirVues(boolean dessinerCarte) {
+        fenetre.rafraichir(planning, demandeSelectionnee, dessinerCarte);
     }
 
     /**
@@ -128,7 +132,7 @@ public class Controleur {
      */
     public void chargerCarte() {
         etatCourant.chargerCarte(this);
-        rafraichirVues();
+        rafraichirVues(true);
     }
 
     /**
@@ -138,7 +142,7 @@ public class Controleur {
      */
     public void chargerRequetes() {
         etatCourant.chargerRequetes(this);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -153,7 +157,7 @@ public class Controleur {
      */
     public void lancerCalcul() {
         etatCourant.lancerCalcul(this);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -161,7 +165,7 @@ public class Controleur {
      */
     public void supprimerDemande() {
         etatCourant.supprimerDemande(this, demandeSelectionnee);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -169,7 +173,7 @@ public class Controleur {
      */
     public void supprimerRequete() {
         etatCourant.supprimerRequete(this, demandeSelectionnee.getRequete());
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -178,7 +182,7 @@ public class Controleur {
      */
     public void ajouterNouvelleRequete() {
         etatCourant.ajoutNouvelleRequete(this);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -186,7 +190,7 @@ public class Controleur {
      */
     public void selectionnerIntersection(Long idIntersection) {
         etatCourant.selectionnerIntersection(this, idIntersection);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -194,7 +198,7 @@ public class Controleur {
      */
     public void valider(String pickUpDurationField, String deliveryDurationField) {
         etatCourant.valider(this, pickUpDurationField, deliveryDurationField);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -202,19 +206,19 @@ public class Controleur {
      */
     public void annuler() {
         etatCourant.annuler(this);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     public void modifierPlanning() {
         etatCourant.modifierPlanning(this);
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
      * Réinitialise la saisie de l'utilisateur.
      */
     public void resetDemandeSelectionnee() {
-        rafraichirVues();
+        rafraichirVues(false);
     }
 
     /**
@@ -223,9 +227,11 @@ public class Controleur {
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        if (this.demandeSelectionnee == demandeSelectionnee) this.demandeSelectionnee = null;
-        else this.demandeSelectionnee = demandeSelectionnee;
-        rafraichirVues();
+        if (this.demandeSelectionnee == demandeSelectionnee)
+            this.demandeSelectionnee = null;
+        else
+            this.demandeSelectionnee = demandeSelectionnee;
+        rafraichirVues(false);
         // if (this.demandeSelectionnee != null) {
         //     this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
         //     this.fenetre.getVueTextuelle().enleverHighlightDemande();

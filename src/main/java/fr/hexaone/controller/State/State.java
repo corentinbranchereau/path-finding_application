@@ -73,7 +73,6 @@ public interface State {
                 c.getFenetre().resetTailleFenetre();
 
                 c.getFenetre().getVueGraphique().calculAdaptationCarte(c.getPlanning().getCarte());
-                c.rafraichirVues();
 
                 // On adapte la taille de la fenêtre en fonction de la taille finale de la carte
                 c.getFenetre().adapterTailleFenetre();
@@ -114,9 +113,6 @@ public interface State {
 
                 // TODO : effacer les trajets (la tournée) s'ils existent (si jamais
                 // précédemment calculé)
-
-                // On affiche les requêtes chargées dans la vue graphique et la vue textuelle
-                c.rafraichirVues();
 
                 // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
                 // textuelle sera prête

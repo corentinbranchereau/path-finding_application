@@ -144,6 +144,12 @@ public class VueGraphique {
     protected final double TAILLE_NOEUD_SECONDAIRE_HIGHLIGHT = 8;
 
     /**
+     * Taille de liste des noeuds correspondant au dessin de la carte (segments et
+     * intersections)
+     */
+    protected int tailleListeNoeudsCarte;
+
+    /**
      * Constructeur de VueGraphique
      * 
      * @param fenetre La fenêtre de l'application à laquelle est reliée la vue
@@ -161,17 +167,24 @@ public class VueGraphique {
      *                            autres variables (carte, requêtes, etc.)
      * @param demandeSelectionnee La demande qui a été sélectionnée par
      *                            l'utilisateur
+     * @param dessinerCarte       Indique s'il y a besoin de redessiner les noeuds
+     *                            de la carte (segments et intersections)
      */
-    public void rafraichir(Planning planning, Demande demandeSelectionnee) {
-        // Réinitialisation de la vue
-        this.paneDessin.getChildren().clear();
-
+    public void rafraichir(Planning planning, Demande demandeSelectionnee, boolean dessinerCarte) {
         if (planning == null)
             return;
 
         if (planning.getCarte() != null) {
-            // Affichage de la carte
-            afficherCarte(planning.getCarte());
+            if (dessinerCarte) {
+                // Réinitialisation de la vue
+                this.paneDessin.getChildren().clear();
+                // Affichage de la carte
+                afficherCarte(planning.getCarte());
+            } else {
+                // On efface les noeuds qui ne font pas partie de Carte (ceux qui ne sont pas
+                // des segments ou intersections)
+                this.paneDessin.getChildren().remove(this.tailleListeNoeudsCarte, this.paneDessin.getChildren().size());
+            }
         }
 
         // Affichage des demandes sur la carte
@@ -439,6 +452,7 @@ public class VueGraphique {
             // On ajoute l'élément au dessin
             this.mapIntersections.put(entry.getKey(), cercleIntersection);
             this.paneDessin.getChildren().add(cercleIntersection);
+            this.tailleListeNoeudsCarte++;
 
             for (Segment s : entry.getValue().getSegmentsPartants()) {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
@@ -477,6 +491,7 @@ public class VueGraphique {
                 });
 
                 this.paneDessin.getChildren().add(ligneSegment);
+                this.tailleListeNoeudsCarte++;
             }
         }
     }

@@ -38,7 +38,6 @@ public class EtatRequetesChargees implements State {
         @Override
         public void lancerCalcul(Controleur c) {
                 c.getPlanning().calculerMeilleurTournee();
-                c.rafraichirVues();
                 c.setEtatTourneeCalcule();
         }
 }

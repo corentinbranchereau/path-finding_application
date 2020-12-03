@@ -385,10 +385,17 @@ public class Fenetre {
     }
 
     /**
-     * Permer de rafraichir la fenetre
+     * Permet de rafraichir la fenêtre
+     * 
+     * @param planning            Le planning actuel de l'application, contenant les
+     *                            objets du modèle à dessiner
+     * @param demandeSelectionnee La demande qui a été sélectionnée (s'il y en a
+     *                            une)
+     * @param dessinerCarte       Indique s'il y a besoin de redessiner les noeuds
+     *                            de la carte (segments et intersections)
      */
-    public void rafraichir(Planning planning, Demande demandeSelectionnee) {
-        vueGraphique.rafraichir(planning, demandeSelectionnee);
+    public void rafraichir(Planning planning, Demande demandeSelectionnee, boolean dessinerCarte) {
+        vueGraphique.rafraichir(planning, demandeSelectionnee, dessinerCarte);
         vueTextuelle.rafraichir(planning, demandeSelectionnee);
     }
 
