@@ -30,7 +30,7 @@ public class ModifierPlanningCommand implements Command {
         this.i=i;
         this.j=j;
     }
-    
+
 
     /**
      * @inheritDoc
@@ -42,7 +42,7 @@ public class ModifierPlanningCommand implements Command {
     		Collections.swap(demandes,k,k+1);
     	}
     	planning.ordonnerLesTrajetsEtLesDates();
-    	
+
     }
 
     /**
@@ -55,6 +55,6 @@ public class ModifierPlanningCommand implements Command {
     		Collections.swap(demandes,k,k-1);
     	}
     	planning.ordonnerLesTrajetsEtLesDates();
-    	
+
     }
 }
