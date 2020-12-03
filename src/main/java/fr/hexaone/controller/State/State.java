@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Planning;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
@@ -151,6 +152,10 @@ public interface State {
     }
 
     default void supprimerDemande(Controleur c, Demande demande) {
+        System.out.println("Il faut avoir calculé la tournée pour supprimer des demandes");
+    }
+
+    default void supprimerRequete(Controleur c, Requete requete) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des requetes");
     }
 
