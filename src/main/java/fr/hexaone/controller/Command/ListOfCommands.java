@@ -56,8 +56,8 @@ public class ListOfCommands {
      * Rétablir la dernière commande réalisée, si elle existe.
      */
     public void redo(){
-        if(l.get(++i) != null)
-            l.get(i).doCommand();
-        else --i;
+    	if(i+1<=l.size()-1) {
+    		  l.get(++i).doCommand();
+    	}
     }
 }
