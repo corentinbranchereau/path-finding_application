@@ -208,14 +208,6 @@ public class VueGraphique {
             afficherDemandes(planning.getDemandesOrdonnees(), planning.getCarte(), planning.getIdDepot());
 
             if (planning.getListeTrajets() != null) {
-                // Génération des couleurs pour les trajets
-                genererCouleursTrajets(planning.getListeTrajets());
-
-                // Affichage des trajets
-                for (Trajet trajet : planning.getListeTrajets()) {
-                    afficherTrajet(planning.getCarte(), trajet);
-                }
-
                 // Affichage de la demande sélectionnée et de la demande associée
                 // TODO : actuellement ne marche pas avant d'avoir calculé --> à voir
                 if (demandeSelectionnee != null) {
@@ -244,10 +236,35 @@ public class VueGraphique {
                         // TODO : Mise en valeur du dépot
                     }
 
-                    // TODO : Mettre en valeur le trajet avant et après la demande sélectionnée
+                    List<Trajet> trajetsAvantApresDemande = new ArrayList<>();
                     int index = planning.getDemandesOrdonnees().indexOf(demandeSelectionnee);
-                    planning.getListeTrajets().get(index);
-                    planning.getListeTrajets().get(index + 1);
+                    if (index != -1) {
+                        // L'index a été trouvé
+                        trajetsAvantApresDemande.add(planning.getListeTrajets().get(index));
+
+                        if (index + 1 < planning.getListeTrajets().size()) {
+                            trajetsAvantApresDemande.add(planning.getListeTrajets().get(index + 1));
+                        }
+
+                        // On vérifie si les couleurs ont déjà été générées pour les trajets
+                        if (this.mapCouleurTrajet == null || this.mapCouleurTrajet.isEmpty()) {
+                            genererCouleursTrajets(planning.getListeTrajets());
+                        }
+
+                        // Affichage des trajets
+                        for (Trajet trajet : trajetsAvantApresDemande) {
+                            afficherTrajet(planning.getCarte(), trajet);
+                        }
+                    }
+                } else {
+                    // Pas de demande sélectionnée : on affiche tous les trajets
+                    // Génération des couleurs pour les trajets
+                    genererCouleursTrajets(planning.getListeTrajets());
+
+                    // Affichage des trajets
+                    for (Trajet trajet : planning.getListeTrajets()) {
+                        afficherTrajet(planning.getCarte(), trajet);
+                    }
                 }
             }
         } else if (!planning.getRequetes().isEmpty()) {
