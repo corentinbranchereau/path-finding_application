@@ -1,5 +1,9 @@
 package fr.hexaone.controller.Command;
 
+import java.util.Collections;
+import java.util.List;
+
+import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 
 /**
@@ -11,22 +15,29 @@ import fr.hexaone.model.Planning;
  */
 public class ModifierPlanningCommand implements Command {
 
-    private Planning planning;
+    private List<Demande> demandes;
+    int i;
+    int j;
 
-    /**
-     * Constructeur de la modificationn de planning
-     */
-    public ModifierPlanningCommand(Planning planning){
-        //TODO --> Préparer la commande (les demandes à déplacer etc...)
-        this.planning = planning;
+   /**
+    * Constructeur de la modificationn de planning
+    * @param planning
+    * @param i index dans la liste de demandes du départ du drag/drop
+    * @param j nouvel index dans la liste de demandes de l'arrivée du drag/drop
+    */
+    public ModifierPlanningCommand(Planning planning,int i, int j){
+        demandes=planning.getDemandesOrdonnees();
     }
+    
 
     /**
      * @inheritDoc
      */
     @Override
     public void doCommand() {
-
+    	for(int k=i;k<j;k++) {
+    		Collections.swap(demandes,k,k+1);
+    	}
     }
 
     /**
@@ -34,6 +45,9 @@ public class ModifierPlanningCommand implements Command {
      */
     @Override
     public void undoCommand() {
-
+    	for(int k=j;k>i;k--) {
+    		Collections.swap(demandes,k,k-1);
+    	}
+    	
     }
 }
