@@ -2,7 +2,9 @@ package fr.hexaone.controller.State;
 
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.SupprimerDemandeCommand;
+import fr.hexaone.controller.Command.SupprimerRequeteCommand;
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -64,11 +66,11 @@ public class EtatTourneeCalcule implements State {
     public void supprimerDemande(Controleur c, Demande demande) {
 
         if (demande == null) {
-            System.out.println("Il faut sélectionner une requete avant.");
+            System.out.println("Il faut sélectionner une demande avant.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Mauvaise sélection");
             alert.setHeaderText(null);
-            alert.setContentText("Il faut selectionner une requete avant.");
+            alert.setContentText("Il faut selectionner une demande avant.");
             alert.show();
             return;
         }
@@ -83,6 +85,29 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
 
         c.resetDemandeSelectionnee();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void supprimerRequete(Controleur c, Requete requete) {
+
+        if (requete == null) {
+            System.out.println("Il faut sélectionner une requete avant.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Il faut selectionner une requete avant.");
+            alert.show();
+            return;
+        }
+
+        c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
+
+        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
+        // textuelle sera prête
+        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
     }
 
     /**
