@@ -22,8 +22,9 @@ public class EtatModifierPlanning implements State {
     /**
      * {@inheritDoc}
      */
-    @Override
+    /*@Override
     public void modifierPlanning(Controleur c) {
         c.setEtatTourneeCalcule();
     }
+    */
 }

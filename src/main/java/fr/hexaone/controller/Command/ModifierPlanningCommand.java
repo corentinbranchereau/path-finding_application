@@ -37,12 +37,22 @@ public class ModifierPlanningCommand implements Command {
      */
     @Override
     public void doCommand() {
-    	List<Demande> demandes=planning.getDemandesOrdonnees();
-    	for(int k=i;k<j;k++) {
-    		Collections.swap(demandes,k,k+1);
-    	}
-    	planning.ordonnerLesTrajetsEtLesDates();
 
+    	List<Demande> demandes=planning.getDemandesOrdonnees();
+ 
+    	if(i<=j) {
+    		for(int k=i;k<j;k++) {
+        		Collections.swap(demandes,k,k+1);
+        	}
+    		
+    	}
+    	else {
+    		for(int k=i;k>j;k--) {
+        		Collections.swap(demandes,k,k-1);
+        	}	
+    	}
+    	
+    	planning.ordonnerLesTrajetsEtLesDates();
     }
 
     /**
@@ -51,9 +61,17 @@ public class ModifierPlanningCommand implements Command {
     @Override
     public void undoCommand() {
     	List<Demande> demandes=planning.getDemandesOrdonnees();
-    	for(int k=j;k>i;k--) {
-    		Collections.swap(demandes,k,k-1);
+    	if(i<=j) {
+        	for(int k=j;k>i;k--) {
+        		Collections.swap(demandes,k,k-1);
+        	}
     	}
+    	else {
+    		for(int k=j;k<i;k++) {
+        		Collections.swap(demandes,k,k+1);
+        	}	
+    	}
+
     	planning.ordonnerLesTrajetsEtLesDates();
 
     }

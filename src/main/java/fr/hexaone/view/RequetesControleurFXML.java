@@ -68,6 +68,14 @@ public class RequetesControleurFXML {
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
      * chargés On définit les règles d'affichage du tableau
      */
+    
+   protected int indexDemandeDepart;
+   
+   protected int indexDemandeArrivee;
+   
+
+   
+   
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -146,10 +154,13 @@ public class RequetesControleurFXML {
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
-
+                    
+                    indexDemandeDepart=index;
+                    
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
+               
                     cc.put(SERIALIZED_MIME_TYPE, index);
                     db.setContent(cc);
 
@@ -218,14 +229,21 @@ public class RequetesControleurFXML {
                         } else {
                             dropIndex = row.getIndex();
                         }
+                        
+                        indexDemandeArrivee=dropIndex;
+                  
                         demandeTable.getItems().add(dropIndex, draggedPerson);
 
                         event.setDropCompleted(true);
                         demandeTable.getSelectionModel().select(dropIndex);
+
+                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart,indexDemandeArrivee);
                     }
+                    
+                    this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
 
-                    this.fenetre.getVueTextuelle().rechargerHighlight();
+                    
                 }
             });
 

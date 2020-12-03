@@ -203,7 +203,7 @@ public interface State {
     /**
      * méthode qui permet de passer dans l'état de modification de planning
      */
-    default void modifierPlanning(Controleur c) {
+    default void modifierPlanning(Controleur c,int i, int j) {
         System.out.println("modifierPlanning [default state implementation]");
     }
 }

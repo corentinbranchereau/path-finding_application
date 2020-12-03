@@ -1,6 +1,7 @@
 package fr.hexaone.controller.State;
 
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.controller.Command.ModifierPlanningCommand;
 import fr.hexaone.controller.Command.SupprimerDemandeCommand;
 import fr.hexaone.controller.Command.SupprimerRequeteCommand;
 import fr.hexaone.model.Demande;
@@ -79,10 +80,6 @@ public class EtatTourneeCalcule implements State {
         //TODO : récupérer depuis la vue graphique/textuelle l'index 
         //c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande,index));
 
-        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
-        // textuelle sera prête
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
-
         c.resetDemandeSelectionnee();
     }
 
@@ -104,19 +101,15 @@ public class EtatTourneeCalcule implements State {
 
         c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
 
-        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
-        // textuelle sera prête
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void modifierPlanning(Controleur c) {
-        // ! Etat Useless
-        // c.setEtatModifierPlanning();
-        // TODO : Mettre au propre le drag and drop selon MVC
-        // c.getListOfCommands().add(new ModifierPlanningCommand(...));
+    public void modifierPlanning(Controleur c, int i,int j) {
+ 
+    	c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(),i,j));
+   
     }
 }

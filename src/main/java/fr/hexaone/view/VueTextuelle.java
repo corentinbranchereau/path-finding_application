@@ -394,9 +394,21 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-        if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
+    	
+    	if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
+           
         }
+    }
+    
+    /**
+     * Permet de réaliser le drag/drop dans le modèle
+     * @param draggIndex index de départ du dragg
+     * @param dropIndex index d'arrivée du dragg
+     */
+    public void modifierPlanning(int draggIndex, int dropIndex) {
+    	this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
+    	
     }
 }

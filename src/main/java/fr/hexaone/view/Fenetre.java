@@ -373,11 +373,12 @@ public class Fenetre {
                 }
             });
 
-            fenetreControleur.getboutonModifierPlanning().setOnAction(new EventHandler<ActionEvent>() {
+            /*fenetreControleur.getboutonModifierPlanning().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     controleur.modifierPlanning();
                 }
             });
+            */
             
             fenetreControleur.getUndoItem().setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {

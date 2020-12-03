@@ -211,8 +211,8 @@ public class Controleur {
         rafraichirVues(false);
     }
 
-    public void modifierPlanning() {
-        etatCourant.modifierPlanning(this);
+    public void modifierPlanning(int i ,int j) {
+        etatCourant.modifierPlanning(this,i,j);
         rafraichirVues(false);
     }
 
