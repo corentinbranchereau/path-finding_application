@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
 import fr.hexaone.model.Planning;
 
 /**
@@ -156,7 +157,7 @@ public class Controleur {
     }
 
     /**
-     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     * Méthode gérant le clic sur le bouton permettant de supprimer une demande
      */
     public void supprimerDemande() {
         etatCourant.supprimerDemande(this, demandeSelectionnee);
@@ -164,10 +165,10 @@ public class Controleur {
     }
 
     /**
-     * Méthode gérant le clic sur le bouton lançant le calcul du planning
+     * Méthode gérant le clic sur le bouton permettant de supprimer une requete
      */
     public void supprimerRequete() {
-        etatCourant.supprimerDemande(this, demandeSelectionnee);
+        etatCourant.supprimerRequete(this, demandeSelectionnee.getRequete());
         rafraichirVues();
     }
 
