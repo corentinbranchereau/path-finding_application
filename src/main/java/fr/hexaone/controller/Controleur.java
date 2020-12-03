@@ -95,6 +95,7 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
+        this.l = new ListOfCommands();
         setEtatInitial();
     }
 

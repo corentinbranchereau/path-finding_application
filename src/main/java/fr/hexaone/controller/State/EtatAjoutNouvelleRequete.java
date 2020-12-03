@@ -189,6 +189,8 @@ public class EtatAjoutNouvelleRequete implements State {
                     Alert.AlertType.ERROR);
             return;
         } finally {
+            idIntersection1 = null;
+            idIntersection2 = null;
             this.annuler(c);
         }
     }
