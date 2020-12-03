@@ -170,13 +170,7 @@ public interface State {
         alert.setTitle("Demande nouvelle livraison");
         alert.setHeaderText(null);
         alert.setContentText("Vous devez avoir un planning determiné avant de pouvoir rajouter d'autres requêtes");
-
-        Optional<ButtonType> decision = alert.showAndWait();
-        if (decision.get() == ButtonType.OK) {
-            // Rien
-        } else {
-            // Rien
-        }
+        alert.show();
     }
 
     /**

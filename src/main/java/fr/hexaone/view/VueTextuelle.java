@@ -120,7 +120,7 @@ public class VueTextuelle {
             }
         } else if (!planning.getRequetes().isEmpty()) {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
-            List<Demande> demandes = new ArrayList<Demande>();
+            List<Demande> demandes = new ArrayList<>();
             for (Requete requete : planning.getRequetes()) {
                 demandes.add(requete.getDemandeCollecte());
                 demandes.add(requete.getDemandeLivraison());
@@ -183,7 +183,7 @@ public class VueTextuelle {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
             FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+            AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.
             this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
@@ -209,7 +209,7 @@ public class VueTextuelle {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
             FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = (AnchorPane) loader.load(inputFichierFxml);
+            AnchorPane personOverview = loader.load(inputFichierFxml);
 
             String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
@@ -243,9 +243,7 @@ public class VueTextuelle {
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
-        for (Demande demande : planning.getDemandesOrdonnees()) {
-            listeDemandes.add(demande);
-        }
+        listeDemandes.addAll(planning.getDemandesOrdonnees());
 
         return listeDemandes;
     }

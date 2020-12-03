@@ -66,17 +66,8 @@ public class Planning{
     /**
      * Comparateur afin de classer les chromosomes au sein d'une population dans
      * l'ordre croissant des coûts
-     *
-     * @param depot
-     * @param requetes
      */
-    public Comparator<Pair<List<Demande>, Double>> ComparatorChromosome = new Comparator<Pair<List<Demande>, Double>>() {
-
-        @Override
-        public int compare(Pair<List<Demande>, Double> e1, Pair<List<Demande>, Double> e2) {
-            return (int) (e1.getValue1() - e2.getValue1());
-        }
-    };
+    public Comparator<Pair<List<Demande>, Double>> ComparatorChromosome = (e1, e2) -> (int) (e1.getValue1() - e2.getValue1());
     
     ///////////////////////////////
     // Méthode de plannification //
@@ -101,22 +92,6 @@ public class Planning{
         this.requetes = requetes;
         this.carte=carte;
     }
-    
-   /**
-    * Constructeur de copie 
-    * @param p
-    */
-    public Planning(Planning p) { 
-        idDepot = p.getIdDepot(); 
-        dureeTotale=p.getDureeTotale();
-        listeTrajets = new ArrayList<Trajet>(p.getListeTrajets());
-        requetes= new ArrayList<Requete>(p.getRequetes());
-        demandesOrdonnees= new ArrayList<Demande>(p.getDemandesOrdonnees());
-        dateDebut=new Date(p.getDateDebut().getTime());
-        dateFin=new Date(p.getDateFin().getTime());
-        
-        //copier la carte aussi ??? 
-    } 
 
     /**
      * Recherche de la tournée la plus rapide :
@@ -135,7 +110,7 @@ public class Planning{
 
         // Recherche des chemins des plus courts entre toutes les 
         // intersections spéciales (dépots, livraisons et dépot)
-        List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
+        List<Intersection> intersectionsSpeciales = new ArrayList<>();
         intersectionsSpeciales.add(carte.getIntersections().get(idDepot));
         for (Requete r : requetes) {
             intersectionsSpeciales.add(carte.getIntersections().get(r.getDemandeCollecte().getIdIntersection()));
@@ -145,7 +120,7 @@ public class Planning{
         calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
         
         //recherche de la melleure tournéee
-        List<Object> demandes = new ArrayList<Object>();
+        List<Object> demandes = new ArrayList<>();
         for (Requete requete : requetes) {
             demandes.add(requete.getDemandeCollecte());
             demandes.add(requete.getDemandeLivraison());
@@ -155,7 +130,7 @@ public class Planning{
         
         List<Object> result=algo.algoGenetique(demandes);
         
-        this.demandesOrdonnees=new ArrayList<Demande>();
+        this.demandesOrdonnees=new ArrayList<>();
         
         for(Object obj: result) {
         	this.demandesOrdonnees.add((Demande)obj);
@@ -179,10 +154,10 @@ public class Planning{
      *     - Avoir les demandes ordonnées
      */
     public void ordonnerLesTrajetsEtLesDates() {
-        Long prevIntersectionId =idDepot;
-        listeTrajets = new LinkedList<Trajet>();
+        long prevIntersectionId =idDepot;
+        listeTrajets = new LinkedList<>();
         double duree = 0.;
-        Long tempsDebut = dateDebut.getTime();
+        long tempsDebut = dateDebut.getTime();
 
         for (Demande demande : demandesOrdonnees) {
             Long newId = demande.getIdIntersection();
@@ -216,7 +191,7 @@ public class Planning{
      */
     public void recalculerTournee() {
         //Recalcule tous les plus courts trajets des demandes
-        List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
+        List<Intersection> intersectionsSpeciales = new ArrayList<>();
         intersectionsSpeciales.add(carte.getIntersections().get(idDepot));
         for (Demande demande : demandesOrdonnees) {
             intersectionsSpeciales.add(carte.getIntersections().get(demande.getIdIntersection()));
@@ -281,7 +256,7 @@ public class Planning{
     public List<Integer> supprimerRequete(Requete requete) {
         requetes.remove(requete);
 
-        List<Integer> positions = new ArrayList<Integer>();
+        List<Integer> positions = new ArrayList<>();
 
         positions.add(demandesOrdonnees.indexOf(requete.getDemandeCollecte()));
         positions.add(demandesOrdonnees.indexOf(requete.getDemandeLivraison()));
@@ -323,12 +298,6 @@ public class Planning{
         
         recalculerTournee();
     }
-
-
-    /**
-     * 
-     * @param intersections
-     */
     
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
@@ -345,7 +314,7 @@ public class Planning{
 
         Map<Long,Intersection> allIntersections = carte.getIntersections();
 
-        TrajetsLesPlusCourts = new HashMap<String, Trajet>();
+        TrajetsLesPlusCourts = new HashMap<>();
 
         // Calcul de tous les chemins les plus courts n fois avec dijkstra
 
@@ -353,9 +322,9 @@ public class Planning{
         	
             source.setDistance(0.);
 
-            Set<Intersection> settledIntersections = new HashSet<Intersection>();
+            Set<Intersection> settledIntersections = new HashSet<>();
 
-            Set<Intersection> unsettledIntersections = new HashSet<Intersection>();
+            Set<Intersection> unsettledIntersections = new HashSet<>();
 
             /*
              * SortedSet<Intersection> unsettledIntersections = new
@@ -394,9 +363,7 @@ public class Planning{
                 TrajetsLesPlusCourts.put(key, new Trajet(i.getCheminLePlusCourt(), i.getDistance()));
             }
 
-            allIntersections.forEach((id, intersection) -> {
-                intersection.resetIntersection();
-            });
+            allIntersections.forEach((id, intersection) -> intersection.resetIntersection());
         }
     }
 
