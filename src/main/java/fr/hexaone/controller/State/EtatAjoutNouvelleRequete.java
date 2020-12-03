@@ -180,8 +180,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
             }
 
-            c.rafraichirVues();
-
+            //TODO : suppr quand methode refresh vue textuelle sera prete
             c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
 
         } catch (NumberFormatException e) {
