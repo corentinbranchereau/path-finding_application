@@ -11,7 +11,14 @@ import fr.hexaone.model.Requete;
  */
 public class AjouterRequeteCommand implements Command{
 
+    /**
+     * Le planning associé
+     */
     private Planning planning;
+
+    /**
+     * La requête à ajouter
+     */
     private Requete requete;
 
     /**

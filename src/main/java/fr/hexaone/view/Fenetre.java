@@ -59,87 +59,87 @@ public class Fenetre {
     /**
      * Vue graphique de la fenêtre
      */
-    protected VueGraphique vueGraphique;
+    private VueGraphique vueGraphique;
 
     /**
      * Vue textuelle de la fenêtre
      */
-    protected VueTextuelle vueTextuelle;
+    private VueTextuelle vueTextuelle;
 
     /**
      * Controleur JavaFX servant à récupérer les références des éléments du fichier
      * FXML
      */
-    protected FenetreControleurFXML fenetreControleur;
+    private FenetreControleurFXML fenetreControleur;
 
     /**
      * Conteneur principal des éléments graphiques
      */
-    protected Stage stage;
+    private Stage stage;
 
     /**
      * Controleur gérant la logique de l'application
      */
-    protected Controleur controleur;
+    private Controleur controleur;
 
     /**
      * Variable indiquant la vitesse de l'animation de zoom
      */
-    protected final double VITESSE_ZOOM = 100;
+    private final double VITESSE_ZOOM = 100;
 
     /**
      * Map qui contient pour chaque requête sa couleur d'affichage
      */
-    protected Map<Requete, Color> mapCouleurRequete;
+    private Map<Requete, Color> mapCouleurRequete;
 
     /**
      * Coordonnée x du clic lors d'un "drag" pour déplacer la carte
      */
-    protected double origineDragSceneX;
+    private double origineDragSceneX;
 
     /**
      * Coordonnée y du clic lors d'un "drag" pour déplacer la carte
      */
-    protected double origineDragSceneY;
+    private double origineDragSceneY;
 
     /**
      * Translation x de la carte lors d'un "drag" pour la déplacer
      */
-    protected double origineDragTranslateX;
+    private double origineDragTranslateX;
 
     /**
      * Translation y de la carte lors d'un "drag" pour la déplacer
      */
-    protected double origineDragTranslateY;
+    private double origineDragTranslateY;
 
     /**
      * Largeur initiale de la carte (utile pour redonner à la carte sa taille
      * initiale)
      */
-    protected double largeurInitialeCarte;
+    private double largeurInitialeCarte;
 
     /**
      * Hauteur initiale de la carte (utile pour redonner à la carte sa taille
      * initiale)
      */
-    protected double hauteurInitialeCarte;
+    private double hauteurInitialeCarte;
 
     /**
      * Largeur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
      * initiale)
      */
-    protected double largeurInitialeStage;
+    private double largeurInitialeStage;
 
     /**
      * Hauteur initiale de la fenêtre (utile pour redonner à la fenêtre sa taille
      * initiale)
      */
-    protected double hauteurInitialeStage;
+    private double hauteurInitialeStage;
 
     /**
      * Liste observable des demandes
      */
-    protected ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
     /**
      * Constructeur de Fenetre

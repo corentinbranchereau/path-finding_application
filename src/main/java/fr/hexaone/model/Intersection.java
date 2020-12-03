@@ -16,29 +16,29 @@ public class Intersection {
     /**
      * identifiant unique
      */
-    protected long id;
+    private long id;
 
     /**
      * latitude de l'intersection
      */
-    protected double latitude;
+    private double latitude;
 
     /**
      * longitude de l'intersection
      */
-    protected double longitude;
+    private double longitude;
 
     /**
      * Set des segments arrivants sur l'intersection : utile pour le calcul de
      * tournée
      */
-    protected Set<Segment> segmentsArrivants;
+    private Set<Segment> segmentsArrivants;
 
     /**
      * Set des segments partants depuis l'intersection : utile pour le calcul de
      * tournée
      */
-    protected Set<Segment> segmentsPartants;
+    private Set<Segment> segmentsPartants;
 
     /**
      * Liste des segments pour les calculs de chemins les plus courts

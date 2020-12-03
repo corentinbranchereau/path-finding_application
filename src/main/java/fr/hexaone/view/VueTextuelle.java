@@ -43,34 +43,34 @@ public class VueTextuelle {
     /**
      * Item de la fenêtre où s'affiche la vue textuelle
      */
-    protected Fenetre fenetre;
+    private Fenetre fenetre;
 
     /**
      * zone de texte ou afficher les requetes
      */
-    protected TextFlow zoneTexte;
+    private TextFlow zoneTexte;
 
     /**
      * Représente la paire de lignes (collecte et livraison) qui est
      * sélectionnée/highlight
      */
-    protected Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
+    private Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
 
     /**
      * Couleur de l'highlight des lignes dans le tableau
      */
-    protected final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
+    private final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
 
     /**
      * Variable définissant l'opacité appliquée lors de l'highlight d'une ligne
      * secondaire (ligne en lien avec la ligne actuellement sélectionnée)
      */
-    protected final double OPACITE_DEMANDE_LIEE = 0.3;
+    private final double OPACITE_DEMANDE_LIEE = 0.3;
 
     /**
      * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
      */
-    protected RequetesControleurFXML requetesControleur;
+    private RequetesControleurFXML requetesControleur;
 
     /**
      * constructeur
@@ -334,8 +334,7 @@ public class VueTextuelle {
     /**
      * Méthode permettant récupérer l'heure de sous forme de String au format
      * Pair<Heure, Minute>
-     * 
-     * @param planning le planning
+     *
      * @param horaire  la date
      * @return une pair contenant l'heure et les minutes sous forme de String
      */

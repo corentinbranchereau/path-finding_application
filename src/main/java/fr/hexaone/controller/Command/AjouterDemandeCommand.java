@@ -15,7 +15,14 @@ import java.util.List;
  */
 public class AjouterDemandeCommand implements Command{
 
+    /**
+     * Le planning associé
+     */
     private Planning planning;
+
+    /**
+     * La demande à ajouter
+     */
     private Demande demande;
 
     /**

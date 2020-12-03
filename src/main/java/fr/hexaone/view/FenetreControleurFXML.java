@@ -27,130 +27,130 @@ public class FenetreControleurFXML {
      * Item du menu permettant de charger une carte
      */
     @FXML
-    protected MenuItem chargerCarteItem;
+    private MenuItem chargerCarteItem;
 
     /**
      * Item du menu permettant de charger des requêtes
      */
     @FXML
-    protected MenuItem chargerRequetesItem;
+    private MenuItem chargerRequetesItem;
 
     /**
      * Item du menu permettant de quitter l'application
      */
     @FXML
-    protected MenuItem quitterItem;
+    private MenuItem quitterItem;
     
     /**
      * Item du menu permettant de faire un undo
      */
     @FXML
-    protected MenuItem undoItem ;
+    private MenuItem undoItem ;
     
     
     /**
      * Item du menu permettant de faire un redo
      */
     @FXML
-    protected MenuItem redoItem ;
+    private MenuItem redoItem ;
 
 
 	/**
      * Rectangle permettant de dessiner une bordure autour de la carte.
      */
     @FXML
-    protected Rectangle bordureCarte;
+    private Rectangle bordureCarte;
 
     /**
      * Zone de texte où sont affichées les informations sur le planning. Correspond
      * à la vue textuelle de l'application.
      */
     @FXML
-    protected TextFlow zoneTexte;
+    private TextFlow zoneTexte;
 
     /**
      * Bouton permettant de lancer le calcul du planning.
      */
     @FXML
-    protected Button boutonLancer;
+    private Button boutonLancer;
 
     /**
      * Bouton permettant de lancer le processus d'ajout d'une nouvelle requête.
      */
     @FXML
-    protected Button boutonNouvelleRequete;
+    private Button boutonNouvelleRequete;
 
     /**
      * Label indiquant le champ permettant de préciser la durée de la collecte.
      */
     @FXML
-    protected Label pickupDurationLabel;
+    private Label pickupDurationLabel;
 
     /**
      * Champ permettant de préciser la durée de la collecte.
      */
     @FXML
-    protected TextField pickupDurationField;
+    private TextField pickupDurationField;
 
     /**
      * Champ permettant de préciser la durée de la livraison.
      */
     @FXML
-    protected Label deliveryDurationLabel;
+    private Label deliveryDurationLabel;
 
     /**
      * Champ permettant de préciser la durée de la livraison.
      */
     @FXML
-    protected TextField deliveryDurationField;
+    private TextField deliveryDurationField;
 
     /**
      * Bouton permettant de valider un choix qui le nécessite.
      */
     @FXML
-    protected Button boutonValider;
+    private Button boutonValider;
 
     /**
      * Bouton permettant d'annuler un choix qui le nécessite.
      */
     @FXML
-    protected Button boutonAnnuler;
+    private Button boutonAnnuler;
 
     /**
      * Box contenant les boutons Valider et Annuler.
      */
     @FXML
-    protected HBox boxBoutonsValiderAnnuler;
+    private HBox boxBoutonsValiderAnnuler;
 
     /**
      * Pane qui contient les éléments graphiques dessinant la carte
      */
     @FXML
-    protected Pane paneDessin;
+    private Pane paneDessin;
 
     /**
      * AnchorPane contenant le pane de dessin (vue graphique)
      */
     @FXML
-    protected AnchorPane anchorPaneGraphique;
+    private AnchorPane anchorPaneGraphique;
 
     /**
      * Scroll pane de la vue textuelle
      */
     @FXML
-    protected ScrollPane textScrollPane;
+    private ScrollPane textScrollPane;
 
     /**
      * l'endroit ou on écrit les informations sur le dépot
      */
     @FXML
-    protected TextFlow depotTextInformation;
+    private TextFlow depotTextInformation;
 
     /**
      * bouton qui permet de passer dans l'état modifier planning
      */
     @FXML
-    protected Button boutonModifierPlanning;
+    private Button boutonModifierPlanning;
 
     /**
      * renvoie le bouton permettant de passer dans l'etat modifier planning

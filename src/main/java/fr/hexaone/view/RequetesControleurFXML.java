@@ -38,31 +38,31 @@ public class RequetesControleurFXML {
      * le tableau
      */
     @FXML
-    protected TableView<Demande> demandeTable;
+    private TableView<Demande> demandeTable;
     @FXML
-    protected TableColumn<Demande, String> typeColumn;
+    private TableColumn<Demande, String> typeColumn;
     @FXML
-    protected TableColumn<Demande, String> arriveeColumn;
+    private TableColumn<Demande, String> arriveeColumn;
     @FXML
-    protected TableColumn<Demande, String> departColumn;
+    private TableColumn<Demande, String> departColumn;
     @FXML
-    protected TableColumn<Demande, String> adresseColumn;
+    private TableColumn<Demande, String> adresseColumn;
 
-    protected ContextMenu contextMenu;
+    private ContextMenu contextMenu;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
-    protected Fenetre fenetre;
+    private Fenetre fenetre;
 
     /**
      * Liste qui contient toutes les lignes du tableau de la vue textuelle
      */
-    protected List<TableRow<Demande>> listeLignes = new ArrayList<>();
+    private List<TableRow<Demande>> listeLignes = new ArrayList<>();
 
     /**
      * définit si les cases du tableau peuvent être déplacées ou non
      */
-    protected Boolean draggable = false;
+    private Boolean draggable = false;
 
     /**
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
@@ -138,7 +138,7 @@ public class RequetesControleurFXML {
 
                 @Override
                 public void handle(ContextMenuEvent event) {
-                    fenetre.controleur.setDemandeSelectionnee(row.getItem());
+                    fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                     contextMenu.show(row, event.getScreenX(), event.getScreenY());
                 }
             });
@@ -231,7 +231,7 @@ public class RequetesControleurFXML {
 
             row.setOnMouseClicked(event -> {
                 if (row.getItem() != null) {
-                    fenetre.controleur.setDemandeSelectionnee(row.getItem());
+                    fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                 }
                 this.demandeTable.getSelectionModel().clearSelection();
             });

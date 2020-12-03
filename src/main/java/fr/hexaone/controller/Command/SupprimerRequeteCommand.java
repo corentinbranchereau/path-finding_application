@@ -14,9 +14,21 @@ import fr.hexaone.model.Requete;
  */
 public class SupprimerRequeteCommand implements Command{
 
+    /**
+     * Le planning associé
+     */
     private Planning planning;
+
+    /**
+     * La requête à supprimer
+     */
     private Requete requete;
-    List<Integer> positions;
+
+    /**
+     * Les positions des requêtes associées aux demandes dans la liste
+     * des demandes
+     */
+    private List<Integer> positions;
 
     /**
      * Constructeur de la suppression de requête

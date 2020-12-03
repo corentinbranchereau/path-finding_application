@@ -130,19 +130,16 @@ public class Planning{
      *  - La liste des requetes
      *  - La date de début de la tournée
      *  - idDépot
-     *
-     * @param planning
-     * @return
      */
     public void calculerMeilleurTournee() {
 
         // Recherche des chemins des plus courts entre toutes les 
         // intersections spéciales (dépots, livraisons et dépot)
         List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
-        intersectionsSpeciales.add(carte.intersections.get(idDepot));
+        intersectionsSpeciales.add(carte.getIntersections().get(idDepot));
         for (Requete r : requetes) {
-            intersectionsSpeciales.add(carte.intersections.get(r.getDemandeCollecte().getIdIntersection()));
-            intersectionsSpeciales.add(carte.intersections.get(r.getDemandeLivraison().getIdIntersection()));
+            intersectionsSpeciales.add(carte.getIntersections().get(r.getDemandeCollecte().getIdIntersection()));
+            intersectionsSpeciales.add(carte.getIntersections().get(r.getDemandeLivraison().getIdIntersection()));
             
         }
         calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
@@ -188,14 +185,14 @@ public class Planning{
         Long tempsDebut = dateDebut.getTime();
 
         for (Demande demande : demandesOrdonnees) {
-            Long newId = demande.idIntersection;
+            Long newId = demande.getIdIntersection();
             Trajet trajet = TrajetsLesPlusCourts.get(prevIntersectionId + "|" + newId);
             listeTrajets.add(trajet);
             prevIntersectionId = newId;
 
-            duree += trajet.poids*3600. / 15.;
+            duree += trajet.getPoids()*3600. / 15.;
             demande.setDateArrivee(new Date(tempsDebut + (long)duree));
-            duree += demande.duree*1000;
+            duree += demande.getDuree()*1000;
             demande.setDateDepart(new Date(tempsDebut + (long)duree));
         }
 
@@ -220,9 +217,9 @@ public class Planning{
     public void recalculerTournee() {
         //Recalcule tous les plus courts trajets des demandes
         List<Intersection> intersectionsSpeciales = new ArrayList<Intersection>();
-        intersectionsSpeciales.add(carte.intersections.get(idDepot));
+        intersectionsSpeciales.add(carte.getIntersections().get(idDepot));
         for (Demande demande : demandesOrdonnees) {
-            intersectionsSpeciales.add(carte.intersections.get(demande.getIdIntersection()));
+            intersectionsSpeciales.add(carte.getIntersections().get(demande.getIdIntersection()));
         }
         calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
 
