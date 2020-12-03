@@ -14,18 +14,17 @@ import fr.hexaone.model.Requete;
  */
 public class SupprimerRequeteCommand implements Command{
 
-    private Requete requete;
     private Planning planning;
+    private Requete requete;
     List<Integer> positions;
 
     /**
      * Constructeur de la suppression de requête
      */
-    public SupprimerRequeteCommand(Requete requete, Planning planning) {
-        this.requete = requete;
+    public SupprimerRequeteCommand(Planning planning, Requete requete) {
         this.planning = planning;
+        this.requete = requete;
         positions = new ArrayList<>();
-        //TODO --> Préparer la commande (les demandes à retirer etc...)
     }
 
     /**
