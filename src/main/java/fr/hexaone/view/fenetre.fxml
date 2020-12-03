@@ -40,6 +40,13 @@
                   <MenuItem fx:id="chargerRequetesItem" mnemonicParsing="false" text="Charger demande de livraison" />
                   <MenuItem fx:id="quitterItem" mnemonicParsing="false" text="Quitter" />
                </items>
+               </Menu>
+               <Menu mnemonicParsing="false" text="Edition">
+               <items>
+                  <MenuItem fx:id="undoItem" mnemonicParsing="false" text="Undo" />
+                  <MenuItem fx:id="redoItem" mnemonicParsing="false" text="Redo" />
+
+               </items>
             </Menu>
          </menus>
          <VBox.margin>

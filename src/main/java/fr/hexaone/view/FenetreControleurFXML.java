@@ -40,8 +40,22 @@ public class FenetreControleurFXML {
      */
     @FXML
     protected MenuItem quitterItem;
-
+    
     /**
+     * Item du menu permettant de faire un undo
+     */
+    @FXML
+    protected MenuItem undoItem ;
+    
+    
+    /**
+     * Item du menu permettant de faire un redo
+     */
+    @FXML
+    protected MenuItem redoItem ;
+
+
+	/**
      * Rectangle permettant de dessiner une bordure autour de la carte.
      */
     @FXML
@@ -302,4 +316,12 @@ public class FenetreControleurFXML {
     public Pane getPaneDessin() {
         return paneDessin;
     }
+    public MenuItem getUndoItem() {
+		return undoItem;
+	}
+
+	public MenuItem getRedoItem() {
+		return redoItem;
+	}
+
 }
