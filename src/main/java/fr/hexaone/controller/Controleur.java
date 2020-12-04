@@ -78,11 +78,6 @@ public class Controleur {
     private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
-     * Etat modification de planning en drag and drop
-     */
-    private EtatModifierPlanning etatModifierPlanning;
-
-    /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
      * à l'écran et met l'application à son état initial
      * 
@@ -211,8 +206,13 @@ public class Controleur {
         rafraichirVues(false);
     }
 
-    public void modifierPlanning(int i ,int j) {
-        etatCourant.modifierPlanning(this,i,j);
+    /***
+     * Modifier le planning
+     * @param i correspondant à l'index dans la liste des demandes avant la modification
+     * @param j correspondant à l'index dans la liste des demandes après la modification
+     */
+    public void modifierPlanning(int i , int j) {
+        etatCourant.modifierPlanning(this, i, j);
         rafraichirVues(false);
     }
 
@@ -343,10 +343,5 @@ public class Controleur {
     public void setEtatAjoutNouvelleRequete() {
         etatAjoutNouvelleRequete.init(this);
         etatCourant = etatAjoutNouvelleRequete;
-    }
-
-    public void setEtatModifierPlanning() {
-        etatAjoutNouvelleRequete.init(this);
-        etatCourant = etatModifierPlanning;
     }
 }

@@ -338,8 +338,6 @@ public class Fenetre {
 
             fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 
-            fenetreControleur.getboutonModifierPlanning().setOnAction(event -> controleur.modifierPlanning());
-
             fenetreControleur.getUndoItem().setOnAction(event -> controleur.undo());
 
             fenetreControleur.getRedoItem().setOnAction(event -> controleur.redo());
