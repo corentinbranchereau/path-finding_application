@@ -193,6 +193,7 @@ public class VueGraphique {
             if (dessinerCarte) {
                 // Réinitialisation de la vue
                 this.paneDessin.getChildren().clear();
+                this.tailleListeNoeudsCarte = 0;
                 // Affichage de la carte
                 afficherCarte(planning.getCarte());
             } else {
