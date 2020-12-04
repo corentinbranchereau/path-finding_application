@@ -21,7 +21,6 @@ public class EtatRequetesChargees implements State {
                 c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
                 c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(true);
                 c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-                //c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
                 c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
                 c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
                 c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);

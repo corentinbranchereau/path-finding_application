@@ -29,7 +29,6 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(true);
-        //c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(true);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
