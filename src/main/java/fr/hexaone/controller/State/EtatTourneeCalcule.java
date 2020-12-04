@@ -106,9 +106,7 @@ public class EtatTourneeCalcule implements State {
      * {@inheritDoc}
      */
     @Override
-    public void modifierPlanning(Controleur c, int i,int j) {
- 
-    	c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(),i,j));
-   
+    public void modifierPlanning(Controleur c, int i, int j) {
+    	c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j));
     }
 }

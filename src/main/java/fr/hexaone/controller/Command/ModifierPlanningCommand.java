@@ -36,10 +36,10 @@ public class ModifierPlanningCommand implements Command {
     * @param i index dans la liste de demandes du départ du drag/drop
     * @param j nouvel index dans la liste de demandes à l'arrivée du drag/drop
     */
-    public ModifierPlanningCommand(Planning planning,int i, int j){
-        this.planning=planning;
-        this.i=i;
-        this.j=j;
+    public ModifierPlanningCommand(Planning planning, int i, int j){
+        this.planning = planning;
+        this.i = i;
+        this.j = j;
     }
 
 
@@ -49,20 +49,16 @@ public class ModifierPlanningCommand implements Command {
     @Override
     public void doCommand() {
 
-    	List<Demande> demandes=planning.getDemandesOrdonnees();
+    	List<Demande> demandes = planning.getDemandesOrdonnees();
  
-    	if(i<=j) {
-    		for(int k=i;k<j;k++) {
-        		Collections.swap(demandes,k,k+1);
-        	}
-    		
+    	if(i <= j) {
+    		for(int k=i;k<j;k++)
+        		Collections.swap(demandes, k, k + 1);
     	}
     	else {
-    		for(int k=i;k>j;k--) {
-        		Collections.swap(demandes,k,k-1);
-        	}	
+    		for(int k = i; k > j; k--)
+        		Collections.swap(demandes, k, k - 1);	
     	}
-    	
     	planning.ordonnerLesTrajetsEtLesDates();
     }
 
@@ -72,18 +68,14 @@ public class ModifierPlanningCommand implements Command {
     @Override
     public void undoCommand() {
     	List<Demande> demandes=planning.getDemandesOrdonnees();
-    	if(i<=j) {
-        	for(int k=j;k>i;k--) {
-        		Collections.swap(demandes,k,k-1);
-        	}
+    	if(i <= j) {
+        	for(int k = j; k > i; k--)
+        		Collections.swap(demandes, k, k - 1);
     	}
     	else {
-    		for(int k=j;k<i;k++) {
-        		Collections.swap(demandes,k,k+1);
-        	}	
+    		for(int k = j; k < i; k++)
+        		Collections.swap(demandes, k, k + 1);
     	}
-
     	planning.ordonnerLesTrajetsEtLesDates();
-
     }
 }

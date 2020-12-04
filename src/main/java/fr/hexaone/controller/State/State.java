@@ -195,9 +195,9 @@ public interface State {
     }
 
     /**
-     * méthode qui permet de passer dans l'état de modification de planning
+     * Cette méthode permet de modifier l'ordre des demandes dans le planning
      */
-    default void modifierPlanning(Controleur c,int i, int j) {
+    default void modifierPlanning(Controleur c, int i, int j) {
         System.out.println("modifierPlanning [default state implementation]");
     }
 }
