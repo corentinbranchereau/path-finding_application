@@ -35,6 +35,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -341,6 +342,21 @@ public class Fenetre {
             fenetreControleur.getUndoItem().setOnAction(event -> controleur.undo());
 
             fenetreControleur.getRedoItem().setOnAction(event -> controleur.redo());
+
+            // Définition des handlers pour le undo/redo (CTRL + Z, CTRL + Y)
+            scene.getAccelerators().put(KeyCombination.keyCombination("CTRL+Z"), new Runnable() {
+                @Override
+                public void run() {
+                    controleur.undo();
+                }
+            });
+
+            scene.getAccelerators().put(KeyCombination.keyCombination("CTRL+Y"), new Runnable() {
+                @Override
+                public void run() {
+                    controleur.redo();
+                }
+            });
 
         } catch (IOException e) {
             System.out.println("Erreur lors de l'ouverture du fichier FXML : " + e);
