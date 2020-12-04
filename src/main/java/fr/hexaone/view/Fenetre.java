@@ -310,8 +310,7 @@ public class Fenetre {
                     ((Pane) (event.getSource())).setTranslateY(nouvelleTranslationY);
                 } else {
                     // On applique la translation maximale sans dépasser la bordure
-                    if (boundsInParent.getMaxY() + deltaY < fenetreControleur.getAnchorPaneGraphique()
-                            .getHeight()) {
+                    if (boundsInParent.getMaxY() + deltaY < fenetreControleur.getAnchorPaneGraphique().getHeight()) {
                         nouvelleTranslationY = fenetreControleur.getAnchorPaneGraphique().getHeight()
                                 - boundsInParent.getMaxY() + fenetreControleur.getPaneDessin().getTranslateY();
                     } else {
@@ -333,8 +332,9 @@ public class Fenetre {
 
             fenetreControleur.getBoutonNouvelleRequete().setOnAction(event -> controleur.ajouterNouvelleRequete());
 
-            fenetreControleur.getBoutonValider().setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
-                    fenetreControleur.getDeliveryDurationField().getText()));
+            fenetreControleur.getBoutonValider()
+                    .setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
+                            fenetreControleur.getDeliveryDurationField().getText()));
 
             fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 
