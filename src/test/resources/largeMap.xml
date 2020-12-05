@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE map SYSTEM "./dtd/carte.dtd">
 <map>
 <intersection id="2684668925" latitude="45.775486" longitude="4.888253"/>
 <intersection id="25319182" latitude="45.76362" longitude="4.848288"/>
