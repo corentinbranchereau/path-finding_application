@@ -6,6 +6,7 @@ package fr.hexaone.utils;
  * après la balise xml.
  */
 public enum DTDWritingStage {
+    NONE,
     START_BALISE,
     END_BALISE,
     WRITED
