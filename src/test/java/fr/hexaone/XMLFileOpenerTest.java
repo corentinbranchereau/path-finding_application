@@ -1,5 +1,6 @@
 package fr.hexaone;
 
+import fr.hexaone.utils.DTDType;
 import fr.hexaone.utils.XMLFileOpener;
 import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
@@ -27,7 +28,7 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenThrowFileNotFoundException()
     {
-        assertThrows(FileNotFoundException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileDoesntExist.xml"));
+        assertThrows(FileNotFoundException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileDoesntExist.xml", DTDType.REQUETE));
     }
 
     /**
@@ -37,7 +38,7 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenThrowBadExtensionException()
     {
-        assertThrows(FileBadExtensionException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileFormatText.txt"));
+        assertThrows(FileBadExtensionException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileFormatText.txt", DTDType.REQUETE));
     }
 
     /**
@@ -47,7 +48,7 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenRequestThrowDTDValidationException()
     {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallDTDError.xml"));
+        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallDTDError.xml", DTDType.CARTE));
     }
 
     /**
@@ -57,6 +58,6 @@ public class XMLFileOpenerTest
     @Test
     public void shouldOpenMapThrowDTDValidationException()
     {
-        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapDTDError.xml"));
+        assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapDTDError.xml", DTDType.REQUETE));
     }
 }
