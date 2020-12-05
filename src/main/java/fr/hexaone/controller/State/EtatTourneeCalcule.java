@@ -83,9 +83,11 @@ public class EtatTourneeCalcule implements State {
         //TODO : suppr quand methode refresh vue textuelle sera prete
         //c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
         
-        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),true);
-       
+        
         c.resetDemandeSelectionnee();
+        
+        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),false);
+
     }
 
     /**
@@ -106,7 +108,9 @@ public class EtatTourneeCalcule implements State {
 
         c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
         
-        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),true);
+        c.resetDemandeSelectionnee();
+        
+        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),false);
           
 
     }
