@@ -150,6 +150,11 @@ public interface State {
     default void supprimerDemande(Controleur c, Demande demande) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des demandes");
     }
+    
+    default void modifierDemande(Controleur c, Demande d) {
+    	System.out.println("Il faut avoir calculé la tournée et sélectionner une demande pour la modifier");
+    	
+    }
 
     default void supprimerRequete(Controleur c, Requete requete) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des requetes");
@@ -183,10 +188,11 @@ public interface State {
     /**
      * Cette méthode permet de valider un choix
      */
-    default void valider(Controleur c, String pickUpDurationField, String deliveryDurationField) {
+    default void valider(Controleur c, String... durations) {
         System.out.println("valider [default state implementation]");
     }
-
+    
+    
     /**
      * Cette méthode permet d'annuler un choix
      */

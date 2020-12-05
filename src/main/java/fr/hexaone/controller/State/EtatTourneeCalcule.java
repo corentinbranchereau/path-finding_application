@@ -114,6 +114,25 @@ public class EtatTourneeCalcule implements State {
           
 
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifierDemande(Controleur c, Demande d) {
+    	if(d==null) {
+    		 System.out.println("Il faut sélectionner une demande à modifier.");
+             Alert alert = new Alert(Alert.AlertType.ERROR);
+             alert.setTitle("Mauvaise sélection");
+             alert.setHeaderText(null);
+             alert.setContentText("Il faut selectionner une demande à modifier.");
+             alert.show();
+             return;
+    		
+    	}
+    	c.setEtatModifierDemande();
+          
+    }
 
     /**
      * {@inheritDoc}

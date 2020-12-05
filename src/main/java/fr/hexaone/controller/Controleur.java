@@ -76,6 +76,12 @@ public class Controleur {
      * requête du design pattern STATE
      */
     private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
+    
+    /**
+     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
+     * requête du design pattern STATE
+     */
+    private EtatModifierDemande etatModifierDemande;
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
@@ -91,6 +97,7 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
+        this.etatModifierDemande= new EtatModifierDemande();
         this.l = new ListOfCommands();
         setEtatInitial();
     }
@@ -162,6 +169,15 @@ public class Controleur {
      */
     public void supprimerDemande() {
         etatCourant.supprimerDemande(this, demandeSelectionnee);
+        rafraichirVues(false);
+    }
+    
+    /**
+     * Méthode permettant la sélection d'une nouvelle intersection pour modifier 
+     *le lieu de collecte ou livraison
+     */
+    public void modifierDemande() {
+        etatCourant.modifierDemande(this,demandeSelectionnee);
         rafraichirVues(false);
     }
 
@@ -344,5 +360,10 @@ public class Controleur {
     public void setEtatAjoutNouvelleRequete() {
         etatAjoutNouvelleRequete.init(this);
         etatCourant = etatAjoutNouvelleRequete;
+    }
+    
+    public void setEtatModifierDemande() {
+        etatModifierDemande.init(this);
+        etatCourant = etatModifierDemande;
     }
 }

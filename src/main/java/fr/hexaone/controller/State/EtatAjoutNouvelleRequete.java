@@ -82,7 +82,25 @@ public class EtatAjoutNouvelleRequete implements State {
      * {@inheritDoc}
      */
     @Override
-    public void valider(Controleur c, String pickUpDurationField, String deliveryDurationField) {
+    public void valider(Controleur c, String... durations) {
+    	
+    	String pickUpDurationField=durations[0];
+    	String deliveryDurationField=durations[1];
+    	
+    	/*for(String d : durations) {
+    		
+    		if(compteur==0) {
+    			pickUpDurationField=d;
+    			
+    		}
+    		
+    		if(compteur==1) {
+    			deliveryDurationField=d;
+    		}
+    		
+    	}
+    	*/
+    
         // Erreurs de saisies et sélections
         TypeIntersection typeIntersection = null;
         if (idIntersection1 == null && idIntersection2 == null) {

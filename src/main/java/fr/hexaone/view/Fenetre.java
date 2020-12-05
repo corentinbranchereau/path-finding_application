@@ -336,6 +336,8 @@ public class Fenetre {
             fenetreControleur.getBoutonValider()
                     .setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
                             fenetreControleur.getDeliveryDurationField().getText()));
+            
+            //TODO ajouter les boutons pour la modification de demande
 
             fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 

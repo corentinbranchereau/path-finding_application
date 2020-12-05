@@ -211,6 +211,18 @@ public class Planning{
 
         recalculerTournee();
     }
+    
+    
+
+    /**
+     * Modifier une demande seule après avoir déja calculer la 
+     * meilleure tournée.
+     */
+    public void modifierDemande(Demande demande, int duree, Long idIntersection) {
+        demande.setDuree(duree);
+        demande.setIdIntersection(idIntersection);
+        recalculerTournee();
+    }
 
     /**
      * Ajouter une requete après avoir déja calculé la 

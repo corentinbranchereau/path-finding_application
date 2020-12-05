@@ -69,9 +69,15 @@ public class RequetesControleurFXML {
      * chargés On définit les règles d'affichage du tableau
      */
     
-   protected int indexDemandeDepart;
+    /**
+     * index demande de départ drag and drop
+     */
+    protected int indexDemandeDepart;
    
-   protected int indexDemandeArrivee;
+    /**
+     * index demande d'arrivée drag and drop
+     */
+    protected int indexDemandeArrivee;
    
 
    
@@ -108,9 +114,18 @@ public class RequetesControleurFXML {
                 fenetre.getControleur().supprimerRequete();
             }
         });
+        
+        MenuItem itemModifDemande = new MenuItem("Modifier le lieu ou la durée");
+        itemModifDemande.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fenetre.getControleur().modifierDemande();
+            }
+        });
 
+        
         // Add MenuItem to ContextMenu
-        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete);
+        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete,itemModifDemande);
 
         // When user right-click on Circle
 
