@@ -2,10 +2,12 @@ package fr.hexaone.controller.State;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import fr.hexaone.controller.Command.ListOfCommands;
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.utils.DTDType;
 import fr.hexaone.utils.exception.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -61,7 +63,7 @@ public interface State {
         if (fichier != null) {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
-                Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath());
+                Document xmlCarte = xmlFileOpener.open(fichier.getAbsolutePath(), DTDType.CARTE);
                 Carte nouvelleCarte = new Carte();
                 Planning nouveauPlanning = new Planning(nouvelleCarte);
                 c.setPlanning(nouveauPlanning);
@@ -90,6 +92,8 @@ public interface State {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
+            } catch (URISyntaxException e) {
+                System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
@@ -105,7 +109,7 @@ public interface State {
         if (fichier != null) {
             XMLFileOpener xmlFileOpener = XMLFileOpener.getInstance();
             try {
-                Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath());
+                Document xmlRequete = xmlFileOpener.open(fichier.getAbsolutePath(), DTDType.REQUETE);
                 XMLDeserializer.loadRequete(xmlRequete, c.getPlanning());
 
                 // On génère des couleurs pour les requêtes
@@ -134,6 +138,8 @@ public interface State {
                 System.out.println(e.getMessage());
             } catch (RequestOutOfMapException e) {
                 System.out.println(e.getMessage());
+            } catch (URISyntaxException e) {
+                System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
