@@ -6,8 +6,8 @@ package fr.hexaone.utils;
  */
 public enum DTDType {
 
-    CARTE("pathToMap"),
-    REQUETE("pathToRequete");
+    CARTE("carte.dtd"),
+    REQUETE("requetes.dtd");
 
     /**
      * Le chemin du DTD dans le dossier resources.
