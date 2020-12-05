@@ -34,10 +34,10 @@ public class SupprimerDemandeCommand implements Command{
      * @param demande
      * @param index de l'ajout dans la liste
      */
-    public SupprimerDemandeCommand(Planning planning, Demande demande, int index){
+    public SupprimerDemandeCommand(Planning planning, Demande demande){
         this.planning = planning;
         this.demande = demande;
-        this.index=index;
+        this.index=planning.getDemandesOrdonnees().indexOf(demande);
     }
 
     /**
@@ -55,6 +55,7 @@ public class SupprimerDemandeCommand implements Command{
     public void undoCommand() {
     	List<Demande>demandes=planning.getDemandesOrdonnees();
     	demandes.add(index,demande);
+    	planning.recalculerTournee();
 
     }
 }

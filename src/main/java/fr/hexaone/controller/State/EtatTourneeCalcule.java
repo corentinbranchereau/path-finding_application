@@ -5,6 +5,7 @@ import fr.hexaone.controller.Command.ModifierPlanningCommand;
 import fr.hexaone.controller.Command.SupprimerDemandeCommand;
 import fr.hexaone.controller.Command.SupprimerRequeteCommand;
 import fr.hexaone.model.Demande;
+import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
@@ -77,8 +78,13 @@ public class EtatTourneeCalcule implements State {
         // TODO : Créer un marqeur car point orphelin
 
         //TODO : récupérer depuis la vue graphique/textuelle l'index 
-        //c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande,index));
-
+        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(),demande));
+        
+        //TODO : suppr quand methode refresh vue textuelle sera prete
+        //c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
+        
+        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),true);
+       
         c.resetDemandeSelectionnee();
     }
 
@@ -99,6 +105,9 @@ public class EtatTourneeCalcule implements State {
         }
 
         c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
+        
+        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),true);
+          
 
     }
 

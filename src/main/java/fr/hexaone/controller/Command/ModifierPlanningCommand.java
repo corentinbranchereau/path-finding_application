@@ -50,7 +50,7 @@ public class ModifierPlanningCommand implements Command {
     public void doCommand() {
 
     	List<Demande> demandes = planning.getDemandesOrdonnees();
- 
+    	
     	if(i <= j) {
     		for(int k=i;k<j;k++)
         		Collections.swap(demandes, k, k + 1);
