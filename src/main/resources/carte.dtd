@@ -1,3 +1,4 @@
+<!DOCTYPE map [
 <!ELEMENT map (intersection*, segment*)>
 <!ELEMENT intersection (#PCDATA)>
 <!ELEMENT segment (#PCDATA)>
@@ -8,3 +9,4 @@
 <!ATTLIST segment length CDATA #REQUIRED>
 <!ATTLIST segment name CDATA #REQUIRED>
 <!ATTLIST segment origin CDATA #REQUIRED>
+]>
