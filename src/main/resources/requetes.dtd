@@ -1,3 +1,4 @@
+<!DOCTYPE planningRequest [
 <!ELEMENT planningRequest (depot, request*)>
 <!ELEMENT depot (#PCDATA)>
 <!ELEMENT request (#PCDATA)>
@@ -7,3 +8,4 @@
 <!ATTLIST request deliveryAddress CDATA #REQUIRED>
 <!ATTLIST request pickupDuration CDATA #REQUIRED>
 <!ATTLIST request deliveryDuration CDATA #REQUIRED>
+]>

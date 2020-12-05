@@ -9,6 +9,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Permet d'ouvrir un fichier et de version type (XML). Implémente FileFilter du
@@ -49,6 +54,7 @@ public class XMLFileOpener implements FileFilter {
      * Ouverture d'un fichier XML dont l'URI est est spécifié en paramètre
      * 
      * @param path L'URI vers le fichier à ouvrir
+     * @param dtdType Le type de dtd à appliquer
      * @throws IOException               Lorsque le fichier spécifié n'existe pas
      * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas
      *                                   XML
@@ -57,8 +63,8 @@ public class XMLFileOpener implements FileFilter {
      * @throws DTDValidationException    Lorsque le fichier XML ne valide pas son DTD
      * @return Le document XML correspondant au format org.w3c.dom.Document
      */
-    public Document open(String path) throws IOException, FileBadExtensionException, SAXException, DTDValidationException {
-        File file = new File(path);
+    public Document open(String path, DTDType dtdType) throws IOException, FileBadExtensionException, SAXException, DTDValidationException, URISyntaxException {
+        File file = creerXMLTemporaireAvecDTD(path, dtdType);
         if (!accept(file))
             throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
         Document xml = null;
@@ -89,5 +95,65 @@ public class XMLFileOpener implements FileFilter {
     @Override
     public boolean accept(File file) {
         return file.getName().endsWith(".xml");
+    }
+
+    /**
+     * Crée un fichier temporaire comportant la DTD correspondante au type passé en paramètre.
+     * De cette façon, nous pouvons vérifier la bonne formation d'un fichier XML non doté d'un
+     * dtd au départ.
+     * @param realPath Le chemin du fichier réel de l'utilisateur
+     * @param dtdType Le type de dtd à appliquer
+     * @return Le fichier temporaire crée
+     */
+    private File creerXMLTemporaireAvecDTD(String realPath, DTDType dtdType) throws IOException, URISyntaxException {
+        //Charge le dtd du dossier ressource
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(dtdType.getPath());
+        File dtdFile;
+        if (resource == null) {
+            throw new IllegalArgumentException("Fichier XML non trouvé dans le dossier ressource" + realPath);
+        } else {
+            dtdFile = new File(resource.toURI());
+        }
+
+        //Créer un fichier temporaire copie de celui passé en paramètre et y ajoute le DTD.
+        String[] splits = realPath.split("\\.");
+        File tempFile = File.createTempFile("tmp_hexaone","."+splits[splits.length-1]);
+
+        //Il sera supprimé à la fin de l'exécution de l'application
+        tempFile.deleteOnExit();
+
+        BufferedReader reader = new BufferedReader(new FileReader(realPath));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+        String line = reader.readLine();
+        DTDWritingStage stage = DTDWritingStage.NONE;
+        while(line!=null){
+            writer.write(line);
+            writer.newLine();
+            if(stage!=DTDWritingStage.WRITED){
+                if(stage == DTDWritingStage.NONE && line.startsWith("<?xml")) stage = DTDWritingStage.START_BALISE;
+                if(stage == DTDWritingStage.START_BALISE && line.endsWith("?>")) stage = DTDWritingStage.END_BALISE;
+                if(stage == DTDWritingStage.END_BALISE){
+                    stage = DTDWritingStage.WRITED;
+                    //Ecrire le DTD
+                    BufferedReader dtdReader = new BufferedReader(new FileReader(dtdFile));
+                    line = dtdReader.readLine();
+                    while(line!=null){
+                        writer.write(line);
+                        writer.newLine();
+                        line = dtdReader.readLine();
+                    }
+                    dtdReader.close();
+                }
+            }
+            line = reader.readLine();
+        }
+
+        writer.flush();
+        writer.close();
+        reader.close();
+
+        return tempFile;
     }
 }

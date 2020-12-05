@@ -4,6 +4,7 @@ import fr.hexaone.controller.Command.AjouterDemandeCommand;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.AjouterRequeteCommand;
 import fr.hexaone.model.*;
+import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 
@@ -105,25 +106,25 @@ public class EtatAjoutNouvelleRequete implements State {
         TypeIntersection typeIntersection = null;
         if (idIntersection1 == null && idIntersection2 == null) {
             System.out.println("Il faut sélectionner au moins une intersection.");
-            alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.", Alert.AlertType.ERROR);
+            Utils.alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.", Alert.AlertType.ERROR);
             return;
         } else if (idIntersection1 != null && idIntersection2 != null) {
             if (pickUpDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Collecte est vide !");
-                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !",
+                Utils.alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !",
                         Alert.AlertType.ERROR);
                 return;
             }
             if (deliveryDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Livraison est vide !");
-                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !",
+                Utils.alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !",
                         Alert.AlertType.ERROR);
                 return;
             }
         } else if (idIntersection2 == null) {
             if (!pickUpDurationField.isEmpty() && !deliveryDurationField.isEmpty()) {
                 System.out.println("Il faut sélectionner deux intersections si l'on renseigne deux durées.");
-                alertHelper("Mauvaise sélection",
+                Utils.alertHelper("Mauvaise sélection",
                         "Il faut selectionner deux intersections si l'on renseigne deux durées.",
                         Alert.AlertType.ERROR);
                 return;
@@ -131,7 +132,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 typeIntersection = TypeIntersection.COLLECTE;
                 if (!verifieDureeUtilisateur(pickUpDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper("Mauvaise saisie de durée",
                             "La durée de collecte (en seconde) ne doit contenir que des chiffres !",
                             Alert.AlertType.ERROR);
                     return;
@@ -140,7 +141,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 typeIntersection = TypeIntersection.LIVRAISON;
                 if (!verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper("Mauvaise saisie de durée",
                             "La durée de livraison (en seconde) ne doit contenir que des chiffres !",
                             Alert.AlertType.ERROR);
                     return;
@@ -154,7 +155,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
                 if (!verifieDureeUtilisateur(pickUpDurationField) || !verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("Les durées ne doivent contenir que des chiffres !");
-                    alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper("Mauvaise saisie de durée",
                             "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
                     return;
                 }
@@ -210,7 +211,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
         } catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+            Utils.alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
                     Alert.AlertType.ERROR);
             return;
         } finally {
@@ -247,21 +248,6 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     public void setIdIntersection2(Long idIntersection2) {
         this.idIntersection2 = idIntersection2;
-    }
-
-    /**
-     * Gère l'affichage de messages d'alertes dans l'application
-     * 
-     * @param title     Le titre de l'alerte
-     * @param message   Le message contenu dans l'alerte
-     * @param alertType Le type d'alerte souhaité
-     */
-    public void alertHelper(String title, String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
     }
 
     /**
