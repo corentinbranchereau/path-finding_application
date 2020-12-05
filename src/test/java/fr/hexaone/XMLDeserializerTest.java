@@ -144,7 +144,7 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadCarteThrowBadFileTypeException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, IllegalArgumentException, URISyntaxException {
-        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmall2.xml", DTDType.CARTE);
+        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmall2.xml", DTDType.REQUETE);
         assertThrows(BadFileTypeException.class, () -> { XMLDeserializer.loadCarte(carte, xml); });
     }
 
@@ -247,7 +247,7 @@ public class XMLDeserializerTest {
      */
     @Test
     public void shouldLoadRequestThrowIllegalAttributException() throws SAXException, FileBadExtensionException, DTDValidationException, IOException, BadFileTypeException, URISyntaxException {
-        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallIllegalAttributError.xml", DTDType.CARTE);
+        Document xml = XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallIllegalAttributError.xml", DTDType.REQUETE);
         assertThrows(IllegalAttributException.class, () -> { XMLDeserializer.loadRequete(xml, planning); });
     }
 

@@ -117,7 +117,8 @@ public class XMLFileOpener implements FileFilter {
         }
 
         //Créer un fichier temporaire copie de celui passé en paramètre et y ajoute le DTD.
-        File tempFile = File.createTempFile("tmp_hexaone",".xml");
+        String[] splits = realPath.split("\\.");
+        File tempFile = File.createTempFile("tmp_hexaone","."+splits[splits.length-1]);
 
         //Il sera supprimé à la fin de l'exécution de l'application
         tempFile.deleteOnExit();
