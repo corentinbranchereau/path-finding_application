@@ -112,8 +112,6 @@ public interface State {
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
-            Utils.alertHelper("Aucun fichier", "Aucun fichier n'a été sélectionné, veuillez recommencer !",
-                    Alert.AlertType.ERROR);
         }
     }
 
