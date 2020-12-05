@@ -8,6 +8,7 @@ import java.util.Optional;
 import fr.hexaone.controller.Command.ListOfCommands;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.utils.DTDType;
+import fr.hexaone.utils.Utils;
 import fr.hexaone.utils.exception.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -82,21 +83,37 @@ public interface State {
                 c.setEtatCarteChargee();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
+                Utils.alertHelper("Erreur d'ouverture", "Erreur lors de l'ouverture du fichier carte, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (FileBadExtensionException e) {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
+                Utils.alertHelper("Erreur d'extension", "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
+                Utils.alertHelper("Erreur de fichier XML", "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (DTDValidationException e) {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
+                Utils.alertHelper("Erreur de DTD", "Le fichier XML ne respecte pas son DTD, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
+                Utils.alertHelper("Erreur de type", "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
+                Utils.alertHelper("Erreur de type", "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             } catch (URISyntaxException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
+                Utils.alertHelper("Erreur d'inclusion DTD", "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
+                        Alert.AlertType.ERROR);
             }
         } else {
             System.out.println("Aucun fichier n'a été sélectionné");
+            Utils.alertHelper("Aucun fichier", "Aucun fichier n'a été sélectionné, veuillez recommencer !",
+                    Alert.AlertType.ERROR);
         }
     }
 
