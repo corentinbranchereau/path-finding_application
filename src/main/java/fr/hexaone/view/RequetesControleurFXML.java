@@ -61,6 +61,10 @@ public class RequetesControleurFXML {
      * Liste qui contient toutes les lignes du tableau de la vue textuelle
      */
     // private List<TableRow<Demande>> listeLignes = new ArrayList<>();
+
+    /**
+     * Map faisant le lien entre les lignes du tableau et leur index dans celui-ci
+     */
     private Map<Integer, TableRow<Demande>> mapIndexLignes = new HashMap<>();
 
     /**
@@ -401,6 +405,11 @@ public class RequetesControleurFXML {
         return contextMenu;
     }
 
+    /**
+     * Renvoie la map faisant le lien entre les lignes du tableau et leur index
+     * 
+     * @return La map faisant le lien entre les lignes du tableau et leur index
+     */
     public Map<Integer, TableRow<Demande>> getMapIndexLignes() {
         return mapIndexLignes;
     }
