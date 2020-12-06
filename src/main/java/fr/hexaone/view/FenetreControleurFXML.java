@@ -103,13 +103,34 @@ public class FenetreControleurFXML {
      */
     @FXML
     private TextField deliveryDurationField;
+    
+    
+    /**
+     * Label permettant de préciser la durée lors d'une modification
+     */
+    @FXML
+    private Label durationLabel;
 
     /**
+     * Champ permettant de préciser la durée lors d'une modification
+     */
+    @FXML
+    private TextField durationField;
+    
+
+	/**
      * Bouton permettant de valider un choix qui le nécessite.
      */
     @FXML
     private Button boutonValider;
-
+    
+    
+	/**
+     * Bouton permettant de valider la modification d'une demande
+     */
+    @FXML
+    private Button boutonValiderModificationDemande;
+   
     /**
      * Bouton permettant d'annuler un choix qui le nécessite.
      */
@@ -272,6 +293,34 @@ public class FenetreControleurFXML {
     public TextField getDeliveryDurationField() {
         return deliveryDurationField;
     }
+    
+    /**
+     * Getter
+     * @return le label de la durée lors d'une modification
+     */
+    public Label getDurationLabel() {
+		return durationLabel;
+	}
+
+	public void setDurationLabel(Label durationLabel) {
+		this.durationLabel = durationLabel;
+	}
+
+	/**
+     * Getter
+     * @return le texte de la durée lors d'une modfification
+     */
+	public TextField getDurationField() {
+		return durationField;
+	}
+
+	public void setDurationField(TextField durationField) {
+		this.durationField = durationField;
+	}
+
+    
+    
+    
 
     /**
      * Renvoie le bouton de validation.
@@ -280,6 +329,16 @@ public class FenetreControleurFXML {
      */
     public Button getBoutonValider() {
         return boutonValider;
+    }
+    
+    
+    /**
+     * Renvoie le bouton de validation de demande.
+     *
+     * @return Le bouton de validation de demande.
+     */
+    public Button getBoutonValiderModificationDemande() {
+        return boutonValiderModificationDemande;
     }
 
     /**

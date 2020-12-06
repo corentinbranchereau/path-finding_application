@@ -209,8 +209,18 @@ public class Controleur {
     /**
      * Valider l'action en cours
      */
-    public void valider(String pickUpDurationField, String deliveryDurationField) {
-        etatCourant.valider(this, pickUpDurationField, deliveryDurationField);
+    public void valider(String... durations) {
+    	
+    	int taille=durations.length;
+    	
+    	if (taille==2) {
+    		etatCourant.valider(this, durations[0], durations[1]);
+    		
+    	}
+    	if(taille==1) {
+    		etatCourant.valider(this, durations[0]);
+    	}
+        
         rafraichirVues(false);
     }
 
@@ -362,7 +372,8 @@ public class Controleur {
         etatCourant = etatAjoutNouvelleRequete;
     }
     
-    public void setEtatModifierDemande() {
+    public void setEtatModifierDemande(int duree) {
+    	etatModifierDemande.setDuree(duree);
         etatModifierDemande.init(this);
         etatCourant = etatModifierDemande;
     }

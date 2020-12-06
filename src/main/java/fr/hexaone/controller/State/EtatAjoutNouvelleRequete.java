@@ -40,6 +40,10 @@ public class EtatAjoutNouvelleRequete implements State {
 
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        
+        c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
 
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);

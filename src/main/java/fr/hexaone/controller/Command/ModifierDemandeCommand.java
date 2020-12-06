@@ -58,7 +58,14 @@ public class ModifierDemandeCommand implements Command{
         this.demande = demande;
         this.dureeAvant=demande.getDuree();
         this.idIntersectionGeoAvant = demande.getIdIntersection();
-        this.idIntersectionGeoNouveau=idIntersection;
+        
+        if(idIntersection==null) {
+        	this.idIntersectionGeoNouveau=idIntersectionGeoAvant;
+        }
+        else {
+        	this.idIntersectionGeoNouveau=idIntersection;
+        }
+        
         this.dureeNouvelle=duree;
     }
 

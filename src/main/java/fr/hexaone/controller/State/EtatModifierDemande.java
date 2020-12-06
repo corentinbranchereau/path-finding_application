@@ -24,6 +24,9 @@ public class EtatModifierDemande implements State {
      * L'id de l'intersection  sélectionné
      */
     private Long idIntersection = null;
+    
+    
+    private int duree;
 
 
     /**
@@ -34,27 +37,36 @@ public class EtatModifierDemande implements State {
 
         // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
 
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        //c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+        
         //c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDurationField().clear();
+        c.getFenetre().getFenetreControleur().getDurationField().setText(String.valueOf(duree));
+        c.getFenetre().getFenetreControleur().getDurationField().setVisible(true);
+        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(true);
+        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setDisable(false);
+        c.getFenetre().getFenetreControleur().getDurationField().setDisable(false);
 
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
         c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
+        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
 
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
+        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
+        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
 
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
     }
 
-    /**
+
+	/**
      * {@inheritDoc}
      */
     @Override
@@ -75,16 +87,18 @@ public class EtatModifierDemande implements State {
     	String durationField=durations[0];
     	
         TypeIntersection typeIntersection = null;
-        if (idIntersection == null) {
-            System.out.println("Il faut sélectionner la nouvelle intersection.");
-            alertHelper("Mauvaise sélection", "Il faut selectionner la nouvelle intersection.", Alert.AlertType.ERROR);
+        if (idIntersection == null && durationField.isEmpty() ) {
+            System.out.println("Il faut sélectionner la nouvelle intersection ou modifier la durée");
+            alertHelper("Mauvaise sélection", "Il faut selectionner la nouvelle intersection ou modifier la durée.", Alert.AlertType.ERROR);
             return;
         }
-        
-        if(durationField.isEmpty()) {
-        	 System.out.println("Le champ concernant la durée est vide !");
-             alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée  est vide !",
-                     Alert.AlertType.ERROR);
+        else {
+        	 if(durationField.isEmpty()) {
+            	 System.out.println("Le champ concernant la durée est vide !");
+                 alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée  est vide !",
+                         Alert.AlertType.ERROR);
+            }
+            
         }
         
         if (!verifieDureeUtilisateur(durationField)) {
@@ -130,6 +144,22 @@ public class EtatModifierDemande implements State {
     public void setIdIntersection(Long idIntersection) {
         this.idIntersection = idIntersection;
     }
+    
+    /**
+     * Getter de la durée
+     * @return la durée en sec
+     */
+    public int getDuree() {
+		return duree;
+	}
+
+    /**
+     * Setter de la durée
+     * @param duree en sec
+     */
+	public void setDuree(int duree) {
+		this.duree = duree;
+	}
 
 
 
