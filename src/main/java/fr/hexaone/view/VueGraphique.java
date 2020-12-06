@@ -247,10 +247,8 @@ public class VueGraphique {
                             trajetsAvantApresDemande.add(planning.getListeTrajets().get(index + 1));
                         }
 
-                        // On vérifie si les couleurs ont déjà été générées pour les trajets
-                        if (this.mapCouleurTrajet == null || this.mapCouleurTrajet.isEmpty()) {
-                            genererCouleursTrajets(planning.getListeTrajets());
-                        }
+                        // Génération des couleurs pour les trajets
+                        genererCouleursTrajets(planning.getListeTrajets());
 
                         // Affichage des trajets
                         for (Trajet trajet : trajetsAvantApresDemande) {

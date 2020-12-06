@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
@@ -87,37 +88,15 @@ public class VueTextuelle {
 
         if (planning == null)
             return;
-        // Affichage des demandes sur la carte
+
         if (planning.getDemandesOrdonnees() != null) {
-            // Affichage des demandes sur la carte
-
-            if (planning.getListeTrajets() != null) {
-                // Affichage des trajets
-
-                // Affichage de la demande sélectionnée et de la demande associée
-                if (demandeSelectionnee != null) {
-                    Requete requeteAssociee = demandeSelectionnee.getRequete();
-                    if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
-                        // Mise en valeur forte de la collecte
-
-                        if (requeteAssociee != null && requeteAssociee.getDemandeLivraison() != null) {
-                            Demande demandeAssociee = requeteAssociee.getDemandeLivraison();
-                            // Mise en valeur faible de la livraison
-
-                        }
-                    } else if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
-                        // Mise en valeur forte de la livraison
-
-                        if (requeteAssociee != null && requeteAssociee.getDemandeCollecte() != null) {
-                            Demande demandeAssociee = requeteAssociee.getDemandeCollecte();
-                            // Mise en valeur faible de la collecte
-
-                        }
-                    } else {
-                        // Si on veut afficher un dépot sélectionné ( mais pas demandé ).
-                    }
-                }
+            // Affichage des demandes (ordonnées) dans le tableau
+            afficherPlanning(planning, planning.getCarte());
+            enleverHighlightDemande();
+            if (demandeSelectionnee != null) {
+                highlightDemande(demandeSelectionnee);
             }
+
         } else if (!planning.getRequetes().isEmpty()) {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
             List<Demande> demandes = new ArrayList<>();
@@ -135,7 +114,7 @@ public class VueTextuelle {
      * 
      * @param planning liste des segments à parcourir
      */
-    public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+    public void afficherRequetes(Planning planning, Carte carte) {
 
         // On vide le zone de texte au cas où des choses sont déjà affichées dedans
         this.zoneTexte.getChildren().clear();
@@ -149,7 +128,6 @@ public class VueTextuelle {
         texteDepot.setFill(Color.RED);
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
-        int i = 1;
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
@@ -158,24 +136,6 @@ public class VueTextuelle {
 
             listeDemandes.add(requete.getDemandeCollecte());
             listeDemandes.add(requete.getDemandeLivraison());
-            // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-            // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
-
-            // Text titreText = new Text("Requête " + i + ": \r\n");
-            // Text collecteIcon = new Text(" ■ ");
-            // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-            // + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
-            // Text livraisonIcon = new Text(" ● ");
-            // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-            // + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
-            // i++;
-
-            // collecteIcon.setFill(mapCouleurRequete.get(requete));
-            // livraisonIcon.setFill(mapCouleurRequete.get(requete));
-
-            // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
-            // livraisonIcon,
-            // livraisonText);
         }
         fenetre.setListeDemandes(listeDemandes);
 
@@ -205,11 +165,22 @@ public class VueTextuelle {
         // listeDemande dans planning
         ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
         fenetre.setListeDemandes(listeDemandes);
-        try {
-            // Load textual tab.
-            FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = loader.load(inputFichierFxml);
+        this.requetesControleur.getDemandeTable().setItems(listeDemandes);
+
+        // System.out.println("===================");
+        // for (int i = 0; i < this.getRequetesControleur().getListeLignes().size();
+        // i++) {
+        // TableRow<Demande> ligne =
+        // this.getRequetesControleur().getListeLignes().get(i);
+        // if (ligne.getItem() != null) {
+        // System.out.println("INDEX TEST : "
+        // +
+        // this.requetesControleur.getDemandeTable().getItems().indexOf(ligne.getItem()));
+        // System.out.println("INDEX I ASSOCIE : " + i);
+        // System.out.println();
+        // }
+        // }
+        // System.out.println("===================");
 
             String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
@@ -220,15 +191,37 @@ public class VueTextuelle {
             fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
             fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
 
-            // Set person overview into the center of root layout.
-            this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
+        requetesControleur.getDepartColumn()
+                .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
+        requetesControleur.getDepartColumn().setText("Repart à");
+        requetesControleur.getArriveeColumn().setVisible(true);
+        // try {
+        // // Load textual tab.
+        // FXMLLoader loader = new FXMLLoader();
+        // FileInputStream inputFichierFxml = new
+        // FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
+        // AnchorPane personOverview = loader.load(inputFichierFxml);
 
-            this.requetesControleur = loader.getController();
-            requetesControleur.setFenetre(fenetre);
+        // String depotName = getNomIntersection(planning, carte,
+        // carte.getIntersections().get(planning.getIdDepot()));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
+        // + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
+        // + getStringFromDate(planning.getDateFin());
+
+        // fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        // fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new
+        // Text(depotString));
+
+        // // Set person overview into the center of root layout.
+        // this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
+
+        // this.requetesControleur = loader.getController();
+        // requetesControleur.setFenetre(fenetre);
+
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
 
     }
 
@@ -356,8 +349,11 @@ public class VueTextuelle {
      * Méthode permettant de désélectionner la demande actuellement sélectionnée
      */
     public void enleverHighlightDemande() {
-        for (TableRow<Demande> row : this.requetesControleur.getListeLignes()) {
-            row.setStyle("");
+        for (TableRow<Demande> ligne : this.requetesControleur.getMapIndexLignes().values()) {
+            if (ligne != null) {
+                ligne.setStyle("");
+            } else {
+            }
         }
     }
 
@@ -374,14 +370,14 @@ public class VueTextuelle {
             demandeLiee = demande.getRequete().getDemandeCollecte();
         }
 
-        int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande) + 1;
-        int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee) + 1;
+        int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande);
+        int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee);
 
-        this.requetesControleur.getListeLignes().get(indexDemande)
+        this.requetesControleur.getMapIndexLignes().get(indexDemande)
                 .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
 
         Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
-        this.requetesControleur.getListeLignes().get(indexDemandeLiee)
+        this.requetesControleur.getMapIndexLignes().get(indexDemandeLiee)
                 .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen() + ","
                         + 255 * couleur.getBlue() + ", " + this.OPACITE_DEMANDE_LIEE + ")");
     }

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.lang.ModuleLayer.Controller;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import fr.hexaone.model.Demande;
@@ -11,6 +12,8 @@ import fr.hexaone.model.Requete;
 import fr.hexaone.model.TypeIntersection;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -57,7 +60,8 @@ public class RequetesControleurFXML {
     /**
      * Liste qui contient toutes les lignes du tableau de la vue textuelle
      */
-    private List<TableRow<Demande>> listeLignes = new ArrayList<>();
+    // private List<TableRow<Demande>> listeLignes = new ArrayList<>();
+    private Map<Integer, TableRow<Demande>> mapIndexLignes = new HashMap<>();
 
     /**
      * définit si les cases du tableau peuvent être déplacées ou non
@@ -134,6 +138,7 @@ public class RequetesControleurFXML {
                 @Override
                 public void updateIndex(int i) {
                     super.updateIndex(i);
+                    mapIndexLignes.put(i, this);
                     doUpdateItem(getItem());
                 }
 
@@ -156,7 +161,8 @@ public class RequetesControleurFXML {
             };
 
             // On ajoute la liste au tableau
-            this.listeLignes.add(row);
+            // this.listeLignes.add(row);
+            this.mapIndexLignes.put(row.getIndex(), row);
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
                 @Override
@@ -398,6 +404,10 @@ public class RequetesControleurFXML {
      */
     public ContextMenu getContextMenu() {
         return contextMenu;
+    }
+
+    public Map<Integer, TableRow<Demande>> getMapIndexLignes() {
+        return mapIndexLignes;
     }
 
 }
