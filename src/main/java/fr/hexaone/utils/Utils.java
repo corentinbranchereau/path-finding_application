@@ -1,6 +1,8 @@
 package fr.hexaone.utils;
 
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 /**
  * Classe Utils contenant des méthodes génériques pouvant servir
@@ -20,6 +22,7 @@ public class Utils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
         alert.show();
     }
 
