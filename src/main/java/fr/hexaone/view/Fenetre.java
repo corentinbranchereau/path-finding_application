@@ -340,7 +340,7 @@ public class Fenetre {
             fenetreControleur.getBoutonValiderModificationDemande()
                     .setOnAction(event -> controleur.valider(fenetreControleur.getDurationField().getText()));
 
-            // TODO ajouter les boutons pour la modification de demande
+            fenetreControleur.getBoutonAide().setOnAction(event -> controleur.aide());
 
             fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 

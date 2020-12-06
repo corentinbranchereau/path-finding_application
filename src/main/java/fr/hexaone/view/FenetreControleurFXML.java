@@ -168,18 +168,18 @@ public class FenetreControleurFXML {
     private TextFlow depotTextInformation;
 
     /**
-     * bouton qui permet de passer dans l'état modifier planning
+     * Bouton qui permet d'afficher l'aide de l'application
      */
     @FXML
-    private Button boutonModifierPlanning;
+    private Button boutonAide;
 
     /**
-     * renvoie le bouton permettant de passer dans l'etat modifier planning
+     * Renvoie le bouton permettant d'afficher l'aide de l'application
      * 
      * @return le bouton
      */
-    public Button getboutonModifierPlanning() {
-        return boutonModifierPlanning;
+    public Button getBoutonAide() {
+        return boutonAide;
     }
 
     /**
@@ -314,13 +314,13 @@ public class FenetreControleurFXML {
 		return durationField;
 	}
 
+    /**
+     * Setter
+     * @param durationField La durée de la demande
+     */
 	public void setDurationField(TextField durationField) {
 		this.durationField = durationField;
 	}
-
-    
-    
-    
 
     /**
      * Renvoie le bouton de validation.
