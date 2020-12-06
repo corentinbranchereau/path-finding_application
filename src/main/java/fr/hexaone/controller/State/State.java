@@ -249,4 +249,11 @@ public interface State {
     default void modifierPlanning(Controleur c, int i, int j) {
         System.out.println("modifierPlanning [default state implementation]");
     }
+
+    /**
+     * Cette méthode permet d'afficher l'aide à l'utilisateur
+     */
+    default void aide(){
+        Utils.alertHelper("Aide","Simple test", AlertType.INFORMATION);
+    }
 }
