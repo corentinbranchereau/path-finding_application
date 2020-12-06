@@ -41,6 +41,8 @@ public class RequetesControleurFXML {
     private TableColumn<Demande, String> departColumn;
     @FXML
     private TableColumn<Demande, String> adresseColumn;
+    @FXML
+    private TableColumn<Demande, String> orphelineColumn;
 
     private ContextMenu contextMenu;
 
@@ -86,6 +88,9 @@ public class RequetesControleurFXML {
 
         adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
         adresseColumn.setSortable(false);
+
+        orphelineColumn.setCellValueFactory(cellData -> cellData.getValue().getOrphelineProperty());
+        orphelineColumn.setSortable(false);
 
         // Create ContextMenu
         contextMenu = new ContextMenu();
@@ -387,6 +392,10 @@ public class RequetesControleurFXML {
      */
     public Map<Integer, TableRow<Demande>> getMapIndexLignes() {
         return mapIndexLignes;
+    }
+
+    public TableColumn<Demande, String> getOrphelineColumn() {
+        return orphelineColumn;
     }
 
 }

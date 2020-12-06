@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
+import fr.hexaone.model.TypeIntersection;
 
 /**
  * Commande de suppression de demande en suivant le design pattern COMMAND.
@@ -46,6 +47,13 @@ public class SupprimerDemandeCommand implements Command{
     @Override
     public void doCommand() {
         planning.supprimerDemande(demande);
+
+        // On fait passer la valeur à null dans la requête associée
+        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+            demande.getRequete().setDemandeCollecte(null);
+        } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+            demande.getRequete().setDemandeLivraison(null);
+        }
     }
 
     /**
@@ -53,9 +61,17 @@ public class SupprimerDemandeCommand implements Command{
      */
     @Override
     public void undoCommand() {
-    	List<Demande>demandes=planning.getDemandesOrdonnees();
-    	demandes.add(index,demande);
-    	planning.recalculerTournee();
+        List<Demande> demandes = planning.getDemandesOrdonnees();
+        demandes.add(index, demande);
+
+        // On change la valeur dans la requête associée
+        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+            demande.getRequete().setDemandeCollecte(demande);
+        } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+            demande.getRequete().setDemandeLivraison(demande);
+        }
+
+        planning.recalculerTournee();
 
     }
 }

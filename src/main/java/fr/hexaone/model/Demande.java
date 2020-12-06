@@ -44,6 +44,13 @@ public class Demande {
     private StringProperty dateDepartProperty;
 
     /**
+     * Propriété JavaFX indiquant si la demande est orpheline (cela signife pour une
+     * demande de collecte qu'elle n'a pas de demande de livraison associée, et
+     * inversement)
+     */
+    private StringProperty orphelineProperty;
+
+    /**
      * Date d'arrivée au point
      */
     private Date dateArrivee;
@@ -265,5 +272,16 @@ public class Demande {
 
     public void setTypeIntersection(TypeIntersection typeIntersection) {
         this.typeIntersection = typeIntersection;
+    }
+
+    public StringProperty getOrphelineProperty() {
+        if (this.typeIntersection == TypeIntersection.COLLECTE) {
+            this.orphelineProperty = requete.getDemandeLivraison() == null ? new SimpleStringProperty("X")
+                    : new SimpleStringProperty();
+        } else {
+            this.orphelineProperty = requete.getDemandeCollecte() == null ? new SimpleStringProperty("X")
+                    : new SimpleStringProperty();
+        }
+        return orphelineProperty;
     }
 }

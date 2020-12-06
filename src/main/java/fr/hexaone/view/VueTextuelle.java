@@ -141,6 +141,7 @@ public class VueTextuelle {
                     .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
             requetesControleur.getDepartColumn().setText("Durée");
             requetesControleur.getArriveeColumn().setVisible(false);
+            requetesControleur.getOrphelineColumn().setVisible(false);
             requetesControleur.setFenetre(fenetre);
 
         } catch (IOException e) {
@@ -168,6 +169,7 @@ public class VueTextuelle {
                 .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
         requetesControleur.getDepartColumn().setText("Repart à");
         requetesControleur.getArriveeColumn().setVisible(true);
+        requetesControleur.getOrphelineColumn().setVisible(true);
     }
 
     /**
