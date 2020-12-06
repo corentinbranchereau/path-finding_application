@@ -49,9 +49,6 @@ public class EtatTourneeCalcule implements State {
     @Override
     public void lancerCalcul(Controleur c) {
         c.getPlanning().calculerMeilleurTournee();
-        // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
-        // textuelle sera prête
-        c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
     }
 
     /**
@@ -82,9 +79,6 @@ public class EtatTourneeCalcule implements State {
 
         //TODO : récupérer depuis la vue graphique/textuelle l'index 
         c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(),demande));
-        
-        //TODO : suppr quand methode refresh vue textuelle sera prete
-        //c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
         
         
         c.resetDemandeSelectionnee();

@@ -111,8 +111,6 @@ public class EtatModifierDemande implements State {
         
         c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(),c.getDemandeSelectionnee(),Integer.parseInt(durationField),idIntersection));
         
-        //TODO : suppr quand methode refresh vue textuelle sera prete
-        //c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
         
         c.resetDemandeSelectionnee();
         

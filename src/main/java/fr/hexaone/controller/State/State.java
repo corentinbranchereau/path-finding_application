@@ -137,9 +137,7 @@ public interface State {
                 // TODO : effacer les trajets (la tournée) s'ils existent (si jamais
                 // précédemment calculé)
 
-                // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
-                // textuelle sera prête
-                c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getPlanning().getCarte());
+                c.rafraichirVues(false);
 
                 c.setEtatRequetesChargees();
             } catch (IOException e) {

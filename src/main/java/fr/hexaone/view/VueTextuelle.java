@@ -87,14 +87,8 @@ public class VueTextuelle {
             }
 
         } else if (!planning.getRequetes().isEmpty()) {
-            // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
-            List<Demande> demandes = new ArrayList<>();
-            for (Requete requete : planning.getRequetes()) {
-                demandes.add(requete.getDemandeCollecte());
-                demandes.add(requete.getDemandeLivraison());
-            }
-            // Affichage des demandes
-
+            // Affichage des requêtes
+            afficherRequetes(planning, planning.getCarte());
         }
     }
 

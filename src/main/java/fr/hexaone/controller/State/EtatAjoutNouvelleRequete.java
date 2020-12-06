@@ -210,9 +210,6 @@ public class EtatAjoutNouvelleRequete implements State {
                 c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
             }
 
-            //TODO : suppr quand methode refresh vue textuelle sera prete
-            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
-
         } catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
             Utils.alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
