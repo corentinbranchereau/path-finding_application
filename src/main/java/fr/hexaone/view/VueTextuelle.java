@@ -182,14 +182,14 @@ public class VueTextuelle {
         // }
         // System.out.println("===================");
 
-            String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
-            String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
-                    + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
-                    + getStringFromDate(planning.getDateFin());
+        String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
+                + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
+                + getStringFromDate(planning.getDateFin());
 
-            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
 
         requetesControleur.getDepartColumn()
                 .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
@@ -326,7 +326,7 @@ public class VueTextuelle {
      * Méthode permettant récupérer l'heure de sous forme de String au format
      * Pair<Heure, Minute>
      *
-     * @param horaire  la date
+     * @param horaire la date
      * @return une pair contenant l'heure et les minutes sous forme de String
      */
     private String getStringFromDate(Date horaire) {
@@ -387,21 +387,22 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-    	
-    	if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
+
+        if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
-           
+
         }
     }
-    
+
     /**
      * Permet de réaliser le drag/drop dans le modèle
+     * 
      * @param draggIndex index de départ du dragg
-     * @param dropIndex index d'arrivée du dragg
+     * @param dropIndex  index d'arrivée du dragg
      */
     public void modifierPlanning(int draggIndex, int dropIndex) {
-    	this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
-    	
+        this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
+
     }
 }

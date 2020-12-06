@@ -72,20 +72,17 @@ public class RequetesControleurFXML {
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
      * chargés On définit les règles d'affichage du tableau
      */
-    
+
     /**
      * index demande de départ drag and drop
      */
     protected int indexDemandeDepart;
-   
+
     /**
      * index demande d'arrivée drag and drop
      */
     protected int indexDemandeArrivee;
-   
 
-   
-   
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -118,7 +115,7 @@ public class RequetesControleurFXML {
                 fenetre.getControleur().supprimerRequete();
             }
         });
-        
+
         MenuItem itemModifDemande = new MenuItem("Modifier le lieu ou la durée");
         itemModifDemande.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -127,9 +124,8 @@ public class RequetesControleurFXML {
             }
         });
 
-        
         // Add MenuItem to ContextMenu
-        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete,itemModifDemande);
+        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
 
         // When user right-click on Circle
 
@@ -175,13 +171,13 @@ public class RequetesControleurFXML {
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
-                    
-                    indexDemandeDepart=index;
-                    
+
+                    indexDemandeDepart = index;
+
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
-               
+
                     cc.put(SERIALIZED_MIME_TYPE, index);
                     db.setContent(cc);
 
@@ -250,21 +246,20 @@ public class RequetesControleurFXML {
                         } else {
                             dropIndex = row.getIndex();
                         }
-                        
-                        indexDemandeArrivee=dropIndex;
-                  
+
+                        indexDemandeArrivee = dropIndex;
+
                         demandeTable.getItems().add(dropIndex, draggedPerson);
 
                         event.setDropCompleted(true);
                         demandeTable.getSelectionModel().select(dropIndex);
 
-                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart,indexDemandeArrivee);
+                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     }
-                    
+
                     this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
 
-                    
                 }
             });
 
@@ -375,9 +370,9 @@ public class RequetesControleurFXML {
      * 
      * @return La liste des lignes du tableau
      */
-    public List<TableRow<Demande>> getListeLignes() {
-        return listeLignes;
-    }
+    // public List<TableRow<Demande>> getListeLignes() {
+    // return listeLignes;
+    // }
 
     /**
      * Set if the columns can be dragged or not
