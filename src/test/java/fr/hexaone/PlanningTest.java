@@ -1,25 +1,11 @@
 package fr.hexaone;
 
-import fr.hexaone.model.AlgoTSP;
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Demande;
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Segment;
-import fr.hexaone.model.Trajet;
-import fr.hexaone.model.TypeIntersection;
-
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import fr.hexaone.model.*;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.*;
 
 /**
  * Unit test for simple App.

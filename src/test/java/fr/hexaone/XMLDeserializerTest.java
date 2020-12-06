@@ -1,10 +1,6 @@
 package fr.hexaone;
 
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Segment;
+import fr.hexaone.model.*;
 import fr.hexaone.utils.DTDType;
 import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
