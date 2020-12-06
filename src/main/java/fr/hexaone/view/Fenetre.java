@@ -336,11 +336,11 @@ public class Fenetre {
             fenetreControleur.getBoutonValider()
                     .setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
                             fenetreControleur.getDeliveryDurationField().getText()));
-            
+
             fenetreControleur.getBoutonValiderModificationDemande()
-            .setOnAction(event -> controleur.valider(fenetreControleur.getDurationField().getText()));
-            
-            //TODO ajouter les boutons pour la modification de demande
+                    .setOnAction(event -> controleur.valider(fenetreControleur.getDurationField().getText()));
+
+            // TODO ajouter les boutons pour la modification de demande
 
             fenetreControleur.getBoutonAnnuler().setOnAction(event -> controleur.annuler());
 

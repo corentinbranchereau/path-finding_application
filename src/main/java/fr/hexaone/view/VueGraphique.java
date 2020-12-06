@@ -29,7 +29,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -118,11 +117,6 @@ public class VueGraphique {
      * (carré ou rond)
      */
     private Map<Demande, Node> mapDemandeNoeud;
-
-    /**
-     * Paire d'objets graphiques qui a été sélectionnée/highlight
-     */
-    private Pair<Node, Node> noeudsHighlight;
 
     /**
      * Variable définissant la taille d'un noeud (élément graphique) de demande
@@ -247,10 +241,8 @@ public class VueGraphique {
                             trajetsAvantApresDemande.add(planning.getListeTrajets().get(index + 1));
                         }
 
-                        // On vérifie si les couleurs ont déjà été générées pour les trajets
-                        if (this.mapCouleurTrajet == null || this.mapCouleurTrajet.isEmpty()) {
-                            genererCouleursTrajets(planning.getListeTrajets());
-                        }
+                        // Génération des couleurs pour les trajets
+                        genererCouleursTrajets(planning.getListeTrajets());
 
                         // Affichage des trajets
                         for (Trajet trajet : trajetsAvantApresDemande) {
@@ -272,8 +264,12 @@ public class VueGraphique {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
             List<Demande> demandes = new ArrayList<Demande>();
             for (Requete requete : planning.getRequetes()) {
-                demandes.add(requete.getDemandeCollecte());
-                demandes.add(requete.getDemandeLivraison());
+                if (requete.getDemandeCollecte() != null) {
+                    demandes.add(requete.getDemandeCollecte());
+                }
+                if (requete.getDemandeLivraison() != null) {
+                    demandes.add(requete.getDemandeLivraison());
+                }
             }
             // Affichage des demandes
             afficherDemandes(demandes, planning.getCarte(), planning.getIdDepot());

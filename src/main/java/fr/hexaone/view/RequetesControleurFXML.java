@@ -2,15 +2,11 @@ package fr.hexaone.view;
 
 import java.util.Map;
 import java.util.Optional;
-import java.lang.ModuleLayer.Controller;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.TypeIntersection;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,10 +23,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class RequetesControleurFXML {
 
@@ -47,6 +41,8 @@ public class RequetesControleurFXML {
     private TableColumn<Demande, String> departColumn;
     @FXML
     private TableColumn<Demande, String> adresseColumn;
+    @FXML
+    private TableColumn<Demande, String> orphelineColumn;
 
     private ContextMenu contextMenu;
 
@@ -55,9 +51,9 @@ public class RequetesControleurFXML {
     private Fenetre fenetre;
 
     /**
-     * Liste qui contient toutes les lignes du tableau de la vue textuelle
+     * Map faisant le lien entre les lignes du tableau et leur index dans celui-ci
      */
-    private List<TableRow<Demande>> listeLignes = new ArrayList<>();
+    private Map<Integer, TableRow<Demande>> mapIndexLignes = new HashMap<>();
 
     /**
      * définit si les cases du tableau peuvent être déplacées ou non
@@ -65,23 +61,19 @@ public class RequetesControleurFXML {
     private Boolean draggable = false;
 
     /**
-     * Méthode qui se lance après le constructeur, une fois les éléments FXML
-     * chargés On définit les règles d'affichage du tableau
-     */
-    
-    /**
      * index demande de départ drag and drop
      */
     protected int indexDemandeDepart;
-   
+
     /**
      * index demande d'arrivée drag and drop
      */
     protected int indexDemandeArrivee;
-   
 
-   
-   
+    /**
+     * Méthode qui se lance après le constructeur, une fois les éléments FXML
+     * chargés On définit les règles d'affichage du tableau
+     */
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -96,6 +88,9 @@ public class RequetesControleurFXML {
 
         adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
         adresseColumn.setSortable(false);
+
+        orphelineColumn.setCellValueFactory(cellData -> cellData.getValue().getOrphelineProperty());
+        orphelineColumn.setSortable(false);
 
         // Create ContextMenu
         contextMenu = new ContextMenu();
@@ -114,7 +109,7 @@ public class RequetesControleurFXML {
                 fenetre.getControleur().supprimerRequete();
             }
         });
-        
+
         MenuItem itemModifDemande = new MenuItem("Modifier le lieu ou la durée");
         itemModifDemande.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -123,9 +118,8 @@ public class RequetesControleurFXML {
             }
         });
 
-        
         // Add MenuItem to ContextMenu
-        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete,itemModifDemande);
+        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
 
         // When user right-click on Circle
 
@@ -134,6 +128,7 @@ public class RequetesControleurFXML {
                 @Override
                 public void updateIndex(int i) {
                     super.updateIndex(i);
+                    mapIndexLignes.put(i, this);
                     doUpdateItem(getItem());
                 }
 
@@ -155,8 +150,8 @@ public class RequetesControleurFXML {
                 }
             };
 
-            // On ajoute la liste au tableau
-            this.listeLignes.add(row);
+            // On ajoute l'entrée <indx, ligne> dans la map
+            this.mapIndexLignes.put(row.getIndex(), row);
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
                 @Override
@@ -169,13 +164,13 @@ public class RequetesControleurFXML {
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
-                    
-                    indexDemandeDepart=index;
-                    
+
+                    indexDemandeDepart = index;
+
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
-               
+
                     cc.put(SERIALIZED_MIME_TYPE, index);
                     db.setContent(cc);
 
@@ -244,21 +239,20 @@ public class RequetesControleurFXML {
                         } else {
                             dropIndex = row.getIndex();
                         }
-                        
-                        indexDemandeArrivee=dropIndex;
-                  
+
+                        indexDemandeArrivee = dropIndex;
+
                         demandeTable.getItems().add(dropIndex, draggedPerson);
 
                         event.setDropCompleted(true);
                         demandeTable.getSelectionModel().select(dropIndex);
 
-                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart,indexDemandeArrivee);
+                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     }
-                    
+
                     this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
 
-                    
                 }
             });
 
@@ -365,15 +359,6 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * Renvoie la liste des lignes du tableau de la vue textuelle
-     * 
-     * @return La liste des lignes du tableau
-     */
-    public List<TableRow<Demande>> getListeLignes() {
-        return listeLignes;
-    }
-
-    /**
      * Set if the columns can be dragged or not
      * 
      * @param draggable
@@ -398,6 +383,19 @@ public class RequetesControleurFXML {
      */
     public ContextMenu getContextMenu() {
         return contextMenu;
+    }
+
+    /**
+     * Renvoie la map faisant le lien entre les lignes du tableau et leur index
+     * 
+     * @return La map faisant le lien entre les lignes du tableau et leur index
+     */
+    public Map<Integer, TableRow<Demande>> getMapIndexLignes() {
+        return mapIndexLignes;
+    }
+
+    public TableColumn<Demande, String> getOrphelineColumn() {
+        return orphelineColumn;
     }
 
 }

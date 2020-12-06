@@ -40,7 +40,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        
+
         c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
@@ -53,7 +53,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        //c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
+        // c.getFenetre().getFenetreControleur().getBoutonSupprimerRequete().setVisible(false);
         c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
@@ -88,29 +88,28 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void valider(Controleur c, String... durations) {
-    	
-    	String pickUpDurationField=durations[0];
-    	String deliveryDurationField=durations[1];
-    	
-    	/*for(String d : durations) {
-    		
-    		if(compteur==0) {
-    			pickUpDurationField=d;
-    			
-    		}
-    		
-    		if(compteur==1) {
-    			deliveryDurationField=d;
-    		}
-    		
-    	}
-    	*/
-    
+
+        String pickUpDurationField = durations[0];
+        String deliveryDurationField = durations[1];
+
+        /*
+         * for(String d : durations) {
+         * 
+         * if(compteur==0) { pickUpDurationField=d;
+         * 
+         * }
+         * 
+         * if(compteur==1) { deliveryDurationField=d; }
+         * 
+         * }
+         */
+
         // Erreurs de saisies et sélections
         TypeIntersection typeIntersection = null;
         if (idIntersection1 == null && idIntersection2 == null) {
             System.out.println("Il faut sélectionner au moins une intersection.");
-            Utils.alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.", Alert.AlertType.ERROR);
+            Utils.alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.",
+                    Alert.AlertType.ERROR);
             return;
         } else if (idIntersection1 != null && idIntersection2 != null) {
             if (pickUpDurationField.isEmpty()) {
@@ -209,9 +208,6 @@ public class EtatAjoutNouvelleRequete implements State {
                 }
                 c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
             }
-
-            //TODO : suppr quand methode refresh vue textuelle sera prete
-            c.getFenetre().getVueTextuelle().afficherPlanning(c.getPlanning(), c.getPlanning().getCarte());
 
         } catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");

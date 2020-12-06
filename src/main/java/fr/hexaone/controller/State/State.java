@@ -83,15 +83,16 @@ public interface State {
                 c.setEtatCarteChargee();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
-                Utils.alertHelper("Erreur d'ouverture", "Erreur lors de l'ouverture du fichier carte, veuillez recommencer !",
-                        Alert.AlertType.ERROR);
+                Utils.alertHelper("Erreur d'ouverture",
+                        "Erreur lors de l'ouverture du fichier carte, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (FileBadExtensionException e) {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
-                Utils.alertHelper("Erreur d'extension", "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !",
-                        Alert.AlertType.ERROR);
+                Utils.alertHelper("Erreur d'extension",
+                        "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
-                Utils.alertHelper("Erreur de fichier XML", "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
+                Utils.alertHelper("Erreur de fichier XML",
+                        "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (DTDValidationException e) {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
@@ -99,15 +100,18 @@ public interface State {
                         Alert.AlertType.ERROR);
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-                Utils.alertHelper("Erreur de type", "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
+                Utils.alertHelper("Erreur de type",
+                        "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper("Erreur de type", "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
+                Utils.alertHelper("Erreur de type",
+                        "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (URISyntaxException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
-                Utils.alertHelper("Erreur d'inclusion DTD", "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
+                Utils.alertHelper("Erreur d'inclusion DTD",
+                        "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             }
         } else {
@@ -133,23 +137,22 @@ public interface State {
                 // TODO : effacer les trajets (la tournée) s'ils existent (si jamais
                 // précédemment calculé)
 
-                // TODO : enlever la ligne du dessous quand la méthode rafraichir de la vue
-                // textuelle sera prête
-                c.getFenetre().getVueTextuelle().afficherRequetes(c.getPlanning(), c.getPlanning().getCarte(),
-                        c.getFenetre().getMapCouleurRequete());
+                c.rafraichirVues(false);
 
                 c.setEtatRequetesChargees();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de requêtes : " + e);
-                Utils.alertHelper("Erreur d'ouverture", "Erreur lors de l'ouverture du fichier de requêtes, veuillez recommencer !",
+                Utils.alertHelper("Erreur d'ouverture",
+                        "Erreur lors de l'ouverture du fichier de requêtes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (FileBadExtensionException e) {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
-                Utils.alertHelper("Erreur d'extension", "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !",
-                        Alert.AlertType.ERROR);
+                Utils.alertHelper("Erreur d'extension",
+                        "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
-                Utils.alertHelper("Erreur de fichier XML", "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
+                Utils.alertHelper("Erreur de fichier XML",
+                        "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (DTDValidationException e) {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
@@ -157,19 +160,23 @@ public interface State {
                         Alert.AlertType.ERROR);
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-                Utils.alertHelper("Erreur de type", "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
+                Utils.alertHelper("Erreur de type",
+                        "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper("Erreur de type", "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
+                Utils.alertHelper("Erreur de type",
+                        "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (RequestOutOfMapException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper("Erreur requête hors de la carte", "Une ou plusieurs requête(s) chargées ne sont pas dans la carte, veuillez recommencer !",
+                Utils.alertHelper("Erreur requête hors de la carte",
+                        "Une ou plusieurs requête(s) chargées ne sont pas dans la carte, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (URISyntaxException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
-                Utils.alertHelper("Erreur d'inclusion DTD", "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
+                Utils.alertHelper("Erreur d'inclusion DTD",
+                        "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             }
         } else {
@@ -187,10 +194,10 @@ public interface State {
     default void supprimerDemande(Controleur c, Demande demande) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des demandes");
     }
-    
+
     default void modifierDemande(Controleur c, Demande d) {
-    	System.out.println("Il faut avoir calculé la tournée et sélectionner une demande pour la modifier");
-    	
+        System.out.println("Il faut avoir calculé la tournée et sélectionner une demande pour la modifier");
+
     }
 
     default void supprimerRequete(Controleur c, Requete requete) {
@@ -228,8 +235,7 @@ public interface State {
     default void valider(Controleur c, String... durations) {
         System.out.println("valider [default state implementation]");
     }
-    
-    
+
     /**
      * Cette méthode permet d'annuler un choix
      */

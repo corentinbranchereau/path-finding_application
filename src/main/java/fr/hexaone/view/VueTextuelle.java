@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,10 +20,7 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -49,12 +45,6 @@ public class VueTextuelle {
      * zone de texte ou afficher les requetes
      */
     private TextFlow zoneTexte;
-
-    /**
-     * Représente la paire de lignes (collecte et livraison) qui est
-     * sélectionnée/highlight
-     */
-    private Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
 
     /**
      * Couleur de l'highlight des lignes dans le tableau
@@ -87,46 +77,18 @@ public class VueTextuelle {
 
         if (planning == null)
             return;
-        // Affichage des demandes sur la carte
+
         if (planning.getDemandesOrdonnees() != null) {
-            // Affichage des demandes sur la carte
-
-            if (planning.getListeTrajets() != null) {
-                // Affichage des trajets
-
-                // Affichage de la demande sélectionnée et de la demande associée
-                if (demandeSelectionnee != null) {
-                    Requete requeteAssociee = demandeSelectionnee.getRequete();
-                    if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
-                        // Mise en valeur forte de la collecte
-
-                        if (requeteAssociee != null && requeteAssociee.getDemandeLivraison() != null) {
-                            Demande demandeAssociee = requeteAssociee.getDemandeLivraison();
-                            // Mise en valeur faible de la livraison
-
-                        }
-                    } else if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
-                        // Mise en valeur forte de la livraison
-
-                        if (requeteAssociee != null && requeteAssociee.getDemandeCollecte() != null) {
-                            Demande demandeAssociee = requeteAssociee.getDemandeCollecte();
-                            // Mise en valeur faible de la collecte
-
-                        }
-                    } else {
-                        // Si on veut afficher un dépot sélectionné ( mais pas demandé ).
-                    }
-                }
+            // Affichage des demandes (ordonnées) dans le tableau
+            afficherPlanning(planning, planning.getCarte());
+            enleverHighlightDemande();
+            if (demandeSelectionnee != null) {
+                highlightDemande(demandeSelectionnee);
             }
+
         } else if (!planning.getRequetes().isEmpty()) {
-            // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
-            List<Demande> demandes = new ArrayList<>();
-            for (Requete requete : planning.getRequetes()) {
-                demandes.add(requete.getDemandeCollecte());
-                demandes.add(requete.getDemandeLivraison());
-            }
-            // Affichage des demandes
-
+            // Affichage des requêtes
+            afficherRequetes(planning, planning.getCarte());
         }
     }
 
@@ -135,7 +97,7 @@ public class VueTextuelle {
      * 
      * @param planning liste des segments à parcourir
      */
-    public void afficherRequetes(Planning planning, Carte carte, Map<Requete, Color> mapCouleurRequete) {
+    public void afficherRequetes(Planning planning, Carte carte) {
 
         // On vide le zone de texte au cas où des choses sont déjà affichées dedans
         this.zoneTexte.getChildren().clear();
@@ -149,33 +111,19 @@ public class VueTextuelle {
         texteDepot.setFill(Color.RED);
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
-        int i = 1;
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
         // parcours des requêtes
         for (Requete requete : planning.getRequetes()) {
 
-            listeDemandes.add(requete.getDemandeCollecte());
-            listeDemandes.add(requete.getDemandeLivraison());
-            // String nomCollecte = requete.getDemandeCollecte().getNomIntersection();
-            // String nomLivraison = requete.getDemandeLivraison().getNomIntersection();
+            if (requete.getDemandeCollecte() != null) {
+                listeDemandes.add(requete.getDemandeCollecte());
+            }
 
-            // Text titreText = new Text("Requête " + i + ": \r\n");
-            // Text collecteIcon = new Text(" ■ ");
-            // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-            // + String.valueOf(requete.getDemandeCollecte().getDuree()) + "s" + "\r\n");
-            // Text livraisonIcon = new Text(" ● ");
-            // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-            // + String.valueOf(requete.getDemandeLivraison().getDuree()) + "s" + "\r\n\n");
-            // i++;
-
-            // collecteIcon.setFill(mapCouleurRequete.get(requete));
-            // livraisonIcon.setFill(mapCouleurRequete.get(requete));
-
-            // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
-            // livraisonIcon,
-            // livraisonText);
+            if (requete.getDemandeLivraison() != null) {
+                listeDemandes.add(requete.getDemandeLivraison());
+            }
         }
         fenetre.setListeDemandes(listeDemandes);
 
@@ -193,6 +141,7 @@ public class VueTextuelle {
                     .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
             requetesControleur.getDepartColumn().setText("Durée");
             requetesControleur.getArriveeColumn().setVisible(false);
+            requetesControleur.getOrphelineColumn().setVisible(false);
             requetesControleur.setFenetre(fenetre);
 
         } catch (IOException e) {
@@ -205,31 +154,22 @@ public class VueTextuelle {
         // listeDemande dans planning
         ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
         fenetre.setListeDemandes(listeDemandes);
-        try {
-            // Load textual tab.
-            FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-            AnchorPane personOverview = loader.load(inputFichierFxml);
+        this.requetesControleur.getDemandeTable().setItems(listeDemandes);
 
-            String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
-            String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
-                    + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
-                    + getStringFromDate(planning.getDateFin());
+        String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
+                + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
+                + getStringFromDate(planning.getDateFin());
 
-            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
 
-            // Set person overview into the center of root layout.
-            this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
-
-            this.requetesControleur = loader.getController();
-            requetesControleur.setFenetre(fenetre);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        requetesControleur.getDepartColumn()
+                .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
+        requetesControleur.getDepartColumn().setText("Repart à");
+        requetesControleur.getArriveeColumn().setVisible(true);
+        requetesControleur.getOrphelineColumn().setVisible(true);
     }
 
     /**
@@ -259,35 +199,6 @@ public class VueTextuelle {
      */
     public void afficherPopUpNouvelleDemandeLivraison() {
         // TODO
-    }
-
-    /**
-     * Méthode qui permet d'afficher la nouvelle demande de livraison sur la vue
-     * textuelle
-     */
-    public void afficherNouvelleRequeteVueTextuelle(Requete nouvelleRequete, Map<Requete, Color> mapCouleurRequete) {
-        // TODO
-        // String nomCollecte =
-        // nouvelleRequete.getDemandeCollecte().getNomIntersection();
-        // String nomLivraison =
-        // nouvelleRequete.getDemandeLivraison().getNomIntersection();
-
-        // Text titreText = new Text("Requête " + i + ": \r\n");
-        // Text collecteIcon = new Text(" ■ ");
-        // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-        // + String.valueOf(nouvelleRequete.getDemandeCollecte().getDuree()) + "s" +
-        // "\r\n");
-        // Text livraisonIcon = new Text(" ● ");
-        // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-        // + String.valueOf(nouvelleRequete.getDemandeLivraison().getDuree()) + "s" +
-        // "\r\n\n");
-
-        // collecteIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
-        // livraisonIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
-
-        // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
-        // livraisonIcon,
-        // livraisonText);
     }
 
     /**
@@ -333,7 +244,7 @@ public class VueTextuelle {
      * Méthode permettant récupérer l'heure de sous forme de String au format
      * Pair<Heure, Minute>
      *
-     * @param horaire  la date
+     * @param horaire la date
      * @return une pair contenant l'heure et les minutes sous forme de String
      */
     private String getStringFromDate(Date horaire) {
@@ -356,8 +267,10 @@ public class VueTextuelle {
      * Méthode permettant de désélectionner la demande actuellement sélectionnée
      */
     public void enleverHighlightDemande() {
-        for (TableRow<Demande> row : this.requetesControleur.getListeLignes()) {
-            row.setStyle("");
+        for (TableRow<Demande> ligne : this.requetesControleur.getMapIndexLignes().values()) {
+            if (ligne != null) {
+                ligne.setStyle("");
+            }
         }
     }
 
@@ -374,16 +287,17 @@ public class VueTextuelle {
             demandeLiee = demande.getRequete().getDemandeCollecte();
         }
 
-        int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande) + 1;
-        int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee) + 1;
-
-        this.requetesControleur.getListeLignes().get(indexDemande)
+        int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande);
+        this.requetesControleur.getMapIndexLignes().get(indexDemande)
                 .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
 
-        Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
-        this.requetesControleur.getListeLignes().get(indexDemandeLiee)
-                .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen() + ","
-                        + 255 * couleur.getBlue() + ", " + this.OPACITE_DEMANDE_LIEE + ")");
+        if (demandeLiee != null) {
+            int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee);
+            Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
+            this.requetesControleur.getMapIndexLignes().get(indexDemandeLiee)
+                    .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen()
+                            + "," + 255 * couleur.getBlue() + ", " + this.OPACITE_DEMANDE_LIEE + ")");
+        }
     }
 
     /**
@@ -391,21 +305,22 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-    	
-    	if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
+
+        if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
-           
+
         }
     }
-    
+
     /**
      * Permet de réaliser le drag/drop dans le modèle
+     * 
      * @param draggIndex index de départ du dragg
-     * @param dropIndex index d'arrivée du dragg
+     * @param dropIndex  index d'arrivée du dragg
      */
     public void modifierPlanning(int draggIndex, int dropIndex) {
-    	this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
-    	
+        this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
+
     }
 }
