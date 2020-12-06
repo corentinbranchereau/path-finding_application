@@ -122,7 +122,7 @@ public class VueTextuelle {
             }
 
             if (requete.getDemandeLivraison() != null) {
-                listeDemandes.add(requete.getDemandeCollecte());
+                listeDemandes.add(requete.getDemandeLivraison());
             }
         }
         fenetre.setListeDemandes(listeDemandes);
