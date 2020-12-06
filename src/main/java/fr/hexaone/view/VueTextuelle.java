@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
@@ -22,10 +20,7 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -50,12 +45,6 @@ public class VueTextuelle {
      * zone de texte ou afficher les requetes
      */
     private TextFlow zoneTexte;
-
-    /**
-     * Représente la paire de lignes (collecte et livraison) qui est
-     * sélectionnée/highlight
-     */
-    private Pair<TableRow<Demande>, TableRow<Demande>> lignesHighlight;
 
     /**
      * Couleur de l'highlight des lignes dans le tableau
@@ -167,21 +156,6 @@ public class VueTextuelle {
         fenetre.setListeDemandes(listeDemandes);
         this.requetesControleur.getDemandeTable().setItems(listeDemandes);
 
-        // System.out.println("===================");
-        // for (int i = 0; i < this.getRequetesControleur().getListeLignes().size();
-        // i++) {
-        // TableRow<Demande> ligne =
-        // this.getRequetesControleur().getListeLignes().get(i);
-        // if (ligne.getItem() != null) {
-        // System.out.println("INDEX TEST : "
-        // +
-        // this.requetesControleur.getDemandeTable().getItems().indexOf(ligne.getItem()));
-        // System.out.println("INDEX I ASSOCIE : " + i);
-        // System.out.println();
-        // }
-        // }
-        // System.out.println("===================");
-
         String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
         String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
@@ -195,34 +169,6 @@ public class VueTextuelle {
                 .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
         requetesControleur.getDepartColumn().setText("Repart à");
         requetesControleur.getArriveeColumn().setVisible(true);
-        // try {
-        // // Load textual tab.
-        // FXMLLoader loader = new FXMLLoader();
-        // FileInputStream inputFichierFxml = new
-        // FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
-        // AnchorPane personOverview = loader.load(inputFichierFxml);
-
-        // String depotName = getNomIntersection(planning, carte,
-        // carte.getIntersections().get(planning.getIdDepot()));
-
-        // String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
-        // + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
-        // + getStringFromDate(planning.getDateFin());
-
-        // fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        // fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new
-        // Text(depotString));
-
-        // // Set person overview into the center of root layout.
-        // this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
-
-        // this.requetesControleur = loader.getController();
-        // requetesControleur.setFenetre(fenetre);
-
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-
     }
 
     /**
@@ -252,35 +198,6 @@ public class VueTextuelle {
      */
     public void afficherPopUpNouvelleDemandeLivraison() {
         // TODO
-    }
-
-    /**
-     * Méthode qui permet d'afficher la nouvelle demande de livraison sur la vue
-     * textuelle
-     */
-    public void afficherNouvelleRequeteVueTextuelle(Requete nouvelleRequete, Map<Requete, Color> mapCouleurRequete) {
-        // TODO
-        // String nomCollecte =
-        // nouvelleRequete.getDemandeCollecte().getNomIntersection();
-        // String nomLivraison =
-        // nouvelleRequete.getDemandeLivraison().getNomIntersection();
-
-        // Text titreText = new Text("Requête " + i + ": \r\n");
-        // Text collecteIcon = new Text(" ■ ");
-        // Text collecteText = new Text("Collecte : " + nomCollecte + " - "
-        // + String.valueOf(nouvelleRequete.getDemandeCollecte().getDuree()) + "s" +
-        // "\r\n");
-        // Text livraisonIcon = new Text(" ● ");
-        // Text livraisonText = new Text("Livraison : " + nomLivraison + " - "
-        // + String.valueOf(nouvelleRequete.getDemandeLivraison().getDuree()) + "s" +
-        // "\r\n\n");
-
-        // collecteIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
-        // livraisonIcon.setFill(mapCouleurRequete.get(nouvelleRequete));
-
-        // this.zoneTexte.getChildren().addAll(titreText, collecteIcon, collecteText,
-        // livraisonIcon,
-        // livraisonText);
     }
 
     /**

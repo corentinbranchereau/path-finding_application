@@ -29,7 +29,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.
@@ -118,11 +117,6 @@ public class VueGraphique {
      * (carré ou rond)
      */
     private Map<Demande, Node> mapDemandeNoeud;
-
-    /**
-     * Paire d'objets graphiques qui a été sélectionnée/highlight
-     */
-    private Pair<Node, Node> noeudsHighlight;
 
     /**
      * Variable définissant la taille d'un noeud (élément graphique) de demande

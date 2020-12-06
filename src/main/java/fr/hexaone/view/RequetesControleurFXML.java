@@ -2,18 +2,11 @@ package fr.hexaone.view;
 
 import java.util.Map;
 import java.util.Optional;
-import java.lang.ModuleLayer.Controller;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.TypeIntersection;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -30,10 +23,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class RequetesControleurFXML {
 
@@ -58,11 +49,6 @@ public class RequetesControleurFXML {
     private Fenetre fenetre;
 
     /**
-     * Liste qui contient toutes les lignes du tableau de la vue textuelle
-     */
-    // private List<TableRow<Demande>> listeLignes = new ArrayList<>();
-
-    /**
      * Map faisant le lien entre les lignes du tableau et leur index dans celui-ci
      */
     private Map<Integer, TableRow<Demande>> mapIndexLignes = new HashMap<>();
@@ -71,11 +57,6 @@ public class RequetesControleurFXML {
      * définit si les cases du tableau peuvent être déplacées ou non
      */
     private Boolean draggable = false;
-
-    /**
-     * Méthode qui se lance après le constructeur, une fois les éléments FXML
-     * chargés On définit les règles d'affichage du tableau
-     */
 
     /**
      * index demande de départ drag and drop
@@ -87,6 +68,10 @@ public class RequetesControleurFXML {
      */
     protected int indexDemandeArrivee;
 
+    /**
+     * Méthode qui se lance après le constructeur, une fois les éléments FXML
+     * chargés On définit les règles d'affichage du tableau
+     */
     @FXML
     public void initialize() {
         // Initialize the person table with the two columns.
@@ -160,8 +145,7 @@ public class RequetesControleurFXML {
                 }
             };
 
-            // On ajoute la liste au tableau
-            // this.listeLignes.add(row);
+            // On ajoute l'entrée <indx, ligne> dans la map
             this.mapIndexLignes.put(row.getIndex(), row);
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
@@ -368,15 +352,6 @@ public class RequetesControleurFXML {
         arriveeColumn.setSortable(false);
 
     }
-
-    /**
-     * Renvoie la liste des lignes du tableau de la vue textuelle
-     * 
-     * @return La liste des lignes du tableau
-     */
-    // public List<TableRow<Demande>> getListeLignes() {
-    // return listeLignes;
-    // }
 
     /**
      * Set if the columns can be dragged or not
