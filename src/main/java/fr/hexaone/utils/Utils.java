@@ -50,9 +50,8 @@ public class Utils {
      */
     public static Label obtenirParagrapheAide(String texte){
         Label label = new Label(texte);
-        label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC,10D));
+        label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC,13D));
         label.setWrapText(true);
-        label.setPadding(new Insets(0D,0D,10D,0D));
         return label;
     }
 
