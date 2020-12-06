@@ -73,11 +73,11 @@ public abstract class AlgoGenetique {
     public AlgoGenetique() {
     	this.sigma=30;
     	this.delta=3;
-    	this.p=0.1;
+    	this.p=0.2;
     	this.nMax=10000;
-    	this.alphamax=30000;
-    	this.BetaMax=10000;
-    	this.maxIter=1000;
+    	this.alphamax=2000;
+    	this.BetaMax=2000;
+    	this.maxIter=5000;
     }
     
     
@@ -87,157 +87,175 @@ public abstract class AlgoGenetique {
      * @return
      */
 	public final List<Object> algoGenetique(List<Object> objets) {
-
-        //création de la population
-		population=new ArrayList<Pair<List<Object>, Double>>();
 		
-        //1er élément de la population obtenu avec du 2-opt
-		List<Object> chr1 =this.genererChromosomeAleatoire(objets);
+		List<List<Pair<List<Object>, Double>>> listePopulations= new ArrayList<List<Pair<List<Object>, Double>>>();
 		
-        chr1 = this.mutationLocalSearch(chr1, cout(chr1));
-        
-        population.add(new Pair<>(chr1, cout(chr1)));
-
-        //initialisation des variables
-        int k = 1;
-        int nbEssais = 0;
-        int iter = 0;
-
-        Double cost;
-        
-        Pair<List<Object>, Double> chrom;
-
-        Random rand = new Random();
-
-        //génération aléatoire de la population initiale
-        while (k <= sigma && nbEssais <= nMax) {
-            k++;
-            nbEssais = 0;
-
-            do {
-            	//on essaie de générer un chromosome aléatoire avec un nombre max d'essais
-                nbEssais++;
-                List<Object> chr = genererChromosomeAleatoire(objets);
-                cost = cout(chr);
-                chrom = new Pair<>(chr, cost);
-            } while (nbEssais <= nMax && !espacePopulation(population, delta, cost));
-            if (nbEssais <= nMax) {
-            	//la génération a réussi
-                population.add(chrom);
-            }
-        }
-        if (nbEssais > nMax) {
-            sigma = k - 1;
-        }
-
-        //tri par ordre coissant de cout la population
-        Collections.sort(population, ComparatorChromosome);
-
-        int i1;
-        int i2;
-        int indexP1;
-        int indexP2;
-
-        int alpha = 0;
-        int beta = 0;
-
-        // boucle principale
-        while (alpha < alphamax && beta < BetaMax && iter <= maxIter) {
-
-            indexP1 = 0;
-            indexP2 = 0;
-
-            //génération aléatoire de 2 indices i et j < poulation.size()
-            for (int i = 0; i < 2; i++) {
-
-                i1 = rand.nextInt(population.size());
-                i2 = rand.nextInt(population.size());
-
-                if (i == 0) {
-                    indexP1 = i2;
-                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
-                        indexP1 = i1;
-                    }
-                } else {
-                    indexP2 = i2;
-                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
-                        indexP2 = i1;
-                    }
-                }
-            }
-
-            int choiceChild = rand.nextInt(2);
-
-            //génération des enfants : un seul survit aléatoirement
-            List<Object> child;
-
-            if (choiceChild == 0) {
-                child = crossoverOX(population.get(indexP1).getValue0(), population.get(indexP2).getValue0(),
-                        rand.nextInt(population.get(0).getValue0().size()),
-                        rand.nextInt(population.get(0).getValue0().size()));
-            } else {
-                child = crossoverOX(population.get(indexP2).getValue0(), population.get(indexP1).getValue0(),
-                        rand.nextInt(population.get(0).getValue0().size()),
-                        rand.nextInt(population.get(0).getValue0().size()));
-            }
-
-            //correction des contraintes de précédence sur l'enfant
-            child = correctionCrossover(child);
-
-            //nb aléatoire compris entre sigma/2 et sigma
-            int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
-
-            double costChild = cout(child);
-
-            if (Math.random() < p) {
-                // mutation de l'enfant : on l'améliore avec de la recherche locale
-
-                List<Object> M = this.mutationLocalSearch(child, cout(child));
-
-                double ancienCout = population.get(kRand).getValue1();
-                population.get(kRand).setAt1(Integer.MIN_VALUE);
-
-                if (this.espacePopulation(population, delta, costChild)) {
-                	//si les contraintes d'espacement sont vérifiés avec le nouvel enfant
-                    child = M;
-                    costChild = cout(child);
-                }
-
-                population.get(kRand).setAt1(ancienCout);
-
-            }
-
-            double ancienCout = population.get(kRand).getValue1();
-            population.get(kRand).setAt1(Integer.MIN_VALUE);
-
-            if (this.espacePopulation(population, delta, costChild)) {
-
-            	// itération productive
-            	alpha++;
-                iter = 0;
-
-                population.remove(kRand);
-                population.add(new Pair<>(child, costChild));
-
-                if (costChild >= population.get(0).getValue1()) {
-                	//pas d'amélioration de la meilleure solution
-                    beta++;
-
-                } else {
-                    beta = 0;
-                }
-
-                Collections.sort(population, ComparatorChromosome);
-            }
-
-            else {
-            	//l'enfant n'est pas acceptable dans la population
-                population.get(kRand).setAt1(ancienCout);
-                iter++;
-            }
-        }
-
-        return population.get(0).getValue0();
+		double bestCost=Integer.MAX_VALUE;
+		
+		for(int nbGa=0;nbGa<10;nbGa++)
+		{
+			
+	        //création de la population
+			population=new ArrayList<Pair<List<Object>, Double>>();
+			
+	        //1er élément de la population obtenu avec du 2-opt
+			List<Object> chr1 =this.genererChromosomeAleatoire(objets);
+			
+	        chr1 = this.mutationLocalSearch(chr1, cout(chr1));
+	        
+	        population.add(new Pair<>(chr1, cout(chr1)));
+	
+	        //initialisation des variables
+	        int k = 1;
+	        int nbEssais = 0;
+	        int iter = 0;
+	
+	        Double cost;
+	        
+	        Pair<List<Object>, Double> chrom;
+	
+	        Random rand = new Random();
+	
+	        //génération aléatoire de la population initiale
+	        while (k <= sigma && nbEssais <= nMax) {
+	            k++;
+	            nbEssais = 0;
+	
+	            do {
+	            	//on essaie de générer un chromosome aléatoire avec un nombre max d'essais
+	                nbEssais++;
+	                List<Object> chr = genererChromosomeAleatoire(objets);
+	                cost = cout(chr);
+	                chrom = new Pair<>(chr, cost);
+	            } while (nbEssais <= nMax && !espacePopulation(population, delta, cost));
+	            if (nbEssais <= nMax) {
+	            	//la génération a réussi
+	                population.add(chrom);
+	            }
+	        }
+	        if (nbEssais > nMax) {
+	            sigma = k - 1;
+	        }
+	
+	        //tri par ordre coissant de cout la population
+	        Collections.sort(population, ComparatorChromosome);
+	
+	        int i1;
+	        int i2;
+	        int indexP1;
+	        int indexP2;
+	
+	        int alpha = 0;
+	        int beta = 0;
+	
+	        // boucle principale
+	        while (alpha < alphamax && beta < BetaMax && iter <= maxIter) {
+	
+	            indexP1 = 0;
+	            indexP2 = 0;
+	
+	            //génération aléatoire de 2 indices i et j < poulation.size()
+	            for (int i = 0; i < 2; i++) {
+	
+	                i1 = rand.nextInt(population.size());
+	                i2 = rand.nextInt(population.size());
+	
+	                if (i == 0) {
+	                    indexP1 = i2;
+	                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
+	                        indexP1 = i1;
+	                    }
+	                } else {
+	                    indexP2 = i2;
+	                    if (population.get(i1).getValue1() < population.get(i2).getValue1()) {
+	                        indexP2 = i1;
+	                    }
+	                }
+	            }
+	
+	            int choiceChild = rand.nextInt(2);
+	
+	            //génération des enfants : un seul survit aléatoirement
+	            List<Object> child;
+	
+	            if (choiceChild == 0) {
+	                child = crossoverOX(population.get(indexP1).getValue0(), population.get(indexP2).getValue0(),
+	                        rand.nextInt(population.get(0).getValue0().size()),
+	                        rand.nextInt(population.get(0).getValue0().size()));
+	            } else {
+	                child = crossoverOX(population.get(indexP2).getValue0(), population.get(indexP1).getValue0(),
+	                        rand.nextInt(population.get(0).getValue0().size()),
+	                        rand.nextInt(population.get(0).getValue0().size()));
+	            }
+	
+	            //correction des contraintes de précédence sur l'enfant
+	            child = correctionCrossover(child);
+	
+	            //nb aléatoire compris entre sigma/2 et sigma
+	            int kRand = rand.nextInt(sigma - sigma / 2) + (sigma / 2);
+	
+	            double costChild = cout(child);
+	
+	            if (Math.random() < p) {
+	                // mutation de l'enfant : on l'améliore avec de la recherche locale
+	
+	                List<Object> M = this.mutationLocalSearch(child, cout(child));
+	
+	                double ancienCout = population.get(kRand).getValue1();
+	                population.get(kRand).setAt1(Integer.MIN_VALUE);
+	
+	                if (this.espacePopulation(population, delta, costChild)) {
+	                	//si les contraintes d'espacement sont vérifiés avec le nouvel enfant
+	                    child = M;
+	                    costChild = cout(child);
+	                }
+	
+	                population.get(kRand).setAt1(ancienCout);
+	
+	            }
+	
+	            double ancienCout = population.get(kRand).getValue1();
+	            population.get(kRand).setAt1(Integer.MIN_VALUE);
+	
+	            if (this.espacePopulation(population, delta, costChild)) {
+	
+	            	// itération productive
+	            	alpha++;
+	                iter = 0;
+	
+	                population.remove(kRand);
+	                population.add(new Pair<>(child, costChild));
+	
+	                if (costChild >= population.get(0).getValue1()) {
+	                	//pas d'amélioration de la meilleure solution
+	                    beta++;
+	
+	                } else {
+	                    beta = 0;
+	                }
+	
+	                Collections.sort(population, ComparatorChromosome);
+	            }
+	
+	            else {
+	            	//l'enfant n'est pas acceptable dans la population
+	                population.get(kRand).setAt1(ancienCout);
+	                iter++;
+	            }
+	        }
+	        	
+	        	listePopulations.add(population);
+		}
+		
+		List<Object> resultat=new ArrayList<Object>();
+		
+		for(int m=0;m<listePopulations.size();m++) {
+			if(listePopulations.get(m).get(0).getValue1()<bestCost) {
+				bestCost=listePopulations.get(m).get(0).getValue1();
+				resultat=listePopulations.get(m).get(0).getValue0();
+			}
+		}
+        return resultat;
 	}
 	
 
