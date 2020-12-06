@@ -251,6 +251,10 @@ public interface State {
      * Cette méthode permet d'afficher l'aide à l'utilisateur
      */
     default void aide(){
-        Utils.alertHelper("Aide","Simple test", AlertType.INFORMATION);
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Aide de l'application");
+        alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
+        alert.setContentText("En construction...");
+        alert.show();
     }
 }
