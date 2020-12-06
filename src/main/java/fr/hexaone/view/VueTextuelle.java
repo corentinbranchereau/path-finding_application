@@ -117,8 +117,13 @@ public class VueTextuelle {
         // parcours des requêtes
         for (Requete requete : planning.getRequetes()) {
 
-            listeDemandes.add(requete.getDemandeCollecte());
-            listeDemandes.add(requete.getDemandeLivraison());
+            if (requete.getDemandeCollecte() != null) {
+                listeDemandes.add(requete.getDemandeCollecte());
+            }
+
+            if (requete.getDemandeLivraison() != null) {
+                listeDemandes.add(requete.getDemandeCollecte());
+            }
         }
         fenetre.setListeDemandes(listeDemandes);
 
@@ -263,7 +268,6 @@ public class VueTextuelle {
         for (TableRow<Demande> ligne : this.requetesControleur.getMapIndexLignes().values()) {
             if (ligne != null) {
                 ligne.setStyle("");
-            } else {
             }
         }
     }
@@ -282,15 +286,16 @@ public class VueTextuelle {
         }
 
         int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande);
-        int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee);
-
         this.requetesControleur.getMapIndexLignes().get(indexDemande)
                 .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
 
-        Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
-        this.requetesControleur.getMapIndexLignes().get(indexDemandeLiee)
-                .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen() + ","
-                        + 255 * couleur.getBlue() + ", " + this.OPACITE_DEMANDE_LIEE + ")");
+        if (demandeLiee != null) {
+            int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee);
+            Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
+            this.requetesControleur.getMapIndexLignes().get(indexDemandeLiee)
+                    .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen()
+                            + "," + 255 * couleur.getBlue() + ", " + this.OPACITE_DEMANDE_LIEE + ")");
+        }
     }
 
     /**

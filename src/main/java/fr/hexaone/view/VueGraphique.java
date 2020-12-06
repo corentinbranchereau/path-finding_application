@@ -264,8 +264,12 @@ public class VueGraphique {
             // Si les demandes n'ont pas encore été calculées, on affiche les requetes.
             List<Demande> demandes = new ArrayList<Demande>();
             for (Requete requete : planning.getRequetes()) {
-                demandes.add(requete.getDemandeCollecte());
-                demandes.add(requete.getDemandeLivraison());
+                if (requete.getDemandeCollecte() != null) {
+                    demandes.add(requete.getDemandeCollecte());
+                }
+                if (requete.getDemandeLivraison() != null) {
+                    demandes.add(requete.getDemandeLivraison());
+                }
             }
             // Affichage des demandes
             afficherDemandes(demandes, planning.getCarte(), planning.getIdDepot());
