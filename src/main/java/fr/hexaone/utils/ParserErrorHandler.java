@@ -19,8 +19,11 @@ public class ParserErrorHandler implements ErrorHandler {
 
     @Override
     public void error(SAXParseException exception) {
-        System.out.println("[HEXAONE PARSER ERROR] : "+exception.toString());
-        this.isValid = false;
+        if(this.isValid){
+            System.out.println("[HEXAONE PARSER ERROR] : "+exception.toString());
+            this.isValid = false;
+        }
+
     }
 
     @Override

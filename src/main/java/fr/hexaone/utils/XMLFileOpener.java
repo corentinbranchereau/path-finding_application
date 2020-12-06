@@ -66,7 +66,7 @@ public class XMLFileOpener implements FileFilter {
     public Document open(String path, DTDType dtdType) throws IOException, FileBadExtensionException, SAXException, DTDValidationException, URISyntaxException {
         File file = creerXMLTemporaireAvecDTD(path, dtdType);
         if (!accept(file))
-            throw new FileBadExtensionException("Incorrect file extension, XML is needed.");
+            throw new FileBadExtensionException("Extension de fichier incorrete, il faut du .XML.");
         Document xml = null;
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setValidating(true); // Activer la vérification par le DTD
@@ -77,7 +77,7 @@ public class XMLFileOpener implements FileFilter {
             documentBuilder.setErrorHandler(errorHandler);
             xml = documentBuilder.parse(file);
             if(!errorHandler.isValid()){
-                throw new DTDValidationException("DTD Error, XML file does not validate it.");
+                throw new DTDValidationException("Erreur de DTD, le fichier XML ne le valide pas.");
             }
             xml.getDocumentElement().normalize();
         } catch (ParserConfigurationException e) {
