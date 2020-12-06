@@ -78,7 +78,7 @@
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="boutonModifierPlanning" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="150.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Modifier l'ordre">
+                        <Button fx:id="boutonAide" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="150.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Afficher l'aide">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
