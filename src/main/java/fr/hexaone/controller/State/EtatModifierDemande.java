@@ -21,13 +21,11 @@ import java.util.regex.Pattern;
 public class EtatModifierDemande implements State {
 
     /**
-     * L'id de l'intersection  sélectionné
+     * L'id de l'intersection sélectionné
      */
     private Long idIntersection = null;
-    
-    
-    private int duree;
 
+    private int duree;
 
     /**
      * {@inheritDoc}
@@ -37,9 +35,9 @@ public class EtatModifierDemande implements State {
 
         // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
 
-        //c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-        
-        //c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+        // c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
+
+        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
         c.getFenetre().getFenetreControleur().getDurationField().clear();
         c.getFenetre().getFenetreControleur().getDurationField().setText(String.valueOf(duree));
         c.getFenetre().getFenetreControleur().getDurationField().setVisible(true);
@@ -65,16 +63,15 @@ public class EtatModifierDemande implements State {
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
     }
 
-
-	/**
+    /**
      * {@inheritDoc}
      */
     @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
-    	
-    	c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
-    	this.idIntersection=idIntersection;
-    	
+
+        c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
+        this.idIntersection = idIntersection;
+
     }
 
     /**
@@ -83,44 +80,41 @@ public class EtatModifierDemande implements State {
     @Override
     public void valider(Controleur c, String... durations) {
         // Erreurs de saisies et sélections
-    	
-    	String durationField=durations[0];
-    	
+
+        String durationField = durations[0];
+
         TypeIntersection typeIntersection = null;
-        if (idIntersection == null && durationField.isEmpty() ) {
+        if (idIntersection == null && durationField.isEmpty()) {
             System.out.println("Il faut sélectionner la nouvelle intersection ou modifier la durée");
-            alertHelper("Mauvaise sélection", "Il faut selectionner la nouvelle intersection ou modifier la durée.", Alert.AlertType.ERROR);
+            alertHelper("Mauvaise sélection", "Il faut selectionner la nouvelle intersection ou modifier la durée.",
+                    Alert.AlertType.ERROR);
             return;
-        }
-        else {
-        	 if(durationField.isEmpty()) {
-            	 System.out.println("Le champ concernant la durée est vide !");
-                 alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée  est vide !",
-                         Alert.AlertType.ERROR);
+        } else {
+            if (durationField.isEmpty()) {
+                System.out.println("Le champ concernant la durée est vide !");
+                alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée  est vide !",
+                        Alert.AlertType.ERROR);
             }
-            
+
         }
-        
+
         if (!verifieDureeUtilisateur(durationField)) {
             System.out.println("La durée ne doit contenir que des chiffres !");
-            alertHelper("Mauvaise saisie de durée",
-                    "La durée (en seconde) ne doit contenir que des chiffres !",
+            alertHelper("Mauvaise saisie de durée", "La durée (en seconde) ne doit contenir que des chiffres !",
                     Alert.AlertType.ERROR);
             return;
         }
-        
-        c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(),c.getDemandeSelectionnee(),Integer.parseInt(durationField),idIntersection));
-        
-        
+
+        c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(),
+                Integer.parseInt(durationField), idIntersection));
+
         c.resetDemandeSelectionnee();
-        
-        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),false);
-        
+
+        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+
         this.annuler(c);
 
-     }
-
-      
+    }
 
     /**
      * {@inheritDoc}
@@ -130,7 +124,7 @@ public class EtatModifierDemande implements State {
         // idIntersection1 = null;
         // idIntersection2 = null;
         // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-    	idIntersection=null;
+        idIntersection = null;
         c.setEtatTourneeCalcule();
     }
 
@@ -142,24 +136,24 @@ public class EtatModifierDemande implements State {
     public void setIdIntersection(Long idIntersection) {
         this.idIntersection = idIntersection;
     }
-    
+
     /**
      * Getter de la durée
+     * 
      * @return la durée en sec
      */
     public int getDuree() {
-		return duree;
-	}
+        return duree;
+    }
 
     /**
      * Setter de la durée
+     * 
      * @param duree en sec
      */
-	public void setDuree(int duree) {
-		this.duree = duree;
-	}
-
-
+    public void setDuree(int duree) {
+        this.duree = duree;
+    }
 
     /**
      * Gère l'affichage de messages d'alertes dans l'application

@@ -77,13 +77,12 @@ public class EtatTourneeCalcule implements State {
 
         // TODO : Créer un marqeur car point orphelin
 
-        //TODO : récupérer depuis la vue graphique/textuelle l'index 
-        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(),demande));
-        
-        
+        // TODO : récupérer depuis la vue graphique/textuelle l'index
+        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
+
         c.resetDemandeSelectionnee();
-        
-        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),false);
+
+        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
 
     }
 
@@ -104,31 +103,30 @@ public class EtatTourneeCalcule implements State {
         }
 
         c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
-        
+
         c.resetDemandeSelectionnee();
-        
-        c.getFenetre().rafraichir(c.getPlanning(),c.getDemandeSelectionnee(),false);
-          
+
+        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
 
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void modifierDemande(Controleur c, Demande d) {
-    	if(d==null) {
-    		 System.out.println("Il faut sélectionner une demande à modifier.");
-             Alert alert = new Alert(Alert.AlertType.ERROR);
-             alert.setTitle("Mauvaise sélection");
-             alert.setHeaderText(null);
-             alert.setContentText("Il faut selectionner une demande à modifier.");
-             alert.show();
-             return;
-    		
-    	}
-    	c.setEtatModifierDemande(d.getDuree());
-          
+        if (d == null) {
+            System.out.println("Il faut sélectionner une demande à modifier.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mauvaise sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Il faut selectionner une demande à modifier.");
+            alert.show();
+            return;
+
+        }
+        c.setEtatModifierDemande(d.getDuree());
+
     }
 
     /**
@@ -136,6 +134,6 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c, int i, int j) {
-    	c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j));
+        c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j));
     }
 }
