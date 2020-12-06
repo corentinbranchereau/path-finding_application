@@ -12,7 +12,7 @@ import fr.hexaone.model.TypeIntersection;
  * @author HexaOne
  * @version 1.0
  */
-public class SupprimerDemandeCommand implements Command{
+public class SupprimerDemandeCommand implements Command {
 
     /**
      * Le planning associé
@@ -31,14 +31,15 @@ public class SupprimerDemandeCommand implements Command{
 
     /**
      * Constructeur de la suppression de demande
+     * 
      * @param planning
      * @param demande
-     * @param index de l'ajout dans la liste
+     * @param index    de l'ajout dans la liste
      */
-    public SupprimerDemandeCommand(Planning planning, Demande demande){
+    public SupprimerDemandeCommand(Planning planning, Demande demande) {
         this.planning = planning;
         this.demande = demande;
-        this.index=planning.getDemandesOrdonnees().indexOf(demande);
+        this.index = planning.getDemandesOrdonnees().indexOf(demande);
     }
 
     /**
