@@ -25,7 +25,6 @@ public class EtatCarteChargee implements State {
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);

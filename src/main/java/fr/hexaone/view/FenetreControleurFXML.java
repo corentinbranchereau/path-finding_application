@@ -1,12 +1,8 @@
 package fr.hexaone.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -46,8 +42,13 @@ public class FenetreControleurFXML {
      */
     @FXML
     private MenuItem undoItem ;
-    
-    
+
+    /**
+     * Menu d'aide pour l'utilisateur
+     */
+    @FXML
+    private MenuItem aide;
+
     /**
      * Item du menu permettant de faire un redo
      */
@@ -168,18 +169,10 @@ public class FenetreControleurFXML {
     private TextFlow depotTextInformation;
 
     /**
-     * Bouton qui permet d'afficher l'aide de l'application
+     * Renvoie le menu item d'aide pour le joueur
      */
-    @FXML
-    private Button boutonAide;
-
-    /**
-     * Renvoie le bouton permettant d'afficher l'aide de l'application
-     * 
-     * @return le bouton
-     */
-    public Button getBoutonAide() {
-        return boutonAide;
+    public MenuItem getAide(){
+        return aide;
     }
 
     /**

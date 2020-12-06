@@ -54,7 +54,6 @@ public class EtatModifierDemande implements State {
 
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
@@ -131,7 +130,7 @@ public class EtatModifierDemande implements State {
     /**
      * Setter de l'idIntersection
      * 
-     * @param idIntersection1
+     * @param idIntersection
      */
     public void setIdIntersection(Long idIntersection) {
         this.idIntersection = idIntersection;

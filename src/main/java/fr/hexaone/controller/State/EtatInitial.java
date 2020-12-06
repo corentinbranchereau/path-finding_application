@@ -24,7 +24,6 @@ public class EtatInitial implements State {
         c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
@@ -33,7 +32,6 @@ public class EtatInitial implements State {
         // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
 
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
-        c.getFenetre().getFenetreControleur().getboutonModifierPlanning().setDisable(true);
         
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);

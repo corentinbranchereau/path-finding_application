@@ -40,13 +40,15 @@
                   <MenuItem fx:id="chargerRequetesItem" mnemonicParsing="false" text="Charger demande de livraison" />
                   <MenuItem fx:id="quitterItem" mnemonicParsing="false" text="Quitter" />
                </items>
-               </Menu>
-               <Menu mnemonicParsing="false" text="Edition">
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edition">
                <items>
                   <MenuItem fx:id="undoItem" mnemonicParsing="false" text="Undo" />
                   <MenuItem fx:id="redoItem" mnemonicParsing="false" text="Redo" />
-
                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Aide">
+               <MenuItem fx:id="aide" mnemonicParsing="false" text="Afficher l'aide" />
             </Menu>
          </menus>
          <VBox.margin>
@@ -76,11 +78,6 @@
                         <Button fx:id="boutonNouvelleRequete" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Ajouter demande de livraison">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="boutonAide" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="150.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Afficher l'aide">
-                           <HBox.margin>
-                              <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
                      </children>
