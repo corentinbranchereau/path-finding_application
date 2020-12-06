@@ -669,7 +669,6 @@ public class VueGraphique {
      * @param carte   La carte actuelle de l'application, contenant les
      *                intersections
      * @param trajet  Le trajet à dessiner
-     * @param couleur La couleur du trajet
      */
     private void afficherTrajet(Carte carte, Trajet trajet) {
         // On récupère la couleur du trajet
