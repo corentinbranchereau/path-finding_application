@@ -11,9 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Permet d'ouvrir un fichier et de version type (XML). Implémente FileFilter du

@@ -1,17 +1,12 @@
 package fr.hexaone.controller.State;
 
-import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.ModifierPlanningCommand;
 import fr.hexaone.controller.Command.SupprimerDemandeCommand;
 import fr.hexaone.controller.Command.SupprimerRequeteCommand;
+import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Demande;
-import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
-import fr.hexaone.model.Trajet;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.paint.Color;
 
 /**
  * Implémentation d'un State représentant l'état de l'application lorsqu'une

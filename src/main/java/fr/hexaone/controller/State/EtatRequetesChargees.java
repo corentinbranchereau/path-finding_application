@@ -1,8 +1,6 @@
 package fr.hexaone.controller.State;
 
 import fr.hexaone.controller.Controleur;
-import fr.hexaone.model.Trajet;
-import javafx.scene.paint.Color;
 
 /**
  * Implémentation d'un State représentant l'état de l'application lorsque les

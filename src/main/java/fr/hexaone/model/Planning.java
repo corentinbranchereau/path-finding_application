@@ -1,9 +1,8 @@
 package fr.hexaone.model;
 
-import java.lang.reflect.Array;
-import java.util.*;
-
 import org.javatuples.Pair;
+
+import java.util.*;
 
 // TODO
 // Set pour les intersections dans le calcul des plus courts trajets

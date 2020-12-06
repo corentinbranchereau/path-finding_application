@@ -1,22 +1,6 @@
 package fr.hexaone.view;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Demande;
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Segment;
-import fr.hexaone.model.TypeIntersection;
+import fr.hexaone.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +9,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.util.Pair;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Permet d'afficher la partie textuelle de l'IHM.

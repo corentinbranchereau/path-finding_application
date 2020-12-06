@@ -1,17 +1,6 @@
 package fr.hexaone.utils;
 
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Carte;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import fr.hexaone.model.Segment;
+import fr.hexaone.model.*;
 import fr.hexaone.utils.exception.BadFileTypeException;
 import fr.hexaone.utils.exception.IllegalAttributException;
 import fr.hexaone.utils.exception.RequestOutOfMapException;
@@ -19,6 +8,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**

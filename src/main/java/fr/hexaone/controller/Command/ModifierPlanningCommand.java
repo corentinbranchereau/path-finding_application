@@ -1,10 +1,10 @@
 package fr.hexaone.controller.Command;
 
-import java.util.Collections;
-import java.util.List;
-
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Commande de modification du planning avec le drag n drop

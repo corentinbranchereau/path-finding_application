@@ -2,10 +2,6 @@ package fr.hexaone.controller.Command;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Commande d'ajout de demande en suivant le design pattern COMMAND.

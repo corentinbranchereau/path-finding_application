@@ -1,12 +1,14 @@
 package fr.hexaone.controller.State;
 
 import fr.hexaone.controller.Command.AjouterDemandeCommand;
-import fr.hexaone.controller.Controleur;
 import fr.hexaone.controller.Command.AjouterRequeteCommand;
-import fr.hexaone.model.*;
+import fr.hexaone.controller.Controleur;
+import fr.hexaone.model.Demande;
+import fr.hexaone.model.Requete;
+import fr.hexaone.model.Segment;
+import fr.hexaone.model.TypeIntersection;
 import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert;
-import javafx.scene.paint.Color;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

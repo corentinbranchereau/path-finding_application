@@ -1,22 +1,6 @@
 package fr.hexaone.view;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Demande;
-import fr.hexaone.model.Intersection;
-import fr.hexaone.model.Planning;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Segment;
-import fr.hexaone.model.Trajet;
-import fr.hexaone.model.TypeIntersection;
+import fr.hexaone.model.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -29,6 +13,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
+import java.util.*;
 
 /**
  * Permet d'afficher la partie graphique de l'IHM.

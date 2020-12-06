@@ -2,13 +2,11 @@ package fr.hexaone.controller;
 
 import fr.hexaone.controller.Command.ListOfCommands;
 import fr.hexaone.controller.State.*;
-import fr.hexaone.view.Fenetre;
-import javafx.stage.Stage;
-
 import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
-import fr.hexaone.model.Requete;
 import fr.hexaone.model.Planning;
+import fr.hexaone.view.Fenetre;
+import javafx.stage.Stage;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions

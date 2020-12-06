@@ -1,10 +1,10 @@
 package fr.hexaone.controller.Command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Commande de suppression de requête en suivant le design pattern COMMAND.

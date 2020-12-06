@@ -1,10 +1,10 @@
 package fr.hexaone.model;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class Demande {
 

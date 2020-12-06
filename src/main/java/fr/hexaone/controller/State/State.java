@@ -1,29 +1,26 @@
 package fr.hexaone.controller.State;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Optional;
-
 import fr.hexaone.controller.Command.ListOfCommands;
 import fr.hexaone.controller.Controleur;
+import fr.hexaone.model.Carte;
+import fr.hexaone.model.Demande;
+import fr.hexaone.model.Planning;
+import fr.hexaone.model.Requete;
 import fr.hexaone.utils.DTDType;
 import fr.hexaone.utils.Utils;
+import fr.hexaone.utils.XMLDeserializer;
+import fr.hexaone.utils.XMLFileOpener;
 import fr.hexaone.utils.exception.*;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import fr.hexaone.model.Carte;
-import fr.hexaone.model.Demande;
-import fr.hexaone.model.Requete;
-import fr.hexaone.model.Planning;
-import fr.hexaone.utils.XMLDeserializer;
-import fr.hexaone.utils.XMLFileOpener;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Interface implémentant le design pattern STATE pour la gestion des évènements

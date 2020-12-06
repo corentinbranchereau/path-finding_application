@@ -1,7 +1,5 @@
 package fr.hexaone.controller.Command;
 
-import fr.hexaone.controller.Command.Command;
-
 import java.util.LinkedList;
 
 /**
