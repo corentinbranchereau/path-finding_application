@@ -152,6 +152,10 @@ public class VueTextuelle {
         fenetre.setListeDemandes(listeDemandes);
         this.requetesControleur.getDemandeTable().setItems(listeDemandes);
 
+        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        if (this.nomDepot.isEmpty()) {
+            this.nomDepot = depotName;
+        }
         String depotString = "★ Dépot : " + nomDepot + "\r\n";
         Text texteDepot = new Text(depotString);
         texteDepot.setFill(Color.RED);
