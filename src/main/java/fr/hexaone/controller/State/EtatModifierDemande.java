@@ -5,6 +5,7 @@ import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.TypeIntersection;
 import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,8 +104,13 @@ public class EtatModifierDemande implements State {
         }
 
         try {
-        c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(),
-                Integer.parseInt(durationField), idIntersection));
+            if ( !c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(), Integer.parseInt(durationField), idIntersection)) ){
+                Alert messageAlerte = new Alert(AlertType.INFORMATION);
+                messageAlerte.setTitle("Information");
+                messageAlerte.setHeaderText(null);
+                messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+                messageAlerte.showAndWait();
+            }
         }
         
         catch (NumberFormatException e) {

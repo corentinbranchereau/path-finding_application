@@ -7,6 +7,7 @@ import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * Implémentation d'un State représentant l'état de l'application lorsqu'une
@@ -72,11 +73,16 @@ public class EtatTourneeCalcule implements State {
         // TODO : Créer un marqeur car point orphelin
 
         // TODO : récupérer depuis la vue graphique/textuelle l'index
-        c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
-        
-        c.resetDemandeSelectionnee();
-
-        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+        if ( c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande)) ) {
+            c.resetDemandeSelectionnee();
+            c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+        } else {
+            Alert messageAlerte = new Alert(AlertType.INFORMATION);
+            messageAlerte.setTitle("Information");
+            messageAlerte.setHeaderText(null);
+            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+            messageAlerte.showAndWait();
+        }
 
     }
 
@@ -96,11 +102,16 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
-        
-        c.resetDemandeSelectionnee();
-
-        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+        if ( c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete)) ) {
+            c.resetDemandeSelectionnee();
+            c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+        } else {
+            Alert messageAlerte = new Alert(AlertType.INFORMATION);
+            messageAlerte.setTitle("Information");
+            messageAlerte.setHeaderText(null);
+            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+            messageAlerte.showAndWait();
+        }
 
     }
 
@@ -128,6 +139,12 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c, int i, int j) {
-        c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j));
+        if ( !c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j)) ) {
+            Alert messageAlerte = new Alert(AlertType.INFORMATION);
+            messageAlerte.setTitle("Information");
+            messageAlerte.setHeaderText(null);
+            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+            messageAlerte.showAndWait();
+        }
     }
 }

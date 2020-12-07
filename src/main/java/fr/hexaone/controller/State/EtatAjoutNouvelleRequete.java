@@ -9,6 +9,7 @@ import fr.hexaone.model.Segment;
 import fr.hexaone.model.TypeIntersection;
 import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -183,7 +184,13 @@ public class EtatAjoutNouvelleRequete implements State {
 
                 Requete nouvelleRequete = new Requete(idIntersection1, Integer.parseInt(pickUpDurationField), nomPickup,
                         idIntersection2, Integer.parseInt(deliveryDurationField), nomDelivery);
-                c.getListOfCommands().add(new AjouterRequeteCommand(c.getPlanning(), nouvelleRequete));
+                if ( !c.getListOfCommands().add(new AjouterRequeteCommand(c.getPlanning(), nouvelleRequete))) {
+                    Alert messageAlerte = new Alert(AlertType.INFORMATION);
+                    messageAlerte.setTitle("Information");
+                    messageAlerte.setHeaderText(null);
+                    messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+                    messageAlerte.showAndWait();
+                }
 
             } else {
                 // Pickup or Delivery
@@ -206,7 +213,13 @@ public class EtatAjoutNouvelleRequete implements State {
                             TypeIntersection.LIVRAISON);
                     nouvelleDemande = nouvelleRequete.getDemandeLivraison();
                 }
-                c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande));
+                if ( !c.getListOfCommands().add(new AjouterDemandeCommand(c.getPlanning(), nouvelleDemande))) {
+                    Alert messageAlerte = new Alert(AlertType.INFORMATION);
+                    messageAlerte.setTitle("Information");
+                    messageAlerte.setHeaderText(null);
+                    messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
+                    messageAlerte.showAndWait();
+                }
             }
 
         } catch (NumberFormatException e) {

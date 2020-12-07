@@ -69,9 +69,9 @@ public class ModifierDemandeCommand implements Command{
      * @inheritDoc
      */
     @Override
-    public void doCommand() {
+    public boolean doCommand() {
     	
-        planning.modifierDemande(demande, dureeNouvelle,idIntersectionGeoNouveau);
+        return planning.modifierDemande(demande, dureeNouvelle,idIntersectionGeoNouveau);
     }
 
     /**

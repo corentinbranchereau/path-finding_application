@@ -34,7 +34,7 @@ public class ListOfCommands {
      * Ajoute une commande à la liste des commandes et réalise la commande
      * @param c La commande à ajouter.
      */
-    public void add(Command c){
+    public boolean add(Command c){
         i++;
         if(i<l.size()) {
         	int taille=l.size();
@@ -43,7 +43,12 @@ public class ListOfCommands {
         	}	
         }
         l.add(c);
-        c.doCommand();
+        if ( !c.doCommand() ) {
+            l.remove(i);
+            i--;
+            return false;
+        }
+        return true;
     }
 
     /**

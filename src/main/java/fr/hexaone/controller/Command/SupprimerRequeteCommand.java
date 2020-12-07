@@ -43,8 +43,9 @@ public class SupprimerRequeteCommand implements Command{
      * @inheritDoc
      */
     @Override
-    public void doCommand() {
+    public boolean doCommand() {
         positions = planning.supprimerRequete(requete);
+        return true;
     }
 
     /**
