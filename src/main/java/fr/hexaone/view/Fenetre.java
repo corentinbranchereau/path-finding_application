@@ -13,10 +13,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
@@ -496,7 +498,6 @@ public class Fenetre {
         alert.getDialogPane().setMaxWidth(550D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
-
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10D));
 
