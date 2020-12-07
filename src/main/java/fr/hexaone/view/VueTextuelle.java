@@ -55,8 +55,6 @@ public class VueTextuelle {
      */
     private RequetesControleurFXML requetesControleur;
 
-    private Boolean afficherPremierPlanning = true;
-
     /**
      * constructeur
      */
@@ -73,27 +71,29 @@ public class VueTextuelle {
         if (planning == null)
             return;
 
+        // Affichage des demandes (ordonnées) dans le tableau
         if (planning.getDemandesOrdonnees() != null) {
-            // Affichage des demandes (ordonnées) dans le tableau
-            if (afficherPremierPlanning) {
-                afficherPlanning(planning, planning.getCarte());
-            } else {
-                rafraichirVuePlanning(planning);
-            }
+            AfficherPlanning(planning, planning.getCarte());
             enleverHighlightDemande();
             if (demandeSelectionnee != null)
                 highlightDemande(demandeSelectionnee);
 
+            // Affichage des requêtes si planning non calculé
         } else if (!planning.getRequetes().isEmpty()) {
-            // Affichage des requêtes
-            init();
-            afficherRequetes(planning, planning.getCarte());
+            reinitialiser();
+            AfficherRequetes(planning, planning.getCarte());
+
         } else {
-            init();
+            reinitialiser();
         }
     }
 
-    public void init() {
+    /**
+     * méthode qui réinitialise la vue textuelle et le tableau comme au lancement de
+     * l'application.
+     */
+    public void reinitialiser() {
+
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(
                 "Pour charger une Carte ou des Requêtes, rendez-vous dans 'Fichier', en haut à gauche de l'application. \r\n\r\n"));
@@ -102,14 +102,15 @@ public class VueTextuelle {
     }
 
     /**
-     * Méthode qui permet d'afficher les requetes dans la vue textuelle
+     * Méthode qui permet d'afficher les requetes dans la vue textuelle lors du
+     * chargement d'un fichier de requête (quand le planning n'est pas calculé)
      * 
      * @param planning liste des segments à parcourir
      */
-    public void afficherRequetes(Planning planning, Carte carte) {
+    public void AfficherRequetes(Planning planning, Carte carte) {
 
         // récupération du nom du dépot
-        this.nomDepot = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        this.nomDepot = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
 
         // écriture du point et de l'heure de départ
         Text texteDepot = new Text(
@@ -156,14 +157,21 @@ public class VueTextuelle {
         }
     }
 
-    public void afficherPlanning(Planning planning, Carte carte) {
-        // TODO : Passer la logique applicative dans planning,e t récupérer la
-        // listeDemande dans planning
-        ObservableList<Demande> listeDemandes = creerListeDemandes(planning, carte);
+    /**
+     * Méthode qui permet d'afficher le planning dans la vue textuelle quand
+     * celui-ci est calculé
+     * 
+     * @param planning le planning à afficher
+     * @param carte    la carte permettant de récupérer le nom des intersections
+     *                 (pour le dépot)
+     */
+    public void AfficherPlanning(Planning planning, Carte carte) {
+
+        ObservableList<Demande> listeDemandes = ajouterDemandesDansLaVue(planning);
         fenetre.setListeDemandes(listeDemandes);
         this.requetesControleur.getDemandeTable().setItems(listeDemandes);
 
-        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        String depotName = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
         if (this.nomDepot.isEmpty()) {
             this.nomDepot = depotName;
         }
@@ -187,41 +195,19 @@ public class VueTextuelle {
         requetesControleur.getOrphelineColumn().setVisible(true);
     }
 
-    public void rafraichirVuePlanning(Planning planning) {
-        fenetre.getListeDemandes().clear();
-        fenetre.getListeDemandes().addAll(planning.getDemandesOrdonnees());
-        // this.requetesControleur.getDemandeTable().setItems(fenetre.getListeDemandes());
-    }
-
     /**
      * Méthode qui crée les objets demande à la réception d'un planning
      *
      * @param planning le planning
-     * @param carte    la carte
      * @return une liste observable de demandes
      */
-    public ObservableList<Demande> creerListeDemandes(Planning planning, Carte carte) {
+    public ObservableList<Demande> ajouterDemandesDansLaVue(Planning planning) {
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
 
         listeDemandes.addAll(planning.getDemandesOrdonnees());
 
         return listeDemandes;
-    }
-
-    /**
-     * Méthode qui permet d'afficher le popup demande nouvelle livraison dans la vue
-     * textuelle
-     */
-    public void afficherPopUpNouvelleDemandeLivraison() {
-        // TODO
-    }
-
-    /**
-     * Méthode qui permet de supprimer la demande de livraison sur la vue textuelle
-     */
-    public void afficherSuppressionRequeteVueTextuelle() {
-        // TODO
     }
 
     /**
@@ -233,7 +219,7 @@ public class VueTextuelle {
      * @param intersection l'intersection dont on cherche le nom
      * @return String: le nom de la rue du dépot
      */
-    private String getNomIntersection(Planning planning, Carte carte, Intersection intersection) {
+    private String getNomIntersection(Planning planning, Intersection intersection) {
 
         Set<Segment> segments = intersection.getSegmentsPartants();
         String nomIntersection = "";
