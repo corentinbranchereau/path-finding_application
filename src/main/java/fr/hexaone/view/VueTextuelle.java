@@ -1,6 +1,7 @@
 package fr.hexaone.view;
 
 import fr.hexaone.model.*;
+import fr.hexaone.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -125,7 +127,7 @@ public class VueTextuelle {
         try {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
+            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"requetes.fxml").toExternalForm().split(":")[1]);
             AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.

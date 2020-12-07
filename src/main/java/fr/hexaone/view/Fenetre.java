@@ -147,7 +147,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/fenetre.fxml");
+            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"fenetre.fxml").toExternalForm().split(":")[1]);
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -173,7 +173,7 @@ public class Fenetre {
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
+            stage.getIcons().add(new Image(Utils.obtenirURLRessource(this,"logo-hexa.png").toExternalForm()));
 
             this.stage.show();
 
@@ -496,7 +496,7 @@ public class Fenetre {
      */
     public void afficherAide(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Utils.obtenirURLRessource(this,"logo-hexa.png").toExternalForm()));
         alert.getDialogPane().setMaxWidth(550D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");

@@ -19,18 +19,18 @@
   <dependencies>
     <!-- Junit 5 -->
     <dependency>
-    
+
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.7.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.javatuples</groupId>
-    <artifactId>javatuples</artifactId>
-    <version>1.2</version>
-	</dependency>
-    
+      <groupId>org.javatuples</groupId>
+      <artifactId>javatuples</artifactId>
+      <version>1.2</version>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -113,7 +113,7 @@
           <artifactId>javafx-maven-plugin</artifactId>
           <version>0.0.5</version>
           <configuration>
-            <mainClass>fr.hexaone.App</mainClass>
+            <mainClass>fr.hexaone.LanceurApp</mainClass>
           </configuration>
         </plugin>
       </plugins>
@@ -125,6 +125,27 @@
         <configuration>
           <source>11</source>
           <target>11</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>fr.hexaone.LanceurApp</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
     </plugins>
