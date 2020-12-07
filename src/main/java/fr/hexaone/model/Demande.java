@@ -131,8 +131,6 @@ public class Demande {
      * @return renvoie le type formaté avec l'icone correspondant
      */
     public StringProperty getTypeProperty() {
-        if (typeIntersection == TypeIntersection.DEPOT)
-            return new SimpleStringProperty("★ dépot");
         if (typeIntersection == TypeIntersection.COLLECTE)
             return new SimpleStringProperty("■ collecte");
         if (typeIntersection == TypeIntersection.LIVRAISON)

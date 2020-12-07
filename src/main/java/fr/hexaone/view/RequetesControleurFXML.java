@@ -6,10 +6,13 @@ import fr.hexaone.model.TypeIntersection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -109,9 +112,31 @@ public class RequetesControleurFXML {
 
         contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
 
-        // définit le type de case affiché dans le tableau, et les évènements associés
-        // aux cases.
+        // Création des tooltip d'erreur
+        Tooltip tooltipCollecteLivraisonReversed = new Tooltip(
+                "Cette Collecte est effectuée après sa livraison associée");
+        tooltipCollecteLivraisonReversed.setShowDelay(new Duration(0));
+        tooltipCollecteLivraisonReversed.setHideDelay(new Duration(0));
+
+        Tooltip tooltipLivraisonSeule = new Tooltip("Cette Livraison n'est associée à aucune collecte");
+        tooltipLivraisonSeule.setShowDelay(new Duration(0));
+        tooltipLivraisonSeule.setHideDelay(new Duration(0));
+
+        Tooltip tooltipLivraisonCollecteReversed = new Tooltip(
+                "Cette Livraison est effectuée avant sa collecte associée");
+        tooltipLivraisonCollecteReversed.setShowDelay(new Duration(0));
+        tooltipLivraisonCollecteReversed.setHideDelay(new Duration(0));
+
+        Tooltip tooltipCollecteSeule = new Tooltip("Cette Collecte n'est associée à aucune livraison");
+        tooltipCollecteSeule.setShowDelay(new Duration(0));
+        tooltipCollecteSeule.setHideDelay(new Duration(0));
+
+        /**
+         * définit le type de case affiché dans le tableau, et les évènements associés
+         * aux cases.
+         */
         demandeTable.setRowFactory(tv -> {
+
             TableRow<Demande> row = new TableRow<Demande>() {
                 @Override
                 public void updateIndex(int i) {
@@ -126,20 +151,88 @@ public class RequetesControleurFXML {
                     doUpdateItem(item);
                 }
 
+                /**
+                 * méthode qui se lance à chaque fois qu'une ligne du tableau est mise à jour.
+                 * On y définit la couleur des cases, et les tooltip d'erreur à afficher si
+                 * nécessaire
+                 * 
+                 * @param item l'objet demande associé à la ligne mise à jour
+                 */
                 protected void doUpdateItem(Demande item) {
                     if (item != null) {
                         Map<Requete, Color> mapCouleur = fenetre.getMapCouleurRequete();
                         Color couleur = mapCouleur.get(item.getRequete());
                         if (getChildren().size() > 0) {
                             ((Cell) getChildren().get(0)).setTextFill(couleur);
+
+                            if (getChildren().size() > 3) {
+                                Cell textCell = (Cell) getChildren().get(4);
+                                textCell.setTextFill(Color.RED);
+                                Boolean reversed = false;
+
+                                Demande itemAssocie;
+                                if (item.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                                    itemAssocie = item.getRequete().getDemandeLivraison();
+                                } else {
+                                    itemAssocie = item.getRequete().getDemandeCollecte();
+                                }
+                                if (itemAssocie != null) {
+                                    int indexItemAssocie = demandeTable.getItems().indexOf(itemAssocie);
+
+                                    if ((item.getTypeIntersection() == TypeIntersection.COLLECTE
+                                            && this.getIndex() > indexItemAssocie)
+                                            || (item.getTypeIntersection() == TypeIntersection.LIVRAISON
+                                                    && this.getIndex() < indexItemAssocie)) {
+                                        reversed = true;
+
+                                    }
+                                }
+                                if (item.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                                    if (reversed) {
+                                        textCell.setText(" ! ");
+                                        Tooltip.install(textCell, tooltipCollecteLivraisonReversed);
+
+                                    } else {
+                                        textCell.setText(item.getOrphelineProperty().get());
+                                        if (item.getOrphelineProperty().get() != null) {
+
+                                            Tooltip.install(textCell, tooltipCollecteSeule);
+                                        } else {
+                                            Tooltip.uninstall(textCell, tooltipCollecteSeule);
+                                            Tooltip.uninstall(textCell, tooltipCollecteLivraisonReversed);
+                                        }
+                                    }
+
+                                } else if (item.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                                    if (reversed) {
+                                        textCell.setText(" ! ");
+
+                                        Tooltip.install(textCell, tooltipLivraisonCollecteReversed);
+
+                                    } else {
+                                        textCell.setText(item.getOrphelineProperty().get());
+                                        if (item.getOrphelineProperty().get() != null) {
+
+                                            Tooltip.install(textCell, tooltipLivraisonSeule);
+                                        } else {
+                                            Tooltip.uninstall(textCell, tooltipLivraisonSeule);
+                                            Tooltip.uninstall(textCell, tooltipLivraisonCollecteReversed);
+                                        }
+                                    }
+                                }
+                            }
+                            setTextFill(couleur);
                         }
-                        setTextFill(couleur);
                     }
                 }
             };
 
             // On ajoute l'entrée <indx, ligne> dans la map
             this.mapIndexLignes.put(row.getIndex(), row);
+
+            /**
+             * évènement click droit sur une case du tableau appelant le menu contextuel
+             */
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent event) {
@@ -152,6 +245,9 @@ public class RequetesControleurFXML {
                 }
             });
 
+            /**
+             * évènement d'une ligne du tableau cliquée et déplacée
+             */
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
                     Integer index = row.getIndex();
@@ -169,6 +265,9 @@ public class RequetesControleurFXML {
                 }
             });
 
+            /**
+             * évènement d'une ligne du tableau déplacée dessus une autre
+             */
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
@@ -179,74 +278,36 @@ public class RequetesControleurFXML {
                 }
             });
 
+            /**
+             * evenement d'une ligne du tableau lachée sur une autre
+             */
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    int droppedIndex = row.getIndex();
-                    Boolean doDrop = false;
+                    Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+                    int dropIndex;
 
-                    Demande draggedDemande = demandeTable.getItems().get(draggedIndex);
-                    Demande draggedDemandeOpposee;
-                    if (draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE) {
-                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeLivraison();
-                    } else {
-                        draggedDemandeOpposee = draggedDemande.getRequete().getDemandeCollecte();
-                    }
-                    if (draggedDemandeOpposee != null) {
-                        int draggedIndexOposee = demandeTable.getItems().indexOf(draggedDemandeOpposee);
+                    if (row.isEmpty())
+                        dropIndex = demandeTable.getItems().size();
+                    else
+                        dropIndex = row.getIndex();
 
-                        if ((draggedDemande.getTypeIntersection() == TypeIntersection.COLLECTE
-                                && droppedIndex < draggedIndexOposee)
-                                || (draggedDemande.getTypeIntersection() == TypeIntersection.LIVRAISON
-                                        && droppedIndex > draggedIndexOposee)) {
-                            doDrop = true;
+                    indexDemandeArrivee = dropIndex;
+                    demandeTable.getItems().add(dropIndex, draggedPerson);
+                    event.setDropCompleted(true);
 
-                        } else {
-                            Alert alert = new Alert(AlertType.CONFIRMATION);
-                            alert.setTitle(" Déplacer ce point ?");
-                            alert.setHeaderText(null);
-                            alert.setContentText(
-                                    "Vous êtes sur le point de placer un point de livraison avant sa collecte. Continuer ?");
-
-                            Optional<ButtonType> decision = alert.showAndWait();
-                            if (decision.get() == ButtonType.OK) {
-                                doDrop = true;
-                            } else {
-                                doDrop = false;
-                            }
-                        }
-                    } else {
-                        doDrop = false;
-                    }
-
-                    if (doDrop) {
-                        Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
-
-                        int dropIndex;
-
-                        if (row.isEmpty()) {
-                            dropIndex = demandeTable.getItems().size();
-                        } else {
-                            dropIndex = row.getIndex();
-                        }
-
-                        indexDemandeArrivee = dropIndex;
-
-                        demandeTable.getItems().add(dropIndex, draggedPerson);
-
-                        event.setDropCompleted(true);
-                        demandeTable.getSelectionModel().select(dropIndex);
-
-                        this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
-                    }
-
+                    demandeTable.getSelectionModel().select(dropIndex);
+                    this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
 
                 }
             });
 
+            /**
+             * Evenement du click de souris
+             */
             row.setOnMouseClicked(event -> {
                 if (event.getButton() != MouseButton.SECONDARY) {
                     if (row.getItem() != null)
@@ -259,6 +320,7 @@ public class RequetesControleurFXML {
         });
 
         typeColumn.setPrefWidth(typeColumn.getPrefWidth() + 1);
+
     }
 
     /**
