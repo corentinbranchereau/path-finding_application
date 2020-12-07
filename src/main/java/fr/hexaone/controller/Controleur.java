@@ -255,6 +255,10 @@ public class Controleur {
         rafraichirVues(false);
     }
 
+    public void reinitialiserCommandes() {
+        l.reinitialiser();
+    }
+
     /**
      * Sélectionne une demande dans la vue textuelle de l'application.
      * 
