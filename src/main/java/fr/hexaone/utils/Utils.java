@@ -1,5 +1,6 @@
 package fr.hexaone.utils;
 
+import fr.hexaone.controller.Controleur;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -9,6 +10,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * Classe Utils contenant des méthodes génériques pouvant servir
@@ -67,6 +70,14 @@ public class Utils {
         Label label = new Label("");
         label.setPadding(new Insets(0D,0D,valeur,0D));
         return label;
+    }
+
+    /**
+     * Permet de savoir si l'application tourne dans un JAR ou dans l'IDE
+     * @return Vraie si l'application tourne sur un JAR, faux s'il tourne dans un IDE.
+     */
+    public static boolean tourneSurJar(Object o){
+        return Objects.equals(o.getClass().getResource("").getProtocol(),"jar");
     }
 
 }
