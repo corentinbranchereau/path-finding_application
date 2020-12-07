@@ -227,8 +227,6 @@ public class EtatAjoutNouvelleRequete implements State {
             Utils.alertHelper(this,"Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !", Alert.AlertType.ERROR);
             return;
         } finally {
-            idIntersection1 = null;
-            idIntersection2 = null;
             this.annuler(c);
         }
     }
@@ -238,9 +236,9 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void annuler(Controleur c) {
-        // idIntersection1 = null;
-        // idIntersection2 = null;
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
+        idIntersection1 = null;
+        idIntersection2 = null;
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatTourneeCalcule();
     }
 

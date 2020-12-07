@@ -904,8 +904,9 @@ public class VueGraphique {
      * Déselectionne la totalité des intersections sélectionnées
      */
     public void nettoyerIntersectionsSelectionnees() {
-        for (Long l : listIntersectionsSelectionnees) {
-            this.deselectionneIntersection(l);
+        for (int i = listIntersectionsSelectionnees.size() - 1; i >= 0; i--) {
+            mapIntersections.get(listIntersectionsSelectionnees.get(i)).setViewOrder(0D);
+            this.deselectionneIntersection(listIntersectionsSelectionnees.get(i));
         }
     }
 
