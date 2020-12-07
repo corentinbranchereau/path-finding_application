@@ -1,6 +1,5 @@
 package fr.hexaone.utils;
 
-import fr.hexaone.controller.Controleur;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -12,9 +11,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Objects;
 
 /**
  * Classe Utils contenant des méthodes génériques pouvant servir

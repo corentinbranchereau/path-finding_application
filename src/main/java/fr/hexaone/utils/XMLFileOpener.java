@@ -2,7 +2,6 @@ package fr.hexaone.utils;
 
 import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
-import jdk.jshell.execution.Util;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -12,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  * Permet d'ouvrir un fichier et de version type (XML). Implémente FileFilter du
