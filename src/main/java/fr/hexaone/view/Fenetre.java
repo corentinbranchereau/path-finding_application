@@ -25,7 +25,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
 
+import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -496,9 +499,12 @@ public class Fenetre {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
                 .add(new Image(Utils.obtenirURLRessource(this, "logo-hexa.png").toExternalForm()));
-        alert.getDialogPane().setMaxWidth(550D);
+        alert.getDialogPane().setMaxWidth(600D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
 
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10D));
@@ -543,7 +549,9 @@ public class Fenetre {
                 "Vous avez commis une erreur lors de l'amélioration d'une tournée calculée ? Aucun problème ! Il est possible d'annuler et de rejouer chaque action avec les raccourcis clavier CTRL+Z (undo) et CTRL+Y (redo), ou en passant par le menu \"Edition\""));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
-        alert.getDialogPane().setContent(vBox);
+        scrollPane.setContent(vBox);
+
+        alert.getDialogPane().setContent(scrollPane);
 
         alert.show();
     }
