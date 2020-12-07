@@ -147,7 +147,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/fenetre.fxml");
+            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"fenetre.fxml").toExternalForm().split(":")[1]);
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
