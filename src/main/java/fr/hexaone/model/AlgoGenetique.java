@@ -13,45 +13,72 @@ import java.util.*;
  * @version 1.0
  */
 public abstract class AlgoGenetique {
-	
-	  int sigma ; // Nb chromosomes max dans une population
-      double delta ;// Minimum d'ecart entre les valeurs dans la population
-      double p ; // probabilité d'améliorer avec du Local Search un enfant
-      int nMax ;// Nb max d'itérations pour générer une pop initiale
-      int alphamax ;// Nb max de crossovers productifsList<Pair<List<Object>, Object>>
-      int BetaMax ;// Nb max de crossosovers sans améliorer la solution
-      int maxIter ;//Nb max d'iterations d'affilé à ne pas trouver de solution
-      
-      /**
-       * population constituée d'une liste d'objets associée à un coût
-       */
-      List<Pair<List<Object>, Double>> population;
-      
-      /**
-       * Comparateur afin de classer les chromosomes au sein d'une population dans
-       * l'ordre croissant des coûts
-       *
-       * @param depot
-       * @param requetes
-       */
-      protected final Comparator<Pair<List<Object>, Double>> ComparatorChromosome = new Comparator<Pair<List<Object>, Double>>() {
 
-          @Override
-          public int compare(Pair<List<Object>, Double> e1, Pair<List<Object>, Double> e2) {
-              return (int) (e1.getValue1() - e2.getValue1());
-          }
-      };
+	/**
+	*  Nb chromosomes max dans une population
+	*/
+	int sigma;
+	
+	/**
+	 * Minimum d'ecart entre les valeurs dans la population
+	 */
+	double delta;
+	 
+	/**
+	 *Probabilité d'améliorer avec du Local Search un enfant 
+	 */
+    double p; 
+    
+    /**
+     *Nb max d'itérations pour générer une pop initiale 
+     */
+    int nMax ;
+    
+    /**
+     *Nb max de crossovers productifs
+     */
+    int alphamax ;
+    
+    /**
+     * Nb max de crossosovers sans améliorer la solution
+     */
+    int BetaMax ;
+    
+    /**
+     *Nb max d'iterations d'affilé à ne pas trouver de solution 
+     */
+    int maxIter ;
       
-      /**
-       * Constructeur abstrait de AlgoGentique
-       * @param sigma Nb chromosomes max dans une population
-       * @param delta Minimum d'ecart entre les valeurs dans la population
-       * @param p  probabilité d'améliorer avec du Local Search un enfant
-       * @param nMax Nb max d'itérations pour générer une pop initiale
-       * @param alphaMax  Nb max de crossovers productifs
-       * @param betaMax Nb max de crossosovers sans améliorer la solution
-       * @param maxIter Nb max d'iterations d'affilé à ne pas trouver de solution
-       */
+     /**
+      * population constituée d'une liste d'objets associée à un coût
+      */
+    List<Pair<List<Object>, Double>> population;
+      
+     /**
+      * Comparateur afin de classer les chromosomes au sein d'une population dans
+      * l'ordre croissant des coûts
+      *
+      * @param depot
+      * @param requetes
+      */
+     protected final Comparator<Pair<List<Object>, Double>> ComparatorChromosome = new Comparator<Pair<List<Object>, Double>>() {
+
+         @Override
+         public int compare(Pair<List<Object>, Double> e1, Pair<List<Object>, Double> e2) {
+             return (int) (e1.getValue1() - e2.getValue1());
+         }
+     };
+      
+    /**
+     * Constructeur abstrait de AlgoGentique
+     * @param sigma Nb chromosomes max dans une population
+     * @param delta Minimum d'ecart entre les valeurs dans la population
+     * @param p  probabilité d'améliorer avec du Local Search un enfant
+     * @param nMax Nb max d'itérations pour générer une pop initiale
+     * @param alphaMax  Nb max de crossovers productifs
+     * @param betaMax Nb max de crossosovers sans améliorer la solution
+     * @param maxIter Nb max d'iterations d'affilé à ne pas trouver de solution
+     */
     public AlgoGenetique(int sigma, int delta,int p,int nMax,int alphaMax,int betaMax,int maxIter) {
     	
     	this.sigma=sigma;

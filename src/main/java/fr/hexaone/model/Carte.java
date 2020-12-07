@@ -25,7 +25,7 @@ public class Carte {
 
     /**
      * Getter
-     * @return
+     * @return la map d'intersections
      */
     public Map<Long, Intersection> getIntersections() {
         return intersections;
