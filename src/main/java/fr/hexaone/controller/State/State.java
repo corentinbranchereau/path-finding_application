@@ -12,13 +12,9 @@ import fr.hexaone.utils.XMLDeserializer;
 import fr.hexaone.utils.XMLFileOpener;
 import fr.hexaone.utils.exception.*;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
