@@ -12,7 +12,7 @@ public interface Command {
     /**
      * Exécuter la commande.
      */
-    void doCommand();
+    boolean doCommand();
 
     /**
      * Annuler la commande.

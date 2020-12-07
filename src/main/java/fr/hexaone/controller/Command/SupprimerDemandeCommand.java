@@ -46,7 +46,7 @@ public class SupprimerDemandeCommand implements Command {
      * @inheritDoc
      */
     @Override
-    public void doCommand() {
+    public boolean doCommand() {
         planning.supprimerDemande(demande);
 
         // On fait passer la valeur à null dans la requête associée
@@ -55,6 +55,8 @@ public class SupprimerDemandeCommand implements Command {
         } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
             demande.getRequete().setDemandeLivraison(null);
         }
+
+        return true;
     }
 
     /**

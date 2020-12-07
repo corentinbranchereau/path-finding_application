@@ -4,11 +4,6 @@ import org.javatuples.Pair;
 
 import java.util.*;
 
-// TODO
-// Set pour les intersections dans le calcul des plus courts trajets
-// générer chromosomes aléa, mieux qu'un do while ?
-// treeset pour générer les plus courts trajets
-
 /**
  * Objet contenant toutes les informations relatives au planning d'une tournée "
  *
@@ -103,8 +98,10 @@ public class Planning {
      * 
      * Prérequis : - La liste des requetes - La date de début de la tournée -
      * idDépot
+     * 
+     * @return Vrai si succès
      */
-    public void calculerMeilleurTournee() {
+    public boolean calculerMeilleurTournee() {
 
         // Recherche des chemins des plus courts entre toutes les
         // intersections spéciales (dépots, livraisons et dépot)
@@ -115,7 +112,10 @@ public class Planning {
             intersectionsSpeciales.add(carte.getIntersections().get(r.getDemandeLivraison().getIdIntersection()));
 
         }
-        calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
+        boolean success = calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
+        if (!success) {
+            return false;
+        }
 
         // recherche de la melleure tournéee
         List<Object> demandes = new ArrayList<>();
@@ -134,10 +134,10 @@ public class Planning {
             this.demandesOrdonnees.add((Demande) obj);
         }
 
-        // demandesOrdonnees = ordonnerLesDemandes(demandes); //ordonnerLesDemandes
-
         // Création de la listes des trajets à suivre et calcul des temps
         ordonnerLesTrajetsEtLesDates();
+
+        return true;
     }
 
     /**
@@ -182,60 +182,96 @@ public class Planning {
      * temps et lieux de demandes.
      * 
      * Prérequis : - Avoir les demandes ordonnées.
+     * 
+     * @return Vrai si succès
      */
-    public void recalculerTournee() {
+    public boolean recalculerTournee() {
         // Recalcule tous les plus courts trajets des demandes
         List<Intersection> intersectionsSpeciales = new ArrayList<>();
         intersectionsSpeciales.add(carte.getIntersections().get(idDepot));
         for (Demande demande : demandesOrdonnees) {
             intersectionsSpeciales.add(carte.getIntersections().get(demande.getIdIntersection()));
         }
-        calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
+        boolean success = calculerLesTrajetsLesPlusCourts(intersectionsSpeciales);
+        if (!success) {
+            return false;
+        }
 
         // Recréer une liste de trajet et recalcule les dates des demandes
         ordonnerLesTrajetsEtLesDates();
+        return true;
     }
 
     /**
      * Ajouter une demande seule après avoir déja calculer la meilleure tournée.
+     * 
+     * @return Vrai si succès
      */
-    public void ajouterDemande(Demande demande) {
+    public boolean ajouterDemande(Demande demande) {
         demandesOrdonnees.add(demande);
 
-        recalculerTournee();
+        boolean success = recalculerTournee();
+        
+        if ( !success ) demandesOrdonnees.remove(demande);
+        
+        return success;
     }
 
     /**
      * Modifier une demande seule après avoir déja calculer la meilleure tournée.
+     * 
+     * @return Vrai si succès
      */
-    public void modifierDemande(Demande demande, int duree, Long idIntersection) {
+    public boolean modifierDemande(Demande demande, int duree, Long idIntersection) {
+
+        int prevDuree = demande.getDuree();
+        Long prevIdInter = demande.getIdIntersection();
+
         demande.setDuree(duree);
         demande.setIdIntersection(idIntersection);
-        recalculerTournee();
+
+        boolean success = recalculerTournee();
+        if ( !success ) {
+            demande.setDuree(prevDuree);
+            demande.setIdIntersection(prevIdInter);
+        }
+
+        return success;
     }
 
     /**
      * Ajouter une requete après avoir déja calculé la meilleure tournée.
+     * 
+     * @return Vrai si succès
      */
-    public void ajouterRequete(Requete requete) {
+    public boolean ajouterRequete(Requete requete) {
         requetes.add(requete);
 
         demandesOrdonnees.add(requete.getDemandeCollecte());
         demandesOrdonnees.add(requete.getDemandeLivraison());
 
-        recalculerTournee();
+        boolean success = recalculerTournee();
+
+        if ( !success ) {
+            demandesOrdonnees.remove(requete.getDemandeCollecte());
+            demandesOrdonnees.remove(requete.getDemandeLivraison());
+        }
+
+        return success;
     }
 
     /**
      * Ajouter une requete après avoir déja calculer la meilleure tournée.
+     * 
+     * @return Vrai si succès
      */
-    public void ajouterRequete(Requete requete, List<Integer> positions) {
+    public boolean ajouterRequete(Requete requete, List<Integer> positions) {
         requetes.add(requete);
 
         demandesOrdonnees.add(positions.get(0), requete.getDemandeCollecte());
         demandesOrdonnees.add(positions.get(1), requete.getDemandeLivraison());
 
-        recalculerTournee();
+        return recalculerTournee();
     }
 
     /**
@@ -246,7 +282,6 @@ public class Planning {
 
         ordonnerLesTrajetsEtLesDates();
 
-        System.out.println(demandesOrdonnees.size());
     }
 
     /**
@@ -267,8 +302,6 @@ public class Planning {
 
         ordonnerLesTrajetsEtLesDates();
 
-        System.out.println(demandesOrdonnees.size());
-
         return positions;
     }
 
@@ -283,21 +316,40 @@ public class Planning {
 
     /**
      * Modifer la durée d'une demande
+     * 
+     * @return Vrai si succès
      */
-    public void modifierDemande(Demande demande, Long idIntersection) {
+    public boolean modifierDemande(Demande demande, Long idIntersection) {
+        Long prevIdIntersection = demande.getIdIntersection();
+
         demande.setIdIntersection(idIntersection);
 
-        recalculerTournee();
+        boolean success = recalculerTournee();
+        if ( !success ) {
+            demande.setIdIntersection(prevIdIntersection);
+        }
+
+        return success;
     }
 
     /**
      * Modifer la durée et l'intersection d'une demande
+     * 
+     * @return Vrai si succès
      */
-    public void modifierDemande(Demande demande, Long idIntersection, Integer duree) {
+    public boolean modifierDemande(Demande demande, Long idIntersection, Integer duree) {
+        Long prevIdIntersection = demande.getIdIntersection();
+        
         demande.setIdIntersection(idIntersection);
         demande.setDuree(duree);
 
-        recalculerTournee();
+        boolean success = recalculerTournee();
+
+        if ( !success ) {
+            demande.setIdIntersection(prevIdIntersection);
+        }
+
+        return success;
     }
     
     public void reinitialiserPlanning() {
@@ -323,8 +375,10 @@ public class Planning {
      * paramètre
      * 
      * @param intersections
+     * 
+     * @return Vrai si succès
      */
-    public void calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
+    public boolean calculerLesTrajetsLesPlusCourts(List<Intersection> intersections) {
 
         // Préparation
 
@@ -337,25 +391,12 @@ public class Planning {
         for (Intersection source : intersections) {
 
             source.setDistance(0.);
-
             Set<Intersection> settledIntersections = new HashSet<>();
-
             Set<Intersection> unsettledIntersections = new HashSet<>();
-
-            /*
-             * SortedSet<Intersection> unsettledIntersections = new
-             * TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si
-             * c'est le set le plus efficace pour récupérer le premier
-             *
-             * @Override public int compare(Intersection o1, Intersection o2) { return
-             * (int)(o1.getDistance()-o2.getDistance()); } });
-             */
 
             unsettledIntersections.add(source);
 
             while (unsettledIntersections.size() != 0) {
-
-                // Intersection currentIntersection = unsettledIntersections.first();
 
                 Intersection currentIntersection = getLowestDistanceIntersection(unsettledIntersections);
                 unsettledIntersections.remove(currentIntersection);
@@ -376,11 +417,16 @@ public class Planning {
 
             for (Intersection i : intersections) {
                 String key = sourceId + i.getId();
+                if(i.getDistance() >= Double.MAX_VALUE) {
+                    return false;
+                }
                 TrajetsLesPlusCourts.put(key, new Trajet(i.getCheminLePlusCourt(), i.getDistance()));
             }
 
             allIntersections.forEach((id, intersection) -> intersection.resetIntersection());
         }
+
+        return true;
     }
 
     /**

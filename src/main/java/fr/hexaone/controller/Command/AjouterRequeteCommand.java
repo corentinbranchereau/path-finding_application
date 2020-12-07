@@ -33,8 +33,8 @@ public class AjouterRequeteCommand implements Command{
      * @inheritDoc
      */
     @Override
-    public void doCommand() {
-        planning.ajouterRequete(requete);
+    public boolean doCommand() {
+        return planning.ajouterRequete(requete);
     }
 
     /**

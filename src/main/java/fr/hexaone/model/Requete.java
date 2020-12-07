@@ -22,7 +22,7 @@ public class Requete {
     private Demande demandeLivraison;
 
     /**
-     * 
+     * Couleur utilisée
      */
     private Color couleur;
 

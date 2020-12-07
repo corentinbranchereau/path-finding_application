@@ -47,19 +47,21 @@ public class ModifierPlanningCommand implements Command {
      * @inheritDoc
      */
     @Override
-    public void doCommand() {
+    public boolean doCommand() {
 
     	List<Demande> demandes = planning.getDemandesOrdonnees();
     	
     	if(i <= j) {
     		for(int k=i;k<j;k++)
         		Collections.swap(demandes, k, k + 1);
-    	}
-    	else {
+    	} else {
     		for(int k = i; k > j; k--)
         		Collections.swap(demandes, k, k - 1);	
-    	}
-    	planning.ordonnerLesTrajetsEtLesDates();
+        }
+        
+        planning.ordonnerLesTrajetsEtLesDates();
+        
+        return true;
     }
 
     /**
