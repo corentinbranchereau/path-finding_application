@@ -299,6 +299,20 @@ public class Planning {
 
         recalculerTournee();
     }
+    
+    public void reinitialiserPlanning() {
+    	
+    	this.demandesOrdonnees=null;
+    	this.dateDebut=null;
+    	this.dateFin=null;
+    	this.dureeTotale=null;
+    	this.idDepot=null;
+    	this.listeTrajets=null;
+    	this.requetes.clear();
+
+    }
+    
+    
 
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
