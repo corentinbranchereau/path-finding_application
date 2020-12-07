@@ -2,6 +2,8 @@ package fr.hexaone.model;
 
 import org.javatuples.Pair;
 
+import fr.hexaone.algo.AlgoTSP;
+
 import java.util.*;
 
 /**
