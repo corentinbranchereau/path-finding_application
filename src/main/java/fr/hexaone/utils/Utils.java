@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 /**
@@ -52,6 +53,8 @@ public class Utils {
         Label label = new Label(texte);
         label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC,13D));
         label.setWrapText(true);
+        label.setMaxWidth(520D);
+        label.setTextAlignment(TextAlignment.JUSTIFY);
         return label;
     }
 
