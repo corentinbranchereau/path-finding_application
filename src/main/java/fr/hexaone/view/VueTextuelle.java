@@ -83,14 +83,22 @@ public class VueTextuelle {
             enleverHighlightDemande();
             if (demandeSelectionnee != null)
                 highlightDemande(demandeSelectionnee);
-                
+
         } else if (!planning.getRequetes().isEmpty()) {
             // Affichage des requêtes
+            init();
             afficherRequetes(planning, planning.getCarte());
         } else {
-            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-            this.fenetre.getFenetreControleur().getScrollPane().setContent(null);
+            init();
         }
+    }
+
+    public void init() {
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(
+                "Pour charger une Carte ou des Requêtes, rendez-vous dans 'Fichier', en haut à gauche de l'application. \r\n\r\n"));
+        this.fenetre.getFenetreControleur().getScrollPane().setContent(null);
+        fenetre.getListeDemandes().clear();
     }
 
     /**
@@ -128,7 +136,8 @@ public class VueTextuelle {
         try {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"requetes.fxml").toExternalForm().split(":")[1]);
+            FileInputStream inputFichierFxml = new FileInputStream(
+                    Utils.obtenirURLRessource(this, "requetes.fxml").toExternalForm().split(":")[1]);
             AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.
