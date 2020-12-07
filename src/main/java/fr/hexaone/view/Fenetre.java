@@ -503,7 +503,8 @@ public class Fenetre {
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
                 .add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
         alert.getDialogPane().setMaxWidth(600D);
-        alert.getDialogPane().setMaxHeight(500D);
+        alert.getDialogPane().setMaxHeight(700D);
+        alert.setHeight(700D);
         alert.setY(100D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
