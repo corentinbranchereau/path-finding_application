@@ -13,12 +13,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
@@ -27,11 +25,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
 
-import java.awt.Dimension;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -153,7 +148,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.getFileFromResourceAsStream(this,"fenetre.fxml");
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this,"fenetre.fxml");
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -176,7 +171,7 @@ public class Fenetre {
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image(Utils.getFileFromResourceAsStream(this,"logo-hexa.png")));
+            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this,"logo-hexa.png")));
             this.stage.show();
 
             this.largeurInitialeStage = this.stage.getWidth();
@@ -499,7 +494,7 @@ public class Fenetre {
     public void afficherAide() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
-                .add(new Image(Utils.obtenirURLRessource(this, "logo-hexa.png").toExternalForm()));
+                .add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
         alert.getDialogPane().setMaxWidth(600D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");

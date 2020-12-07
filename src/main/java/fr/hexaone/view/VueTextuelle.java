@@ -134,7 +134,7 @@ public class VueTextuelle {
         try {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.getFileFromResourceAsStream(this,"requetes.fxml");
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this,"requetes.fxml");
             AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.

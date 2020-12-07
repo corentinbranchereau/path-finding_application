@@ -75,7 +75,7 @@ public class Utils {
      * Permet d'obtenir un InputStream vers une ressource que l'on soit dans un JAR ou non
      * @return L'input stream de la ressource pointée
      */
-    public static InputStream getFileFromResourceAsStream(Object o, String fileName) {
+    public static InputStream obtenirInputStreamDepuisPath(Object o, String fileName) {
         ClassLoader classLoader = o.getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         if (inputStream == null) {
