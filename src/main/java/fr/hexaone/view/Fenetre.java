@@ -153,9 +153,6 @@ public class Fenetre {
             // Récupération du controleur FXML
             fenetreControleur = loader.getController();
 
-            // on donne la zone de texte à la vue textuelle
-            this.vueTextuelle.setZoneTexte(this.fenetreControleur.getZoneTexte());
-
             // On fait en sorte que le pane de dessin s'affiche au dessus des autres
             // éléments
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
@@ -494,9 +491,10 @@ public class Fenetre {
     /**
      * Affiche l'aide utilisateur
      */
-    public void afficherAide(){
+    public void afficherAide() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
+                .add(new Image("file:src/main/resources/logo-hexa.png"));
         alert.getDialogPane().setMaxWidth(550D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
@@ -505,35 +503,43 @@ public class Fenetre {
         vBox.setPadding(new Insets(10D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Chargement des fichiers XML"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Afin de charger une carte et des demandes de livraison, il faut se rendre dans le menu Fichier en haut à gauche de l'application et choisir l'option adaptée."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Afin de charger une carte et des demandes de livraison, il faut se rendre dans le menu Fichier en haut à gauche de l'application et choisir l'option adaptée."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Calculer une tournée"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Une fois une carte et des demandes de livraison chargées, il est possible de calculer une tournée en utilisant le bouton \"Lancer le calcul\" disponible sur la vue textuelle de l'application."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Une fois une carte et des demandes de livraison chargées, il est possible de calculer une tournée en utilisant le bouton \"Lancer le calcul\" disponible sur la vue textuelle de l'application."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier l'ordre d'une tournée"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque la tournée est calculée, il est possible de modifier l'ordre d'une tournée en modifiant l'ordre de passage à un point de collecte ou de livraison. Pour ce faire, il suffit de faire un drag'n'drop (sélection du point à déplacer avec la souris en maintenant le clic, tout en le déplaçant vers le bon emplacement) depuis la vue textuelle."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque la tournée est calculée, il est possible de modifier l'ordre d'une tournée en modifiant l'ordre de passage à un point de collecte ou de livraison. Pour ce faire, il suffit de faire un drag'n'drop (sélection du point à déplacer avec la souris en maintenant le clic, tout en le déplaçant vers le bon emplacement) depuis la vue textuelle."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier le lieu d'un évènement"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de modifier le lieu d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle, en choisissant l'option adéquate puis en choisissant une intersection sur la carte."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque que la tournée est calculée, il est possible de modifier le lieu d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle, en choisissant l'option adéquate puis en choisissant une intersection sur la carte."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier la durée d'un évènement"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque que la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Ajouter une demande de livraison"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque la tournée est calculée, il est possible d'ajouter une demande de livraison, partielle ou non, grâce au bouton \"Ajouter une demande de livraison\" depuis la vue textuelle. Ensuite, sélectionner une ou deux intersection(s) sur la carte et remplissez le ou les champ(s) de durée qu'il vous faut. Enfin, valider ou annuler votre saisie."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque la tournée est calculée, il est possible d'ajouter une demande de livraison, partielle ou non, grâce au bouton \"Ajouter une demande de livraison\" depuis la vue textuelle. Ensuite, sélectionner une ou deux intersection(s) sur la carte et remplissez le ou les champ(s) de durée qu'il vous faut. Enfin, valider ou annuler votre saisie."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Supprimer une demande de livraison"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque que la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Annuler ou rejouer une action"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Vous avez commis une erreur lors de l'amélioration d'une tournée calculée ? Aucun problème ! Il est possible d'annuler et de rejouer chaque action avec les raccourcis clavier CTRL+Z (undo) et CTRL+Y (redo), ou en passant par le menu \"Edition\""));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Vous avez commis une erreur lors de l'amélioration d'une tournée calculée ? Aucun problème ! Il est possible d'annuler et de rejouer chaque action avec les raccourcis clavier CTRL+Z (undo) et CTRL+Y (redo), ou en passant par le menu \"Edition\""));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         alert.getDialogPane().setContent(vBox);
