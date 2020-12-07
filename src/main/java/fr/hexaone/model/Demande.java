@@ -276,10 +276,10 @@ public class Demande {
 
     public StringProperty getOrphelineProperty() {
         if (this.typeIntersection == TypeIntersection.COLLECTE) {
-            this.orphelineProperty = requete.getDemandeLivraison() == null ? new SimpleStringProperty("X")
+            this.orphelineProperty = requete.getDemandeLivraison() == null ? new SimpleStringProperty("⚠")
                     : new SimpleStringProperty();
         } else {
-            this.orphelineProperty = requete.getDemandeCollecte() == null ? new SimpleStringProperty("X")
+            this.orphelineProperty = requete.getDemandeCollecte() == null ? new SimpleStringProperty("⚠")
                     : new SimpleStringProperty();
         }
         return orphelineProperty;
