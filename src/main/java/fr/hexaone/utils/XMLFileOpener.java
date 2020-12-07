@@ -105,7 +105,7 @@ public class XMLFileOpener implements FileFilter {
     private File creerXMLTemporaireAvecDTD(String realPath, DTDType dtdType) throws IOException, URISyntaxException {
         //Charge le dtd du dossier ressource
         File dtdFile = File.createTempFile("tmp_hexaone",".dtd");
-        FileUtils.copyInputStreamToFile(Utils.getFileFromResourceAsStream(this,dtdType.getPath()), dtdFile);
+        FileUtils.copyInputStreamToFile(Utils.obtenirInputStreamDepuisPath(this,dtdType.getPath()), dtdFile);
 
         //Créer un fichier temporaire copie de celui passé en paramètre et y ajoute le DTD.
         String[] splits = realPath.split("\\.");
