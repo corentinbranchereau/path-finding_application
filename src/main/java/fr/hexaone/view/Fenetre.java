@@ -25,9 +25,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import jdk.jshell.execution.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,7 +149,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"fenetre.fxml").toExternalForm().split(":")[1]);
+            InputStream inputFichierFxml = Utils.getFileFromResourceAsStream(this,"fenetre.fxml");
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -173,8 +175,8 @@ public class Fenetre {
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image(Utils.obtenirURLRessource(this,"logo-hexa.png").toExternalForm()));
-
+            //stage.getIcons().add(new Image(Utils.obtenirURLRessource(this,"logo-hexa.png").toExternalForm()));
+            stage.getIcons().add(new Image(Utils.getFileFromResourceAsStream(this,"logo-hexa.png")));
             this.stage.show();
 
             this.largeurInitialeStage = this.stage.getWidth();
@@ -496,7 +498,7 @@ public class Fenetre {
      */
     public void afficherAide(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Utils.obtenirURLRessource(this,"logo-hexa.png").toExternalForm()));
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Utils.getFileFromResourceAsStream(this,"logo-hexa.png")));
         alert.getDialogPane().setMaxWidth(550D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");

@@ -14,6 +14,7 @@ import javafx.scene.text.TextFlow;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -128,7 +129,7 @@ public class VueTextuelle {
         try {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"requetes.fxml").toExternalForm().split(":")[1]);
+            InputStream inputFichierFxml = Utils.getFileFromResourceAsStream(this,"requetes.fxml");
             AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.

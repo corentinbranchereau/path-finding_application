@@ -11,6 +11,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
@@ -75,19 +76,16 @@ public class Utils {
     }
 
     /**
-     * Permet d'obtenir une URL vers une ressource que l'on soit dans un JAR ou non
-     * @return L'URL de la ressource, null si l'URL est mal formé
+     * Permet d'obtenir un InputStream vers une ressource que l'on soit dans un JAR ou non
+     * @return L'input stream de la ressource pointée
      */
-    public static URL obtenirURLRessource(Object o, String path) {
-        URL url = o.getClass().getResource(path);
-        try {
-            if (url == null) {
-                url = new URL("file:src/main/resources/" + path);
-            }
-        } catch (MalformedURLException e){
-            e.printStackTrace();
-            url = null;
+    public static InputStream getFileFromResourceAsStream(Object o, String fileName) {
+        ClassLoader classLoader = o.getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("Fichier non trouvé " + fileName);
+        } else {
+            return inputStream;
         }
-        return url;
     }
 }
