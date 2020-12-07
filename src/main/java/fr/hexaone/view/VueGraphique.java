@@ -137,12 +137,12 @@ public class VueGraphique {
     /**
      * Angle Hue (modèle HSB) du début de l'intervalle des couleurs de trajets
      */
-    private final double DEBUT_INTERVALLE_COULEURS_TRAJETS = 60;
+    private final double DEBUT_INTERVALLE_COULEURS_TRAJETS = 0;
 
     /**
      * Angle Hue (modèle HSB) de la fin de l'intervalle des couleurs de trajets
      */
-    private final double FIN_INTERVALLE_COULEURS_TRAJETS = 180;
+    private final double FIN_INTERVALLE_COULEURS_TRAJETS = 200;
 
     /**
      * Constructeur de VueGraphique

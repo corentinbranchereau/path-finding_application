@@ -73,7 +73,7 @@ public class EtatTourneeCalcule implements State {
 
         // TODO : récupérer depuis la vue graphique/textuelle l'index
         c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande));
-
+        
         c.resetDemandeSelectionnee();
 
         c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
@@ -97,7 +97,7 @@ public class EtatTourneeCalcule implements State {
         }
 
         c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete));
-
+        
         c.resetDemandeSelectionnee();
 
         c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);

@@ -1,6 +1,7 @@
 package fr.hexaone.view;
 
 import fr.hexaone.model.*;
+import fr.hexaone.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -30,11 +32,6 @@ public class VueTextuelle {
      * Item de la fenêtre où s'affiche la vue textuelle
      */
     private Fenetre fenetre;
-
-    /**
-     * zone de texte ou afficher les requetes
-     */
-    private TextFlow zoneTexte;
 
     /**
      * Couleur de l'highlight des lignes dans le tableau
@@ -58,6 +55,8 @@ public class VueTextuelle {
      */
     private RequetesControleurFXML requetesControleur;
 
+    private Boolean afficherPremierPlanning = true;
+
     /**
      * constructeur
      */
@@ -76,15 +75,21 @@ public class VueTextuelle {
 
         if (planning.getDemandesOrdonnees() != null) {
             // Affichage des demandes (ordonnées) dans le tableau
-            afficherPlanning(planning, planning.getCarte());
-            enleverHighlightDemande();
-            if (demandeSelectionnee != null) {
-                highlightDemande(demandeSelectionnee);
+            if (afficherPremierPlanning) {
+                afficherPlanning(planning, planning.getCarte());
+            } else {
+                rafraichirVuePlanning(planning);
             }
-
+            enleverHighlightDemande();
+            if (demandeSelectionnee != null)
+                highlightDemande(demandeSelectionnee);
+                
         } else if (!planning.getRequetes().isEmpty()) {
             // Affichage des requêtes
             afficherRequetes(planning, planning.getCarte());
+        } else {
+            fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+            this.fenetre.getFenetreControleur().getScrollPane().setContent(null);
         }
     }
 
@@ -94,9 +99,6 @@ public class VueTextuelle {
      * @param planning liste des segments à parcourir
      */
     public void afficherRequetes(Planning planning, Carte carte) {
-
-        // On vide le zone de texte au cas où des choses sont déjà affichées dedans
-        this.zoneTexte.getChildren().clear();
 
         // récupération du nom du dépot
         this.nomDepot = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
@@ -126,7 +128,7 @@ public class VueTextuelle {
         try {
             // Load textual tab.
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/requetes.fxml");
+            FileInputStream inputFichierFxml = new FileInputStream(Utils.obtenirURLRessource(this,"requetes.fxml").toExternalForm().split(":")[1]);
             AnchorPane personOverview = loader.load(inputFichierFxml);
 
             // Set person overview into the center of root layout.
@@ -176,6 +178,12 @@ public class VueTextuelle {
         requetesControleur.getOrphelineColumn().setVisible(true);
     }
 
+    public void rafraichirVuePlanning(Planning planning) {
+        fenetre.getListeDemandes().clear();
+        fenetre.getListeDemandes().addAll(planning.getDemandesOrdonnees());
+        // this.requetesControleur.getDemandeTable().setItems(fenetre.getListeDemandes());
+    }
+
     /**
      * Méthode qui crée les objets demande à la réception d'un planning
      *
@@ -205,15 +213,6 @@ public class VueTextuelle {
      */
     public void afficherSuppressionRequeteVueTextuelle() {
         // TODO
-    }
-
-    /**
-     * setter permettant de définir la zone de texte de la fenêtre
-     * 
-     * @param zoneTexte
-     */
-    public void setZoneTexte(TextFlow zoneTexte) {
-        this.zoneTexte = zoneTexte;
     }
 
     /**
@@ -304,7 +303,6 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-
         if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());

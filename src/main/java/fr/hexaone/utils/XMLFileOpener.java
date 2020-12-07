@@ -112,7 +112,6 @@ public class XMLFileOpener implements FileFilter {
         } else {
             dtdFile = new File(resource.toURI());
         }
-
         //Créer un fichier temporaire copie de celui passé en paramètre et y ajoute le DTD.
         String[] splits = realPath.split("\\.");
         File tempFile = File.createTempFile("tmp_hexaone","."+splits[splits.length-1]);
