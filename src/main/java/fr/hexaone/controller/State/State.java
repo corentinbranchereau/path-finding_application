@@ -276,6 +276,10 @@ public interface State {
         vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque la tournée est calculée, il est possible de modifier l'ordre d'une tournée en modifiant l'ordre de passage à un point de collecte ou de livraison. Pour ce faire, il suffit de faire un drag'n'drop (sélection du point à déplacer avec la souris en maintenant le clic, tout en le déplaçant vers le bon emplacement) depuis la vue textuelle."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
+        vBox.getChildren().add(Utils.obtenirTitreAide("Modifier le lieu d'un évènement"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de modifier le lieu d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle, en choisissant l'option adéquate puis en choisissant une intersection sur la carte."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier la durée d'un évènement"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
