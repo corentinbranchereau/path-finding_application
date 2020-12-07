@@ -222,6 +222,24 @@ public class RequetesControleurFXML {
                                 }
                             }
                             setTextFill(couleur);
+
+                            // On met à jour la date d'arrivée, la date de départ et le nom
+                            // TODO : le nom n'est pas encore mis à jour dans le modèle à la modification
+                            // d'une demande
+
+                            if (item.getDateArriveeProperty() != null && getChildren().size() == 5) {
+                                Cell dateArriveeCell = (Cell) getChildren().get(1);
+                                dateArriveeCell.setText(item.getDateArriveeProperty().get());
+                            }
+                            if (item.getDateDepartProperty() != null && getChildren().size() == 5) {
+                                Cell dateDepartCell = (Cell) getChildren().get(2);
+                                dateDepartCell.setText(item.getDateDepartProperty().get());
+                            }
+                            if (item.getNomIntersectionProperty() != null && getChildren().size() == 5) {
+                                Cell nomCell = (Cell) getChildren().get(3);
+                                nomCell.setText(item.getNomIntersectionProperty().get());
+                            }
+
                         }
                     }
                 }
