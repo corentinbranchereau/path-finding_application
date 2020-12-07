@@ -186,12 +186,14 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getPaneDessin().setOnScroll(event -> {
-                double facteurZoom;
-                if (event.getTextDeltaY() > 0) {
+            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { //scrollEvent linux
+                event.consume();
+                double facteurZoom = 1.;
+                double scrollAmout = event.getDeltaY();
+                if ( scrollAmout > 0 ) {
                     // Zoom
-                    facteurZoom = 2;
-                } else {
+                    facteurZoom = 2.;
+                } else if ( scrollAmout < 0) {
                     // Dézoom
                     facteurZoom = 0.5;
                 }

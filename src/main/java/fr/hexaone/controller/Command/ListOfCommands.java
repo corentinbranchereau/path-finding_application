@@ -69,5 +69,13 @@ public class ListOfCommands {
     		  l.get(++i).doCommand();
     	}
     }  
+
+    /**
+     * Réinitialiser toutes les commandes.
+     */
+    public void reinitialiser() {
+        l.clear();
+        i=-1;
+    }
     
 }
