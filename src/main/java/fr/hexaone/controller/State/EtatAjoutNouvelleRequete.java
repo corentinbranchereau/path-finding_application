@@ -108,26 +108,26 @@ public class EtatAjoutNouvelleRequete implements State {
         TypeIntersection typeIntersection = null;
         if (idIntersection1 == null && idIntersection2 == null) {
             System.out.println("Il faut sélectionner au moins une intersection.");
-            Utils.alertHelper("Mauvaise sélection", "Il faut selectionner au moins une intersection.",
+            Utils.alertHelper(this,"Mauvaise sélection", "Il faut selectionner au moins une intersection.",
                     Alert.AlertType.ERROR);
             return;
         } else if (idIntersection1 != null && idIntersection2 != null) {
             if (pickUpDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Collecte est vide !");
-                Utils.alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !",
+                Utils.alertHelper(this,"Mauvaise saisie de durée", "Le champ concernant la durée de Collecte est vide !",
                         Alert.AlertType.ERROR);
                 return;
             }
             if (deliveryDurationField.isEmpty()) {
                 System.out.println("Le champ concernant la durée de Livraison est vide !");
-                Utils.alertHelper("Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !",
+                Utils.alertHelper(this,"Mauvaise saisie de durée", "Le champ concernant la durée de Livraison est vide !",
                         Alert.AlertType.ERROR);
                 return;
             }
         } else if (idIntersection2 == null) {
             if (!pickUpDurationField.isEmpty() && !deliveryDurationField.isEmpty()) {
                 System.out.println("Il faut sélectionner deux intersections si l'on renseigne deux durées.");
-                Utils.alertHelper("Mauvaise sélection",
+                Utils.alertHelper(this,"Mauvaise sélection",
                         "Il faut selectionner deux intersections si l'on renseigne deux durées.",
                         Alert.AlertType.ERROR);
                 return;
@@ -135,7 +135,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 typeIntersection = TypeIntersection.COLLECTE;
                 if (!verifieDureeUtilisateur(pickUpDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    Utils.alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper(this,"Mauvaise saisie de durée",
                             "La durée de collecte (en seconde) ne doit contenir que des chiffres !",
                             Alert.AlertType.ERROR);
                     return;
@@ -144,7 +144,7 @@ public class EtatAjoutNouvelleRequete implements State {
                 typeIntersection = TypeIntersection.LIVRAISON;
                 if (!verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("La durée ne doit contenir que des chiffres !");
-                    Utils.alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper(this,"Mauvaise saisie de durée",
                             "La durée de livraison (en seconde) ne doit contenir que des chiffres !",
                             Alert.AlertType.ERROR);
                     return;
@@ -158,7 +158,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
                 if (!verifieDureeUtilisateur(pickUpDurationField) || !verifieDureeUtilisateur(deliveryDurationField)) {
                     System.out.println("Les durées ne doivent contenir que des chiffres !");
-                    Utils.alertHelper("Mauvaise saisie de durée",
+                    Utils.alertHelper(this,"Mauvaise saisie de durée",
                             "Les durées (en secondes) ne doivent contenir que des chiffres !", Alert.AlertType.ERROR);
                     return;
                 }
@@ -211,7 +211,7 @@ public class EtatAjoutNouvelleRequete implements State {
 
         } catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            Utils.alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+            Utils.alertHelper(this,"Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
                     Alert.AlertType.ERROR);
             return;
         } finally {

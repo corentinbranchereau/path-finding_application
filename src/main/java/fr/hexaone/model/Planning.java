@@ -4,11 +4,6 @@ import org.javatuples.Pair;
 
 import java.util.*;
 
-// TODO
-// Set pour les intersections dans le calcul des plus courts trajets
-// générer chromosomes aléa, mieux qu'un do while ?
-// treeset pour générer les plus courts trajets
-
 /**
  * Objet contenant toutes les informations relatives au planning d'une tournée "
  *
@@ -134,8 +129,6 @@ public class Planning {
             this.demandesOrdonnees.add((Demande) obj);
         }
 
-        // demandesOrdonnees = ordonnerLesDemandes(demandes); //ordonnerLesDemandes
-
         // Création de la listes des trajets à suivre et calcul des temps
         ordonnerLesTrajetsEtLesDates();
     }
@@ -246,7 +239,6 @@ public class Planning {
 
         ordonnerLesTrajetsEtLesDates();
 
-        System.out.println(demandesOrdonnees.size());
     }
 
     /**
@@ -266,8 +258,6 @@ public class Planning {
         demandesOrdonnees.remove(requete.getDemandeLivraison());
 
         ordonnerLesTrajetsEtLesDates();
-
-        System.out.println(demandesOrdonnees.size());
 
         return positions;
     }
@@ -337,25 +327,12 @@ public class Planning {
         for (Intersection source : intersections) {
 
             source.setDistance(0.);
-
             Set<Intersection> settledIntersections = new HashSet<>();
-
             Set<Intersection> unsettledIntersections = new HashSet<>();
-
-            /*
-             * SortedSet<Intersection> unsettledIntersections = new
-             * TreeSet<Intersection>(new Comparator<Intersection>() { // TODO Vérifier si
-             * c'est le set le plus efficace pour récupérer le premier
-             *
-             * @Override public int compare(Intersection o1, Intersection o2) { return
-             * (int)(o1.getDistance()-o2.getDistance()); } });
-             */
 
             unsettledIntersections.add(source);
 
             while (unsettledIntersections.size() != 0) {
-
-                // Intersection currentIntersection = unsettledIntersections.first();
 
                 Intersection currentIntersection = getLowestDistanceIntersection(unsettledIntersections);
                 unsettledIntersections.remove(currentIntersection);
