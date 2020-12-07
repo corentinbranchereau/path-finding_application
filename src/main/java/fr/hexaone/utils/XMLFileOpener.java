@@ -2,6 +2,8 @@ package fr.hexaone.utils;
 
 import fr.hexaone.utils.exception.DTDValidationException;
 import fr.hexaone.utils.exception.FileBadExtensionException;
+import jdk.jshell.execution.Util;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -104,14 +106,9 @@ public class XMLFileOpener implements FileFilter {
      */
     private File creerXMLTemporaireAvecDTD(String realPath, DTDType dtdType) throws IOException, URISyntaxException {
         //Charge le dtd du dossier ressource
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(dtdType.getPath());
-        File dtdFile;
-        if (resource == null) {
-            throw new IllegalArgumentException("Fichier XML non trouvé dans le dossier ressource" + realPath);
-        } else {
-            dtdFile = new File(resource.toURI());
-        }
+        File dtdFile = File.createTempFile("tmp_hexaone",".dtd");
+        FileUtils.copyInputStreamToFile(Utils.getFileFromResourceAsStream(this,dtdType.getPath()), dtdFile);
+
         //Créer un fichier temporaire copie de celui passé en paramètre et y ajoute le DTD.
         String[] splits = realPath.split("\\.");
         File tempFile = File.createTempFile("tmp_hexaone","."+splits[splits.length-1]);
