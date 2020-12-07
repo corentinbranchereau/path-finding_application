@@ -1,5 +1,6 @@
 package fr.hexaone;
 
+import fr.hexaone.algo.AlgoTSP;
 import fr.hexaone.model.*;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;

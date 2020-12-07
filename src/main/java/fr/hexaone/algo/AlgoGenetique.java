@@ -1,4 +1,4 @@
-package fr.hexaone.model;
+package fr.hexaone.algo;
 
 import org.javatuples.Pair;
 
