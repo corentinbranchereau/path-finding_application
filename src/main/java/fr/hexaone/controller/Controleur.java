@@ -208,7 +208,7 @@ public class Controleur {
      * Méthode permettant d'afficher l'aide à l'utilisateur
      */
     public void aide(){
-        etatCourant.aide();
+        etatCourant.aide(this);
     }
 
     /**
