@@ -78,10 +78,9 @@ public class VueTextuelle {
             // Affichage des demandes (ordonnées) dans le tableau
             afficherPlanning(planning, planning.getCarte());
             enleverHighlightDemande();
-            if (demandeSelectionnee != null) {
+            if (demandeSelectionnee != null)
                 highlightDemande(demandeSelectionnee);
-            }
-
+                
         } else if (!planning.getRequetes().isEmpty()) {
             // Affichage des requêtes
             afficherRequetes(planning, planning.getCarte());
@@ -304,7 +303,6 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-
         if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
