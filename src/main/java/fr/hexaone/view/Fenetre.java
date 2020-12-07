@@ -153,7 +153,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this,"fenetre.fxml");
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this, "fenetre.fxml");
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -176,7 +176,7 @@ public class Fenetre {
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this,"logo-hexa.png")));
+            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
             this.stage.show();
 
             this.largeurInitialeStage = this.stage.getWidth();
@@ -191,14 +191,14 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { //scrollEvent linux
+            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { // scrollEvent linux
                 event.consume();
                 double facteurZoom = 1.;
                 double scrollAmout = event.getDeltaY();
-                if ( scrollAmout > 0 ) {
+                if (scrollAmout > 0) {
                     // Zoom
                     facteurZoom = 2.;
-                } else if ( scrollAmout < 0) {
+                } else if (scrollAmout < 0) {
                     // Dézoom
                     facteurZoom = 0.5;
                 }
