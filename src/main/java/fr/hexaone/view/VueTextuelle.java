@@ -148,12 +148,18 @@ public class VueTextuelle {
 
         String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
-        String depotString = "★ Dépot : " + depotName + "\r\n heure de départ : "
-                + getStringFromDate(planning.getDateDebut()) + "\r\n heure de retour : "
-                + getStringFromDate(planning.getDateFin());
+        String depotString = "★ Dépot : " + depotName + "\r\n";
+        Text texteDepot = new Text(depotString);
+        texteDepot.setFill(Color.RED);
+        String heureDepartString = "Heure de départ : " + getStringFromDate(planning.getDateDebut()) + "\r\n";
+        Text texteHeureDepart = new Text(heureDepartString);
+        String heureRetourString = "Heure de retour : " + getStringFromDate(planning.getDateFin());
+        Text texteHeureRetour = new Text(heureRetourString);
 
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(depotString));
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureDepart);
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureRetour);
 
         requetesControleur.getDepartColumn()
                 .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
