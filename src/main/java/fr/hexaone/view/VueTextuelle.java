@@ -48,6 +48,12 @@ public class VueTextuelle {
     private final double OPACITE_DEMANDE_LIEE = 0.3;
 
     /**
+     * Variable qui est initialisé au premier parcours du planning: représente la
+     * nom de la rue du dépot
+     */
+    private String nomDepot;
+
+    /**
      * Controleur FXML pour le tableau affichant les requêtes dans la vue textuelle
      */
     private RequetesControleurFXML requetesControleur;
@@ -93,11 +99,11 @@ public class VueTextuelle {
         this.zoneTexte.getChildren().clear();
 
         // récupération du nom du dépot
-        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
+        this.nomDepot = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
 
         // écriture du point et de l'heure de départ
         Text texteDepot = new Text(
-                " ★ Départ : " + depotName + " à " + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
+                " ★ Départ : " + nomDepot + " à " + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
         texteDepot.setFill(Color.RED);
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
@@ -146,9 +152,7 @@ public class VueTextuelle {
         fenetre.setListeDemandes(listeDemandes);
         this.requetesControleur.getDemandeTable().setItems(listeDemandes);
 
-        String depotName = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
-
-        String depotString = "★ Dépot : " + depotName + "\r\n";
+        String depotString = "★ Dépot : " + nomDepot + "\r\n";
         Text texteDepot = new Text(depotString);
         texteDepot.setFill(Color.RED);
         String heureDepartString = "Heure de départ : " + getStringFromDate(planning.getDateDebut()) + "\r\n";
@@ -182,11 +186,6 @@ public class VueTextuelle {
         listeDemandes.addAll(planning.getDemandesOrdonnees());
 
         return listeDemandes;
-    }
-
-    public void effacerVueTextuelle() {
-        this.zoneTexte.getChildren().clear();
-        this.fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
     }
 
     /**
