@@ -11,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,11 +34,6 @@ public class VueTextuelle {
     private Fenetre fenetre;
 
     /**
-     * zone de texte ou afficher les requetes
-     */
-    private TextFlow zoneTexte;
-
-    /**
      * Couleur de l'highlight des lignes dans le tableau
      */
     private final String COULEUR_HIGHLIGHT_LIGNE = "yellow";
@@ -61,6 +55,8 @@ public class VueTextuelle {
      */
     private RequetesControleurFXML requetesControleur;
 
+    private Boolean afficherPremierPlanning = true;
+
     /**
      * constructeur
      */
@@ -79,16 +75,30 @@ public class VueTextuelle {
 
         if (planning.getDemandesOrdonnees() != null) {
             // Affichage des demandes (ordonnées) dans le tableau
-            afficherPlanning(planning, planning.getCarte());
-            enleverHighlightDemande();
-            if (demandeSelectionnee != null) {
-                highlightDemande(demandeSelectionnee);
+            if (afficherPremierPlanning) {
+                afficherPlanning(planning, planning.getCarte());
+            } else {
+                rafraichirVuePlanning(planning);
             }
+            enleverHighlightDemande();
+            if (demandeSelectionnee != null)
+                highlightDemande(demandeSelectionnee);
 
         } else if (!planning.getRequetes().isEmpty()) {
             // Affichage des requêtes
+            init();
             afficherRequetes(planning, planning.getCarte());
+        } else {
+            init();
         }
+    }
+
+    public void init() {
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
+        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(
+                "Pour charger une Carte ou des Requêtes, rendez-vous dans 'Fichier', en haut à gauche de l'application. \r\n\r\n"));
+        this.fenetre.getFenetreControleur().getScrollPane().setContent(null);
+        fenetre.getListeDemandes().clear();
     }
 
     /**
@@ -97,9 +107,6 @@ public class VueTextuelle {
      * @param planning liste des segments à parcourir
      */
     public void afficherRequetes(Planning planning, Carte carte) {
-
-        // On vide le zone de texte au cas où des choses sont déjà affichées dedans
-        this.zoneTexte.getChildren().clear();
 
         // récupération du nom du dépot
         this.nomDepot = getNomIntersection(planning, carte, carte.getIntersections().get(planning.getIdDepot()));
@@ -179,6 +186,12 @@ public class VueTextuelle {
         requetesControleur.getOrphelineColumn().setVisible(true);
     }
 
+    public void rafraichirVuePlanning(Planning planning) {
+        fenetre.getListeDemandes().clear();
+        fenetre.getListeDemandes().addAll(planning.getDemandesOrdonnees());
+        // this.requetesControleur.getDemandeTable().setItems(fenetre.getListeDemandes());
+    }
+
     /**
      * Méthode qui crée les objets demande à la réception d'un planning
      *
@@ -208,15 +221,6 @@ public class VueTextuelle {
      */
     public void afficherSuppressionRequeteVueTextuelle() {
         // TODO
-    }
-
-    /**
-     * setter permettant de définir la zone de texte de la fenêtre
-     * 
-     * @param zoneTexte
-     */
-    public void setZoneTexte(TextFlow zoneTexte) {
-        this.zoneTexte = zoneTexte;
     }
 
     /**
@@ -307,7 +311,6 @@ public class VueTextuelle {
      * du drag and drop
      */
     public void rechargerHighlight() {
-
         if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());

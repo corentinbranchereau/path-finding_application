@@ -251,7 +251,7 @@ public class Controleur {
      * Réinitialise la saisie de l'utilisateur.
      */
     public void resetDemandeSelectionnee() {
-    	this.demandeSelectionnee = null;
+        this.demandeSelectionnee = null;
         rafraichirVues(false);
     }
 

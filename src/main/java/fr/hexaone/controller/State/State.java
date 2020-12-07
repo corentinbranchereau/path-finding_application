@@ -60,6 +60,9 @@ public interface State {
      * Cette méthode permet de charger et d'afficher une carte
      */
     default void chargerCarte(Controleur c) {
+    	
+    	if(c.getPlanning()!=null) c.getPlanning().reinitialiserPlanning();
+    	
         FileChooser fChooser = new FileChooser();
         File fichier = fChooser.showOpenDialog(c.getFenetre().getStage());
         if (fichier != null) {
@@ -124,6 +127,7 @@ public interface State {
      * Cette méthode permet de charger et d'afficher des requêtes
      */
     default void chargerRequetes(Controleur c) {
+    	if(c.getPlanning()!=null) c.getPlanning().reinitialiserPlanning();
         FileChooser fChooser = new FileChooser();
         File fichier = fChooser.showOpenDialog(c.getFenetre().getStage());
         if (fichier != null) {

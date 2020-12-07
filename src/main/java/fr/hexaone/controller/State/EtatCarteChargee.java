@@ -18,6 +18,7 @@ public class EtatCarteChargee implements State {
      */
     @Override
     public void init(Controleur c) {
+    	
         c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
