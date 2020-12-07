@@ -147,7 +147,8 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            FileInputStream inputFichierFxml = new FileInputStream("src/main/java/fr/hexaone/view/fenetre.fxml");
+            FileInputStream inputFichierFxml = new FileInputStream(
+                    Utils.obtenirURLRessource(this, "fenetre.fxml").toExternalForm().split(":")[1]);
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -170,7 +171,7 @@ public class Fenetre {
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image("file:src/main/resources/logo-hexa.png"));
+            stage.getIcons().add(new Image(Utils.obtenirURLRessource(this, "logo-hexa.png").toExternalForm()));
 
             this.stage.show();
 
@@ -494,7 +495,7 @@ public class Fenetre {
     public void afficherAide() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
-                .add(new Image("file:src/main/resources/logo-hexa.png"));
+                .add(new Image(Utils.obtenirURLRessource(this, "logo-hexa.png").toExternalForm()));
         alert.getDialogPane().setMaxWidth(550D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
@@ -519,12 +520,12 @@ public class Fenetre {
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier le lieu d'un évènement"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
-                "Lorsque que la tournée est calculée, il est possible de modifier le lieu d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle, en choisissant l'option adéquate puis en choisissant une intersection sur la carte."));
+                "Lorsque la tournée est calculée, il est possible de modifier le lieu d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle, en choisissant l'option adéquate puis en choisissant une intersection sur la carte."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier la durée d'un évènement"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
-                "Lorsque que la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
+                "Lorsque la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Ajouter une demande de livraison"));
@@ -534,7 +535,7 @@ public class Fenetre {
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Supprimer une demande de livraison"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
-                "Lorsque que la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
+                "Lorsque la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Annuler ou rejouer une action"));

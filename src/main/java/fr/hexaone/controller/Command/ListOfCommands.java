@@ -36,7 +36,13 @@ public class ListOfCommands {
      */
     public void add(Command c){
         i++;
-        l.add(i,c);
+        if(i<l.size()) {
+        	int taille=l.size();
+        	for(int j=i;j<taille;j++) {
+        		l.remove(i);
+        	}	
+        }
+        l.add(c);
         c.doCommand();
     }
 
@@ -57,5 +63,6 @@ public class ListOfCommands {
     	if(i+1<=l.size()-1) {
     		  l.get(++i).doCommand();
     	}
-    }
+    }  
+    
 }

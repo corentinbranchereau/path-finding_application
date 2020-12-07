@@ -1,5 +1,6 @@
 package fr.hexaone.utils;
 
+import fr.hexaone.controller.Controleur;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -9,6 +10,10 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Objects;
 
 /**
  * Classe Utils contenant des méthodes génériques pouvant servir
@@ -69,4 +74,20 @@ public class Utils {
         return label;
     }
 
+    /**
+     * Permet d'obtenir une URL vers une ressource que l'on soit dans un JAR ou non
+     * @return L'URL de la ressource, null si l'URL est mal formé
+     */
+    public static URL obtenirURLRessource(Object o, String path) {
+        URL url = o.getClass().getResource(path);
+        try {
+            if (url == null) {
+                url = new URL("file:src/main/resources/" + path);
+            }
+        } catch (MalformedURLException e){
+            e.printStackTrace();
+            url = null;
+        }
+        return url;
+    }
 }

@@ -3,6 +3,7 @@ package fr.hexaone.controller.State;
 import fr.hexaone.controller.Command.ModifierDemandeCommand;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.TypeIntersection;
+import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert;
 
 import java.util.regex.Matcher;
@@ -101,15 +102,24 @@ public class EtatModifierDemande implements State {
             return;
         }
 
+        try {
         c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(),
                 Integer.parseInt(durationField), idIntersection));
-
-        c.resetDemandeSelectionnee();
-
-        c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
-
-        this.annuler(c);
-
+        }
+        
+        catch (NumberFormatException e) {
+            System.out.println("Les durées (en seconde) saisies sont incorrectes !");
+            Utils.alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+                    Alert.AlertType.ERROR);
+            return;
+        }
+        
+        finally {
+            c.resetDemandeSelectionnee();
+            c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
+            this.annuler(c);
+        }
+        
     }
 
     /**
