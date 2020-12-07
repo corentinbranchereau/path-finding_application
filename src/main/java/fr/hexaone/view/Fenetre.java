@@ -23,6 +23,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.ScrollPane;
@@ -517,6 +522,38 @@ public class Fenetre {
         vBox.getChildren().add(Utils.obtenirTitreAide("Calculer une tournée"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
                 "Une fois une carte et des demandes de livraison chargées, il est possible de calculer une tournée en utilisant le bouton \"Lancer le calcul\" disponible sur la vue textuelle de l'application."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
+        vBox.getChildren().add(Utils.obtenirTitreAide("Couleurs utilisées pour le dessin d'une tournée"));
+        TextFlow texteCouleursUtilisees = new TextFlow();
+        Color couleurTexte = Color.gray(0.20);
+        Text debutTexteCouleurs = new Text("Lorsqu'une tournée est affichée, le sens du parcours va du ");
+        debutTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        debutTexteCouleurs.setFill(couleurTexte);
+        Text texteCouleur1 = new Text("rouge");
+        texteCouleur1.setUnderline(true);
+        texteCouleur1.setFill(Color.hsb(0, 1.0, 1.0));
+        texteCouleur1.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        Text milieuTexteCouleurs = new Text(" au ");
+        milieuTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        milieuTexteCouleurs.setFill(couleurTexte);
+        milieuTexteCouleurs.setWrappingWidth(600D);
+        Text texteCouleur2 = new Text("vert");
+        texteCouleur2.setUnderline(true);
+        texteCouleur2.setFill(Color.hsb(120, 1.0, 1.0));
+        texteCouleur2.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        Text finTexteCouleurs = new Text(
+                " (c'est-à-dire que le livreur part du dépôt du côté du rouge et revient à ce dernier du côté du vert)");
+        finTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        finTexteCouleurs.setFill(couleurTexte);
+        texteCouleursUtilisees.getChildren().addAll(debutTexteCouleurs, texteCouleur1, milieuTexteCouleurs,
+                texteCouleur2, finTexteCouleurs);
+        vBox.getChildren().add(texteCouleursUtilisees);
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
+        vBox.getChildren().add(Utils.obtenirTitreAide("Sélection d'une demande"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Il est possible de sélectionner une demande pour la mettre en valeur en cliquant dessus (dans la vue graphique ou textuelle). Pour la désélectionner, il suffit de recliquer dessus. Lorsqu'une demande est sélectionnée, les trajets situés avant et après cette dernière sont également mis en valeur, en suivant la même logique de couleur que pour la tournée (le sens va du rouge au vert)."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier l'ordre d'une tournée"));
