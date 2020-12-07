@@ -25,8 +25,10 @@ public class Utils {
      * @param message   Le message contenu dans l'alerte
      * @param alertType Le type d'alerte souhaité
      */
-    public static void alertHelper(String title, String message, Alert.AlertType alertType) {
+    public static void alertHelper(Object o,String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
+                .add(new Image(Utils.obtenirInputStreamDepuisPath(o, "logo-hexa.png")));
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
