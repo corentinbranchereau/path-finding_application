@@ -1,6 +1,5 @@
 package fr.hexaone.utils;
 
-import fr.hexaone.controller.Controleur;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -11,9 +10,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Objects;
+import java.io.InputStream;
 
 /**
  * Classe Utils contenant des méthodes génériques pouvant servir
@@ -28,8 +25,10 @@ public class Utils {
      * @param message   Le message contenu dans l'alerte
      * @param alertType Le type d'alerte souhaité
      */
-    public static void alertHelper(String title, String message, Alert.AlertType alertType) {
+    public static void alertHelper(Object o,String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
+                .add(new Image(Utils.obtenirInputStreamDepuisPath(o, "logo-hexa.png")));
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -75,19 +74,16 @@ public class Utils {
     }
 
     /**
-     * Permet d'obtenir une URL vers une ressource que l'on soit dans un JAR ou non
-     * @return L'URL de la ressource, null si l'URL est mal formé
+     * Permet d'obtenir un InputStream vers une ressource que l'on soit dans un JAR ou non
+     * @return L'input stream de la ressource pointée
      */
-    public static URL obtenirURLRessource(Object o, String path) {
-        URL url = o.getClass().getResource(path);
-        try {
-            if (url == null) {
-                url = new URL("file:src/main/resources/" + path);
-            }
-        } catch (MalformedURLException e){
-            e.printStackTrace();
-            url = null;
+    public static InputStream obtenirInputStreamDepuisPath(Object o, String fileName) {
+        ClassLoader classLoader = o.getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("Fichier non trouvé " + fileName);
+        } else {
+            return inputStream;
         }
-        return url;
     }
 }

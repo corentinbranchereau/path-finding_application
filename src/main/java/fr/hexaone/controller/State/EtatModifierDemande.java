@@ -109,7 +109,7 @@ public class EtatModifierDemande implements State {
         
         catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            Utils.alertHelper("Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+            Utils.alertHelper(this,"Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
                     Alert.AlertType.ERROR);
             return;
         }
