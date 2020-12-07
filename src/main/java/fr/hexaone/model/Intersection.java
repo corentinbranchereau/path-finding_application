@@ -160,7 +160,8 @@ public class Intersection {
         distance = Double.MAX_VALUE;
         cheminLePlusCourt = new LinkedList<Segment>();
     }
-
+    
+    /*
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Intersection)) {
@@ -175,5 +176,6 @@ public class Intersection {
         }
         return false;
     }
+    */
 
 }

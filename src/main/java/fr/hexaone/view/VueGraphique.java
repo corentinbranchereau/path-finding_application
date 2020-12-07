@@ -142,7 +142,7 @@ public class VueGraphique {
     /**
      * Angle Hue (modèle HSB) de la fin de l'intervalle des couleurs de trajets
      */
-    private final double FIN_INTERVALLE_COULEURS_TRAJETS = 200;
+    private final double FIN_INTERVALLE_COULEURS_TRAJETS = 120;
 
     /**
      * Constructeur de VueGraphique
@@ -216,24 +216,31 @@ public class VueGraphique {
                     } else {
                         // TODO : Mise en valeur du dépot
                     }
+                    Trajet trajetAvant = null;
+                    Trajet trajetApres = null;
 
-                    List<Trajet> trajetsAvantApresDemande = new ArrayList<>();
                     int index = planning.getDemandesOrdonnees().indexOf(demandeSelectionnee);
                     if (index != -1) {
                         // L'index a été trouvé
-                        trajetsAvantApresDemande.add(planning.getListeTrajets().get(index));
+                        trajetAvant = planning.getListeTrajets().get(index);
 
                         if (index + 1 < planning.getListeTrajets().size()) {
-                            trajetsAvantApresDemande.add(planning.getListeTrajets().get(index + 1));
+                            trajetApres = planning.getListeTrajets().get(index + 1);
                         }
 
                         // Génération des couleurs pour les trajets
                         genererCouleursTrajets(planning.getListeTrajets());
 
-                        // Affichage des trajets
-                        for (Trajet trajet : trajetsAvantApresDemande) {
-                            afficherTrajet(planning.getCarte(), trajet);
+                        // Affichage des trajets avant et après la demande
+                        afficherTrajetsAvantApres(planning.getCarte(), trajetAvant, trajetApres);
+
+                        // Affichage des autres trajets en pointillés
+                        for (Trajet trajet : planning.getListeTrajets()) {
+                            if (trajet != trajetAvant && trajet != trajetApres) {
+                                afficherTrajetMinimise(planning.getCarte(), trajet);
+                            }
                         }
+
                     }
                 } else {
                     // Pas de demande sélectionnée : on affiche tous les trajets
@@ -645,12 +652,10 @@ public class VueGraphique {
     }
 
     /**
-     * Cette méthode permet de dessiner le trajet passé en paramètre avec la couleur
-     * choisie.
+     * Cette méthode permet de dessiner le trajet passé en paramètre.
      * 
-     * @param carte   La carte actuelle de l'application, contenant les
-     *                intersections
-     * @param trajet  Le trajet à dessiner
+     * @param carte  La carte actuelle de l'application, contenant les intersections
+     * @param trajet Le trajet à dessiner
      */
     private void afficherTrajet(Carte carte, Trajet trajet) {
         // On récupère la couleur du trajet
@@ -678,6 +683,173 @@ public class VueGraphique {
             // On change le "viewOrder" pour que les trajets apparaissent derrière les
             // intersections
             ligneSegment.setViewOrder(2);
+
+            // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+            Tooltip tooltipNomRue = new Tooltip(segment.getNom());
+            tooltipNomRue.setShowDelay(new Duration(0));
+            tooltipNomRue.setHideDelay(new Duration(0));
+            Tooltip.install(ligneSegment, tooltipNomRue);
+
+            // Ajoute un handler pour augmenter la taille de la route lors du survol
+            ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                }
+            });
+
+            ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                }
+            });
+
+            this.paneDessin.getChildren().add(ligneSegment);
+        }
+    }
+
+    /**
+     * Cette méthode permet de dessiner le trajet passé en paramètre avec une taille
+     * plus petite que les autres trajets.
+     * 
+     * @param carte  La carte actuelle de l'application, contenant les intersections
+     * @param trajet Le trajet à dessiner
+     */
+    private void afficherTrajetMinimise(Carte carte, Trajet trajet) {
+        // On donne une couleur unique à tous les trajets minimisés
+        Color couleur = Color.BLUE;
+
+        // On parcourt tous les segments composant le trajet
+        for (Segment segment : trajet.getListeSegments()) {
+            // On calcule les coordonnées du départ et de l'arrivée
+            Intersection depart = carte.getIntersections().get(segment.getDepart());
+
+            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
+
+            Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
+
+            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
+
+            // On crée une ligne pour le segment
+            Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
+                    coordArrivee.getY());
+            ligneSegment.setStroke(couleur);
+
+            // On choisit une taille plus petite que les autres trajets
+            ligneSegment.setStrokeWidth(2.0);
+
+            // On change le "viewOrder" pour que les trajets apparaissent derrière les
+            // intersections
+            ligneSegment.setViewOrder(2);
+
+            // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+            Tooltip tooltipNomRue = new Tooltip(segment.getNom());
+            tooltipNomRue.setShowDelay(new Duration(0));
+            tooltipNomRue.setHideDelay(new Duration(0));
+            Tooltip.install(ligneSegment, tooltipNomRue);
+
+            // Ajoute un handler pour augmenter la taille de la route lors du survol
+            ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                }
+            });
+
+            ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                }
+            });
+
+            this.paneDessin.getChildren().add(ligneSegment);
+        }
+    }
+
+    /**
+     * Cette méthode permet de dessiner de manière plus visible les trajets situés
+     * avant et après une demande sélectionnée
+     * 
+     * @param carte       La carte actuelle de l'application, contenant les
+     *                    intersections
+     * @param trajetAvant Le trajet situé avant la demande sélectionnée
+     * @param trajetApres Le trajet situé après la demande sélectionnée
+     */
+    private void afficherTrajetsAvantApres(Carte carte, Trajet trajetAvant, Trajet trajetApres) {
+        // Trajet avant
+        Color couleurTrajetAvant = Color.RED;
+
+        for (Segment segment : trajetAvant.getListeSegments()) {
+            // On calcule les coordonnées du départ et de l'arrivée
+            Intersection depart = carte.getIntersections().get(segment.getDepart());
+
+            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
+
+            Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
+
+            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
+
+            // On crée une ligne pour le segment
+            Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
+                    coordArrivee.getY());
+            ligneSegment.setStroke(couleurTrajetAvant);
+            ligneSegment.setStrokeWidth(6.0);
+
+            // On change le "viewOrder" pour que les trajets apparaissent derrière les
+            // intersections, et devant les autres trajets
+            ligneSegment.setViewOrder(1.5);
+
+            // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
+            Tooltip tooltipNomRue = new Tooltip(segment.getNom());
+            tooltipNomRue.setShowDelay(new Duration(0));
+            tooltipNomRue.setHideDelay(new Duration(0));
+            Tooltip.install(ligneSegment, tooltipNomRue);
+
+            // Ajoute un handler pour augmenter la taille de la route lors du survol
+            ligneSegment.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() + 3);
+                }
+            });
+
+            ligneSegment.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    ligneSegment.setStrokeWidth(ligneSegment.getStrokeWidth() - 3);
+                }
+            });
+
+            this.paneDessin.getChildren().add(ligneSegment);
+        }
+
+        // Trajet après
+        Color couleurTrajetApres = Color.hsb(120, 1.0, 1.0); // Vert clair
+
+        for (Segment segment : trajetApres.getListeSegments()) {
+            // On calcule les coordonnées du départ et de l'arrivée
+            Intersection depart = carte.getIntersections().get(segment.getDepart());
+
+            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
+
+            Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
+
+            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
+
+            // On crée une ligne pour le segment
+            Line ligneSegment = new Line(coordDepart.getX(), coordDepart.getY(), coordArrivee.getX(),
+                    coordArrivee.getY());
+            ligneSegment.setStroke(couleurTrajetApres);
+
+            // On diminue un peu la taille de la ligne pour qu'on puisse distinguer le
+            // trajet avant et après
+            ligneSegment.setStrokeWidth(4.0);
+
+            // On change le "viewOrder" pour que les trajets apparaissent derrière les
+            // intersections
+            ligneSegment.setViewOrder(1.5);
 
             // Ajoute un tooltip pour afficher le nom de la rue au survol de la souris
             Tooltip tooltipNomRue = new Tooltip(segment.getNom());

@@ -61,11 +61,11 @@ public class RequetesControleurFXML {
 
     /**
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
-     * chargés On définit les règles d'affichage du tableau
+     * chargés On définit les règles d'affichage du tableau, les éléments affiché
+     * dans les colonnes, et les évènements associés aux lignes
      */
     @FXML
     public void initialize() {
-        // Initialize the person table with the two columns.
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().getTypeProperty());
         typeColumn.setSortable(false);
 
@@ -107,11 +107,10 @@ public class RequetesControleurFXML {
             }
         });
 
-        // Add MenuItem to ContextMenu
         contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
 
-        // When user right-click on Circle
-
+        // définit le type de case affiché dans le tableau, et les évènements associés
+        // aux cases.
         demandeTable.setRowFactory(tv -> {
             TableRow<Demande> row = new TableRow<Demande>() {
                 @Override
@@ -144,7 +143,7 @@ public class RequetesControleurFXML {
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent event) {
-                    if(fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
+                    if (fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
                         fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                         contextMenu.show(row, event.getScreenX(), event.getScreenY());
                     } else {
@@ -249,7 +248,7 @@ public class RequetesControleurFXML {
             });
 
             row.setOnMouseClicked(event -> {
-                if(event.getButton() != MouseButton.SECONDARY) {
+                if (event.getButton() != MouseButton.SECONDARY) {
                     if (row.getItem() != null)
                         fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                 }
@@ -260,14 +259,10 @@ public class RequetesControleurFXML {
         });
 
         typeColumn.setPrefWidth(typeColumn.getPrefWidth() + 1);
-        // Listen for selection changes and show the person details when changed.
-        // personTable.getSelectionModel().selectedItemProperty()
-        // .addListener((observable, oldValue, newValue) ->
-        // showPersonDetails(newValue));
     }
 
     /**
-     * @return TableView<Demande> return the demandeTable
+     * @return TableView<Demande> retourne le tableau demandeTable
      */
     public TableView<Demande> getDemandeTable() {
         return demandeTable;
@@ -352,7 +347,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * Set if the columns can be dragged or not
+     * Définit si les colonnes peuvent être glissées déposées.
      * 
      * @param draggable
      */
@@ -361,7 +356,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * get if the columns are draggable
+     * retourne le boolean draggable
      * 
      * @return boolean
      */
