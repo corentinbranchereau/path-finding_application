@@ -277,7 +277,7 @@ public interface State {
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier la durée d'un évènement"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque la tournée est calculée, il est possible de modifier la durée d'un évènement sur un point de collecte ou de livraison en cliquant droit sur le point depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Ajouter une demande de livraison"));
@@ -285,7 +285,7 @@ public interface State {
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Supprimer une demande de livraison"));
-        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque que la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide("Lorsque la tournée est calculée, il est possible de supprimer une demande de livraison, de façon partielle ou non, en cliquant droit sur la collecte ou la livraison depuis la vue textuelle et en choisissant l'option adéquate."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Annuler ou rejouer une action"));
