@@ -3,20 +3,18 @@ package fr.hexaone.view;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
 import fr.hexaone.model.TypeIntersection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class RequetesControleurFXML {
 
@@ -24,7 +22,7 @@ public class RequetesControleurFXML {
      * le tableau
      */
     @FXML
-    private TableView<Demande> demandeTable;
+    private TableView<Demande> tableauDemandes;
     @FXML
     private TableColumn<Demande, String> typeColumn;
     @FXML
@@ -63,6 +61,11 @@ public class RequetesControleurFXML {
     protected int indexDemandeArrivee;
 
     /**
+     * Liste observable des demandes
+     */
+    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+
+    /**
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
      * chargés On définit les règles d'affichage du tableau, les éléments affiché
      * dans les colonnes, et les évènements associés aux lignes
@@ -73,7 +76,7 @@ public class RequetesControleurFXML {
         typeColumn.setSortable(false);
 
         arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArriveeProperty());
-        arriveeColumn.setSortable(true);
+        arriveeColumn.setSortable(false);
 
         departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
         departColumn.setSortable(false);
@@ -83,6 +86,8 @@ public class RequetesControleurFXML {
 
         orphelineColumn.setCellValueFactory(cellData -> cellData.getValue().getOrphelineProperty());
         orphelineColumn.setSortable(false);
+
+        tableauDemandes.setItems(listeDemandes);
 
         // Create ContextMenu
         contextMenu = new ContextMenu();
@@ -135,7 +140,7 @@ public class RequetesControleurFXML {
          * définit le type de case affiché dans le tableau, et les évènements associés
          * aux cases.
          */
-        demandeTable.setRowFactory(tv -> {
+        tableauDemandes.setRowFactory(tv -> {
 
             TableRow<Demande> row = new TableRow<Demande>() {
                 @Override
@@ -177,7 +182,7 @@ public class RequetesControleurFXML {
                                     itemAssocie = item.getRequete().getDemandeCollecte();
                                 }
                                 if (itemAssocie != null) {
-                                    int indexItemAssocie = demandeTable.getItems().indexOf(itemAssocie);
+                                    int indexItemAssocie = tableauDemandes.getItems().indexOf(itemAssocie);
 
                                     if ((item.getTypeIntersection() == TypeIntersection.COLLECTE
                                             && this.getIndex() > indexItemAssocie)
@@ -303,19 +308,19 @@ public class RequetesControleurFXML {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    Demande draggedPerson = demandeTable.getItems().remove(draggedIndex);
+                    Demande draggedItem = tableauDemandes.getItems().remove(draggedIndex);
                     int dropIndex;
 
                     if (row.isEmpty())
-                        dropIndex = demandeTable.getItems().size();
+                        dropIndex = tableauDemandes.getItems().size();
                     else
                         dropIndex = row.getIndex();
 
                     indexDemandeArrivee = dropIndex;
-                    demandeTable.getItems().add(dropIndex, draggedPerson);
+                    tableauDemandes.getItems().add(dropIndex, draggedItem);
                     event.setDropCompleted(true);
 
-                    demandeTable.getSelectionModel().select(dropIndex);
+                    tableauDemandes.getSelectionModel().select(dropIndex);
                     this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
@@ -331,7 +336,7 @@ public class RequetesControleurFXML {
                     if (row.getItem() != null)
                         fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                 }
-                this.demandeTable.getSelectionModel().clearSelection();
+                this.tableauDemandes.getSelectionModel().clearSelection();
             });
 
             return row;
@@ -342,17 +347,17 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableView<Demande> retourne le tableau demandeTable
+     * @return TableView<Demande> retourne le tableau tableauDemandes
      */
-    public TableView<Demande> getDemandeTable() {
-        return demandeTable;
+    public TableView<Demande> getTableauDemandes() {
+        return tableauDemandes;
     }
 
     /**
-     * @param demandeTable the demandeTable to set
+     * @param tableauDemandes the tableauDemandes to set
      */
-    public void setDemandeTable(TableView<Demande> demandeTable) {
-        this.demandeTable = demandeTable;
+    public void setTableauDemandes(TableView<Demande> tableauDemandes) {
+        this.tableauDemandes = tableauDemandes;
     }
 
     /**
@@ -377,28 +382,28 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @param arriveeColumn the arriveeColumn to set
+     * @param arriveeColumn set l'arriveeColumn
      */
     public void setArriveeColumn(TableColumn<Demande, String> arriveeColumn) {
         this.arriveeColumn = arriveeColumn;
     }
 
     /**
-     * @return TableColumn<Demande, String> return the departColumn
+     * @return TableColumn<Demande, String> retourne la departColumn
      */
     public TableColumn<Demande, String> getDepartColumn() {
         return departColumn;
     }
 
     /**
-     * @param departColumn the departColumn to set
+     * @param departColumn définit departColumn
      */
     public void setDepartColumn(TableColumn<Demande, String> departColumn) {
         this.departColumn = departColumn;
     }
 
     /**
-     * @return TableColumn<Demande, String> return the adresseColumn
+     * @return TableColumn<Demande, String> retourne la colonne adresseColumn
      */
     public TableColumn<Demande, String> getAdresseColumn() {
         return adresseColumn;
@@ -412,18 +417,12 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * définit la fenetre, mais également associe les items du tableau, et les trie
+     * définit la fenetre
      * 
      * @param fenetre the fenetre to set
      */
     public void setFenetre(Fenetre fenetre) {
         this.fenetre = fenetre;
-        demandeTable.setItems(fenetre.getListeDemandes());
-        arriveeColumn.setSortType(TableColumn.SortType.ASCENDING);
-        demandeTable.getSortOrder().add(arriveeColumn);
-        demandeTable.sort();
-        arriveeColumn.setSortable(false);
-
     }
 
     /**
@@ -464,6 +463,31 @@ public class RequetesControleurFXML {
 
     public TableColumn<Demande, String> getOrphelineColumn() {
         return orphelineColumn;
+    }
+
+    /**
+     * @return ObservableList<Demande> retourne la liste observable listeDemandes
+     */
+    public ObservableList<Demande> getListeDemandes() {
+        return listeDemandes;
+    }
+
+    /**
+     * setter de liste observable
+     *
+     * @param list la liste observable
+     */
+    public void setListeDemandes(ObservableList<Demande> list) {
+        this.listeDemandes = list;
+    }
+
+    /**
+     * Méthode qui permet d'ajouter une demande au tableau dans la vue textuelle
+     * 
+     * @param demande la demande à ajouter
+     */
+    public void ajouterDemande(Demande demande) {
+        listeDemandes.add(demande);
     }
 
 }
