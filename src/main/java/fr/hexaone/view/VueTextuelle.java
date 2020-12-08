@@ -5,6 +5,7 @@ import fr.hexaone.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.TableRow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -136,8 +137,9 @@ public class VueTextuelle {
         Text texteDepot = new Text(
                 " ★ Départ : " + nomDepot + " à " + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
         texteDepot.setFill(Color.RED);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
+        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
+        f.remove(0, f.size());
+        f.add(texteDepot);
 
         // parcours des requêtes
         for (Requete requete : planning.getRequetes()) {
@@ -184,10 +186,11 @@ public class VueTextuelle {
         String heureRetourString = "Heure de retour : " + getStringFromDate(planning.getDateFin());
         Text texteHeureRetour = new Text(heureRetourString);
 
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureDepart);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureRetour);
+        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
+        f.remove(0, f.size());
+        f.add(texteDepot);
+        f.add(texteHeureDepart);
+        f.add(texteHeureRetour);
 
     }
 
