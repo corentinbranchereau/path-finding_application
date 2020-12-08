@@ -36,6 +36,7 @@ public class EtatCarteChargee implements State {
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
 
         c.getFenetre().getVueTextuelle().showContextualMenu(false);
+        c.getFenetre().getFenetreControleur().getScrollPane().setContent(null);
     }
 
     /**
