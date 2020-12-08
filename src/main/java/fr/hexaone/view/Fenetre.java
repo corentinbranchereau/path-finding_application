@@ -166,6 +166,10 @@ public class Fenetre {
             this.largeurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getWidth();
             this.hauteurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getHeight();
 
+            // On lie les propriétés "visible" et "managed" des noeuds dont la visibilité
+            // change au cours de l'application
+            lierVisibleEtManaged();
+
             // Affichage de la scène
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
@@ -576,6 +580,38 @@ public class Fenetre {
         alert.getDialogPane().setContent(scrollPane);
 
         alert.show();
+    }
+
+    /**
+     * Méthode qui permet de lier les propriétés "visible" et "managed" des noeuds
+     * dont la visibilité change au cours de l'application, afin que les autres
+     * éléments s'adaptent pour prendre la place libérée
+     */
+    public void lierVisibleEtManaged() {
+        this.fenetreControleur.getBoutonNouvelleRequete().managedProperty()
+                .bind(this.fenetreControleur.getBoutonNouvelleRequete().visibleProperty());
+        this.fenetreControleur.getBoutonLancer().managedProperty()
+                .bind(this.fenetreControleur.getBoutonLancer().visibleProperty());
+        this.fenetreControleur.getBoutonValider().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
+        this.fenetreControleur.getDurationField().managedProperty()
+                .bind(this.fenetreControleur.getDurationField().visibleProperty());
+        this.fenetreControleur.getDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getDurationLabel().visibleProperty());
+        this.fenetreControleur.getBoutonValiderModificationDemande().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValiderModificationDemande().visibleProperty());
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().managedProperty()
+                .bind(this.fenetreControleur.getBoxBoutonsValiderAnnuler().visibleProperty());
+        this.fenetreControleur.getBoutonAnnuler().managedProperty()
+                .bind(this.fenetreControleur.getBoutonAnnuler().visibleProperty());
+        this.fenetreControleur.getDeliveryDurationField().managedProperty()
+                .bind(this.fenetreControleur.getDeliveryDurationField().visibleProperty());
+        this.fenetreControleur.getDeliveryDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getDeliveryDurationLabel().visibleProperty());
+        this.fenetreControleur.getPickUpDurationField().managedProperty()
+                .bind(this.fenetreControleur.getPickUpDurationField().visibleProperty());
+        this.fenetreControleur.getPickUpDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
     }
 
     /**
