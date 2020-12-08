@@ -296,4 +296,10 @@ public class VueTextuelle {
         this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
 
     }
+
+    public void showContextualMenu(boolean visible) {
+        if (this.requetesControleur != null) {
+            this.requetesControleur.showContextualMenu(visible);
+        }
+    }
 }

@@ -32,6 +32,7 @@ public class EtatRequetesChargees implements State {
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
         c.getFenetre().getVueTextuelle().chargerFXML();
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        c.getFenetre().getVueTextuelle().showContextualMenu(false);
     }
 
     /**

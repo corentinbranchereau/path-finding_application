@@ -11,7 +11,7 @@ import javafx.scene.control.Alert.AlertType;
  * @version 1.0
  */
 public class EtatInitial implements State {
-    
+
     /**
      * {@inheritDoc}
      */
@@ -32,9 +32,10 @@ public class EtatInitial implements State {
         // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
 
         c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setDisable(false);
-        
+
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().setDisable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().setDisable(false);
+        c.getFenetre().getVueTextuelle().showContextualMenu(false);
 
     }
 

@@ -18,7 +18,7 @@ public class EtatCarteChargee implements State {
      */
     @Override
     public void init(Controleur c) {
-    	
+
         c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
         c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
@@ -31,9 +31,11 @@ public class EtatCarteChargee implements State {
         c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
-        //c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        // c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
         c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
         c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
+
+        c.getFenetre().getVueTextuelle().showContextualMenu(false);
     }
 
     /**

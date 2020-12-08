@@ -36,6 +36,8 @@ public class EtatTourneeCalcule implements State {
         c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
         c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
         c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
+
+        c.getFenetre().getVueTextuelle().showContextualMenu(true);
     }
 
     /**
@@ -73,7 +75,7 @@ public class EtatTourneeCalcule implements State {
         // TODO : Créer un marqeur car point orphelin
 
         // TODO : récupérer depuis la vue graphique/textuelle l'index
-        if ( c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande)) ) {
+        if (c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
@@ -102,7 +104,7 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        if ( c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete)) ) {
+        if (c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
@@ -139,7 +141,7 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c, int i, int j) {
-        if ( !c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j)) ) {
+        if (!c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j))) {
             Alert messageAlerte = new Alert(AlertType.INFORMATION);
             messageAlerte.setTitle("Information");
             messageAlerte.setHeaderText(null);
