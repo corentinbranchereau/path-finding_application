@@ -3,6 +3,8 @@ package fr.hexaone.model;
 import org.javatuples.Pair;
 
 import fr.hexaone.algo.AlgoTSP;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.*;
 
@@ -228,10 +230,21 @@ public class Planning {
 
         int prevDuree = demande.getDuree();
         Long prevIdInter = demande.getIdIntersection();
+        
+        String nom = null;
+        for (Segment s : carte.getIntersections().get(idIntersection)
+                .getSegmentsArrivants()) {
+            if (!s.getNom().isEmpty()) {
+                nom = s.getNom();
+                break;
+            }
+        }
 
+        
         demande.setDuree(duree);
         demande.setIdIntersection(idIntersection);
-
+        demande.setNomIntersectionProperty(new SimpleStringProperty(nom));
+        
         boolean success = recalculerTournee();
         if ( !success ) {
             demande.setDuree(prevDuree);

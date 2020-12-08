@@ -127,11 +127,6 @@ public class Fenetre {
     private double hauteurInitialeStage;
 
     /**
-     * Liste observable des demandes
-     */
-    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
-
-    /**
      * Constructeur de Fenetre
      *
      * @param stage      le conteneur principal des éléments graphiques de
@@ -468,22 +463,6 @@ public class Fenetre {
 
         this.stage.setWidth(this.largeurInitialeStage);
         this.stage.setHeight(this.hauteurInitialeStage);
-    }
-
-    /**
-     * @return ObservableList<Demande> return the listeDemandes
-     */
-    public ObservableList<Demande> getListeDemandes() {
-        return listeDemandes;
-    }
-
-    /**
-     * setter
-     *
-     * @param list
-     */
-    public void setListeDemandes(ObservableList<Demande> list) {
-        this.listeDemandes = list;
     }
 
     /**
