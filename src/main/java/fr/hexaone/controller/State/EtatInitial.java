@@ -11,7 +11,7 @@ import javafx.scene.control.Alert.AlertType;
  * @version 1.0
  */
 public class EtatInitial implements State {
-    
+
     /**
      * {@inheritDoc}
      */

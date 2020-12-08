@@ -51,6 +51,11 @@ public class RequetesControleurFXML {
     private Boolean draggable = false;
 
     /**
+     * définit si le menu contextuel peut être affiché ou non
+     */
+    private Boolean showContextualMenu = false;
+
+    /**
      * index demande de départ drag and drop
      */
     protected int indexDemandeDepart;
@@ -261,7 +266,7 @@ public class RequetesControleurFXML {
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent event) {
-                    if (row.getItem() == null) {
+                    if (row.getItem() == null || !showContextualMenu) {
                         return;
                     }
                     if (fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
@@ -493,6 +498,24 @@ public class RequetesControleurFXML {
      */
     public void ajouterDemande(Demande demande) {
         listeDemandes.add(demande);
+    }
+
+    /**
+     * setter
+     * 
+     * @param visible
+     */
+    public void showContextualMenu(boolean visible) {
+        this.showContextualMenu = visible;
+    }
+
+    /**
+     * getter
+     * 
+     * @return boolean
+     */
+    public boolean getContextualMenuVisibility() {
+        return this.showContextualMenu;
     }
 
 }

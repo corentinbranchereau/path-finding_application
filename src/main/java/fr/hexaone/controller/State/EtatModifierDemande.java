@@ -80,7 +80,8 @@ public class EtatModifierDemande implements State {
         }
 
         try {
-            if ( !c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(), Integer.parseInt(durationField), idIntersection)) ){
+            if (!c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(),
+                    Integer.parseInt(durationField), idIntersection))) {
                 Alert messageAlerte = new Alert(AlertType.INFORMATION);
                 messageAlerte.setTitle("Information");
                 messageAlerte.setHeaderText(null);
@@ -88,19 +89,20 @@ public class EtatModifierDemande implements State {
                 messageAlerte.showAndWait();
             }
         }
-        
+
         catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            Utils.alertHelper(this,"Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !", Alert.AlertType.ERROR);
+            Utils.alertHelper(this, "Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+                    Alert.AlertType.ERROR);
             return;
         }
-        
+
         finally {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
             this.annuler(c);
         }
-        
+
     }
 
     /**

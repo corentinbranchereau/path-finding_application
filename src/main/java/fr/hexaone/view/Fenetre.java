@@ -595,6 +595,7 @@ public class Fenetre {
         this.fenetreControleur.getPickUpDurationLabel().setVisible(true);
         this.fenetreControleur.getDeliveryDurationLabel().setVisible(true);
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
     }
 
     /**
@@ -617,6 +618,7 @@ public class Fenetre {
         this.fenetreControleur.getPickUpDurationField().clear();
         this.fenetreControleur.getDeliveryDurationField().clear();
         this.fenetreControleur.getScrollPane().setContent(null);
+        this.vueTextuelle.showContextualMenu(false);
     }
 
     /**
@@ -639,6 +641,7 @@ public class Fenetre {
         this.fenetreControleur.getBoutonNouvelleRequete().setDisable(false);
         this.fenetreControleur.getDeliveryDurationField().setDisable(false);
         this.fenetreControleur.getPickUpDurationField().setDisable(false);
+        this.vueTextuelle.showContextualMenu(false);
     }
 
     /**
@@ -668,6 +671,7 @@ public class Fenetre {
         this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
         this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
     }
 
     /**
@@ -689,6 +693,7 @@ public class Fenetre {
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
         this.vueTextuelle.chargerFXML();
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
     }
 
     /**
@@ -709,5 +714,6 @@ public class Fenetre {
         this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
         this.vueTextuelle.getRequetesControleur().setDraggable(true);
+        this.vueTextuelle.showContextualMenu(true);
     }
 }
