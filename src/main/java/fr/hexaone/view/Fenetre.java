@@ -499,6 +499,11 @@ public class Fenetre {
                 "Afin de charger une carte et des demandes de livraison, il faut se rendre dans le menu Fichier en haut à gauche de l'application et choisir l'option adaptée."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
+        vBox.getChildren().add(Utils.obtenirTitreAide("Signification des symboles"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque des demandes de livraison ont été chargées, des carrés et des ronds colorés apparaissent dans la vue graphique : les carrés représentent les différents points de collecte des paquets, tandis que les ronds représentent les points de livraison des paquets. Il est à noter que les points de collecte et de livraison qui vont de pair s'affichent de la même couleur."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
         vBox.getChildren().add(Utils.obtenirTitreAide("Calculer une tournée"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
                 "Une fois une carte et des demandes de livraison chargées, il est possible de calculer une tournée en utilisant le bouton \"Lancer le calcul\" disponible sur la vue textuelle de l'application."));
