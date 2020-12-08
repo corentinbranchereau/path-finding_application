@@ -254,6 +254,9 @@ public class RequetesControleurFXML {
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent event) {
+                    if (row.getItem() == null) {
+                        return;
+                    }
                     if (fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
                         fenetre.getControleur().setDemandeSelectionnee(row.getItem());
                         contextMenu.show(row, event.getScreenX(), event.getScreenY());
