@@ -56,10 +56,6 @@ public interface State {
      * Cette méthode permet de charger et d'afficher une carte
      */
     default void chargerCarte(Controleur c) {
-    	
-        if(c.getPlanning()!=null) c.getPlanning().reinitialiserPlanning();
-        c.reinitialiserCommandes();
-    	
         FileChooser fChooser = new FileChooser();
         File fichier = fChooser.showOpenDialog(c.getFenetre().getStage());
         if (fichier != null) {
