@@ -132,10 +132,8 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void annuler(Controleur c) {
-        // idIntersection1 = null;
-        // idIntersection2 = null;
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         idIntersection = null;
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatTourneeCalcule();
     }
 
