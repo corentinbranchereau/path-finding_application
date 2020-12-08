@@ -89,6 +89,8 @@ public class RequetesControleurFXML {
 
         tableauDemandes.setItems(listeDemandes);
 
+        tableauDemandes.getColumns().forEach(e -> e.setReorderable(false));
+
         // Create ContextMenu
         contextMenu = new ContextMenu();
 
