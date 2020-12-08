@@ -260,4 +260,8 @@ public interface State {
     default void aide(Controleur c){
         c.getFenetre().afficherAide();
     }
+
+    default void selectionnerDemande(Controleur c, Demande demandeSelectionnee) {
+        System.out.println("selectionnerDemande [default state implementation]");
+    }
 }

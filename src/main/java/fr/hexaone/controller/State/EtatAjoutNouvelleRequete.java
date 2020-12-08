@@ -243,6 +243,18 @@ public class EtatAjoutNouvelleRequete implements State {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void selectionnerDemande(Controleur c, Demande demandeSelectionnee) {
+        if (c.getDemandeSelectionnee() == demandeSelectionnee)
+            c.setDemandeSelectionnee(null);
+        else
+            c.setDemandeSelectionnee(demandeSelectionnee);
+        c.rafraichirVues(false);
+    }
+
+    /**
      * Setter de l'idIntersection1
      * 
      * @param idIntersection1

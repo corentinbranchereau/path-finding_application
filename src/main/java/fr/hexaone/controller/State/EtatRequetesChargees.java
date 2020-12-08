@@ -40,6 +40,7 @@ public class EtatRequetesChargees implements State {
     public void lancerCalcul(Controleur c) {
         if (c.getPlanning().calculerMeilleurTournee()) {
             c.setEtatTourneeCalcule();
+            c.resetDemandeSelectionnee();
         } else {
             Alert messageAlerte = new Alert(AlertType.INFORMATION);
             messageAlerte.setTitle("Information");

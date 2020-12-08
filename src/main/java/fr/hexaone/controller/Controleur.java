@@ -264,24 +264,8 @@ public class Controleur {
      * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
-    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        if (this.demandeSelectionnee == demandeSelectionnee)
-            this.demandeSelectionnee = null;
-        else
-            this.demandeSelectionnee = demandeSelectionnee;
-        rafraichirVues(false);
-        // if (this.demandeSelectionnee != null) {
-        // this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-        // this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        // }
-
-        // if (this.demandeSelectionnee == demandeSelectionnee) {
-        // this.demandeSelectionnee = null;
-        // } else {
-        // this.demandeSelectionnee = demandeSelectionnee;
-        // this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
-        // this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
-        // }
+    public void selectionnerDemande(Demande demandeSelectionnee) {
+        this.etatCourant.selectionnerDemande(this, demandeSelectionnee);
     }
 
     /**
@@ -385,5 +369,9 @@ public class Controleur {
     	etatModifierDemande.setDuree(duree);
         etatModifierDemande.init(this);
         etatCourant = etatModifierDemande;
+    }
+
+    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
+        this.demandeSelectionnee = demandeSelectionnee;
     }
 }
