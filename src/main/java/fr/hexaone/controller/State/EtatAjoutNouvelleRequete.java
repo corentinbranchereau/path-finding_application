@@ -38,31 +38,7 @@ public class EtatAjoutNouvelleRequete implements State {
      */
     @Override
     public void init(Controleur c) {
-
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
-
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(false);
-
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(true);
-
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
-        c.getFenetre().getVueTextuelle().showContextualMenu(false);
+        c.getFenetre().initFenetreAjoutNouvelleRequete();
     }
 
     /**

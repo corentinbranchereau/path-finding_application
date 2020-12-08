@@ -31,35 +31,7 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void init(Controleur c) {
-
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-
-        // c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-
-        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDurationField().setText(String.valueOf(duree));
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setDisable(false);
-        c.getFenetre().getFenetreControleur().getDurationField().setDisable(false);
-
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
-
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-
-        c.getFenetre().getVueTextuelle().showContextualMenu(false);
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        c.getFenetre().initFenetreModifierDemande(this.duree);
     }
 
     /**
