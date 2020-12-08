@@ -190,7 +190,6 @@ public class VueGraphique {
 
             if (planning.getListeTrajets() != null) {
                 // Affichage de la demande sélectionnée et de la demande associée
-                // TODO : actuellement ne marche pas avant d'avoir calculé --> à voir
                 if (demandeSelectionnee != null) {
                     Requete requeteAssociee = demandeSelectionnee.getRequete();
 
@@ -213,8 +212,6 @@ public class VueGraphique {
                             // Mise en valeur faible de la collecte
                             highlightDemande(demandeAssociee, true);
                         }
-                    } else {
-                        // TODO : Mise en valeur du dépot
                     }
                     Trajet trajetAvant = null;
                     Trajet trajetApres = null;

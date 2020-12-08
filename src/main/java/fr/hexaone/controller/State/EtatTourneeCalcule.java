@@ -58,8 +58,6 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        // TODO : Créer un marqeur car point orphelin
-
         // TODO : récupérer depuis la vue graphique/textuelle l'index
         if (c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande))) {
             c.resetDemandeSelectionnee();

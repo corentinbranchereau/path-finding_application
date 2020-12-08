@@ -236,8 +236,6 @@ public class RequetesControleurFXML {
                             setTextFill(couleur);
 
                             // On met à jour la date d'arrivée, la date de départ et le nom
-                            // TODO : le nom n'est pas encore mis à jour dans le modèle à la modification
-                            // d'une demande
 
                             if (item.getDateArriveeProperty() != null && getChildren().size() == 5) {
                                 Cell dateArriveeCell = (Cell) getChildren().get(1);
