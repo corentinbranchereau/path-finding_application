@@ -102,45 +102,8 @@ public class PlanningTest {
 
 
         //Calcul des chemins les plus courts
-        planning.calculerLesTrajetsLesPlusCourts(intersections);
+       assert( planning.calculerLesTrajetsLesPlusCourts(intersections)==false);
 
-        // Vérification des résultats
-        assert(planning.getTrajetsLesPlusCourts().size() == 9);
-
-        planning.getTrajetsLesPlusCourts().forEach( (key,value) -> {
-            switch (key) {
-	            case "0|0":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "1|1":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "9|9":
-	                assert(value.getPoids() == 0.);
-	                break;
-                case "0|1":
-                    assert(value.getPoids() == 4.);
-                    break;
-                case "0|9":
-                    assert(value.getPoids() == Double.MAX_VALUE);
-                    break;
-                case "1|0":
-                    assert(value.getPoids() == 4.);
-                    break;
-                case "1|9":
-                    assert(value.getPoids() == Double.MAX_VALUE);
-                    break;
-                case "9|0":
-                    assert(value.getPoids() == Double.MAX_VALUE);
-                    break;
-                case "9|1":
-                    assert(value.getPoids() == Double.MAX_VALUE);
-                    break;
-                default:
-                    assert(false);
-                    break;
-            }
-        });
     }
 
     /**
@@ -418,20 +381,11 @@ public class PlanningTest {
         intersections.add(carte.getIntersections().get(1L));
         intersections.add(carte.getIntersections().get(9L));
 
-
         //Calcul des chemins les plus courts
-        planning.calculerLesTrajetsLesPlusCourts(intersections);
+        boolean test = planning.calculerLesTrajetsLesPlusCourts(intersections);
 
+        assert(test==false);
 
-        List<Object> chromosome = new ArrayList<Object>();
-    	chromosome.add(requetes.get(0).getDemandeCollecte());
-        chromosome.add(requetes.get(0).getDemandeLivraison());
-
-        AlgoTSP algo=new AlgoTSP(0L,planning.getTrajetsLesPlusCourts());
-
-        Double cout = algo.cout(chromosome);
-
-        assert(cout >= Double.MAX_VALUE);
     }
 
     /**
