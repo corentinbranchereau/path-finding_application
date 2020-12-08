@@ -66,10 +66,13 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
-
-        c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
-        this.idIntersection = idIntersection;
-
+        if (this.idIntersection != null && this.idIntersection.equals(idIntersection)) {
+            c.getFenetre().getVueGraphique().deselectionneIntersection(this.idIntersection);
+            this.idIntersection = null;
+        } else if (this.idIntersection == null) {
+            c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
+            this.idIntersection = idIntersection;
+        }
     }
 
     /**
@@ -132,10 +135,8 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void annuler(Controleur c) {
-        // idIntersection1 = null;
-        // idIntersection2 = null;
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         idIntersection = null;
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatTourneeCalcule();
     }
 
