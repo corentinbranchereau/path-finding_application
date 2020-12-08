@@ -28,7 +28,8 @@ public class Demande {
      */
     private Long idIntersection;
 
-    /**
+
+	/**
      * propriété javafx symbolisant le nom de la rue associée à cette intersection
      */
     private StringProperty nomIntersectionProperty;
@@ -282,4 +283,7 @@ public class Demande {
         }
         return orphelineProperty;
     }
+    public void setNomIntersectionProperty(StringProperty nomIntersectionProperty) {
+		this.nomIntersectionProperty = nomIntersectionProperty;
+	}
 }
