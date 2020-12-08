@@ -18,23 +18,7 @@ public class EtatCarteChargee implements State {
      */
     @Override
     public void init(Controleur c) {
-    	
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
-        //c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        c.getFenetre().getFenetreControleur().getScrollPane().setContent(null);
+        c.getFenetre().initFenetreCarteChargee();
     }
 
     /**
