@@ -80,34 +80,34 @@ public interface State {
                 c.setEtatCarteChargee();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier carte : " + e);
-                Utils.alertHelper(this,"Erreur d'ouverture",
+                Utils.alertHelper(this, "Erreur d'ouverture",
                         "Erreur lors de l'ouverture du fichier carte, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (FileBadExtensionException e) {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
-                Utils.alertHelper(this,"Erreur d'extension",
+                Utils.alertHelper(this, "Erreur d'extension",
                         "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
-                Utils.alertHelper(this,"Erreur de fichier XML",
+                Utils.alertHelper(this, "Erreur de fichier XML",
                         "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (DTDValidationException e) {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
-                Utils.alertHelper(this,"Erreur de DTD", "Le fichier XML ne respecte pas son DTD, veuillez recommencer !",
-                        Alert.AlertType.ERROR);
+                Utils.alertHelper(this, "Erreur de DTD",
+                        "Le fichier XML ne respecte pas son DTD, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-                Utils.alertHelper(this,"Erreur de type",
+                Utils.alertHelper(this, "Erreur de type",
                         "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper(this,"Erreur de type",
+                Utils.alertHelper(this, "Erreur de type",
                         "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (URISyntaxException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
-                Utils.alertHelper(this,"Erreur d'inclusion DTD",
+                Utils.alertHelper(this, "Erreur d'inclusion DTD",
                         "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             }
@@ -140,40 +140,40 @@ public interface State {
                 c.setEtatRequetesChargees();
             } catch (IOException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de requêtes : " + e);
-                Utils.alertHelper(this,"Erreur d'ouverture",
+                Utils.alertHelper(this, "Erreur d'ouverture",
                         "Erreur lors de l'ouverture du fichier de requêtes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (FileBadExtensionException e) {
                 System.out.println("Le fichier sélectionné n'est pas de type XML");
-                Utils.alertHelper(this,"Erreur d'extension",
+                Utils.alertHelper(this, "Erreur d'extension",
                         "Le fichier sélectionné n'est pas de type XML, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (SAXException e) {
                 System.out.println("Erreur liée au fichier XML : " + e);
-                Utils.alertHelper(this,"Erreur de fichier XML",
+                Utils.alertHelper(this, "Erreur de fichier XML",
                         "Le fichier sélectionné possèdes erreurs internes, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (DTDValidationException e) {
                 System.out.println("Le fichier XML ne respecte pas son DTD");
-                Utils.alertHelper(this,"Erreur de DTD", "Le fichier XML ne respecte pas son DTD, veuillez recommencer !",
-                        Alert.AlertType.ERROR);
+                Utils.alertHelper(this, "Erreur de DTD",
+                        "Le fichier XML ne respecte pas son DTD, veuillez recommencer !", Alert.AlertType.ERROR);
             } catch (IllegalAttributException e) {
                 System.out.println("Le fichier XML contient un attribut de type incohérent");
-                Utils.alertHelper(this,"Erreur de type",
+                Utils.alertHelper(this, "Erreur de type",
                         "Le fichier XML contient un attribut de type incohérent, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (BadFileTypeException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper(this,"Erreur de type",
+                Utils.alertHelper(this, "Erreur de type",
                         "Le fichier XML n'est pas cohérent avec le type demandé, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (RequestOutOfMapException e) {
                 System.out.println(e.getMessage());
-                Utils.alertHelper(this,"Erreur requête hors de la carte",
+                Utils.alertHelper(this, "Erreur requête hors de la carte",
                         "Une ou plusieurs requête(s) chargées ne sont pas dans la carte, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             } catch (URISyntaxException e) {
                 System.out.println("Erreur lors de l'ouverture du fichier de dtd pour l'inclusion : " + e);
-                Utils.alertHelper(this,"Erreur d'inclusion DTD",
+                Utils.alertHelper(this, "Erreur d'inclusion DTD",
                         "Inclusion du DTD de vérification dans le fichier XML, veuillez recommencer !",
                         Alert.AlertType.ERROR);
             }
@@ -251,7 +251,7 @@ public interface State {
     /**
      * Cette méthode permet d'afficher l'aide à l'utilisateur
      */
-    default void aide(Controleur c){
+    default void aide(Controleur c) {
         c.getFenetre().afficherAide();
     }
 
