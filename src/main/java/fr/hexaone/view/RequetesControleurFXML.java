@@ -251,6 +251,13 @@ public class RequetesControleurFXML {
                             }
 
                         }
+                    } else {
+                        if (getChildren().size() > 3) {
+                            Cell textCell = (Cell) getChildren().get(4);
+                            textCell.setText("");
+                            Tooltip.uninstall(textCell, tooltipLivraisonSeule);
+                            Tooltip.uninstall(textCell, tooltipLivraisonCollecteReversed);
+                        }
                     }
                 }
             };
