@@ -265,7 +265,7 @@ public class RequetesControleurFXML {
                         return;
                     }
                     if (fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
-                        fenetre.getControleur().setDemandeSelectionnee(row.getItem());
+                        fenetre.getControleur().selectionnerDemande(row.getItem());
                         contextMenu.show(row, event.getScreenX(), event.getScreenY());
                     } else {
                         contextMenu.show(row, event.getScreenX(), event.getScreenY());
@@ -339,7 +339,7 @@ public class RequetesControleurFXML {
             row.setOnMouseClicked(event -> {
                 if (event.getButton() != MouseButton.SECONDARY) {
                     if (row.getItem() != null)
-                        fenetre.getControleur().setDemandeSelectionnee(row.getItem());
+                        fenetre.getControleur().selectionnerDemande(row.getItem());
                 }
                 this.tableauDemandes.getSelectionModel().clearSelection();
             });

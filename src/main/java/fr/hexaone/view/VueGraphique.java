@@ -617,7 +617,7 @@ public class VueGraphique {
             // On ajoute un handler pour sélectionner la demande
             rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                    fenetre.getControleur().selectionnerDemande(demande);
                 }
             });
 
@@ -639,7 +639,7 @@ public class VueGraphique {
             // On ajoute un handler pour sélectionner la demande
             cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                    fenetre.getControleur().selectionnerDemande(demande);
                 }
             });
 
