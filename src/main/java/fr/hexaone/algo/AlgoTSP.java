@@ -1,5 +1,8 @@
-package fr.hexaone.model;
+package fr.hexaone.algo;
 
+import fr.hexaone.model.Demande;
+import fr.hexaone.model.Trajet;
+import fr.hexaone.model.TypeIntersection;
 import org.javatuples.Pair;
 
 import java.util.*;
@@ -72,11 +75,12 @@ public class AlgoTSP extends AlgoGenetique {
     
     /**
      * Réalise le crossover de chromosomes afin d'obtenir un enfant
-     *
+     * 
      * @param P1 parent1
      * @param P2 parent2
      * @param i indice 1
      * @param j indice 2
+     * @return le chromosome enfant
      */
     @Override
 	public List<Object> crossoverOX(List<Object> P1, List<Object> P2, int i, int j) {
@@ -131,6 +135,7 @@ public class AlgoTSP extends AlgoGenetique {
      * ils sont inversés
      *
      * @param chromosome
+     * @return le nouveau chromosome corrigé
      */
     @Override
 	public List<Object> correctionCrossover(List<Object> chromosome){
@@ -162,6 +167,7 @@ public class AlgoTSP extends AlgoGenetique {
      * @param population   à tester
      * @param ecart        maximum
      * @param valeurEnfant
+     * @return true si l'espacement minimum dans la population est supérieur à ecart 
      */
     @Override
 	public Boolean espacePopulation(List<Pair<List<Object>, Double>> population, Double ecart, Double valeurEnfant) {
@@ -180,6 +186,7 @@ public class AlgoTSP extends AlgoGenetique {
      *
      * @param population à tester
      * @param ecart      maximum
+     * @return true si l'espacement minimum dans la population est supérieur à ecart 
      */
     @Override
 	public Boolean espacePopulation(List<Pair<List<Object>, Double>> population, Double ecart) {
@@ -199,6 +206,7 @@ public class AlgoTSP extends AlgoGenetique {
      * sinon
      *
      * @param chromosome que l'on teste
+     * @return true si toutes les contraintes de précédences sont respectées
      */
     @Override
 	public Boolean verifierPop(List<Object> chromosome) {
@@ -228,6 +236,7 @@ public class AlgoTSP extends AlgoGenetique {
      *
      * @param chromosome que l'on teste
      * @param coutIni coût initial
+     * @return le chromosome muté
      */
     @Override
 	public List<Object> mutationLocalSearch(List<Object> chromosome, Double coutIni){
@@ -278,6 +287,7 @@ public class AlgoTSP extends AlgoGenetique {
      * Calcule le cout d'un chromsomome
      *
      * @param chromosome que l'on teste
+     * @return le cout d'un chromosome
      */
     @Override
 	public Double cout(List<Object> chromosome) {
@@ -299,6 +309,7 @@ public class AlgoTSP extends AlgoGenetique {
      *
      * @param a
      * @param b
+     * @return le max entre a et b
      */
     private int max(int a, int b) {
 
@@ -314,6 +325,7 @@ public class AlgoTSP extends AlgoGenetique {
      *
      * @param a
      * @param b
+     * @return le min entre a et b
      */
     private int min(int a, int b) {
 

@@ -190,7 +190,6 @@ public class VueGraphique {
 
             if (planning.getListeTrajets() != null) {
                 // Affichage de la demande sélectionnée et de la demande associée
-                // TODO : actuellement ne marche pas avant d'avoir calculé --> à voir
                 if (demandeSelectionnee != null) {
                     Requete requeteAssociee = demandeSelectionnee.getRequete();
 
@@ -213,8 +212,6 @@ public class VueGraphique {
                             // Mise en valeur faible de la collecte
                             highlightDemande(demandeAssociee, true);
                         }
-                    } else {
-                        // TODO : Mise en valeur du dépot
                     }
                     Trajet trajetAvant = null;
                     Trajet trajetApres = null;
@@ -617,7 +614,7 @@ public class VueGraphique {
             // On ajoute un handler pour sélectionner la demande
             rectangleCollecte.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                    fenetre.getControleur().selectionnerDemande(demande);
                 }
             });
 
@@ -639,7 +636,7 @@ public class VueGraphique {
             // On ajoute un handler pour sélectionner la demande
             cercleLivraison.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent event) {
-                    fenetre.getControleur().setDemandeSelectionnee(demande);
+                    fenetre.getControleur().selectionnerDemande(demande);
                 }
             });
 
@@ -904,8 +901,9 @@ public class VueGraphique {
      * Déselectionne la totalité des intersections sélectionnées
      */
     public void nettoyerIntersectionsSelectionnees() {
-        for (Long l : listIntersectionsSelectionnees) {
-            this.deselectionneIntersection(l);
+        for (int i = listIntersectionsSelectionnees.size() - 1; i >= 0; i--) {
+            mapIntersections.get(listIntersectionsSelectionnees.get(i)).setViewOrder(0D);
+            this.deselectionneIntersection(listIntersectionsSelectionnees.get(i));
         }
     }
 

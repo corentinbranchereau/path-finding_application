@@ -9,12 +9,12 @@ import java.util.Date;
 public class Demande {
 
     /**
-     * attribut static qui permet d'incrémenter l'id unique de demande
+     * Attribut static qui permet d'incrémenter l'id unique de demande
      */
     private static Long increment = (long) 0;
 
     /**
-     * le type d'intersection: COLLECTE, DELIVERY ou DEPOT
+     * Le type d'intersection: COLLECTE, DELIVERY ou DEPOT
      */
     private TypeIntersection typeIntersection;
 
@@ -24,22 +24,23 @@ public class Demande {
     private Long idDemande;
 
     /**
-     * id de l'intersection où se situe
+     * ID de l'intersection où se situe
      */
     private Long idIntersection;
 
-    /**
-     * propriété javafx symbolisant le nom de la rue associée à cette intersection
+
+	/**
+     * Propriété javafx symbolisant le nom de la rue associée à cette intersection
      */
     private StringProperty nomIntersectionProperty;
 
     /**
-     * propriété javafx de la date d'arrivée au point sous forme "08h35"
+     * Propriété javafx de la date d'arrivée au point sous forme "08h35"
      */
     private StringProperty dateArriveeProperty;
 
     /**
-     * propriété javafx de la date de départ au point sous forme "08h35"
+     * Propriété javafx de la date de départ au point sous forme "08h35"
      */
     private StringProperty dateDepartProperty;
 
@@ -56,7 +57,7 @@ public class Demande {
     private Date dateArrivee;
 
     /**
-     * date de départ du point
+     * Date de départ du point
      */
     private Date dateDepart;
 
@@ -73,11 +74,11 @@ public class Demande {
     /**
      * Constructeur de demande
      * 
-     * @param type
-     * @param idIntersection
-     * @param nomIntersection
-     * @param duree
-     * @param requete
+     * @param type Le type de demande
+     * @param idIntersection L'id de l'intersection
+     * @param nomIntersection Le nom de l'intersection
+     * @param duree La durée de la demande
+     * @param requete La requête liée
      */
     public Demande(TypeIntersection type, Long idIntersection, String nomIntersection, Integer duree, Requete requete) {
         this.idDemande = increment;
@@ -94,12 +95,8 @@ public class Demande {
 
     }
 
-    public void setIdDemande(Long idDemande) {
-        this.idDemande = idDemande;
-    }
-
     /**
-     * getter nomIntersection
+     * Getter nomIntersection
      * 
      * @return StringProperty nomIntersectionProperty
      */
@@ -108,7 +105,7 @@ public class Demande {
     }
 
     /**
-     * getter
+     * Getter
      * 
      * @return Stringproperty
      */
@@ -117,7 +114,7 @@ public class Demande {
     }
 
     /**
-     * getter
+     * Getter
      * 
      * @return Stringproperty
      */
@@ -126,13 +123,11 @@ public class Demande {
     }
 
     /**
-     * getter du type de demande
+     * Getter du type de demande
      * 
      * @return renvoie le type formaté avec l'icone correspondant
      */
     public StringProperty getTypeProperty() {
-        if (typeIntersection == TypeIntersection.DEPOT)
-            return new SimpleStringProperty("★ dépot");
         if (typeIntersection == TypeIntersection.COLLECTE)
             return new SimpleStringProperty("■ collecte");
         if (typeIntersection == TypeIntersection.LIVRAISON)
@@ -141,16 +136,7 @@ public class Demande {
     }
 
     /**
-     * getter
-     * 
-     * @return String
-     */
-    public String getNomIntersection() {
-        return nomIntersectionProperty.get();
-    }
-
-    /**
-     * getter
+     * Getter
      * 
      * @return duree sous forme StringProperty
      */
@@ -159,52 +145,49 @@ public class Demande {
     }
 
     /**
-     * getter
+     * Getter
      * 
-     * @return Date
+     * @return Date de départ
      */
     public Date getDateDepart() {
         return dateDepart;
     }
 
     /**
-     * getter
+     * Getter
      * 
-     * @return Date
+     * @return Date d'arrivée
      */
     public Date getDateArrivee() {
         return dateArrivee;
     }
 
     /**
-     * getter
-     * 
+     * Getter
+     * @return La requête
      */
     public Requete getRequete() {
         return requete;
     }
 
     /**
-     * getter
-     * 
-     * @return Integer
+     * Getter
+     * @return Integer La durée
      */
     public Integer getDuree() {
         return duree;
     }
 
     /**
-     * setter
-     * 
-     * @return Integer
+     * Setter
+     * @param duree La durée
      */
     public void setDuree(Integer duree) {
         this.duree = duree;
     }
 
     /**
-     * getter
-     * 
+     * Getter
      * @return Long idDemande
      */
     public Long getIdDemande() {
@@ -212,8 +195,7 @@ public class Demande {
     }
 
     /**
-     * getter
-     * 
+     * Getter
      * @return Long
      */
     public Long getIdIntersection() {
@@ -221,8 +203,7 @@ public class Demande {
     }
 
     /**
-     * setter de Date datedépart et de StringProperty dateDépartProperty
-     * 
+     * Setter de Date datedépart et de StringProperty dateDépartProperty
      * @param date la date au format Date
      */
     public void setDateDepart(Date date) {
@@ -237,8 +218,7 @@ public class Demande {
     }
 
     /**
-     * setter de Date datearrivee et de StringProperty dateArriveeProperty
-     * 
+     * Setter de Date datearrivee et de StringProperty dateArriveeProperty
      * @param date la date au format Date
      */
     public void setDateArrivee(Date date) {
@@ -253,9 +233,8 @@ public class Demande {
     }
 
     /**
-     * setter
-     * 
-     * @param idIntersection
+     * Setter
+     * @param idIntersection l'id de l'intersection
      */
     public void setIdIntersection(Long idIntersection) {
         this.idIntersection = idIntersection;
@@ -270,10 +249,10 @@ public class Demande {
         return typeIntersection;
     }
 
-    public void setTypeIntersection(TypeIntersection typeIntersection) {
-        this.typeIntersection = typeIntersection;
-    }
-
+    /**
+     * Getter
+     * @return La propriété orpheline
+     */
     public StringProperty getOrphelineProperty() {
         if (this.typeIntersection == TypeIntersection.COLLECTE) {
             this.orphelineProperty = requete.getDemandeLivraison() == null ? new SimpleStringProperty("⚠")
@@ -284,4 +263,12 @@ public class Demande {
         }
         return orphelineProperty;
     }
+
+    /**
+     * Setter
+     * @param nomIntersectionProperty le nom de l'intersection
+     */
+    public void setNomIntersectionProperty(StringProperty nomIntersectionProperty) {
+		this.nomIntersectionProperty = nomIntersectionProperty;
+	}
 }

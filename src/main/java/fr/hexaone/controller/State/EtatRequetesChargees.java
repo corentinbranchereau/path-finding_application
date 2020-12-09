@@ -18,19 +18,7 @@ public class EtatRequetesChargees implements State {
      */
     @Override
     public void init(Controleur c) {
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(false);
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        c.getFenetre().initFenetreRequetesChargees();
     }
 
     /**
@@ -40,6 +28,7 @@ public class EtatRequetesChargees implements State {
     public void lancerCalcul(Controleur c) {
         if (c.getPlanning().calculerMeilleurTournee()) {
             c.setEtatTourneeCalcule();
+            c.resetDemandeSelectionnee();
         } else {
             Alert messageAlerte = new Alert(AlertType.INFORMATION);
             messageAlerte.setTitle("Information");

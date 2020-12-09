@@ -57,41 +57,44 @@
             </AnchorPane>
             <VBox alignment="TOP_CENTER" prefHeight="710.0" prefWidth="488.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="boutonLancer" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lancer le calcul" visible="false">
+                        <Button fx:id="boutonLancer" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Lancer le calcul de la tournée" visible="false">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="boutonNouvelleRequete" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Ajouter demande de livraison">
+                        <Button fx:id="boutonNouvelleRequete" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Ajouter une demande de livraison">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>
                         </Button>
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </HBox>
                   <GridPane alignment="TOP_CENTER" hgap="10" prefHeight="48.0" prefWidth="488.0" vgap="10">
                      <padding>
                         <Insets bottom="10" left="0" right="0" top="0" />
                      </padding>
                      <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" maxWidth="100.0" minWidth="160.0" prefWidth="100.0" />
                         <ColumnConstraints />
                      </columnConstraints>
                      <children>
                         <!-- Add PickupDuration Label -->
-                        
-                        <Label fx:id="pickupDurationLabel" text="Durée Collecte" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+                        <Label fx:id="pickupDurationLabel" prefHeight="18.0" prefWidth="235.0" text="Durée Collecte (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <!-- Add PickupDuration Text Field -->
                         <TextField fx:id="pickupDurationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <!-- Add deliveryDuration Label -->
-                        <Label fx:id="deliveryDurationLabel" text="Durée Livraison" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label fx:id="deliveryDurationLabel" prefHeight="18.0" prefWidth="225.0" text="Durée Livraison (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <!-- Add deliveryDuration Field -->
                         <TextField fx:id="deliveryDurationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        
-                        <Label fx:id="durationLabel" text="Nouvelle durée" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+                        <Label fx:id="durationLabel" text="Nouvelle durée (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <!-- Add PickupDuration Text Field -->
                         <TextField fx:id="durationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
@@ -141,6 +144,9 @@
                      </content>
                   </ScrollPane>
                </children>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
             </VBox>
          </children>
       </HBox>

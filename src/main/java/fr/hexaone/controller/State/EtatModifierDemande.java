@@ -31,34 +31,7 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void init(Controleur c) {
-
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
-
-        // c.getFenetre().getFenetreControleur().getPickUpDurationField().clear();
-
-        // c.getFenetre().getFenetreControleur().getDeliveryDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDurationField().clear();
-        c.getFenetre().getFenetreControleur().getDurationField().setText(String.valueOf(duree));
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(true);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setDisable(false);
-        c.getFenetre().getFenetreControleur().getDurationField().setDisable(false);
-
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setDisable(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setDisable(true);
-
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(false);
+        c.getFenetre().initFenetreModifierDemande(this.duree);
     }
 
     /**
@@ -66,10 +39,13 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void selectionnerIntersection(Controleur c, Long idIntersection) {
-
-        c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
-        this.idIntersection = idIntersection;
-
+        if (this.idIntersection != null && this.idIntersection.equals(idIntersection)) {
+            c.getFenetre().getVueGraphique().deselectionneIntersection(this.idIntersection);
+            this.idIntersection = null;
+        } else if (this.idIntersection == null) {
+            c.getFenetre().getVueGraphique().selectionneIntersection(idIntersection);
+            this.idIntersection = idIntersection;
+        }
     }
 
     /**
@@ -104,7 +80,8 @@ public class EtatModifierDemande implements State {
         }
 
         try {
-            if ( !c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(), Integer.parseInt(durationField), idIntersection)) ){
+            if (!c.getListOfCommands().add(new ModifierDemandeCommand(c.getPlanning(), c.getDemandeSelectionnee(),
+                    Integer.parseInt(durationField), idIntersection))) {
                 Alert messageAlerte = new Alert(AlertType.INFORMATION);
                 messageAlerte.setTitle("Information");
                 messageAlerte.setHeaderText(null);
@@ -112,19 +89,20 @@ public class EtatModifierDemande implements State {
                 messageAlerte.showAndWait();
             }
         }
-        
+
         catch (NumberFormatException e) {
             System.out.println("Les durées (en seconde) saisies sont incorrectes !");
-            Utils.alertHelper(this,"Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !", Alert.AlertType.ERROR);
+            Utils.alertHelper(this, "Mauvaise saisie de durée", "Les durées (en seconde) saisies sont incorrectes !",
+                    Alert.AlertType.ERROR);
             return;
         }
-        
+
         finally {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
             this.annuler(c);
         }
-        
+
     }
 
     /**
@@ -132,29 +110,9 @@ public class EtatModifierDemande implements State {
      */
     @Override
     public void annuler(Controleur c) {
-        // idIntersection1 = null;
-        // idIntersection2 = null;
-        // c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         idIntersection = null;
+        c.getFenetre().getVueGraphique().nettoyerIntersectionsSelectionnees();
         c.setEtatTourneeCalcule();
-    }
-
-    /**
-     * Setter de l'idIntersection
-     * 
-     * @param idIntersection
-     */
-    public void setIdIntersection(Long idIntersection) {
-        this.idIntersection = idIntersection;
-    }
-
-    /**
-     * Getter de la durée
-     * 
-     * @return la durée en sec
-     */
-    public int getDuree() {
-        return duree;
     }
 
     /**
@@ -183,7 +141,7 @@ public class EtatModifierDemande implements State {
 
     /**
      * Vérification de l'entrée utilisateur sur les durées via une REGEX
-     *
+     * @param durationField la saisie en entrée
      */
     public boolean verifieDureeUtilisateur(String durationField) {
         String regex = "[0-9]+";

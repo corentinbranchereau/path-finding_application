@@ -23,19 +23,7 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void init(Controleur c) {
-        c.getFenetre().getFenetreControleur().getDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonValiderModificationDemande().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonAnnuler().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonLancer().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoutonNouvelleRequete().setVisible(true);
-        c.getFenetre().getFenetreControleur().getBoutonValider().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationField().setVisible(false);
-        c.getFenetre().getFenetreControleur().getPickUpDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getDeliveryDurationLabel().setVisible(false);
-        c.getFenetre().getFenetreControleur().getBoxBoutonsValiderAnnuler().setVisible(true);
-        c.getFenetre().getVueTextuelle().getRequetesControleur().setDraggable(true);
+        c.getFenetre().initFenetreTourneeCalcule();
     }
 
     /**
@@ -70,10 +58,8 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        // TODO : Créer un marqeur car point orphelin
-
         // TODO : récupérer depuis la vue graphique/textuelle l'index
-        if ( c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande)) ) {
+        if (c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
@@ -102,7 +88,7 @@ public class EtatTourneeCalcule implements State {
             return;
         }
 
-        if ( c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete)) ) {
+        if (c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
@@ -139,12 +125,24 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c, int i, int j) {
-        if ( !c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j)) ) {
+        if (!c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j))) {
             Alert messageAlerte = new Alert(AlertType.INFORMATION);
             messageAlerte.setTitle("Information");
             messageAlerte.setHeaderText(null);
             messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
             messageAlerte.showAndWait();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void selectionnerDemande(Controleur c, Demande demandeSelectionnee) {
+        if (c.getDemandeSelectionnee() == demandeSelectionnee)
+            c.setDemandeSelectionnee(null);
+        else
+            c.setDemandeSelectionnee(demandeSelectionnee);
+        c.rafraichirVues(false);
     }
 }

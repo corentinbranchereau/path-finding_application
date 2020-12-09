@@ -5,6 +5,7 @@ import fr.hexaone.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.TableRow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -61,18 +62,35 @@ public class VueTextuelle {
     }
 
     /**
+     * chargement du fichier fxml permettant d'afficher le tableau
+     */
+    public void chargerFXML() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this, "requetes.fxml");
+            AnchorPane TableauDemandeContainer = loader.load(inputFichierFxml);
+
+            this.fenetre.getFenetreControleur().getScrollPane().setContent(TableauDemandeContainer);
+            this.requetesControleur = loader.getController();
+            this.requetesControleur.setFenetre(fenetre);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Permet de réactualiser la vue textuelle après une modification du model
      */
     public void rafraichir(Planning planning, Demande demandeSelectionnee) {
-        // Reinitialisation de la vue
 
-        if (planning == null)
+        if (planning == null || this.requetesControleur == null)
             return;
 
         // Affichage des demandes (ordonnées) dans le tableau
         if (planning.getDemandesOrdonnees() != null) {
-            AfficherPlanning(planning, planning.getCarte());
             enleverHighlightDemande();
+            AfficherPlanning(planning, planning.getCarte());
             if (demandeSelectionnee != null)
                 highlightDemande(demandeSelectionnee);
 
@@ -80,7 +98,7 @@ public class VueTextuelle {
         } else if (!planning.getRequetes().isEmpty()) {
             reinitialiser();
             AfficherRequetes(planning, planning.getCarte());
-
+            enleverHighlightDemande();
         } else {
             reinitialiser();
         }
@@ -95,17 +113,23 @@ public class VueTextuelle {
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
         fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(
                 "Pour charger une Carte ou des Requêtes, rendez-vous dans 'Fichier', en haut à gauche de l'application. \r\n\r\n"));
-        this.fenetre.getFenetreControleur().getScrollPane().setContent(null);
-        fenetre.getListeDemandes().clear();
+        requetesControleur.getListeDemandes().removeAll(requetesControleur.getListeDemandes());
     }
 
     /**
      * Méthode qui permet d'afficher les requetes dans la vue textuelle lors du
      * chargement d'un fichier de requête (quand le planning n'est pas calculé)
      * 
-     * @param planning liste des segments à parcourir
+     * @param planning La liste des segments à parcourir
+     * @param carte La carte
      */
     public void AfficherRequetes(Planning planning, Carte carte) {
+
+        // paramétrage des colonnes tableau
+        requetesControleur.getDepartColumn().setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
+        requetesControleur.getDepartColumn().setText("Durée");
+        requetesControleur.getArriveeColumn().setVisible(false);
+        requetesControleur.getOrphelineColumn().setVisible(false);
 
         // récupération du nom du dépot
         this.nomDepot = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
@@ -114,43 +138,18 @@ public class VueTextuelle {
         Text texteDepot = new Text(
                 " ★ Départ : " + nomDepot + " à " + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
         texteDepot.setFill(Color.RED);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
-
-        ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
+        f.remove(0, f.size());
+        f.add(texteDepot);
 
         // parcours des requêtes
         for (Requete requete : planning.getRequetes()) {
+            if (requete.getDemandeCollecte() != null)
+                requetesControleur.ajouterDemande(requete.getDemandeCollecte());
 
-            if (requete.getDemandeCollecte() != null) {
-                listeDemandes.add(requete.getDemandeCollecte());
-            }
+            if (requete.getDemandeLivraison() != null)
+                requetesControleur.ajouterDemande(requete.getDemandeLivraison());
 
-            if (requete.getDemandeLivraison() != null) {
-                listeDemandes.add(requete.getDemandeLivraison());
-            }
-        }
-        fenetre.setListeDemandes(listeDemandes);
-
-        try {
-            // Load textual tab.
-            FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this,"requetes.fxml");
-            AnchorPane personOverview = loader.load(inputFichierFxml);
-
-            // Set person overview into the center of root layout.
-            this.fenetre.getFenetreControleur().getScrollPane().setContent(personOverview);
-
-            this.requetesControleur = loader.getController();
-            requetesControleur.getDepartColumn()
-                    .setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
-            requetesControleur.getDepartColumn().setText("Durée");
-            requetesControleur.getArriveeColumn().setVisible(false);
-            requetesControleur.getOrphelineColumn().setVisible(false);
-            requetesControleur.setFenetre(fenetre);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -164,9 +163,17 @@ public class VueTextuelle {
      */
     public void AfficherPlanning(Planning planning, Carte carte) {
 
-        ObservableList<Demande> listeDemandes = ajouterDemandesDansLaVue(planning);
-        fenetre.setListeDemandes(listeDemandes);
-        this.requetesControleur.getDemandeTable().setItems(listeDemandes);
+        // paramétrage des colonnes du tableau
+        requetesControleur.getDepartColumn()
+                .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
+        requetesControleur.getDepartColumn().setText("Repart à");
+        requetesControleur.getArriveeColumn().setVisible(true);
+        requetesControleur.getOrphelineColumn().setVisible(true);
+
+        ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
+        listeDemandes.addAll(planning.getDemandesOrdonnees());
+        requetesControleur.setListeDemandes(listeDemandes);
+        this.requetesControleur.getTableauDemandes().setItems(listeDemandes);
 
         String depotName = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
         if (this.nomDepot.isEmpty()) {
@@ -180,31 +187,12 @@ public class VueTextuelle {
         String heureRetourString = "Heure de retour : " + getStringFromDate(planning.getDateFin());
         Text texteHeureRetour = new Text(heureRetourString);
 
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteDepot);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureDepart);
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(texteHeureRetour);
+        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
+        f.remove(0, f.size());
+        f.add(texteDepot);
+        f.add(texteHeureDepart);
+        f.add(texteHeureRetour);
 
-        requetesControleur.getDepartColumn()
-                .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
-        requetesControleur.getDepartColumn().setText("Repart à");
-        requetesControleur.getArriveeColumn().setVisible(true);
-        requetesControleur.getOrphelineColumn().setVisible(true);
-    }
-
-    /**
-     * Méthode qui crée les objets demande à la réception d'un planning
-     *
-     * @param planning le planning
-     * @return une liste observable de demandes
-     */
-    public ObservableList<Demande> ajouterDemandesDansLaVue(Planning planning) {
-
-        ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
-
-        listeDemandes.addAll(planning.getDemandesOrdonnees());
-
-        return listeDemandes;
     }
 
     /**
@@ -212,7 +200,6 @@ public class VueTextuelle {
      * rues qui lui sont adjacentes
      * 
      * @param planning     le planning contenant le dépot
-     * @param carte        la carte contenant le nom des intersections
      * @param intersection l'intersection dont on cherche le nom
      * @return String: le nom de la rue du dépot
      */
@@ -277,12 +264,12 @@ public class VueTextuelle {
             demandeLiee = demande.getRequete().getDemandeCollecte();
         }
 
-        int indexDemande = this.requetesControleur.getDemandeTable().getItems().indexOf(demande);
+        int indexDemande = this.requetesControleur.getTableauDemandes().getItems().indexOf(demande);
         this.requetesControleur.getMapIndexLignes().get(indexDemande)
                 .setStyle("-fx-background-color: " + this.COULEUR_HIGHLIGHT_LIGNE);
 
         if (demandeLiee != null) {
-            int indexDemandeLiee = this.requetesControleur.getDemandeTable().getItems().indexOf(demandeLiee);
+            int indexDemandeLiee = this.requetesControleur.getTableauDemandes().getItems().indexOf(demandeLiee);
             Color couleur = Color.valueOf(this.COULEUR_HIGHLIGHT_LIGNE);
             this.requetesControleur.getMapIndexLignes().get(indexDemandeLiee)
                     .setStyle("-fx-background-color: rgba(" + 255 * couleur.getRed() + "," + 255 * couleur.getGreen()
@@ -311,5 +298,15 @@ public class VueTextuelle {
     public void modifierPlanning(int draggIndex, int dropIndex) {
         this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
 
+    }
+
+    /**
+     * Affiche le menu du contextuel
+     * @param visible Afficher le menu contextuel
+     */
+    public void showContextualMenu(boolean visible) {
+        if (this.requetesControleur != null) {
+            this.requetesControleur.showContextualMenu(visible);
+        }
     }
 }

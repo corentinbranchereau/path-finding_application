@@ -1,4 +1,5 @@
 package fr.hexaone.model;
+
 /**
  * Objet permettant de différencier les types d'intersections
  *
@@ -6,7 +7,5 @@ package fr.hexaone.model;
  * @version 1.0
  */
 public enum TypeIntersection {
-    COLLECTE,
-    LIVRAISON,
-    DEPOT
+    COLLECTE, LIVRAISON
 }

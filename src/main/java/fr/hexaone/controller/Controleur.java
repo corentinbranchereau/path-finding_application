@@ -74,7 +74,7 @@ public class Controleur {
      * requête du design pattern STATE
      */
     private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
-    
+
     /**
      * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
      * requête du design pattern STATE
@@ -95,7 +95,7 @@ public class Controleur {
         this.etatRequetesChargees = new EtatRequetesChargees();
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
-        this.etatModifierDemande= new EtatModifierDemande();
+        this.etatModifierDemande = new EtatModifierDemande();
         this.l = new ListOfCommands();
         setEtatInitial();
     }
@@ -105,7 +105,7 @@ public class Controleur {
      */
     public void undo() {
         etatCourant.undo(l);
-        rafraichirVues(true);
+        rafraichirVues(false);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Controleur {
      */
     public void redo() {
         etatCourant.redo(l);
-        rafraichirVues(true);
+        rafraichirVues(false);
     }
 
     /**
@@ -169,13 +169,13 @@ public class Controleur {
         etatCourant.supprimerDemande(this, demandeSelectionnee);
         rafraichirVues(false);
     }
-    
+
     /**
-     * Méthode permettant la sélection d'une nouvelle intersection pour modifier 
-     *le lieu de collecte ou livraison
+     * Méthode permettant la sélection d'une nouvelle intersection pour modifier le
+     * lieu de collecte ou livraison
      */
     public void modifierDemande() {
-        etatCourant.modifierDemande(this,demandeSelectionnee);
+        etatCourant.modifierDemande(this, demandeSelectionnee);
         rafraichirVues(false);
     }
 
@@ -207,7 +207,7 @@ public class Controleur {
     /**
      * Méthode permettant d'afficher l'aide à l'utilisateur
      */
-    public void aide(){
+    public void aide() {
         etatCourant.aide(this);
     }
 
@@ -215,17 +215,17 @@ public class Controleur {
      * Valider l'action en cours
      */
     public void valider(String... durations) {
-    	
-    	int taille=durations.length;
-    	
-    	if (taille==2) {
-    		etatCourant.valider(this, durations[0], durations[1]);
-    		
-    	}
-    	if(taille==1) {
-    		etatCourant.valider(this, durations[0]);
-    	}
-        
+
+        int taille = durations.length;
+
+        if (taille == 2) {
+            etatCourant.valider(this, durations[0], durations[1]);
+
+        }
+        if (taille == 1) {
+            etatCourant.valider(this, durations[0]);
+        }
+
         rafraichirVues(false);
     }
 
@@ -239,10 +239,13 @@ public class Controleur {
 
     /***
      * Modifier le planning
-     * @param i correspondant à l'index dans la liste des demandes avant la modification
-     * @param j correspondant à l'index dans la liste des demandes après la modification
+     * 
+     * @param i correspondant à l'index dans la liste des demandes avant la
+     *          modification
+     * @param j correspondant à l'index dans la liste des demandes après la
+     *          modification
      */
-    public void modifierPlanning(int i , int j) {
+    public void modifierPlanning(int i, int j) {
         etatCourant.modifierPlanning(this, i, j);
         rafraichirVues(false);
     }
@@ -264,24 +267,8 @@ public class Controleur {
      * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
-    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
-        if (this.demandeSelectionnee == demandeSelectionnee)
-            this.demandeSelectionnee = null;
-        else
-            this.demandeSelectionnee = demandeSelectionnee;
-        rafraichirVues(false);
-        // if (this.demandeSelectionnee != null) {
-        // this.fenetre.getVueGraphique().enleverHighlightDemande(this.demandeSelectionnee);
-        // this.fenetre.getVueTextuelle().enleverHighlightDemande();
-        // }
-
-        // if (this.demandeSelectionnee == demandeSelectionnee) {
-        // this.demandeSelectionnee = null;
-        // } else {
-        // this.demandeSelectionnee = demandeSelectionnee;
-        // this.fenetre.getVueGraphique().highlightDemande(demandeSelectionnee);
-        // this.fenetre.getVueTextuelle().highlightDemande(demandeSelectionnee);
-        // }
+    public void selectionnerDemande(Demande demandeSelectionnee) {
+        this.etatCourant.selectionnerDemande(this, demandeSelectionnee);
     }
 
     /**
@@ -292,15 +279,6 @@ public class Controleur {
     public Fenetre getFenetre() {
         return fenetre;
     }
-
-    // /**
-    // * Change l'état courant par un SETTER du design pattern STATE
-    // *
-    // * @param etatCourant L'état courant de l'application
-    // */
-    // public void setEtatCourant(State etatCourant) {
-    // this.etatCourant = etatCourant;
-    // }
 
     /**
      * Renvoie le planning.
@@ -350,40 +328,69 @@ public class Controleur {
     /**
      * Renvoie la liste des commandes du design pattern COMMAND.
      * 
-     * @return
+     * @return La liste des commandes
      */
     public ListOfCommands getListOfCommands() {
         return l;
     }
 
+    /**
+     * Setter de l'état initial du design pattern STATE
+     */
     public void setEtatInitial() {
         etatInitial.init(this);
         etatCourant = etatInitial;
     }
 
+    /**
+     * Setter de l'état carte chargée du design pattern STATE
+     */
     public void setEtatCarteChargee() {
         etatCarteChargee.init(this);
         etatCourant = etatCarteChargee;
     }
 
+    /**
+     * Setter de l'état requêtes chargées du design pattern STATE
+     */
     public void setEtatRequetesChargees() {
         etatRequetesChargees.init(this);
         etatCourant = etatRequetesChargees;
     }
 
+    /**
+     * Setter de l'état tournée calculée du design pattern STATE
+     */
     public void setEtatTourneeCalcule() {
         etatTourneeCalcule.init(this);
         etatCourant = etatTourneeCalcule;
     }
 
+    /**
+     * Setter de l'état ajout une nouvelle requête du design pattern STATE
+     */
     public void setEtatAjoutNouvelleRequete() {
         etatAjoutNouvelleRequete.init(this);
         etatCourant = etatAjoutNouvelleRequete;
     }
-    
+
+    /**
+     * Setter de l'état modifier une demande du design pattern STATE
+     * 
+     * @param duree La durée de la demande à modifier
+     */
     public void setEtatModifierDemande(int duree) {
-    	etatModifierDemande.setDuree(duree);
+        etatModifierDemande.setDuree(duree);
         etatModifierDemande.init(this);
         etatCourant = etatModifierDemande;
+    }
+
+    /**
+     * Setter de l'état d'une demande sélectionée du design pattern STATE
+     * 
+     * @param demandeSelectionnee La demande à été sélectionné
+     */
+    public void setDemandeSelectionnee(Demande demandeSelectionnee) {
+        this.demandeSelectionnee = demandeSelectionnee;
     }
 }

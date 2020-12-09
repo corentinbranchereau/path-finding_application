@@ -15,15 +15,15 @@ public class Trajet {
     private List<Segment> listeSegments;
 
     /**
-     * poids temporel total du trajet
+     * pPids temporel total du trajet
      */
     private Double poids;
 
     /**
      * constructeur de Trajet
      *
-     * @param listeSegments
-     * @param poids
+     * @param listeSegments La liste de segments
+     * @param poids Le poids du trajet
      */
     public Trajet(List<Segment> listeSegments, Double poids) {
         this.listeSegments = listeSegments;
@@ -40,15 +40,6 @@ public class Trajet {
     }
 
     /**
-     * Setter
-     * 
-     * @param listeSegments
-     */
-    public void setListeSegments(List<Segment> listeSegments) {
-        this.listeSegments = listeSegments;
-    }
-
-    /**
      * Getter
      * 
      * @return le poid total du trajet
@@ -57,11 +48,5 @@ public class Trajet {
         return poids;
     }
 
-    /**
-     * Setter
-     */
-    public void setPoids(Double poids) {
-        this.poids = poids;
-    }
 
 }

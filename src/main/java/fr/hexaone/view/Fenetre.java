@@ -8,8 +8,6 @@ import fr.hexaone.utils.Utils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -17,15 +15,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.control.ScrollPane;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,11 +121,6 @@ public class Fenetre {
     private double hauteurInitialeStage;
 
     /**
-     * Liste observable des demandes
-     */
-    private ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
-
-    /**
      * Constructeur de Fenetre
      *
      * @param stage      le conteneur principal des éléments graphiques de
@@ -148,7 +142,7 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this,"fenetre.fxml");
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this, "fenetre.fxml");
             Parent root = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
@@ -166,12 +160,16 @@ public class Fenetre {
             this.largeurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getWidth();
             this.hauteurInitialeCarte = this.fenetreControleur.getAnchorPaneGraphique().getHeight();
 
+            // On lie les propriétés "visible" et "managed" des noeuds dont la visibilité
+            // change au cours de l'application
+            lierVisibleEtManaged();
+
             // Affichage de la scène
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this,"logo-hexa.png")));
+            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
             this.stage.show();
 
             this.largeurInitialeStage = this.stage.getWidth();
@@ -186,14 +184,14 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { //scrollEvent linux
+            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { // scrollEvent linux
                 event.consume();
                 double facteurZoom = 1.;
                 double scrollAmout = event.getDeltaY();
-                if ( scrollAmout > 0 ) {
+                if (scrollAmout > 0) {
                     // Zoom
                     facteurZoom = 2.;
-                } else if ( scrollAmout < 0) {
+                } else if (scrollAmout < 0) {
                     // Dézoom
                     facteurZoom = 0.5;
                 }
@@ -466,22 +464,6 @@ public class Fenetre {
     }
 
     /**
-     * @return ObservableList<Demande> return the listeDemandes
-     */
-    public ObservableList<Demande> getListeDemandes() {
-        return listeDemandes;
-    }
-
-    /**
-     * setter
-     *
-     * @param list
-     */
-    public void setListeDemandes(ObservableList<Demande> list) {
-        this.listeDemandes = list;
-    }
-
-    /**
      * Renvoie le controleur de l'application
      *
      * @return Le controleur
@@ -498,7 +480,8 @@ public class Fenetre {
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
                 .add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
         alert.getDialogPane().setMaxWidth(600D);
-        alert.getDialogPane().setMaxHeight(500D);
+        alert.getDialogPane().setMaxHeight(700D);
+        alert.setHeight(700D);
         alert.setY(100D);
         alert.setTitle("Aide de l'application");
         alert.setHeaderText("Bienvenue sur l'aide de l'application いちONE, développée par l'HexaOne !");
@@ -514,9 +497,46 @@ public class Fenetre {
                 "Afin de charger une carte et des demandes de livraison, il faut se rendre dans le menu Fichier en haut à gauche de l'application et choisir l'option adaptée."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
+        vBox.getChildren().add(Utils.obtenirTitreAide("Signification des symboles"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Lorsque des demandes de livraison ont été chargées, des carrés et des ronds colorés apparaissent dans la vue graphique : les carrés représentent les différents points de collecte des paquets, tandis que les ronds représentent les points de livraison des paquets. Il est à noter que les points de collecte et de livraison qui vont de pair s'affichent de la même couleur."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
         vBox.getChildren().add(Utils.obtenirTitreAide("Calculer une tournée"));
         vBox.getChildren().add(Utils.obtenirParagrapheAide(
                 "Une fois une carte et des demandes de livraison chargées, il est possible de calculer une tournée en utilisant le bouton \"Lancer le calcul\" disponible sur la vue textuelle de l'application."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
+        vBox.getChildren().add(Utils.obtenirTitreAide("Couleurs utilisées pour le dessin d'une tournée"));
+        TextFlow texteCouleursUtilisees = new TextFlow();
+        Color couleurTexte = Color.gray(0.20);
+        Text debutTexteCouleurs = new Text("Lorsqu'une tournée est affichée, le sens du parcours va du ");
+        debutTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        debutTexteCouleurs.setFill(couleurTexte);
+        Text texteCouleur1 = new Text("rouge");
+        texteCouleur1.setUnderline(true);
+        texteCouleur1.setFill(Color.hsb(0, 1.0, 1.0));
+        texteCouleur1.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        Text milieuTexteCouleurs = new Text(" au ");
+        milieuTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        milieuTexteCouleurs.setFill(couleurTexte);
+        milieuTexteCouleurs.setWrappingWidth(600D);
+        Text texteCouleur2 = new Text("vert");
+        texteCouleur2.setUnderline(true);
+        texteCouleur2.setFill(Color.hsb(120, 1.0, 1.0));
+        texteCouleur2.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        Text finTexteCouleurs = new Text(
+                " (c'est-à-dire que le livreur part du dépôt du côté du rouge et revient à ce dernier du côté du vert)");
+        finTexteCouleurs.setFont(Font.font("Segoe UI", FontWeight.NORMAL, FontPosture.ITALIC, 13D));
+        finTexteCouleurs.setFill(couleurTexte);
+        texteCouleursUtilisees.getChildren().addAll(debutTexteCouleurs, texteCouleur1, milieuTexteCouleurs,
+                texteCouleur2, finTexteCouleurs);
+        vBox.getChildren().add(texteCouleursUtilisees);
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
+        vBox.getChildren().add(Utils.obtenirTitreAide("Sélection d'une demande"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Il est possible de sélectionner une demande pour la mettre en valeur en cliquant dessus (dans la vue graphique ou textuelle). Pour la désélectionner, il suffit de recliquer dessus. Lorsqu'une demande est sélectionnée, les trajets situés avant et après cette dernière sont également mis en valeur, en suivant la même logique de couleur que pour la tournée (le sens va du rouge au vert)."));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
         vBox.getChildren().add(Utils.obtenirTitreAide("Modifier l'ordre d'une tournée"));
@@ -549,10 +569,191 @@ public class Fenetre {
                 "Vous avez commis une erreur lors de l'amélioration d'une tournée calculée ? Aucun problème ! Il est possible d'annuler et de rejouer chaque action avec les raccourcis clavier CTRL+Z (undo) et CTRL+Y (redo), ou en passant par le menu \"Edition\""));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
+        vBox.getChildren().add(Utils.obtenirTitreAide("Messages d'avertissement"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Deux types d'avertissements peuvent apparaître dans le tableau à côté des points de collecte ou de livraison. L'icône '⚠' indique que la demande est orpheline, ce qui signifie qu'elle n'a pas de point de collecte (ou de livraison) associé. L'icône '!' indique qu'un point de livraison est effectué avant son point de collecte associé. De l'aide est disponible au survol de ces icônes d'avertissement."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
         scrollPane.setContent(vBox);
 
         alert.getDialogPane().setContent(scrollPane);
 
         alert.show();
+    }
+
+    /**
+     * Méthode qui permet de lier les propriétés "visible" et "managed" des noeuds
+     * dont la visibilité change au cours de l'application, afin que les autres
+     * éléments s'adaptent pour prendre la place libérée
+     */
+    public void lierVisibleEtManaged() {
+        this.fenetreControleur.getBoutonNouvelleRequete().managedProperty()
+                .bind(this.fenetreControleur.getBoutonNouvelleRequete().visibleProperty());
+        this.fenetreControleur.getBoutonLancer().managedProperty()
+                .bind(this.fenetreControleur.getBoutonLancer().visibleProperty());
+        this.fenetreControleur.getBoutonValider().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
+        this.fenetreControleur.getDurationField().managedProperty()
+                .bind(this.fenetreControleur.getDurationField().visibleProperty());
+        this.fenetreControleur.getDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getDurationLabel().visibleProperty());
+        this.fenetreControleur.getBoutonValiderModificationDemande().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValiderModificationDemande().visibleProperty());
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().managedProperty()
+                .bind(this.fenetreControleur.getBoxBoutonsValiderAnnuler().visibleProperty());
+        this.fenetreControleur.getBoutonAnnuler().managedProperty()
+                .bind(this.fenetreControleur.getBoutonAnnuler().visibleProperty());
+        this.fenetreControleur.getDeliveryDurationField().managedProperty()
+                .bind(this.fenetreControleur.getDeliveryDurationField().visibleProperty());
+        this.fenetreControleur.getDeliveryDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getDeliveryDurationLabel().visibleProperty());
+        this.fenetreControleur.getPickUpDurationField().managedProperty()
+                .bind(this.fenetreControleur.getPickUpDurationField().visibleProperty());
+        this.fenetreControleur.getPickUpDurationLabel().managedProperty()
+                .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatAjoutNouvelleRequete
+     */
+    public void initFenetreAjoutNouvelleRequete() {
+        this.fenetreControleur.getPickUpDurationField().clear();
+        this.fenetreControleur.getDeliveryDurationField().clear();
+        this.fenetreControleur.getDurationField().setVisible(false);
+        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(true);
+        this.fenetreControleur.getBoutonAnnuler().setDisable(false);
+        this.fenetreControleur.getBoutonValider().setVisible(true);
+        this.fenetreControleur.getBoutonValider().setDisable(false);
+        this.fenetreControleur.getBoutonLancer().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(true);
+        this.fenetreControleur.getPickUpDurationField().setVisible(true);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(true);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(true);
+        this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatCarteChargee
+     */
+    public void initFenetreCarteChargee() {
+        this.fenetreControleur.getDurationField().setVisible(false);
+        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(false);
+        this.fenetreControleur.getBoutonLancer().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
+        this.fenetreControleur.getBoutonValider().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().clear();
+        this.fenetreControleur.getDeliveryDurationField().clear();
+        this.fenetreControleur.getScrollPane().setContent(null);
+        this.vueTextuelle.showContextualMenu(false);
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatInitial
+     */
+    public void initFenetreInitial() {
+        this.fenetreControleur.getDurationField().setVisible(false);
+        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(false);
+        this.fenetreControleur.getBoutonLancer().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
+        this.fenetreControleur.getBoutonValider().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setDisable(false);
+        this.fenetreControleur.getDeliveryDurationField().setDisable(false);
+        this.fenetreControleur.getPickUpDurationField().setDisable(false);
+        this.vueTextuelle.showContextualMenu(false);
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatModifierDemande
+     * 
+     * @param duree La durée à mettre par défaut dans le champs dédié à la durée de
+     *              la demande
+     */
+    public void initFenetreModifierDemande(int duree) {
+        this.fenetreControleur.getDurationField().clear();
+        this.fenetreControleur.getDurationField().setText(String.valueOf(duree));
+        this.fenetreControleur.getDurationField().setVisible(true);
+        this.fenetreControleur.getDurationLabel().setVisible(true);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(true);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setDisable(false);
+        this.fenetreControleur.getDurationField().setDisable(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(true);
+        this.fenetreControleur.getBoutonAnnuler().setDisable(false);
+        this.fenetreControleur.getBoutonValider().setVisible(false);
+        this.fenetreControleur.getBoutonValider().setDisable(true);
+        this.fenetreControleur.getBoutonLancer().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatRequetesChargees
+     */
+    public void initFenetreRequetesChargees() {
+        this.fenetreControleur.getDurationField().setVisible(false);
+        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(false);
+        this.fenetreControleur.getBoutonLancer().setVisible(true);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
+        this.fenetreControleur.getBoutonValider().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
+        this.vueTextuelle.chargerFXML();
+        this.vueTextuelle.getRequetesControleur().setDraggable(false);
+        this.vueTextuelle.showContextualMenu(false);
+    }
+
+    /**
+     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
+     * EtatTourneeCalcule
+     */
+    public void initFenetreTourneeCalcule() {
+        this.fenetreControleur.getDurationField().setVisible(false);
+        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
+        this.fenetreControleur.getBoutonAnnuler().setVisible(false);
+        this.fenetreControleur.getBoutonLancer().setVisible(false);
+        this.fenetreControleur.getBoutonNouvelleRequete().setVisible(true);
+        this.fenetreControleur.getBoutonValider().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationField().setVisible(false);
+        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
+        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
+        this.vueTextuelle.getRequetesControleur().setDraggable(true);
+        this.vueTextuelle.showContextualMenu(true);
     }
 }
