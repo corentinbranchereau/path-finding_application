@@ -85,6 +85,7 @@ public class Planning {
      * Constructeur du planning
      * 
      * @param carte La carte du planning
+     * @param requetes Les requetes qu'on intègre au planning
      */
     public Planning(Carte carte, List<Requete> requetes) {
         this.requetes = requetes;
@@ -206,7 +207,7 @@ public class Planning {
 
     /**
      * Ajouter une demande seule après avoir déja calculer la meilleure tournée.
-     * 
+     * @param demande La demande que l'on souhaiter ajouter.
      * @return Vrai si succès
      */
     public boolean ajouterDemande(Demande demande) {
@@ -221,7 +222,9 @@ public class Planning {
 
     /**
      * Modifier une demande seule après avoir déja calculer la meilleure tournée.
-     * 
+     * @param demande La demande que l'on souhaite modifier
+     * @param duree La nouvelle durée
+     * @param idIntersection l'id de l'intersection 
      * @return Vrai si succès
      */
     public boolean modifierDemande(Demande demande, int duree, Long idIntersection) {
@@ -254,7 +257,7 @@ public class Planning {
 
     /**
      * Ajouter une requete après avoir déja calculé la meilleure tournée.
-     * 
+     * @param requete La requete que l'on souhaite ajouter
      * @return Vrai si succès
      */
     public boolean ajouterRequete(Requete requete) {
@@ -275,7 +278,8 @@ public class Planning {
 
     /**
      * Ajouter une requete après avoir déja calculer la meilleure tournée.
-     * 
+     * @param requete La requete que l'on souhaite ajouter
+     * @param positions les positions de la livraison et de la collecte dans le planning établi
      * @return Vrai si succès
      */
     public boolean ajouterRequete(Requete requete, List<Integer> positions) {
@@ -289,6 +293,7 @@ public class Planning {
 
     /**
      * Supprimer une requete de la tournée et regénère les trajets ordonées
+     * @param demande La demande que l'on souhaite supprimer
      */
     public void supprimerDemande(Demande demande) {
         demandesOrdonnees.remove(demande);
@@ -299,7 +304,7 @@ public class Planning {
 
     /**
      * Supprimer une requete de la tournée et regénère les trajets ordonées
-     * 
+     * @param requete La requete que l'on souhaite supprimer.
      * @return la position de la collecte et de la livraison
      */
     public List<Integer> supprimerRequete(Requete requete) {
@@ -320,6 +325,8 @@ public class Planning {
 
     /**
      * Modifer la durée d'une demande
+     * @param demande La demande que l'on souhaite modifier.
+     * @param duree La nouvelle durée de la demande.
      */
     public void modifierDemande(Demande demande, Integer duree) {
         demande.setDuree(duree);
@@ -329,7 +336,8 @@ public class Planning {
 
     /**
      * Modifer la durée d'une demande
-     * 
+     * @param demande La demande que l'on souhaite modifier
+     * @param idIntersection l'id de l'intersection
      * @return Vrai si succès
      */
     public boolean modifierDemande(Demande demande, Long idIntersection) {
@@ -347,7 +355,9 @@ public class Planning {
 
     /**
      * Modifer la durée et l'intersection d'une demande
-     * 
+     * @param demande La demande que l'on souhaite modifier
+     * @param idIntersection l'id de l'intersection
+     * @param duree La nouvelle durée de la demande
      * @return Vrai si succès
      */
     public boolean modifierDemande(Demande demande, Long idIntersection, Integer duree) {
@@ -365,8 +375,10 @@ public class Planning {
         return success;
     }
     
+    /**
+     * Permet de réinitialiser le planning
+     */
     public void reinitialiserPlanning() {
-    	
     	this.demandesOrdonnees=null;
     	this.dateDebut=null;
     	this.dateFin=null;
@@ -374,7 +386,6 @@ public class Planning {
     	this.idDepot=null;
     	this.listeTrajets=null;
     	this.requetes.clear();
-
     }
 
     ///////////////////////////////////////////////

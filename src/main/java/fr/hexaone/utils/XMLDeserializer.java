@@ -29,6 +29,8 @@ public class XMLDeserializer {
      * 
      * @param carte La carte où charger les données.
      * @param xml   Le document XML bien formé contenant les données.
+     * @throws IllegalAttributException
+     * @throws BadFileTypeException
      */
     public static void loadCarte(Carte carte, Document xml) throws IllegalAttributException, BadFileTypeException {
         Map<Long, Intersection> intersections = carte.getIntersections();
@@ -67,6 +69,10 @@ public class XMLDeserializer {
      * 
      * @param planning Le planning où charger les données.
      * @param xml      Le fichier XML bien formé contenant les données.
+     * 
+     * @throws IllegalAttributException Lorsque mauvais attribut
+     * @throws BadFileTypeException Lorsque mauvais type de fichier
+     * @throws RequestOutOfMapException Requete hors de la map
      */
     public static void loadRequete(Document xml, Planning planning) throws IllegalAttributException, BadFileTypeException, RequestOutOfMapException {
         if(xml.getElementsByTagName("planningRequest").getLength()==0) throw new BadFileTypeException("Le fichier XML chargé n'est pas de type request.");

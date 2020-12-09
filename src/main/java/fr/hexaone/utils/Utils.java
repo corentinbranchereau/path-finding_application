@@ -20,7 +20,7 @@ public class Utils {
 
     /**
      * Gère l'affichage de messages d'alertes dans l'application
-     *
+     * @param o L'objet de l'alerte
      * @param title     Le titre de l'alerte
      * @param message   Le message contenu dans l'alerte
      * @param alertType Le type d'alerte souhaité
@@ -75,6 +75,8 @@ public class Utils {
 
     /**
      * Permet d'obtenir un InputStream vers une ressource que l'on soit dans un JAR ou non
+     * @param o L'objet de l'alerte
+     * @param fileName le nom du fichier
      * @return L'input stream de la ressource pointée
      */
     public static InputStream obtenirInputStreamDepuisPath(Object o, String fileName) {

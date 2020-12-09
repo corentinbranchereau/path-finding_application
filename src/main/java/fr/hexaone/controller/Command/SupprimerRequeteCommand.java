@@ -32,6 +32,8 @@ public class SupprimerRequeteCommand implements Command{
 
     /**
      * Constructeur de la suppression de requête
+     * @param planning Le planning que l'on souahite modifier.
+     * @param requete La requete que l'on souhaite supprimer du planning.
      */
     public SupprimerRequeteCommand(Planning planning, Requete requete) {
         this.planning = planning;
@@ -40,7 +42,7 @@ public class SupprimerRequeteCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -49,7 +51,7 @@ public class SupprimerRequeteCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {

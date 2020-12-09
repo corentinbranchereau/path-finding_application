@@ -11,6 +11,7 @@ public class BadFileTypeException extends Exception{
 
     /**
      * Héritage d'une exception java
+     * @param errorMessage le message d'erreur
      */
     public BadFileTypeException(String errorMessage){
         super(errorMessage);

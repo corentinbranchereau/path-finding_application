@@ -198,6 +198,7 @@ public class Controleur {
 
     /**
      * Méthode permettant la sélection d'une intersection
+     * @param idIntersection l'id de l'intersection selectionnée.
      */
     public void selectionnerIntersection(Long idIntersection) {
         etatCourant.selectionnerIntersection(this, idIntersection);
@@ -213,6 +214,7 @@ public class Controleur {
 
     /**
      * Valider l'action en cours
+     * @param durations Le/les nouvelle(s) durée(s).
      */
     public void valider(String... durations) {
 
@@ -258,6 +260,9 @@ public class Controleur {
         rafraichirVues(false);
     }
 
+    /**
+     * Réinitialise les commandes actuellement en mémoire.
+     */
     public void reinitialiserCommandes() {
         l.reinitialiser();
     }

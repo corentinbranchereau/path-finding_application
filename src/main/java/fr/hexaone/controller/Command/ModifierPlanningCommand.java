@@ -32,7 +32,7 @@ public class ModifierPlanningCommand implements Command {
 
    /**
     * Constructeur de la modificationn de planning
-    * @param planning
+    * @param planning Le planning que l'on souhaite modifier
     * @param i index dans la liste de demandes du départ du drag/drop
     * @param j nouvel index dans la liste de demandes à l'arrivée du drag/drop
     */
@@ -44,7 +44,7 @@ public class ModifierPlanningCommand implements Command {
 
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -65,7 +65,7 @@ public class ModifierPlanningCommand implements Command {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {

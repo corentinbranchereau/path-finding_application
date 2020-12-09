@@ -6,6 +6,10 @@ package fr.hexaone.model;
  * @author HexaOne
  * @version 1.0
  */
+
+ /**
+  * Le type de l'intersection.
+  */
 public enum TypeIntersection {
     COLLECTE, LIVRAISON
 }

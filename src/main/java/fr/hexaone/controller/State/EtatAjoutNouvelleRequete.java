@@ -223,6 +223,7 @@ public class EtatAjoutNouvelleRequete implements State {
     /**
      * Vérification de l'entrée utilisateur sur les durées via une REGEX
      * @param durationField la saisie en entrée
+     * @return True si l'entrée utilisateur est conforme (seulement des chiffres).
      */
     public boolean verifieDureeUtilisateur(String durationField) {
         String regex = "[0-9]+";
