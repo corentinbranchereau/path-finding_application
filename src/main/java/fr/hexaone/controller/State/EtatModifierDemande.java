@@ -116,24 +116,6 @@ public class EtatModifierDemande implements State {
     }
 
     /**
-     * Setter de l'idIntersection
-     * 
-     * @param idIntersection
-     */
-    public void setIdIntersection(Long idIntersection) {
-        this.idIntersection = idIntersection;
-    }
-
-    /**
-     * Getter de la durée
-     * 
-     * @return la durée en sec
-     */
-    public int getDuree() {
-        return duree;
-    }
-
-    /**
      * Setter de la durée
      * 
      * @param duree en sec
@@ -159,7 +141,7 @@ public class EtatModifierDemande implements State {
 
     /**
      * Vérification de l'entrée utilisateur sur les durées via une REGEX
-     *
+     * @param durationField la saisie en entrée
      */
     public boolean verifieDureeUtilisateur(String durationField) {
         String regex = "[0-9]+";

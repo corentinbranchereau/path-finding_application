@@ -33,11 +33,13 @@ public interface State {
 
     /**
      * Cette méthode permet d'initaliser l'état
+     * @param c Le controleur MVC
      */
     void init(Controleur c);
 
     /**
      * Annuler la dernière commande (design pattern COMMAND) via un undo
+     * @param l La liste de commandes
      */
     default void undo(ListOfCommands l) {
         l.undo();
@@ -46,6 +48,7 @@ public interface State {
 
     /**
      * Rétablir la dernière commande (design pattern COMMAND) via un redo
+     * @param l la liste de commandes
      */
     default void redo(ListOfCommands l) {
         l.redo();
@@ -54,6 +57,7 @@ public interface State {
 
     /**
      * Cette méthode permet de charger et d'afficher une carte
+     * @param c Le controleur MVC
      */
     default void chargerCarte(Controleur c) {
         FileChooser fChooser = new FileChooser();
@@ -118,6 +122,7 @@ public interface State {
 
     /**
      * Cette méthode permet de charger et d'afficher des requêtes
+     * @param c Le controleur MVC
      */
     default void chargerRequetes(Controleur c) {
         FileChooser fChooser = new FileChooser();
@@ -184,26 +189,43 @@ public interface State {
 
     /**
      * Cette méthode permet de calculer le planning pour les requêtes actuelles
+     * @param c Le controleur MVC
      */
     default void lancerCalcul(Controleur c) {
         System.out.println("handleClicBoutonCalcul [default state implementation]");
     }
 
+    /**
+     * Cette méthode supprime une demande
+     * @param c Le controleur MVC
+     * @param demande La demande à supprimer
+     */
     default void supprimerDemande(Controleur c, Demande demande) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des demandes");
     }
 
+    /**
+     * Cette méthode modifie une demande
+     * @param c Le controleur MVC
+     * @param d La demande à modifier
+     */
     default void modifierDemande(Controleur c, Demande d) {
         System.out.println("Il faut avoir calculé la tournée et sélectionner une demande pour la modifier");
 
     }
 
+    /**
+     * Cette méthode supprime une requête
+     * @param c Le controleur MVC
+     * @param requete La requête à supprimer
+     */
     default void supprimerRequete(Controleur c, Requete requete) {
         System.out.println("Il faut avoir calculé la tournée pour supprimer des requetes");
     }
 
     /**
      * Cette méthode quitte l'application
+     * @param c Le controleur MVC
      */
     default void quitterApplication(Controleur c) {
         Platform.exit();
@@ -211,6 +233,7 @@ public interface State {
 
     /**
      * Cette méthode permet de passer en mode d'ajout d'une nouvelle requête
+     * @param c Le controleur MVC
      */
     default void ajoutNouvelleRequete(Controleur c) {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -222,6 +245,8 @@ public interface State {
 
     /**
      * Cette méthode permet de sélectionner une intersection
+     * @param c Le controleur MVC
+     * @param idIntersection L'id de l'intersection à sélectionner
      */
     default void selectionnerIntersection(Controleur c, Long idIntersection) {
         System.out.println("selectionnerIntersection [default state implementation]");
@@ -229,6 +254,8 @@ public interface State {
 
     /**
      * Cette méthode permet de valider un choix
+     * @param c Le controleur MVC
+     * @param durations Les durées à valider
      */
     default void valider(Controleur c, String... durations) {
         System.out.println("valider [default state implementation]");
@@ -236,6 +263,7 @@ public interface State {
 
     /**
      * Cette méthode permet d'annuler un choix
+     * @param c Le controleur MVC
      */
     default void annuler(Controleur c) {
         System.out.println("annuler [default state implementation]");
@@ -243,6 +271,9 @@ public interface State {
 
     /**
      * Cette méthode permet de modifier l'ordre des demandes dans le planning
+     * @param c Le controleur MVC
+     * @param i index de départ
+     * @param j index d'arrivée
      */
     default void modifierPlanning(Controleur c, int i, int j) {
         System.out.println("modifierPlanning [default state implementation]");
@@ -250,11 +281,17 @@ public interface State {
 
     /**
      * Cette méthode permet d'afficher l'aide à l'utilisateur
+     * @param c Le controleur MVC
      */
     default void aide(Controleur c) {
         c.getFenetre().afficherAide();
     }
 
+    /**
+     * Sélection d'une demande
+     * @param c Le controleur MVC
+     * @param demandeSelectionnee La demande sélectionné
+     */
     default void selectionnerDemande(Controleur c, Demande demandeSelectionnee) {
         System.out.println("selectionnerDemande [default state implementation]");
     }

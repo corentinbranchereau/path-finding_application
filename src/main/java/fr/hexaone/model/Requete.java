@@ -29,10 +29,10 @@ public class Requete {
     /**
      * Constructeur de Requete
      *
-     * @param idPickup
-     * @param dureePickup
-     * @param idDelivery
-     * @param dureeDelivery
+     * @param idPickup L'id du pickup
+     * @param dureePickup La durée du pickup
+     * @param idDelivery L'id du delivery
+     * @param dureeDelivery La durée du delivery
      */
     public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery,
             String nomDelivery) {
@@ -43,10 +43,10 @@ public class Requete {
     /**
      * Constructeur de Requete pour une unique demande
      *
-     * @param id
-     * @param duree
-     * @param nom
-     * @param typeIntersection
+     * @param id L'id de l'intersection
+     * @param duree La duréée
+     * @param nom Le nom
+     * @param typeIntersection Le type d'intersection
      */
     public Requete(long id, int duree, String nom, TypeIntersection typeIntersection) {
         if(typeIntersection==TypeIntersection.COLLECTE){

@@ -70,18 +70,6 @@ public class EtatAjoutNouvelleRequete implements State {
         String pickUpDurationField = durations[0];
         String deliveryDurationField = durations[1];
 
-        /*
-         * for(String d : durations) {
-         * 
-         * if(compteur==0) { pickUpDurationField=d;
-         * 
-         * }
-         * 
-         * if(compteur==1) { deliveryDurationField=d; }
-         * 
-         * }
-         */
-
         // Erreurs de saisies et sélections
         TypeIntersection typeIntersection = null;
         if (idIntersection1 == null && idIntersection2 == null) {
@@ -233,26 +221,8 @@ public class EtatAjoutNouvelleRequete implements State {
     }
 
     /**
-     * Setter de l'idIntersection1
-     * 
-     * @param idIntersection1
-     */
-    public void setIdIntersection1(Long idIntersection1) {
-        this.idIntersection1 = idIntersection1;
-    }
-
-    /**
-     * Setter de l'idIntersection2
-     * 
-     * @param idIntersection2
-     */
-    public void setIdIntersection2(Long idIntersection2) {
-        this.idIntersection2 = idIntersection2;
-    }
-
-    /**
      * Vérification de l'entrée utilisateur sur les durées via une REGEX
-     *
+     * @param durationField la saisie en entrée
      */
     public boolean verifieDureeUtilisateur(String durationField) {
         String regex = "[0-9]+";
