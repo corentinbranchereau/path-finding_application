@@ -57,9 +57,6 @@ public abstract class AlgoGenetique {
      /**
       * Comparateur afin de classer les chromosomes au sein d'une population dans
       * l'ordre croissant des coûts
-      *
-      * @param depot
-      * @param requetes
       */
      protected final Comparator<Pair<List<Object>, Double>> ComparatorChromosome = new Comparator<Pair<List<Object>, Double>>() {
 
@@ -107,8 +104,8 @@ public abstract class AlgoGenetique {
     
     /**
      * Boucle principale de l'algo génétique : à ne jamais modifier
-     * @param objets
-     * @return
+     * @param objets Une liste d'objets représentant un chromosome (une liste non ordonnée)
+     * @return Meilleure solution trouvée
      */
 	public final List<Object> algoGenetique(List<Object> objets) {
 		

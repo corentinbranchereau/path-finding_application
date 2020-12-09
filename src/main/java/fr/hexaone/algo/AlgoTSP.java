@@ -1,10 +1,9 @@
 package fr.hexaone.algo;
 
-import org.javatuples.Pair;
-
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Trajet;
 import fr.hexaone.model.TypeIntersection;
+import org.javatuples.Pair;
 
 import java.util.*;
 
