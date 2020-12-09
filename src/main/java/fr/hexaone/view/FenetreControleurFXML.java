@@ -123,8 +123,8 @@ public class FenetreControleurFXML {
      */
     @FXML
     private Button boutonValider;
-    
-    
+
+
 	/**
      * Bouton permettant de valider la modification d'une demande
      */
@@ -360,17 +360,34 @@ public class FenetreControleurFXML {
         return anchorPaneGraphique;
     }
 
+    /**
+     * Renvoie la zone d'information autour du dépôt
+     * @return La zone d'information autour du dépôt
+     */
     public TextFlow getDepotTextInformation() {
         return depotTextInformation;
     }
 
+    /**
+     * Renvoie la pane de dessin
+     * @return La pane de dessin
+     */
     public Pane getPaneDessin() {
         return paneDessin;
     }
+
+    /**
+     * Renvoi le MenuItem de l'undo
+     * @return L'undo
+     */
     public MenuItem getUndoItem() {
 		return undoItem;
 	}
 
+    /**
+     * Renvoi le MenuItme du redo
+     * @return Le redo
+     */
 	public MenuItem getRedoItem() {
 		return redoItem;
 	}

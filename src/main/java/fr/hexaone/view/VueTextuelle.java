@@ -120,7 +120,8 @@ public class VueTextuelle {
      * Méthode qui permet d'afficher les requetes dans la vue textuelle lors du
      * chargement d'un fichier de requête (quand le planning n'est pas calculé)
      * 
-     * @param planning liste des segments à parcourir
+     * @param planning La liste des segments à parcourir
+     * @param carte La carte
      */
     public void AfficherRequetes(Planning planning, Carte carte) {
 
@@ -199,7 +200,6 @@ public class VueTextuelle {
      * rues qui lui sont adjacentes
      * 
      * @param planning     le planning contenant le dépot
-     * @param carte        la carte contenant le nom des intersections
      * @param intersection l'intersection dont on cherche le nom
      * @return String: le nom de la rue du dépot
      */
@@ -300,6 +300,10 @@ public class VueTextuelle {
 
     }
 
+    /**
+     * Affiche le menu du contextuel
+     * @param visible Afficher le menu contextuel
+     */
     public void showContextualMenu(boolean visible) {
         if (this.requetesControleur != null) {
             this.requetesControleur.showContextualMenu(visible);

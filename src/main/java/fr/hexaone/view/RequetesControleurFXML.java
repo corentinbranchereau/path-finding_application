@@ -19,25 +19,54 @@ import java.util.Map;
 public class RequetesControleurFXML {
 
     /**
-     * le tableau
+     * Le tableau de demande
      */
     @FXML
     private TableView<Demande> tableauDemandes;
+
+    /**
+     * La colonne de type
+     */
     @FXML
     private TableColumn<Demande, String> typeColumn;
+
+    /**
+     * La colonne d'arrivée
+     */
     @FXML
     private TableColumn<Demande, String> arriveeColumn;
+
+    /**
+     * La colonne de départ
+     */
     @FXML
     private TableColumn<Demande, String> departColumn;
+
+    /**
+     * La colonne d'adresse
+     */
     @FXML
     private TableColumn<Demande, String> adresseColumn;
+
+    /**
+     * La colonne de notation orpheline
+     */
     @FXML
     private TableColumn<Demande, String> orphelineColumn;
 
+    /**
+     * Menu contextuel
+     */
     private ContextMenu contextMenu;
 
+    /**
+     * Indicateur de type
+     */
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
+    /**
+     * La fenêtre
+     */
     private Fenetre fenetre;
 
     /**
@@ -143,9 +172,9 @@ public class RequetesControleurFXML {
         tooltipCollecteSeule.setShowDelay(new Duration(0));
         tooltipCollecteSeule.setHideDelay(new Duration(0));
 
-        /**
-         * définit le type de case affiché dans le tableau, et les évènements associés
-         * aux cases.
+        /*
+          définit le type de case affiché dans le tableau, et les évènements associés
+          aux cases.
          */
         tableauDemandes.setRowFactory(tv -> {
 
@@ -265,8 +294,8 @@ public class RequetesControleurFXML {
             // On ajoute l'entrée <indx, ligne> dans la map
             this.mapIndexLignes.put(row.getIndex(), row);
 
-            /**
-             * évènement click droit sur une case du tableau appelant le menu contextuel
+            /*
+              évènement click droit sur une case du tableau appelant le menu contextuel
              */
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
@@ -283,8 +312,8 @@ public class RequetesControleurFXML {
                 }
             });
 
-            /**
-             * évènement d'une ligne du tableau cliquée et déplacée
+            /*
+              évènement d'une ligne du tableau cliquée et déplacée
              */
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
@@ -303,8 +332,8 @@ public class RequetesControleurFXML {
                 }
             });
 
-            /**
-             * évènement d'une ligne du tableau déplacée dessus une autre
+            /*
+              évènement d'une ligne du tableau déplacée dessus une autre
              */
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
@@ -316,8 +345,8 @@ public class RequetesControleurFXML {
                 }
             });
 
-            /**
-             * evenement d'une ligne du tableau lachée sur une autre
+            /*
+              evenement d'une ligne du tableau lachée sur une autre
              */
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
@@ -343,8 +372,8 @@ public class RequetesControleurFXML {
                 }
             });
 
-            /**
-             * Evenement du click de souris
+            /*
+              Evenement du click de souris
              */
             row.setOnMouseClicked(event -> {
                 if (event.getButton() != MouseButton.SECONDARY) {
