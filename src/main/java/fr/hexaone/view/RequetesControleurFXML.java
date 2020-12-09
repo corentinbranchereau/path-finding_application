@@ -340,6 +340,21 @@ public class RequetesControleurFXML {
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        row.setStyle("-fx-background-color:GREY");
+                        event.consume();
+                    }
+                }
+            });
+
+            row.setOnDragExited(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                        this.tableauDemandes.getSelectionModel().clearSelection();
+                        row.setStyle("-fx-background-color:WHITE");
+                        row.setStyle("-fx-text-fill:black");
+
+                        row.setTextFill(Color.BLACK);
                         event.consume();
                     }
                 }
@@ -363,7 +378,10 @@ public class RequetesControleurFXML {
                     indexDemandeArrivee = dropIndex;
                     tableauDemandes.getItems().add(dropIndex, draggedItem);
                     event.setDropCompleted(true);
-
+                    this.tableauDemandes.getSelectionModel().clearSelection();
+                    row.setStyle("-fx-background-color:WHITE");
+                    row.setStyle("-fx-text-fill:black");
+                    fenetre.getControleur().selectionnerDemande(null);
                     tableauDemandes.getSelectionModel().select(dropIndex);
                     this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
