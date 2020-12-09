@@ -16,6 +16,14 @@ import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controleur JavaFX permettant de récupérer les éléments graphiques issus du
+ * fichier Requetes FXML
+ * 
+ * @author HexaOne
+ * @version 1.0
+ */
+
 public class RequetesControleurFXML {
 
     /**
