@@ -340,6 +340,7 @@ public class RequetesControleurFXML {
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        this.fenetre.getVueTextuelle().rechargerHighlight();
                         row.setStyle("-fx-background-color:GREY");
                         event.consume();
                     }
@@ -353,6 +354,7 @@ public class RequetesControleurFXML {
                         this.tableauDemandes.getSelectionModel().clearSelection();
                         row.setStyle("-fx-background-color:WHITE");
                         row.setStyle("-fx-text-fill:black");
+                        this.fenetre.getVueTextuelle().rechargerHighlight();
 
                         row.setTextFill(Color.BLACK);
                         event.consume();
@@ -381,7 +383,6 @@ public class RequetesControleurFXML {
                     this.tableauDemandes.getSelectionModel().clearSelection();
                     row.setStyle("-fx-background-color:WHITE");
                     row.setStyle("-fx-text-fill:black");
-                    fenetre.getControleur().selectionnerDemande(null);
                     tableauDemandes.getSelectionModel().select(dropIndex);
                     this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
