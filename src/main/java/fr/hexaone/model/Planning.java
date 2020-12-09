@@ -74,7 +74,7 @@ public class Planning {
     /**
      * Constructeur du planning
      * 
-     * @param carte
+     * @param carte La carte du planning
      */
     public Planning(Carte carte) {
         this.requetes = new ArrayList<>();
@@ -84,7 +84,7 @@ public class Planning {
     /**
      * Constructeur du planning
      * 
-     * @param carte
+     * @param carte La carte du planning
      */
     public Planning(Carte carte, List<Requete> requetes) {
         this.requetes = requetes;
@@ -376,8 +376,6 @@ public class Planning {
     	this.requetes.clear();
 
     }
-    
-    
 
     ///////////////////////////////////////////////
     // Algo de recherche des plus courts trajets //
@@ -387,7 +385,7 @@ public class Planning {
      * Calculer tous les trajets les plus courts entre toutes les intersections en
      * paramètre
      * 
-     * @param intersections
+     * @param intersections La liste des intersections
      * 
      * @return Vrai si succès
      */
@@ -445,7 +443,7 @@ public class Planning {
     /**
      * Retourne l'intersection avec la distance la plus faible
      * 
-     * @param unsettledIntersections
+     * @param unsettledIntersections Les intersections non parcourus
      * @return lowestDistanceIntersection : l'intersection la plus proche
      */
     public Intersection getLowestDistanceIntersection(Set<Intersection> unsettledIntersections) {
@@ -464,10 +462,10 @@ public class Planning {
     /**
      * Enregistre la distance minimale pour accéder à une intersection
      * 
-     * @param evaluationIntersection
-     * @param edgeWeigh
-     * @param sourceIntersection
-     * @param seg
+     * @param evaluationIntersection L'intersection à évaluer
+     * @param edgeWeigh Le poids de l'arrête
+     * @param sourceIntersection L'intersection source
+     * @param seg Le segment associé
      */
     public void CalculateMinimumDistance(Intersection evaluationIntersection, Double edgeWeigh,
             Intersection sourceIntersection, Segment seg) {
@@ -484,76 +482,107 @@ public class Planning {
     // GETTER AND SETTER //
     ///////////////////////
 
+    /**
+     * Getter
+     * @return L'id du dépot
+     */
     public Long getIdDepot() {
         return idDepot;
     }
 
+    /**
+     * Setter
+     * @param idDepot L'id du dépot
+     */
     public void setIdDepot(Long idDepot) {
         this.idDepot = idDepot;
     }
 
+    /**
+     * Getter
+     * @return La date de début
+     */
     public Date getDateDebut() {
         return dateDebut;
     }
 
+    /**
+     * Setter
+     * @param dateDebut La date de début
+     */
     public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
     }
 
+    /**
+     * Getter
+     * @return La liste des requêtes
+     */
     public List<Requete> getRequetes() {
         return requetes;
     }
 
+    /**
+     * Setter
+     * @param requetes La liste des requêtes
+     */
     public void setRequetes(List<Requete> requetes) {
         this.requetes = requetes;
     }
 
+    /**
+     * Getter
+     * @return La liste des demandes ordonnées
+     */
     public List<Demande> getDemandesOrdonnees() {
         return demandesOrdonnees;
     }
 
-    public void setDemandesOrdonnees(List<Demande> demandesOrdonnees) {
-        this.demandesOrdonnees = demandesOrdonnees;
-    }
-
+    /**
+     * Getter
+     * @return La carte
+     */
     public Carte getCarte() {
         return carte;
     }
 
+    /**
+     * Setter
+     * @param carte La carte
+     */
     public void setCarte(Carte carte) {
         this.carte = carte;
     }
 
+    /**
+     * Getter
+     * @return La liste des trajets
+     */
     public List<Trajet> getListeTrajets() {
         return listeTrajets;
     }
 
-    public void setListeTrajets(List<Trajet> listeTrajets) {
-        this.listeTrajets = listeTrajets;
-    }
-
+    /**
+     * Getter
+     * @return La durée totale
+     */
     public Integer getDureeTotale() {
         return dureeTotale;
     }
 
-    public void setDureeTotale(Integer dureeTotale) {
-        this.dureeTotale = dureeTotale;
-    }
-
+    /**
+     * Getter
+     * @return La liste des plus courts trajets
+     */
     public Map<String, Trajet> getTrajetsLesPlusCourts() {
         return TrajetsLesPlusCourts;
     }
 
-    public void setTrajetsLesPlusCourts(Map<String, Trajet> TrajetsLesPlusCourts) {
-        this.TrajetsLesPlusCourts = TrajetsLesPlusCourts;
-    }
-
+    /**
+     * Getter
+     * @return La date de fin
+     */
     public Date getDateFin() {
         return dateFin;
     }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
 }
