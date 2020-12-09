@@ -105,7 +105,7 @@ public class Controleur {
      */
     public void undo() {
         etatCourant.undo(l);
-        rafraichirVues(true);
+        rafraichirVues(false);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Controleur {
      */
     public void redo() {
         etatCourant.redo(l);
-        rafraichirVues(true);
+        rafraichirVues(false);
     }
 
     /**
