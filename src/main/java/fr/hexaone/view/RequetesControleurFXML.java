@@ -276,7 +276,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the typeColumn
+     * @return the typeColumn
      */
     public TableColumn<Demande, String> getTypeColumn() {
         return typeColumn;
@@ -290,7 +290,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the arriveeColumn
+     * @return the arriveeColumn
      */
     public TableColumn<Demande, String> getArriveeColumn() {
         return arriveeColumn;
@@ -304,7 +304,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the departColumn
+     * @return the departColumn
      */
     public TableColumn<Demande, String> getDepartColumn() {
         return departColumn;
@@ -318,7 +318,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the adresseColumn
+     * @return the adresseColumn
      */
     public TableColumn<Demande, String> getAdresseColumn() {
         return adresseColumn;
