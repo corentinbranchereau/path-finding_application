@@ -16,6 +16,14 @@ import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controleur JavaFX permettant de récupérer les éléments graphiques issus du
+ * fichier Requetes FXML
+ * 
+ * @author HexaOne
+ * @version 1.0
+ */
+
 public class RequetesControleurFXML {
 
     /**
@@ -424,7 +432,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the typeColumn
+     * @return the typeColumn
      */
     public TableColumn<Demande, String> getTypeColumn() {
         return typeColumn;
@@ -438,7 +446,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> return the arriveeColumn
+     * @return the arriveeColumn
      */
     public TableColumn<Demande, String> getArriveeColumn() {
         return arriveeColumn;
@@ -452,7 +460,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> retourne la departColumn
+     * @return the departColumn
      */
     public TableColumn<Demande, String> getDepartColumn() {
         return departColumn;
@@ -466,7 +474,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableColumn<Demande, String> retourne la colonne adresseColumn
+     * @return the adresseColumn
      */
     public TableColumn<Demande, String> getAdresseColumn() {
         return adresseColumn;

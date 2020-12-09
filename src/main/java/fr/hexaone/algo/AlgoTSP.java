@@ -131,7 +131,7 @@ public class AlgoTSP extends AlgoGenetique {
 	
     /**
      * Permet la correction d'un chromosome en intégrant les conditions de
-     * précédence des requêtes Echange la place des couples <pickup,delivery> quand
+     * précédence des requêtes Echange la place des couples pickup-delivery quand
      * ils sont inversés
      *
      * @param chromosome
