@@ -575,6 +575,11 @@ public class Fenetre {
                 "Vous avez commis une erreur lors de l'amélioration d'une tournée calculée ? Aucun problème ! Il est possible d'annuler et de rejouer chaque action avec les raccourcis clavier CTRL+Z (undo) et CTRL+Y (redo), ou en passant par le menu \"Edition\""));
         vBox.getChildren().add(Utils.obtenirInterligne(3D));
 
+        vBox.getChildren().add(Utils.obtenirTitreAide("Messages d'avertissement"));
+        vBox.getChildren().add(Utils.obtenirParagrapheAide(
+                "Deux types d'avertissements peuvent apparaître dans le tableau à côté des points de collecte ou de livraison. L'icône '⚠' indique que la demande est orpheline, ce qui signifie qu'elle n'a pas de point de collecte (ou de livraison) associé. L'icône '!' indique qu'un point de livraison est effectué avant son point de collecte associé. De l'aide est disponible au survol de ces icônes d'avertissement."));
+        vBox.getChildren().add(Utils.obtenirInterligne(3D));
+
         scrollPane.setContent(vBox);
 
         alert.getDialogPane().setContent(scrollPane);
