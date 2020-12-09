@@ -53,10 +53,11 @@ public class XMLDeserializer {
                 long depart = Long.parseLong(element.getAttribute("origin"));
                 long destination = Long.parseLong(element.getAttribute("destination"));
                 double longueur = Double.parseDouble(element.getAttribute("length"));
+                if(longueur<0) throw new IllegalAttributException("Une longueur de segment est négative, veuillez-recommencer !");
                 String nom = element.getAttribute("name");
                 Segment segment = new Segment(longueur, nom, depart, destination);
                 intersections.get(depart).getSegmentsPartants().add(segment);
-                intersections.get(destination).getSegmentsArrivants().add(segment); // TODO : A vérifier
+                intersections.get(destination).getSegmentsArrivants().add(segment);
             }
         } catch (IllegalArgumentException e){
             throw new IllegalAttributException("Le fichier XML chargé contient un attribut avec un type incohérent / illégal");
@@ -106,6 +107,9 @@ public class XMLDeserializer {
                         break;
                     }
                 }
+
+                if((pickupDuration < 0) || (deliveryDuration < 0)) throw new IllegalAttributException("Une durée est négative, veuillez-recommencer !");
+
                 listeRequetes.add(new Requete(idPickup, pickupDuration, nomPickup, idDelivery, deliveryDuration, nomDelivery));
             }
             planning.setIdDepot(idDepot);
