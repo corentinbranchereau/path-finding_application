@@ -41,6 +41,7 @@ public class ParserErrorHandler implements ErrorHandler {
 
     /**
      * Annonce l'erreur sur la console.
+     * @throws SAXException Si erreur parsage DTD.
      */
     @Override
     public void fatalError(SAXParseException exception) throws SAXException {

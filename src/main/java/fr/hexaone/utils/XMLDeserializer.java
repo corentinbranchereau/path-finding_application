@@ -29,8 +29,8 @@ public class XMLDeserializer {
      * 
      * @param carte La carte où charger les données.
      * @param xml   Le document XML bien formé contenant les données.
-     * @throws IllegalAttributException
-     * @throws BadFileTypeException
+     * @throws IllegalAttributException Si mauvais attribut lors du parsage.
+     * @throws BadFileTypeException Si mauvais type de fichier.
      */
     public static void loadCarte(Carte carte, Document xml) throws IllegalAttributException, BadFileTypeException {
         Map<Long, Intersection> intersections = carte.getIntersections();
