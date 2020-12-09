@@ -31,8 +31,9 @@ public class ListOfCommands {
     }
 
     /**
-     * Ajoute une commande à la liste des commandes et réalise la commande
+     * Ajoute une commande à la liste des commandes et réalise la commande.
      * @param c La commande à ajouter.
+     * @return Whether we could add the command c or not.
      */
     public boolean add(Command c){
         i++;

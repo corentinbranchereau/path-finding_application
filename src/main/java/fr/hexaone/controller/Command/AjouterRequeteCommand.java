@@ -23,6 +23,8 @@ public class AjouterRequeteCommand implements Command{
 
     /**
      * Constructeur de l'ajout de requête
+     * @param planning Le planning que l'on veut modifier
+     * @param requete La requete que l'on veut ajouter au planning
      */
     public AjouterRequeteCommand(Planning planning, Requete requete){
         this.planning = planning;
@@ -30,7 +32,7 @@ public class AjouterRequeteCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -38,7 +40,7 @@ public class AjouterRequeteCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {
