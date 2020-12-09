@@ -10,6 +10,7 @@ public class FileBadExtensionException extends Exception{
 
     /**
      * Héritage d'une exception java
+     * @param errorMessage Le message d'erreur
      */
     public FileBadExtensionException(String errorMessage){
         super(errorMessage);

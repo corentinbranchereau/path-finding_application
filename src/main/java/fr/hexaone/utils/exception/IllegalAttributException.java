@@ -11,6 +11,7 @@ public class IllegalAttributException extends Exception{
 
     /**
      * Héritage d'une exception java
+     * @param errorMessage Le message d'erreur
      */
     public IllegalAttributException(String errorMessage){
         super(errorMessage);

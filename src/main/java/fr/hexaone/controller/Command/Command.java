@@ -11,6 +11,7 @@ public interface Command {
 
     /**
      * Exécuter la commande.
+     * @return True si la commande a été exécutée.
      */
     boolean doCommand();
 

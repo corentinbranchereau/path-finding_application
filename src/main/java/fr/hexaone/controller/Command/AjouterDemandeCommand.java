@@ -23,6 +23,8 @@ public class AjouterDemandeCommand implements Command{
 
     /**
      * Constructeur de l'ajout de demande
+     * @param planning Le planning que l'on veut modifier
+     * @param demande La demande que l'on veut ajouter au planning
      */
     public AjouterDemandeCommand(Planning planning, Demande demande){
         this.planning = planning;
@@ -30,7 +32,7 @@ public class AjouterDemandeCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -38,7 +40,7 @@ public class AjouterDemandeCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {

@@ -32,9 +32,8 @@ public class SupprimerDemandeCommand implements Command {
     /**
      * Constructeur de la suppression de demande
      * 
-     * @param planning
-     * @param demande
-     * @param index    de l'ajout dans la liste
+     * @param planning Le planning que l'on souhaite modifier.
+     * @param demande La demande que l'on souhaite supprimer.
      */
     public SupprimerDemandeCommand(Planning planning, Demande demande) {
         this.planning = planning;
@@ -43,7 +42,7 @@ public class SupprimerDemandeCommand implements Command {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -60,7 +59,7 @@ public class SupprimerDemandeCommand implements Command {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {

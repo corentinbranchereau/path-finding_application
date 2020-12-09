@@ -114,6 +114,8 @@ public class Intersection {
 
     /**
      * Setter
+     * 
+     * @param segmentsPartants Correspond aux segments qui partent d'une intersection.
      */
     public void setSegmentsPartants(Set<Segment> segmentsPartants) {
         this.segmentsPartants = segmentsPartants;
@@ -131,6 +133,8 @@ public class Intersection {
 
     /**
      * Setter
+     * 
+     * @param cheminLePlusCourt Le chemin le plus court.
      */
     public void setCheminLePlusCourt(List<Segment> cheminLePlusCourt) {
         this.cheminLePlusCourt = cheminLePlusCourt;
@@ -139,7 +143,7 @@ public class Intersection {
     /**
      * Getter
      * 
-     * @return la distance à la source pendant le calcul du chemin le plus court
+     * @return la distance à la source pendant le calcul du chemin le plus court.
      */
     public Double getDistance() {
         return distance;
@@ -147,6 +151,8 @@ public class Intersection {
 
     /**
      * Setter
+     * 
+     * @param distance La distance à la source pendant le calcul du chemin le plus court.
      */
     public void setDistance(Double distance) {
         this.distance = distance;

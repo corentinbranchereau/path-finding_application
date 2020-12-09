@@ -6,7 +6,13 @@ package fr.hexaone.utils;
  */
 public enum DTDType {
 
+    /**
+     * Le dtd carte
+     */
     CARTE("carte.dtd"),
+    /**
+     * Le dtd requete
+     */
     REQUETE("requetes.dtd");
 
     /**

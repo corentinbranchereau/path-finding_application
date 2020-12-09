@@ -31,8 +31,10 @@ public class Requete {
      *
      * @param idPickup L'id du pickup
      * @param dureePickup La durée du pickup
+     * @param nomPickup Le nom du pickUp
      * @param idDelivery L'id du delivery
      * @param dureeDelivery La durée du delivery
+     * @param nomDelivery Le nom du delivery
      */
     public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery,
             String nomDelivery) {

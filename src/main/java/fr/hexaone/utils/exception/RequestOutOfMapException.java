@@ -11,6 +11,7 @@ public class RequestOutOfMapException extends Exception{
 
     /**
      * Héritage d'une exception java
+     * @param errorMessage Le message d'erreur
      */
     public RequestOutOfMapException(String errorMessage){
         super(errorMessage);

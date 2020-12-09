@@ -10,6 +10,7 @@ public class DTDValidationException extends Exception{
 
     /**
      * Héritage d'une exception java
+     * @param errorMessage Le message d'erreur
      */
     public DTDValidationException(String errorMessage){
         super(errorMessage);

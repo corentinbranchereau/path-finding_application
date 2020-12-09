@@ -101,6 +101,8 @@ public class XMLFileOpener implements FileFilter {
      * @param realPath Le chemin du fichier réel de l'utilisateur
      * @param dtdType Le type de dtd à appliquer
      * @return Le fichier temporaire crée
+     * @throws IOException si problème d'I/O
+     * @throws URISyntaxException si problème de syntaxe URI
      */
     private File creerXMLTemporaireAvecDTD(String realPath, DTDType dtdType) throws IOException, URISyntaxException {
         //Charge le dtd du dossier ressource

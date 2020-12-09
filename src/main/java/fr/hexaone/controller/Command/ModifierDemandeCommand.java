@@ -43,11 +43,11 @@ public class ModifierDemandeCommand implements Command{
     
 
    /**
-    *  Constructeur de la modification de demande
-    * @param planning
-    * @param demande
-    * @param duree
-    * @param idIntersection
+    *  Constructeur de la modification de demande.
+    * @param planning Le planning contenant la demande que l'on veut modifier.
+    * @param demande La demande que l'on veut modifier.
+    * @param duree La nouvelle durée.
+    * @param idIntersection Le nouvel id de l'intersection de la demande.
     */
     public ModifierDemandeCommand(Planning planning, Demande demande, int duree, Long idIntersection){
         this.planning = planning;
@@ -66,7 +66,7 @@ public class ModifierDemandeCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean doCommand() {
@@ -75,7 +75,7 @@ public class ModifierDemandeCommand implements Command{
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undoCommand() {
