@@ -33,7 +33,7 @@ public class Carte {
 
     /**
      * Setter
-     * @param intersections
+     * @param intersections La map contennant les ids et leur intersection associée
      */
     public void setIntersections(Map<Long, Intersection> intersections) {
         this.intersections = intersections;

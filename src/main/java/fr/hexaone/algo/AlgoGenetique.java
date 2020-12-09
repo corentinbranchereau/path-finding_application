@@ -105,7 +105,7 @@ public abstract class AlgoGenetique {
     /**
      * Boucle principale de l'algo génétique : à ne jamais modifier
      * @param objets Une liste d'objets représentant un chromosome (une liste non ordonnée)
-     * @return Meilleure solution trouvée
+     * @return la meilleure liste d'objets ordonnée 
      */
 	public final List<Object> algoGenetique(List<Object> objets) {
 		
@@ -283,7 +283,8 @@ public abstract class AlgoGenetique {
     /**
      * Renvoie une liste de chromosomes aléatoires
      *
-     * @param objets
+     * @param objet : un chromosome
+     * @return un chromosome aléatoire
      */
 	public abstract List<Object> genererChromosomeAleatoire(List<Object> objets);
 	
@@ -295,6 +296,7 @@ public abstract class AlgoGenetique {
      * @param P2 parent2
      * @param i indice 1
      * @param j indice 2
+     * @return le chromosome enfant
      */
 	public abstract List<Object> crossoverOX(List<Object> P1, List<Object> P2, int i, int j);
 	
@@ -314,7 +316,7 @@ public abstract class AlgoGenetique {
 	 * @param population
 	 * @param ecart
 	 * @param valeurEnfant
-	 * @return
+	 * @return true si c'est possible d'ajouter l'enfant en gardant l'espacement de la population 
 	 */
 	public Boolean espacePopulation(List<Pair<List<Object>, Double>> population, Double ecart, Double valeurEnfant) {
 		return true;
@@ -322,11 +324,11 @@ public abstract class AlgoGenetique {
 	
 	
 	/**
-	 *Renvoie true si la population est assez "espacée", c'est à dire avec une 
+	 * Renvoie true si la population est assez "espacée", c'est à dire avec une 
 	 * valeur minimum d'écart entre les couts
 	 * @param population
 	 * @param ecart
-	 * @return
+	 * @return Renvoie true si la population est assez "espacée"
 	 */
 	public Boolean espacePopulation(List<Pair<List<Object>, Double>> population, Double ecart) {
 		return true;
@@ -347,7 +349,7 @@ public abstract class AlgoGenetique {
 	 * Algorithme permettant de réaliser la mutation sur un chromosome 
 	 * @param chromosome
 	 * @param coutIni
-	 * @return
+	 * @return chromosome muté
 	 */
 	public List<Object> mutationLocalSearch(List<Object> chromosome, Double coutIni){
 		return chromosome;
@@ -357,7 +359,7 @@ public abstract class AlgoGenetique {
 	/**
 	 * Méthode de calcul de cout d'un chromosome
 	 * @param chromosome
-	 * @return
+	 * @return cout d'un chromosome
 	 */
 	public abstract Double cout(List<Object> chromosome);	
 	

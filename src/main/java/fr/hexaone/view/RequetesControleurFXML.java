@@ -173,8 +173,8 @@ public class RequetesControleurFXML {
         tooltipCollecteSeule.setHideDelay(new Duration(0));
 
         /*
-          définit le type de case affiché dans le tableau, et les évènements associés
-          aux cases.
+         * définit le type de case affiché dans le tableau, et les évènements associés
+         * aux cases.
          */
         tableauDemandes.setRowFactory(tv -> {
 
@@ -295,7 +295,7 @@ public class RequetesControleurFXML {
             this.mapIndexLignes.put(row.getIndex(), row);
 
             /*
-              évènement click droit sur une case du tableau appelant le menu contextuel
+             * évènement click droit sur une case du tableau appelant le menu contextuel
              */
             row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
@@ -313,7 +313,7 @@ public class RequetesControleurFXML {
             });
 
             /*
-              évènement d'une ligne du tableau cliquée et déplacée
+             * évènement d'une ligne du tableau cliquée et déplacée
              */
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty() && draggable) {
@@ -333,13 +333,14 @@ public class RequetesControleurFXML {
             });
 
             /*
-              évènement d'une ligne du tableau déplacée dessus une autre
+             * évènement d'une ligne du tableau déplacée dessus une autre
              */
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
                     if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        this.fenetre.getVueTextuelle().rechargerHighlight();
                         row.setStyle("-fx-background-color:GREY");
                         event.consume();
                     }
@@ -353,6 +354,7 @@ public class RequetesControleurFXML {
                         this.tableauDemandes.getSelectionModel().clearSelection();
                         row.setStyle("-fx-background-color:WHITE");
                         row.setStyle("-fx-text-fill:black");
+                        this.fenetre.getVueTextuelle().rechargerHighlight();
 
                         row.setTextFill(Color.BLACK);
                         event.consume();
@@ -361,7 +363,7 @@ public class RequetesControleurFXML {
             });
 
             /*
-              evenement d'une ligne du tableau lachée sur une autre
+             * evenement d'une ligne du tableau lachée sur une autre
              */
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
@@ -381,7 +383,6 @@ public class RequetesControleurFXML {
                     this.tableauDemandes.getSelectionModel().clearSelection();
                     row.setStyle("-fx-background-color:WHITE");
                     row.setStyle("-fx-text-fill:black");
-                    fenetre.getControleur().selectionnerDemande(null);
                     tableauDemandes.getSelectionModel().select(dropIndex);
                     this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
@@ -391,7 +392,7 @@ public class RequetesControleurFXML {
             });
 
             /*
-              Evenement du click de souris
+             * Evenement du click de souris
              */
             row.setOnMouseClicked(event -> {
                 if (event.getButton() != MouseButton.SECONDARY) {

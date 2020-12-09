@@ -8,32 +8,32 @@ package fr.hexaone.model;
  */
 public class Segment {
     /**
-     * longueur du segment
+     * Longueur du segment
      */
     private double longueur;
 
     /**
-     * nom du segment
+     * Nom du segment
      */
     private String nom;
 
     /**
-     * Id de l'intersection de départ
+     * ID de l'intersection de départ
      */
     private Long idDepart;
 
     /**
-     * Id de l'intersection d'arrivée
+     * ID de l'intersection d'arrivée
      */
     private Long idArrivee;
 
     /**
-     * constructeur de Segment
+     * Constructeur de Segment
      *
-     * @param longueur
-     * @param nom
-     * @param idDepart
-     * @param idArrivee
+     * @param longueur La longueur du segment
+     * @param nom Le nom du segment
+     * @param idDepart L'id de départ
+     * @param idArrivee L'id d'arrivée
      */
     public Segment(double longueur, String nom, long idDepart, long idArrivee) {
         this.longueur = longueur;

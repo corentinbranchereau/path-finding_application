@@ -14,17 +14,17 @@ import java.util.Set;
 public class Intersection {
 
     /**
-     * identifiant unique
+     * Identifiant unique
      */
     private long id;
 
     /**
-     * latitude de l'intersection
+     * Latitude de l'intersection
      */
     private double latitude;
 
     /**
-     * longitude de l'intersection
+     * Longitude de l'intersection
      */
     private double longitude;
 
@@ -43,7 +43,7 @@ public class Intersection {
     /**
      * Liste des segments pour les calculs de chemins les plus courts
      */
-    private List<Segment> cheminLePlusCourt = new LinkedList<Segment>();
+    private List<Segment> cheminLePlusCourt = new LinkedList<>();
 
     /**
      * Distance entre l'intersection source et ce point. Utilisé pour le calcul de
@@ -52,11 +52,11 @@ public class Intersection {
     private Double distance = Double.MAX_VALUE;
 
     /**
-     * constructeur d'Intersection
+     * Constructeur d'Intersection
      *
-     * @param id
-     * @param latitude
-     * @param longitude
+     * @param id L'id de l'intersection
+     * @param latitude La latitude de l'intersection
+     * @param longitude La longitude de l'intersection
      */
     public Intersection(long id, double latitude, double longitude) {
         this.id = id;
@@ -158,24 +158,7 @@ public class Intersection {
      */
     public void resetIntersection() {
         distance = Double.MAX_VALUE;
-        cheminLePlusCourt = new LinkedList<Segment>();
+        cheminLePlusCourt = new LinkedList<>();
     }
-    
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Intersection)) {
-            return false;
-        }
-
-        Intersection i = (Intersection) o;
-
-        // If the object is compared with itself then return true
-        if (i.id == this.id) {
-            return true;
-        }
-        return false;
-    }
-    */
 
 }
