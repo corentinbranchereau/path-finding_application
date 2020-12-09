@@ -418,13 +418,17 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return TableView<Demande> retourne le tableau tableauDemandes
+     * getteur tableau
+     * 
+     * @return TableView(Demande) retourne le tableau tableauDemandes
      */
     public TableView<Demande> getTableauDemandes() {
         return tableauDemandes;
     }
 
     /**
+     * setteur tableau
+     * 
      * @param tableauDemandes the tableauDemandes to set
      */
     public void setTableauDemandes(TableView<Demande> tableauDemandes) {
@@ -432,6 +436,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * getteur colonne type
+     * 
      * @return the typeColumn
      */
     public TableColumn<Demande, String> getTypeColumn() {
@@ -439,6 +445,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * setteur colonne type
+     * 
      * @param typeColumn the typeColumn to set
      */
     public void setTypeColumn(TableColumn<Demande, String> typeColumn) {
@@ -446,6 +454,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * getteur colonne horaire arrivée
+     * 
      * @return the arriveeColumn
      */
     public TableColumn<Demande, String> getArriveeColumn() {
@@ -453,6 +463,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * setteur de la colonne d'horaire arrivée
+     * 
      * @param arriveeColumn set l'arriveeColumn
      */
     public void setArriveeColumn(TableColumn<Demande, String> arriveeColumn) {
@@ -460,6 +472,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * getteur colonne départ
+     * 
      * @return the departColumn
      */
     public TableColumn<Demande, String> getDepartColumn() {
@@ -467,6 +481,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * setteur de la colonne horaire départ
+     * 
      * @param departColumn définit departColumn
      */
     public void setDepartColumn(TableColumn<Demande, String> departColumn) {
@@ -474,6 +490,8 @@ public class RequetesControleurFXML {
     }
 
     /**
+     * getteur de la colonne adresse
+     * 
      * @return the adresseColumn
      */
     public TableColumn<Demande, String> getAdresseColumn() {
@@ -517,7 +535,7 @@ public class RequetesControleurFXML {
     /**
      * Menu contextuel qui apparait au clic droit sur une demande
      * 
-     * @return
+     * @return le menu contextuel
      */
     public ContextMenu getContextMenu() {
         return contextMenu;
@@ -537,7 +555,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * @return ObservableList<Demande> retourne la liste observable listeDemandes
+     * @return ObservableList(Demande) retourne la liste observable listeDemandes
      */
     public ObservableList<Demande> getListeDemandes() {
         return listeDemandes;
@@ -562,7 +580,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * setter
+     * setter du boolean contextualMenu
      * 
      * @param visible
      */
@@ -571,7 +589,7 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * getter
+     * getter boolean contextualMenu
      * 
      * @return boolean
      */
