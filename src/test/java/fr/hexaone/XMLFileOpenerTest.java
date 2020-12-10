@@ -24,7 +24,7 @@ public class XMLFileOpenerTest
      * Une FileNotFoundException est levée
      */
     @Test
-    public void shouldOpenThrowFileNotFoundException()
+    public void doisOuvrirLanceFileNotFoundException()
     {
         assertThrows(FileNotFoundException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileDoesntExist.xml", DTDType.REQUETE));
     }
@@ -34,7 +34,7 @@ public class XMLFileOpenerTest
      * Une FileNotFoundException est levée
      */
     @Test
-    public void shouldOpenThrowBadExtensionException()
+    public void doisOuvrirLanceBadExtensionException()
     {
         assertThrows(FileBadExtensionException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/fileFormatText.txt", DTDType.REQUETE));
     }
@@ -44,7 +44,7 @@ public class XMLFileOpenerTest
      * Une DTDValidationException est levée
      */
     @Test
-    public void shouldOpenRequestThrowDTDValidationException()
+    public void doisOuvrirRequeteLanceDTDValidationException()
     {
         assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/requestsSmallDTDError.xml", DTDType.REQUETE));
     }
@@ -54,7 +54,7 @@ public class XMLFileOpenerTest
      * Une DTDValidationException est levée
      */
     @Test
-    public void shouldOpenMapThrowDTDValidationException()
+    public void doisOuvrirCarteLanceDTDValidationException()
     {
         assertThrows(DTDValidationException.class, () -> XMLFileOpener.getInstance().open("./src/test/resources/smallMapDTDError.xml", DTDType.CARTE));
     }

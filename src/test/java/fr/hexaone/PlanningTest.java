@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 /**
- * Unit test for simple App.
+ * Tests unitaires de l'algorithmie back-end
  */
 public class PlanningTest {
 
@@ -31,10 +31,10 @@ public class PlanningTest {
      * un graphe simple
      */
     @Test
-    public void test_RechercheDesPlusCourtsTrajets_simple(){
+    public void testRechercheDesPlusCourtsTrajetsSimple(){
 
         //Création d'un graphe
-        createSimpleGraph();
+        creerGrapheSimple();
 
         //Création des intersections des plus courts chemins
         List<Intersection> intersections = new ArrayList<Intersection>();
@@ -89,10 +89,10 @@ public class PlanningTest {
      * un graphe avec une intersection inaccessible
      */
     @Test
-    public void test_RechercheDesPlusCourtsChemins_inaccessible(){
+    public void testRechercheDesPlusCourtsCheminsInaccessible(){
 
         //Création d'un graphe
-        createWeirdGraph();
+        creerGraphePonderer();
 
         //Création des requetes
         List<Intersection> intersections = new ArrayList<Intersection>();
@@ -111,10 +111,10 @@ public class PlanningTest {
      * des mêmes intersections
      */
     @Test
-    public void test_RechercheDesPlusCourtsChemins_memeIntersection(){
+    public void testRechercheDesPlusCourtsCheminsMemeIntersection(){
 
         //Création d'un graphe
-        createGraph();
+        creerGraphe();
 
         //Création de la liste des intersections à accéder
         List<Intersection> intersections = new ArrayList<Intersection>();
@@ -194,7 +194,7 @@ public class PlanningTest {
      *   - correctionCrossover
      */
     @Test
-    public void test_verifierPop() {
+    public void testVerifierPop() {
 
         Requete r1 = new Requete(1,0,"",3,0,"");
         Requete r2 = new Requete(4,0,"",9,0,"");
@@ -237,7 +237,7 @@ public class PlanningTest {
       * Méthode de test pour la vérification de l'espacement minimum des coûts pour une population
      */
      @Test
-    public void test_espacePopulation() {
+    public void testEspacePopulation() {
 
      	List<Object> listIntersections1 = new ArrayList<Object>();
         List<Object> listIntersections2 = new ArrayList<Object>();
@@ -269,7 +269,7 @@ public class PlanningTest {
       * Méthode de test de la vérification de la génération d'un chromosome enfant
       */
      @Test
-     public void test_crossoverOX() {
+     public void testCrossoverOX() {
 
      	List<Object> P1 = new ArrayList<Object>();
     	List<Object> P2 = new ArrayList<Object>();
@@ -324,10 +324,10 @@ public class PlanningTest {
      *   - calculerLesCheminsLesPlusCourts
      */
     @Test
-    public void test_cout_simple() {
+    public void testCoutSimple() {
 
         //Création d'un graphe simple
-        createSimpleGraph();
+        creerGrapheSimple();
 
         //Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
@@ -364,10 +364,10 @@ public class PlanningTest {
      *   - calculerLesCheminsLesPlusCourts
      */
     @Test
-    public void test_cout_infini() {
+    public void testCoutInfini() {
 
         //Création d'un graphe simple
-        createWeirdGraph();
+        creerGraphePonderer();
 
         //Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
@@ -395,7 +395,7 @@ public class PlanningTest {
       *   - calculerLesCheminsLesPlusCourts
       */
      @Test
-     public void test_MutationLocalSearch() {
+     public void testMutationLocalSearch() {
 
      	//Création d'un graphe
 
@@ -405,7 +405,7 @@ public class PlanningTest {
 
          Planning planning2 = new Planning(carte);
          //Calcul des chemins les plus courts
-         planning2.calculerLesTrajetsLesPlusCourts(createGraph());
+         planning2.calculerLesTrajetsLesPlusCourts(creerGraphe());
 
          planning2.setIdDepot(0L);
          planning2.setRequetes(requetes);
@@ -435,7 +435,7 @@ public class PlanningTest {
       *   - verifierPop
       */
      @Test
-     public void test_genererChromosome() {
+     public void testGenererChromosome() {
 
 	     List<Object> demandes = new ArrayList<Object>();
 
@@ -466,10 +466,10 @@ public class PlanningTest {
      *   - correctionCrossover
      */
     @Test
-    public void test_trouverMeilleureTournee_simple() {
+    public void testTrouverMeilleureTourneeSimple() {
 
         // Création d'un grap simple
-        createSimpleGraph();
+        creerGrapheSimple();
 
         // Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
@@ -514,7 +514,7 @@ public class PlanningTest {
       *   - correctionCrossover
       */
      @Test
-     public void test_trouverMeilleureTournee_normal() {
+     public void testTrouverMeilleureTourneeNormal() {
 
          // Création d'un grap simple
 
@@ -530,7 +530,7 @@ public class PlanningTest {
      	requetes.add(requete3);
 
 	    //Calcul des chemins les plus courts
-	    planning.calculerLesTrajetsLesPlusCourts(createGraph());
+	    planning.calculerLesTrajetsLesPlusCourts(creerGraphe());
 	    planning.setIdDepot(0L);
 	    planning.setDateDebut(new Date(0));
 	    planning.setRequetes(requetes);
@@ -556,9 +556,9 @@ public class PlanningTest {
      *   - correctionCrossover
      */
     @Test
-    public void test_calculerTournee_simple() {
+    public void testCalculerTourneeSimple() {
 
-        createSimpleGraph();
+        creerGrapheSimple();
 
         List<Requete> requetes = new ArrayList<Requete>();
         requetes.add(new Requete(1,3,"",3,5,""));
@@ -605,7 +605,7 @@ public class PlanningTest {
     // @Test
     // public void test_calculerTournee_memeIntersection() {
     // 	 // Création d'un grap simple
-    //     createGraph();
+    //     creerGraphe();
 
     //     // Création des requetes
     // 	List<Requete> requetes = new ArrayList<Requete>();
@@ -673,9 +673,9 @@ public class PlanningTest {
       * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
       */
     @Test
-    public void test_modifier_requetes_intersection() {
+    public void testModifierRequetesIntersection() {
      	 // Création d'un graphe
-        createGraph();
+        creerGraphe();
 
          // Création des requetes
      	List<Requete> requetes = new ArrayList<Requete>();
@@ -710,7 +710,7 @@ public class PlanningTest {
     // @Test
     // public void test_modifier_requetes_duree() {
     // 	 // Création d'un graphe
-    //     createGraph();
+    //     creerGraphe();
 
     //     // Création des requetes
     // 	List<Requete> requetes = new ArrayList<Requete>();
@@ -750,7 +750,7 @@ public class PlanningTest {
     // @Test
     // public void test_modifier_requetes_ordre() {
     // 	 // Création d'un graphe
-    //     createGraph();
+    //     creerGraphe();
 
     //     // Création des requetes
     // 	List<Requete> requetes = new ArrayList<Requete>();
@@ -783,10 +783,10 @@ public class PlanningTest {
       * Méthode pour tester l'ajout de requête après le calcul de la tournée
       */
      @Test
-    public void test_ajouter_requetes() {
+    public void testAjouterRequetes() {
      	 // Création d'un graphe
     	 
-    	createGraph();
+    	creerGraphe();
 
          // Création des requetes de référence
      	List<Requete> requetes = new ArrayList<Requete>();
@@ -835,7 +835,7 @@ public class PlanningTest {
     /**
      * Méthode pour créer un graphe orienté simple avec 4 intersections
      */
-    private List<Intersection> createSimpleGraph() {
+    private List<Intersection> creerGrapheSimple() {
 
         planning.setIdDepot(0L);
 
@@ -898,7 +898,7 @@ public class PlanningTest {
     /**
      * Méthode pour créer un graphe non orienté avec 10 intersections
      */
-    private List<Intersection> createGraph() {
+    private List<Intersection> creerGraphe() {
         //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
 
         planning.setIdDepot(0L);
@@ -1076,7 +1076,7 @@ public class PlanningTest {
      * Méthode pour créer un graphe non orienté avec 10 intersections
      * avec un cul de sac et un point inaccessible
      */
-    private void createWeirdGraph() {
+    private void creerGraphePonderer() {
         //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
 
         // Caractéristiques :
