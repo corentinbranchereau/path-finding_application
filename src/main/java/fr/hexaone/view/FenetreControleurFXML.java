@@ -35,12 +35,12 @@ public class FenetreControleurFXML {
      */
     @FXML
     private MenuItem quitterItem;
-    
+
     /**
      * Item du menu permettant de faire un undo
      */
     @FXML
-    private MenuItem undoItem ;
+    private MenuItem undoItem;
 
     /**
      * Menu d'aide pour l'utilisateur
@@ -52,10 +52,9 @@ public class FenetreControleurFXML {
      * Item du menu permettant de faire un redo
      */
     @FXML
-    private MenuItem redoItem ;
+    private MenuItem redoItem;
 
-
-	/**
+    /**
      * Rectangle permettant de dessiner une bordure autour de la carte.
      */
     @FXML
@@ -84,53 +83,50 @@ public class FenetreControleurFXML {
      * Label indiquant le champ permettant de préciser la durée de la collecte.
      */
     @FXML
-    private Label pickupDurationLabel;
+    private Label labelDureeCollecte;
 
     /**
      * Champ permettant de préciser la durée de la collecte.
      */
     @FXML
-    private TextField pickupDurationField;
+    private TextField champDureeCollecte;
 
     /**
      * Champ permettant de préciser la durée de la livraison.
      */
     @FXML
-    private Label deliveryDurationLabel;
+    private Label labelDureeLivraison;
 
     /**
      * Champ permettant de préciser la durée de la livraison.
      */
     @FXML
-    private TextField deliveryDurationField;
-    
-    
+    private TextField champDureeLivraison;
+
     /**
      * Label permettant de préciser la durée lors d'une modification
      */
     @FXML
-    private Label durationLabel;
+    private Label labelDuree;
 
     /**
      * Champ permettant de préciser la durée lors d'une modification
      */
     @FXML
-    private TextField durationField;
-    
+    private TextField champDuree;
 
-	/**
+    /**
      * Bouton permettant de valider un choix qui le nécessite.
      */
     @FXML
     private Button boutonValider;
 
-
-	/**
+    /**
      * Bouton permettant de valider la modification d'une demande
      */
     @FXML
     private Button boutonValiderModificationDemande;
-   
+
     /**
      * Bouton permettant d'annuler un choix qui le nécessite.
      */
@@ -159,69 +155,57 @@ public class FenetreControleurFXML {
      * Scroll pane de la vue textuelle
      */
     @FXML
-    private ScrollPane textScrollPane;
+    private ScrollPane scrollPaneTexte;
 
     /**
-     * l'endroit ou on écrit les informations sur le dépot
+     * L'endroit où on écrit les informations sur le dépôt
      */
     @FXML
-    private TextFlow depotTextInformation;
+    private TextFlow texteInformationDepot;
 
     /**
-     * Renvoie le menu item d'aide pour le joueur
+     * @return L'item d'aide du menu
      */
-    public MenuItem getAide(){
+    public MenuItem getAide() {
         return aide;
     }
 
     /**
-     * Renvoie l'item du menu permettant de charger une carte.
-     * 
-     * @return L'item chargerCarteItem
+     * @return L'item chargerCarteItem du menu
      */
     public MenuItem getChargerCarteItem() {
         return chargerCarteItem;
     }
 
     /**
-     * renvoie le scroll pane où se trouve la vue textuelle
-     * 
-     * @return L'item textscrollPane
+     * @return L'item scrollPaneTexte du menu
      */
-    public ScrollPane getScrollPane() {
-        return textScrollPane;
+    public ScrollPane getScrollPaneTexte() {
+        return scrollPaneTexte;
     }
 
     /**
-     * Renvoie l'item du menu permettant de charger des requêtes.
-     * 
-     * @return L'item chargerRequetesItem
+     * @return L'item chargerRequetesItem du menu
      */
     public MenuItem getChargerRequetesItem() {
         return chargerRequetesItem;
     }
 
     /**
-     * Renvoie l'item du menu permettant de quitter l'application.
-     * 
-     * @return L'item quitterItem
+     * @return L'item quitterItem du menu
      */
     public MenuItem getQuitterItem() {
         return quitterItem;
     }
 
     /**
-     * Renvoie le rectangle dessinant la bordure de la carte.
-     * 
-     * @return Le rectangle de bordure de la carte
+     * @return Le rectangle dessinant la bordure de la carte
      */
     public Rectangle getBordureCarte() {
         return bordureCarte;
     }
 
     /**
-     * Renvoie la zone de texte (vue textuelle) de l'application.
-     * 
      * @return La zone de texte de l'application.
      */
     public TextFlow getZoneTexte() {
@@ -229,8 +213,6 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le bouton lançant le calcul du planning.
-     * 
      * @return Le bouton lançant le calcul du planning.
      */
     public Button getBoutonLancer() {
@@ -238,8 +220,6 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le bouton demandant l'ajout d'une requête.
-     *
      * @return Le bouton demandant l'ajout d'une requête.
      */
     public Button getBoutonNouvelleRequete() {
@@ -247,86 +227,75 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le label indiquant le champ permettant de préciser la durée de la
-     * collecte.
-     *
      * @return Le label indiquant le champ permettant de préciser la durée de la
      *         collecte.
      */
-    public Label getPickUpDurationLabel() {
-        return pickupDurationLabel;
+    public Label getLabelDureeCollecte() {
+        return labelDureeCollecte;
     }
 
     /**
-     * Renvoie le texte précisant la durée de la collecte.
-     *
      * @return Le texte précisant la durée de la collecte.
      */
-    public TextField getPickUpDurationField() {
-        return pickupDurationField;
+    public TextField getChampDureeCollecte() {
+        return champDureeCollecte;
     }
 
     /**
-     * Renvoie le label indiquant le champ permettant de préciser la durée de la
-     * livraison.
-     *
      * @return Le label indiquant le champ permettant de préciser la durée de la
      *         livraison.
      */
-    public Label getDeliveryDurationLabel() {
-        return deliveryDurationLabel;
+    public Label getLabelDureeLivraison() {
+        return labelDureeLivraison;
     }
 
     /**
-     * Renvoie le texte précisant la durée de la livraison.
-     *
      * @return Le texte précisant la durée de la livraison.
      */
-    public TextField getDeliveryDurationField() {
-        return deliveryDurationField;
+    public TextField getChampDureeLivraison() {
+        return champDureeLivraison;
     }
-    
-    /**
-     * Getter
-     * @return le label de la durée lors d'une modification
-     */
-    public Label getDurationLabel() {
-		return durationLabel;
-	}
-
-	public void setDurationLabel(Label durationLabel) {
-		this.durationLabel = durationLabel;
-	}
-
-	/**
-     * Getter
-     * @return le texte de la durée lors d'une modfification
-     */
-	public TextField getDurationField() {
-		return durationField;
-	}
 
     /**
-     * Setter
-     * @param durationField La durée de la demande
+     * @return Le label de la durée lors d'une modification
      */
-	public void setDurationField(TextField durationField) {
-		this.durationField = durationField;
-	}
+    public Label getLabelDuree() {
+        return labelDuree;
+    }
 
     /**
-     * Renvoie le bouton de validation.
-     *
+     * Change la valeur du label de durée
+     * 
+     * @param labelDuree
+     */
+    public void setLabelDuree(Label labelDuree) {
+        this.labelDuree = labelDuree;
+    }
+
+    /**
+     * @return Le texte de la durée lors d'une modfification
+     */
+    public TextField getChampDuree() {
+        return champDuree;
+    }
+
+    /**
+     * Change la valeur du champ de la durée
+     * 
+     * @param champDuree La durée de la demande
+     */
+    public void setChampDuree(TextField champDuree) {
+        this.champDuree = champDuree;
+    }
+
+    /**
      * @return Le bouton de validation.
      */
     public Button getBoutonValider() {
         return boutonValider;
     }
-    
-    
+
     /**
-     * Renvoie le bouton de validation de demande.
-     *
      * @return Le bouton de validation de demande.
      */
     public Button getBoutonValiderModificationDemande() {
@@ -334,8 +303,6 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le bouton d'annulation.
-     *
      * @return Le bouton d'annulation.
      */
     public Button getBoutonAnnuler() {
@@ -343,8 +310,6 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie la box contenant les boutons Valider et Annuler.
-     *
      * @return La box contenant les boutons Valider et Annuler.
      */
     public HBox getBoxBoutonsValiderAnnuler() {
@@ -352,8 +317,6 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie le AnchorPane contenant le pane de dessin
-     * 
      * @return Le AnchorPane contenant le pane de dessin
      */
     public AnchorPane getAnchorPaneGraphique() {
@@ -361,15 +324,13 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoie la zone d'information autour du dépôt
      * @return La zone d'information autour du dépôt
      */
-    public TextFlow getDepotTextInformation() {
-        return depotTextInformation;
+    public TextFlow getTexteInformationDepot() {
+        return texteInformationDepot;
     }
 
     /**
-     * Renvoie la pane de dessin
      * @return La pane de dessin
      */
     public Pane getPaneDessin() {
@@ -377,19 +338,16 @@ public class FenetreControleurFXML {
     }
 
     /**
-     * Renvoi le MenuItem de l'undo
-     * @return L'undo
+     * @return L'item du menu permettant l'undo
      */
     public MenuItem getUndoItem() {
-		return undoItem;
-	}
+        return undoItem;
+    }
 
     /**
-     * Renvoi le MenuItme du redo
-     * @return Le redo
+     * @return L'item du menu permettant le redo
      */
-	public MenuItem getRedoItem() {
-		return redoItem;
-	}
-
+    public MenuItem getRedoItem() {
+        return redoItem;
+    }
 }

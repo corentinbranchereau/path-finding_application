@@ -34,22 +34,22 @@ public class VueGraphique {
     /**
      * Coordonnée x minimale de la carte
      */
-    private double minX = Double.MAX_VALUE;
+    private double xMin = Double.MAX_VALUE;
 
     /**
      * Coordonnée x maximale de la carte
      */
-    private double maxX = Double.MIN_VALUE;
+    private double xMax = Double.MIN_VALUE;
 
     /**
      * Coordonnée y minimale de la carte
      */
-    private double minY = Double.MAX_VALUE;
+    private double yMin = Double.MAX_VALUE;
 
     /**
      * Coordonnée y maximale de la carte
      */
-    private double maxY = Double.MIN_VALUE;
+    private double yMax = Double.MIN_VALUE;
 
     /**
      * Padding utilisé pour le calcul de la largeur et de la longueur max de la
@@ -186,14 +186,14 @@ public class VueGraphique {
         // Affichage des demandes sur la carte
         if (planning.getDemandesOrdonnees() != null) {
             // Affichage des demandes sur la carte
-            afficherDemandes(planning.getDemandesOrdonnees(), planning.getCarte(), planning.getIdDepot());
+            afficherListeDemandes(planning.getDemandesOrdonnees(), planning.getCarte(), planning.getIdDepot());
 
             if (planning.getListeTrajets() != null) {
                 // Affichage de la demande sélectionnée et de la demande associée
                 if (demandeSelectionnee != null) {
                     Requete requeteAssociee = demandeSelectionnee.getRequete();
 
-                    if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.COLLECTE) {
+                    if (demandeSelectionnee.getTypeDemande() == TypeDemande.COLLECTE) {
                         // Mise en valeur forte de la collecte
                         highlightDemande(demandeSelectionnee, false);
 
@@ -203,7 +203,7 @@ public class VueGraphique {
                             highlightDemande(demandeAssociee, true);
 
                         }
-                    } else if (demandeSelectionnee.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+                    } else if (demandeSelectionnee.getTypeDemande() == TypeDemande.LIVRAISON) {
                         // Mise en valeur forte de la livraison
                         highlightDemande(demandeSelectionnee, false);
 
@@ -262,7 +262,7 @@ public class VueGraphique {
                 }
             }
             // Affichage des demandes
-            afficherDemandes(demandes, planning.getCarte(), planning.getIdDepot());
+            afficherListeDemandes(demandes, planning.getCarte(), planning.getIdDepot());
         }
     }
 
@@ -274,7 +274,7 @@ public class VueGraphique {
      * @param latitude  La latitude du point à convertir
      * @return Un point contenant la paire de coordonnées (x, y)
      */
-    private Point2D longLatToXY(double longitude, double latitude) {
+    private Point2D conversionLongLatVersXY(double longitude, double latitude) {
         // Conversion de la longitude et latitude en radian
         longitude = longitude * Math.PI / 180;
         latitude = latitude * Math.PI / 180;
@@ -294,8 +294,8 @@ public class VueGraphique {
      * @return Un point contenant la paire de coordonnées (x, y) adaptées
      */
     public Point2D adapterCoordonnees(double x, double y) {
-        double adaptationX = this.paddingGlobal + ((x - this.minX) * this.ratioGlobal);
-        double adaptationY = this.paneDessin.getHeight() - this.paddingGlobal - ((y - this.minY) * this.ratioGlobal);
+        double adaptationX = this.paddingGlobal + ((x - this.xMin) * this.ratioGlobal);
+        double adaptationY = this.paneDessin.getHeight() - this.paddingGlobal - ((y - this.yMin) * this.ratioGlobal);
         return new Point2D(adaptationX, adaptationY);
     }
 
@@ -307,45 +307,45 @@ public class VueGraphique {
      */
     public void calculAdaptationCarte(Carte carte) {
         // On va chercher les coordonnées (x, y) minimales et maximales
-        this.minX = Double.MAX_VALUE;
-        this.maxX = Double.MIN_VALUE;
-        this.minY = Double.MAX_VALUE;
-        this.maxY = Double.MIN_VALUE;
+        this.xMin = Double.MAX_VALUE;
+        this.xMax = Double.MIN_VALUE;
+        this.yMin = Double.MAX_VALUE;
+        this.yMax = Double.MIN_VALUE;
 
         for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
-            Point2D coordXY = longLatToXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
+            Point2D coordXY = conversionLongLatVersXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
 
-            if (coordXY.getX() > this.maxX) {
-                this.maxX = coordXY.getX();
-            } else if (coordXY.getX() < this.minX) {
-                this.minX = coordXY.getX();
+            if (coordXY.getX() > this.xMax) {
+                this.xMax = coordXY.getX();
+            } else if (coordXY.getX() < this.xMin) {
+                this.xMin = coordXY.getX();
             }
 
-            if (coordXY.getY() > this.maxY) {
-                this.maxY = coordXY.getY();
-            } else if (coordXY.getY() < this.minY) {
-                this.minY = coordXY.getY();
+            if (coordXY.getY() > this.yMax) {
+                this.yMax = coordXY.getY();
+            } else if (coordXY.getY() < this.yMin) {
+                this.yMin = coordXY.getY();
             }
         }
 
         // Offset qui sera appliqué à toutes les coordonnées
-        this.maxX -= this.minX;
-        this.maxY -= this.minY;
+        this.xMax -= this.xMin;
+        this.yMax -= this.yMin;
 
         // On cherche maintenant la largeur et la hauteur maximales que l'on peut avoir
         // en respectant la ratio de la carte
         double largeurCarte = this.paneDessin.getWidth() - this.PADDING_CARTE;
         double hauteurCarte = this.paneDessin.getHeight() - this.PADDING_CARTE;
 
-        double ratioLargeur = largeurCarte / this.maxX;
-        double ratioHauteur = hauteurCarte / this.maxY;
+        double ratioLargeur = largeurCarte / this.xMax;
+        double ratioHauteur = hauteurCarte / this.yMax;
 
         // On prend le ratio le plus petit pour que la carte puisse rentrer dans la zone
         // de dessin
         this.ratioGlobal = Math.min(ratioLargeur, ratioHauteur);
 
-        double paddingLargeur = (this.paneDessin.getWidth() - (this.ratioGlobal * this.maxX)) / 2;
-        double paddingHauteur = (this.paneDessin.getHeight() - (this.ratioGlobal * this.maxY)) / 2;
+        double paddingLargeur = (this.paneDessin.getWidth() - (this.ratioGlobal * this.xMax)) / 2;
+        double paddingHauteur = (this.paneDessin.getHeight() - (this.ratioGlobal * this.yMax)) / 2;
 
         this.paddingGlobal = Math.min(paddingLargeur, paddingHauteur);
     }
@@ -452,7 +452,7 @@ public class VueGraphique {
         // et les segments
         for (Map.Entry<Long, Intersection> entry : carte.getIntersections().entrySet()) {
             // On convertit la longitude et latitude en x et y
-            Point2D coordXY = longLatToXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
+            Point2D coordXY = conversionLongLatVersXY(entry.getValue().getLongitude(), entry.getValue().getLatitude());
 
             // On adapte le x et y en fonction de la taille de la carte établie avant
             coordXY = adapterCoordonnees(coordXY.getX(), coordXY.getY());
@@ -498,7 +498,7 @@ public class VueGraphique {
                 Intersection arrivee = carte.getIntersections().get(s.getArrivee());
 
                 // On convertit la longitude et latitude en x et y
-                Point2D coordXYArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+                Point2D coordXYArrivee = conversionLongLatVersXY(arrivee.getLongitude(), arrivee.getLatitude());
 
                 // On adapte le x et y en fonction de la taille de la carte établie avant
                 coordXYArrivee = adapterCoordonnees(coordXYArrivee.getX(), coordXYArrivee.getY());
@@ -543,13 +543,13 @@ public class VueGraphique {
      * @param carte    La carte actuellement chargée dans l'application
      * @param idDepot  L'identifiant du dépôt
      */
-    private void afficherDemandes(List<Demande> demandes, Carte carte, Long idDepot) {
+    private void afficherListeDemandes(List<Demande> demandes, Carte carte, Long idDepot) {
         // Initialisation de la map reliant les demandes aux objets graphiques
         this.mapDemandeNoeud = new HashMap<>();
 
         // Dessin du dépôt (sous la forme d'une étoile)
         Intersection depot = carte.getIntersections().get(idDepot);
-        Point2D coordDepot = longLatToXY(depot.getLongitude(), depot.getLatitude());
+        Point2D coordDepot = conversionLongLatVersXY(depot.getLongitude(), depot.getLatitude());
         coordDepot = adapterCoordonnees(coordDepot.getX(), coordDepot.getY());
 
         double rayonLarge = 8.0;
@@ -587,7 +587,7 @@ public class VueGraphique {
     private void afficherDemande(Carte carte, Demande demande) {
         Intersection intersection = carte.getIntersections().get(demande.getIdIntersection());
 
-        Point2D coord = longLatToXY(intersection.getLongitude(), intersection.getLatitude());
+        Point2D coord = conversionLongLatVersXY(intersection.getLongitude(), intersection.getLatitude());
         coord = adapterCoordonnees(coord.getX(), coord.getY());
 
         Color couleur = this.fenetre.getMapCouleurRequete().get(demande.getRequete());
@@ -602,7 +602,7 @@ public class VueGraphique {
             this.fenetre.getMapCouleurRequete().put(demande.getRequete(), couleur);
         }
 
-        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+        if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
             // Collecte
             // Pour le point de collecte, on crée un carré
             Rectangle rectangleCollecte = new Rectangle(coord.getX() - 5, coord.getY() - 5, 10, 10);
@@ -663,12 +663,12 @@ public class VueGraphique {
             // On calcule les coordonnées du départ et de l'arrivée
             Intersection depart = carte.getIntersections().get(segment.getDepart());
 
-            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            Point2D coordDepart = conversionLongLatVersXY(depart.getLongitude(), depart.getLatitude());
             coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
 
             Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
 
-            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            Point2D coordArrivee = conversionLongLatVersXY(arrivee.getLongitude(), arrivee.getLatitude());
             coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
 
             // On crée une ligne pour le segment
@@ -720,12 +720,12 @@ public class VueGraphique {
             // On calcule les coordonnées du départ et de l'arrivée
             Intersection depart = carte.getIntersections().get(segment.getDepart());
 
-            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            Point2D coordDepart = conversionLongLatVersXY(depart.getLongitude(), depart.getLatitude());
             coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
 
             Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
 
-            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            Point2D coordArrivee = conversionLongLatVersXY(arrivee.getLongitude(), arrivee.getLatitude());
             coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
 
             // On crée une ligne pour le segment
@@ -780,12 +780,12 @@ public class VueGraphique {
             // On calcule les coordonnées du départ et de l'arrivée
             Intersection depart = carte.getIntersections().get(segment.getDepart());
 
-            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            Point2D coordDepart = conversionLongLatVersXY(depart.getLongitude(), depart.getLatitude());
             coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
 
             Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
 
-            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            Point2D coordArrivee = conversionLongLatVersXY(arrivee.getLongitude(), arrivee.getLatitude());
             coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
 
             // On crée une ligne pour le segment
@@ -827,12 +827,12 @@ public class VueGraphique {
             // On calcule les coordonnées du départ et de l'arrivée
             Intersection depart = carte.getIntersections().get(segment.getDepart());
 
-            Point2D coordDepart = longLatToXY(depart.getLongitude(), depart.getLatitude());
+            Point2D coordDepart = conversionLongLatVersXY(depart.getLongitude(), depart.getLatitude());
             coordDepart = adapterCoordonnees(coordDepart.getX(), coordDepart.getY());
 
             Intersection arrivee = carte.getIntersections().get(segment.getArrivee());
 
-            Point2D coordArrivee = longLatToXY(arrivee.getLongitude(), arrivee.getLatitude());
+            Point2D coordArrivee = conversionLongLatVersXY(arrivee.getLongitude(), arrivee.getLatitude());
             coordArrivee = adapterCoordonnees(coordArrivee.getX(), coordArrivee.getY());
 
             // On crée une ligne pour le segment
@@ -952,8 +952,6 @@ public class VueGraphique {
     }
 
     /**
-     * Renvoie le pane de dessin de la vue graphique.
-     * 
      * @return Le pane de dessin
      */
     public Pane getPaneDessin() {
@@ -970,44 +968,34 @@ public class VueGraphique {
     }
 
     /**
-     * Getter
-     * 
-     * @return Le minX
+     * @return Le x minimale
      */
-    public double getMinX() {
-        return minX;
+    public double getXMin() {
+        return xMin;
     }
 
     /**
-     * Getter
-     * 
-     * @return Le maxX
+     * @return Le x maximale
      */
-    public double getMaxX() {
-        return maxX;
+    public double getXMax() {
+        return xMax;
     }
 
     /**
-     * Getter
-     * 
-     * @return Le minY
+     * @return Le y minimale
      */
-    public double getMinY() {
-        return minY;
+    public double getYMin() {
+        return yMin;
     }
 
     /**
-     * Getter
-     * 
-     * @return Le maxY
+     * @return Le y maximale
      */
-    public double getMaxY() {
-        return maxY;
+    public double getYMax() {
+        return yMax;
     }
 
     /**
-     * Getter
-     * 
      * @return Le padding de la carte
      */
     public double getPADDING_CARTE() {

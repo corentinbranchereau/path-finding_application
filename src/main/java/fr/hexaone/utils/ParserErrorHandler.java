@@ -4,49 +4,59 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+/**
+ * Permet de gérer les erreurs du parser
+ * 
+ * @author HexaOne
+ * @version 1.0
+ */
 public class ParserErrorHandler implements ErrorHandler {
 
     /**
      * Permet de s'assurer de la validité du document parsé.
      */
-    private boolean isValid = true;
+    private boolean estValide = true;
 
     /**
-     * Retourne l'attribut isValid.
-     * @return isValid (true si le fichier parsé est valide).
+     * @return L'attribut estValide
      */
-    public boolean isValid(){
-        return this.isValid;
+    public boolean getEstValide() {
+        return this.estValide;
     }
 
     /**
-     * Annonce l'erreur sur la console.
+     * Annonce l'avertissement sur la console.
+     * 
+     * @param exception L'exception levée
      */
     @Override
     public void warning(SAXParseException exception) {
-        System.out.println("[HEXAONE PARSER WARNING] : "+exception.toString());
+        System.out.println("[HEXAONE PARSER WARNING] : " + exception.toString());
     }
 
     /**
      * Annonce l'erreur sur la console.
+     * 
+     * @param exception L'exception levée
      */
     @Override
     public void error(SAXParseException exception) {
-        if(this.isValid){
-            System.out.println("[HEXAONE PARSER ERROR] : "+exception.toString());
-            this.isValid = false;
+        if (this.estValide) {
+            System.out.println("[HEXAONE PARSER ERROR] : " + exception.toString());
+            this.estValide = false;
         }
-
     }
 
     /**
-     * Annonce l'erreur sur la console.
+     * Annonce l'erreur fatale sur la console.
+     * 
+     * @param exception L'exception levée
      * @throws SAXException Si erreur parsage DTD.
      */
     @Override
     public void fatalError(SAXParseException exception) throws SAXException {
-        System.out.println("[HEXAONE PARSER FATAL ERROR] : "+exception.toString());
-        this.isValid = false;
+        System.out.println("[HEXAONE PARSER FATAL ERROR] : " + exception.toString());
+        this.estValide = false;
         throw exception;
     }
 }

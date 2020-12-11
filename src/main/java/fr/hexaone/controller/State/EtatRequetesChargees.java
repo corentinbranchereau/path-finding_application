@@ -6,7 +6,7 @@ import javafx.scene.control.Alert.AlertType;
 
 /**
  * Implémentation d'un State représentant l'état de l'application lorsque les
- * requetes sont chargées dans l'application
+ * requêtes sont chargées dans l'application
  * 
  * @author HexaOne
  * @version 1.0

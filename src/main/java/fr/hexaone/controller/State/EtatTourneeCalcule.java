@@ -6,12 +6,12 @@ import fr.hexaone.controller.Command.SupprimerRequeteCommand;
 import fr.hexaone.controller.Controleur;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
-import javafx.scene.control.Alert;
+import fr.hexaone.utils.Utils;
 import javafx.scene.control.Alert.AlertType;
 
 /**
  * Implémentation d'un State représentant l'état de l'application lorsqu'une
- * tournée est calculé dans l'application
+ * tournée a été calculée dans l'application
  * 
  * @author HexaOne
  * @version 1.0
@@ -47,27 +47,18 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void supprimerDemande(Controleur c, Demande demande) {
-
         if (demande == null) {
-            System.out.println("Il faut sélectionner une demande avant.");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Mauvaise sélection");
-            alert.setHeaderText(null);
-            alert.setContentText("Il faut selectionner une demande avant.");
-            alert.show();
+            Utils.afficherAlerte(this, "Mauvaise sélection", "Il faut d'abord sélectionner une demande.",
+                    AlertType.ERROR);
             return;
         }
 
-        // TODO : récupérer depuis la vue graphique/textuelle l'index
-        if (c.getListOfCommands().add(new SupprimerDemandeCommand(c.getPlanning(), demande))) {
+        if (c.getListOfCommands().ajouterCommande(new SupprimerDemandeCommand(c.getPlanning(), demande))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
-            Alert messageAlerte = new Alert(AlertType.INFORMATION);
-            messageAlerte.setTitle("Information");
-            messageAlerte.setHeaderText(null);
-            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
-            messageAlerte.showAndWait();
+            Utils.afficherAlerte(this, "Information", "Au moins une de vos demandes est inaccessible.",
+                    AlertType.INFORMATION);
         }
 
     }
@@ -77,26 +68,18 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void supprimerRequete(Controleur c, Requete requete) {
-
         if (requete == null) {
-            System.out.println("Il faut sélectionner une requete avant.");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Mauvaise sélection");
-            alert.setHeaderText(null);
-            alert.setContentText("Il faut selectionner une requete avant.");
-            alert.show();
+            Utils.afficherAlerte(this, "Mauvaise sélection", "Il faut d'abord sélectionner une requête.",
+                    AlertType.ERROR);
             return;
         }
 
-        if (c.getListOfCommands().add(new SupprimerRequeteCommand(c.getPlanning(), requete))) {
+        if (c.getListOfCommands().ajouterCommande(new SupprimerRequeteCommand(c.getPlanning(), requete))) {
             c.resetDemandeSelectionnee();
             c.getFenetre().rafraichir(c.getPlanning(), c.getDemandeSelectionnee(), false);
         } else {
-            Alert messageAlerte = new Alert(AlertType.INFORMATION);
-            messageAlerte.setTitle("Information");
-            messageAlerte.setHeaderText(null);
-            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
-            messageAlerte.showAndWait();
+            Utils.afficherAlerte(this, "Information", "Au moins une de vos demandes est inaccessible.",
+                    AlertType.INFORMATION);
         }
 
     }
@@ -105,19 +88,13 @@ public class EtatTourneeCalcule implements State {
      * {@inheritDoc}
      */
     @Override
-    public void modifierDemande(Controleur c, Demande d) {
-        if (d == null) {
-            System.out.println("Il faut sélectionner une demande à modifier.");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Mauvaise sélection");
-            alert.setHeaderText(null);
-            alert.setContentText("Il faut selectionner une demande à modifier.");
-            alert.show();
+    public void modifierDemande(Controleur c, Demande demande) {
+        if (demande == null) {
+            Utils.afficherAlerte(this, "Mauvaise sélection", "Il faut sélectionner une demande à modifier",
+                    AlertType.ERROR);
             return;
-
         }
-        c.setEtatModifierDemande(d.getDuree());
-
+        c.setEtatModifierDemande(demande.getDuree());
     }
 
     /**
@@ -125,12 +102,9 @@ public class EtatTourneeCalcule implements State {
      */
     @Override
     public void modifierPlanning(Controleur c, int i, int j) {
-        if (!c.getListOfCommands().add(new ModifierPlanningCommand(c.getPlanning(), i, j))) {
-            Alert messageAlerte = new Alert(AlertType.INFORMATION);
-            messageAlerte.setTitle("Information");
-            messageAlerte.setHeaderText(null);
-            messageAlerte.setContentText("Au moins une de vos demandes est innaccessible");
-            messageAlerte.showAndWait();
+        if (!c.getListOfCommands().ajouterCommande(new ModifierPlanningCommand(c.getPlanning(), i, j))) {
+            Utils.afficherAlerte(this, "Information", "Au moins une de vos demandes est inaccessible",
+                    AlertType.INFORMATION);
         }
     }
 

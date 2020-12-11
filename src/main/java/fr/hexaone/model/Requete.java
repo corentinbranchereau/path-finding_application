@@ -1,10 +1,8 @@
 package fr.hexaone.model;
 
-import javafx.scene.paint.Color;
-
 /**
- * Objet permettant de modéliser une requête, c'est à dire avec un point de
- * retrait (PICKUP) et un point de livraison (DELIVERY)
+ * Objet permettant de modéliser une requête, c'est à dire un point de collecte
+ * et un point de livraison.
  *
  * @author HexaOne
  * @version 1.0
@@ -22,45 +20,38 @@ public class Requete {
     private Demande demandeLivraison;
 
     /**
-     * Couleur utilisée
-     */
-    private Color couleur;
-
-    /**
      * Constructeur de Requete
      *
-     * @param idPickup L'id du pickup
-     * @param dureePickup La durée du pickup
-     * @param nomPickup Le nom du pickUp
-     * @param idDelivery L'id du delivery
-     * @param dureeDelivery La durée du delivery
-     * @param nomDelivery Le nom du delivery
+     * @param idCollecte     L'id de l'intersection de la collecte
+     * @param dureeCollecte  La durée de la collecte
+     * @param nomCollecte    Le nom de l'intersection de la collecte
+     * @param idLivraison    L'id de l'intersection de la livraison
+     * @param dureeLivraison La durée de la livraison
+     * @param nomLivraison   Le nom de l'intersection de la livraison
      */
-    public Requete(long idPickup, int dureePickup, String nomPickup, long idDelivery, int dureeDelivery,
-            String nomDelivery) {
-        demandeCollecte = new Demande(TypeIntersection.COLLECTE, idPickup, nomPickup, dureePickup, this);
-        demandeLivraison = new Demande(TypeIntersection.LIVRAISON, idDelivery, nomDelivery, dureeDelivery, this);
+    public Requete(long idCollecte, int dureeCollecte, String nomCollecte, long idLivraison, int dureeLivraison,
+            String nomLivraison) {
+        demandeCollecte = new Demande(TypeDemande.COLLECTE, idCollecte, nomCollecte, dureeCollecte, this);
+        demandeLivraison = new Demande(TypeDemande.LIVRAISON, idLivraison, nomLivraison, dureeLivraison, this);
     }
 
     /**
      * Constructeur de Requete pour une unique demande
      *
-     * @param id L'id de l'intersection
-     * @param duree La duréée
-     * @param nom Le nom
-     * @param typeIntersection Le type d'intersection
+     * @param idIntersection L'id de l'intersection de la demande
+     * @param duree          La durée de la demande
+     * @param nom            Le nom de l'intersection de la demande
+     * @param typeDemande    Le type de la demande
      */
-    public Requete(long id, int duree, String nom, TypeIntersection typeIntersection) {
-        if(typeIntersection==TypeIntersection.COLLECTE){
-            demandeCollecte = new Demande(TypeIntersection.COLLECTE, id, nom, duree, this);
-        } else if (typeIntersection==TypeIntersection.LIVRAISON){
-            demandeLivraison = new Demande(TypeIntersection.LIVRAISON, id, nom, duree, this);
+    public Requete(long idIntersection, int duree, String nom, TypeDemande typeDemande) {
+        if (typeDemande == TypeDemande.COLLECTE) {
+            demandeCollecte = new Demande(TypeDemande.COLLECTE, idIntersection, nom, duree, this);
+        } else if (typeDemande == TypeDemande.LIVRAISON) {
+            demandeLivraison = new Demande(TypeDemande.LIVRAISON, idIntersection, nom, duree, this);
         }
     }
 
     /**
-     * Getter
-     * 
      * @return La demande de collecte
      */
     public Demande getDemandeCollecte() {
@@ -68,17 +59,15 @@ public class Requete {
     }
 
     /**
-     * Setter
+     * Change la demande de collecte
      * 
-     * @param demandeCollecte La demande de collecte
+     * @param demandeCollecte La nouvelle demande de collecte
      */
     public void setDemandeCollecte(Demande demandeCollecte) {
         this.demandeCollecte = demandeCollecte;
     }
 
     /**
-     * Getter
-     * 
      * @return La demande de livraison
      */
     public Demande getDemandeLivraison() {
@@ -86,9 +75,9 @@ public class Requete {
     }
 
     /**
-     * Setter
+     * Change la demande de livraison
      * 
-     * @param demandeLivraison La demande de livraison
+     * @param demandeLivraison La nouvelle demande de livraison
      */
     public void setDemandeLivraison(Demande demandeLivraison) {
         this.demandeLivraison = demandeLivraison;

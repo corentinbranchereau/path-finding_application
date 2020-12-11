@@ -85,18 +85,18 @@
                      <children>
                         <!-- Add PickupDuration Label -->
 
-                        <Label fx:id="pickupDurationLabel" prefHeight="18.0" prefWidth="235.0" text="Durée Collecte (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label fx:id="labelDureeCollecte" prefHeight="18.0" prefWidth="235.0" text="Durée Collecte (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <!-- Add PickupDuration Text Field -->
-                        <TextField fx:id="pickupDurationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="champDureeCollecte" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <!-- Add deliveryDuration Label -->
-                        <Label fx:id="deliveryDurationLabel" prefHeight="18.0" prefWidth="225.0" text="Durée Livraison (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label fx:id="labelDureeLivraison" prefHeight="18.0" prefWidth="225.0" text="Durée Livraison (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <!-- Add deliveryDuration Field -->
-                        <TextField fx:id="deliveryDurationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="champDureeLivraison" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label fx:id="durationLabel" text="Nouvelle durée (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label fx:id="labelDuree" text="Nouvelle durée (en secondes)" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <!-- Add PickupDuration Text Field -->
-                        <TextField fx:id="durationField" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="champDuree" disable="true" prefHeight="40" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                      <rowConstraints>
                         <RowConstraints />
@@ -133,12 +133,12 @@
                         <Insets bottom="10" left="0" right="0" top="0" />
                      </padding>
                   </HBox>
-                  <TextFlow fx:id="depotTextInformation" prefHeight="200.0" prefWidth="200.0">
+                  <TextFlow fx:id="texteInformationDepot" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Text lineSpacing="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pour charger une Carte ou des Requêtes, rendez-vous dans &quot;Fichier&quot;, en haut à gauche de l'application." />
                      </children>
                   </TextFlow>
-                  <ScrollPane fx:id="textScrollPane" prefHeight="630.0" prefWidth="488.0">
+                  <ScrollPane fx:id="scrollPaneTexte" prefHeight="630.0" prefWidth="488.0">
                      <content>
                         <TextFlow fx:id="zoneTexte" prefHeight="493.0" prefWidth="523.0" style="-fx-padding: 10;" />
                      </content>

@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Commande de suppression de requête en suivant le design pattern COMMAND.
+ * Commande de suppression de requête en suivant le design pattern Command.
  *
  * @author HexaOne
  * @version 1.0
  */
-public class SupprimerRequeteCommand implements Command{
+public class SupprimerRequeteCommand implements Command {
 
     /**
      * Le planning associé
@@ -25,15 +25,15 @@ public class SupprimerRequeteCommand implements Command{
     private Requete requete;
 
     /**
-     * Les positions des requêtes associées aux demandes dans la liste
-     * des demandes
+     * Les positions des requêtes associées aux demandes dans la liste des demandes
      */
     private List<Integer> positions;
 
     /**
      * Constructeur de la suppression de requête
+     * 
      * @param planning Le planning que l'on souahite modifier.
-     * @param requete La requete que l'on souhaite supprimer du planning.
+     * @param requete  La requete que l'on souhaite supprimer du planning.
      */
     public SupprimerRequeteCommand(Planning planning, Requete requete) {
         this.planning = planning;

@@ -16,7 +16,6 @@ public class PlanningTest {
     Carte carte;
     Planning planning;
 
-
     /**
      * Instancie une carte vide
      */
@@ -27,56 +26,55 @@ public class PlanningTest {
     }
 
     /**
-     * Méthode de test pour vérifer les trajets créés pour un
-     * un graphe simple
+     * Méthode de test pour vérifer les trajets créés pour un un graphe simple
      */
     @Test
-    public void testRechercheDesPlusCourtsTrajetsSimple(){
+    public void testRechercheDesPlusCourtsTrajetsSimple() {
 
-        //Création d'un graphe
+        // Création d'un graphe
         creerGrapheSimple();
 
-        //Création des intersections des plus courts chemins
+        // Création des intersections des plus courts chemins
         List<Intersection> intersections = new ArrayList<Intersection>();
         intersections.add(carte.getIntersections().get(0L));
         intersections.add(carte.getIntersections().get(1L));
         intersections.add(carte.getIntersections().get(3L));
 
-        //Calcul des chemins les plus courts
+        // Calcul des chemins les plus courts
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
         // Vérification des résultats
         Integer nbTrajet = planning.getTrajetsLesPlusCourts().size();
-        assert( nbTrajet == 9);
+        assert (nbTrajet == 9);
 
-        planning.getTrajetsLesPlusCourts().forEach( (key,value) -> {
+        planning.getTrajetsLesPlusCourts().forEach((key, value) -> {
             switch (key) {
-	            case "0|0":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "1|1":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "3|3":
-	                assert(value.getPoids() == 0.);
-	                break;
+                case "0|0":
+                    assert (value.getPoids() == 0.);
+                    break;
+                case "1|1":
+                    assert (value.getPoids() == 0.);
+                    break;
+                case "3|3":
+                    assert (value.getPoids() == 0.);
+                    break;
                 case "0|1":
-                    assert(value.getPoids() == 1.);
+                    assert (value.getPoids() == 1.);
                     break;
                 case "0|3":
-                    assert(value.getPoids() == 3.);
+                    assert (value.getPoids() == 3.);
                     break;
                 case "1|0":
-                    assert(value.getPoids() == 1.);
+                    assert (value.getPoids() == 1.);
                     break;
                 case "1|3":
-                    assert(value.getPoids() == 2.);
+                    assert (value.getPoids() == 2.);
                     break;
                 case "3|0":
-                    assert(value.getPoids() == 2.);
+                    assert (value.getPoids() == 2.);
                     break;
                 case "3|1":
-                    assert(value.getPoids() == 2.);
+                    assert (value.getPoids() == 2.);
                     break;
                 default:
                     break;
@@ -85,38 +83,37 @@ public class PlanningTest {
     }
 
     /**
-     * Méthode de test pour vérifer les trajets créés pour un
-     * un graphe avec une intersection inaccessible
+     * Méthode de test pour vérifer les trajets créés pour un un graphe avec une
+     * intersection inaccessible
      */
     @Test
-    public void testRechercheDesPlusCourtsCheminsInaccessible(){
+    public void testRechercheDesPlusCourtsCheminsInaccessible() {
 
-        //Création d'un graphe
+        // Création d'un graphe
         creerGraphePonderer();
 
-        //Création des requetes
+        // Création des requetes
         List<Intersection> intersections = new ArrayList<Intersection>();
         intersections.add(carte.getIntersections().get(0L));
         intersections.add(carte.getIntersections().get(1L));
-        intersections.add(carte.getIntersections().get(9L)); //9 est le point inaccessible
+        intersections.add(carte.getIntersections().get(9L)); // 9 est le point inaccessible
 
-
-        //Calcul des chemins les plus courts
-       assert( planning.calculerLesTrajetsLesPlusCourts(intersections)==false);
+        // Calcul des chemins les plus courts
+        assert (planning.calculerLesTrajetsLesPlusCourts(intersections) == false);
 
     }
 
     /**
-     * Méthode de test de la recherche de plus courts chemins contenant
-     * des mêmes intersections
+     * Méthode de test de la recherche de plus courts chemins contenant des mêmes
+     * intersections
      */
     @Test
-    public void testRechercheDesPlusCourtsCheminsMemeIntersection(){
+    public void testRechercheDesPlusCourtsCheminsMemeIntersection() {
 
-        //Création d'un graphe
+        // Création d'un graphe
         creerGraphe();
 
-        //Création de la liste des intersections à accéder
+        // Création de la liste des intersections à accéder
         List<Intersection> intersections = new ArrayList<Intersection>();
         intersections.add(carte.getIntersections().get(0L));
         intersections.add(carte.getIntersections().get(1L));
@@ -124,64 +121,64 @@ public class PlanningTest {
         intersections.add(carte.getIntersections().get(3L));
         intersections.add(carte.getIntersections().get(9L));
 
-        //Calcul des chemins les plus courts
+        // Calcul des chemins les plus courts
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
         // Vérification des résultats
-        assert(planning.getTrajetsLesPlusCourts().size() == 16);
+        assert (planning.getTrajetsLesPlusCourts().size() == 16);
 
-        planning.getTrajetsLesPlusCourts().forEach( (key,value) -> {
+        planning.getTrajetsLesPlusCourts().forEach((key, value) -> {
             switch (key) {
-	            case "0|0":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "1|1":
-	                assert(value.getPoids() == 0.);
-	                break;
-	            case "9|9":
-	                assert(value.getPoids() == 0.);
+                case "0|0":
+                    assert (value.getPoids() == 0.);
+                    break;
+                case "1|1":
+                    assert (value.getPoids() == 0.);
+                    break;
+                case "9|9":
+                    assert (value.getPoids() == 0.);
                     break;
                 case "3|3":
-	                assert(value.getPoids() == 0.);
-	                break;
+                    assert (value.getPoids() == 0.);
+                    break;
                 case "0|1":
-                    assert(value.getPoids() == 4.);
+                    assert (value.getPoids() == 4.);
                     break;
                 case "0|3":
-                    assert(value.getPoids() == 16.);
+                    assert (value.getPoids() == 16.);
                     break;
                 case "0|9":
-                    assert(value.getPoids() == 27.);
+                    assert (value.getPoids() == 27.);
                     break;
                 case "1|0":
-                    assert(value.getPoids() == 4.);
+                    assert (value.getPoids() == 4.);
                     break;
                 case "1|3":
-                    assert(value.getPoids() == 12.);
+                    assert (value.getPoids() == 12.);
                     break;
                 case "1|9":
-                    assert(value.getPoids() == 23.);
+                    assert (value.getPoids() == 23.);
                     break;
                 case "3|0":
-                    assert(value.getPoids() == 16.);
+                    assert (value.getPoids() == 16.);
                     break;
                 case "3|1":
-                    assert(value.getPoids() == 12.);
+                    assert (value.getPoids() == 12.);
                     break;
                 case "3|9":
-                    assert(value.getPoids() == 15.);
+                    assert (value.getPoids() == 15.);
                     break;
                 case "9|0":
-                    assert(value.getPoids() == 27.);
+                    assert (value.getPoids() == 27.);
                     break;
                 case "9|1":
-                    assert(value.getPoids() == 23.);
+                    assert (value.getPoids() == 23.);
                     break;
                 case "9|3":
-                    assert(value.getPoids() == 15.);
+                    assert (value.getPoids() == 15.);
                     break;
                 default:
-                    assert(false);
+                    assert (false);
                     break;
             }
         });
@@ -190,15 +187,14 @@ public class PlanningTest {
     /**
      * Méthode de test pour la vérification des contraintes sur une population
      *
-     * Préconditions :
-     *   - correctionCrossover
+     * Préconditions : - correctionCrossover
      */
     @Test
     public void testVerifierPop() {
 
-        Requete r1 = new Requete(1,0,"",3,0,"");
-        Requete r2 = new Requete(4,0,"",9,0,"");
-        Requete r3 = new Requete(5,0,"",7,0,"");
+        Requete r1 = new Requete(1, 0, "", 3, 0, "");
+        Requete r2 = new Requete(4, 0, "", 9, 0, "");
+        Requete r3 = new Requete(5, 0, "", 7, 0, "");
 
         List<Object> demandes1 = new ArrayList<Object>();
         List<Object> demandes2 = new ArrayList<Object>();
@@ -224,29 +220,30 @@ public class PlanningTest {
         demandes2.add(r2.getDemandeLivraison());
         demandes2.add(r3.getDemandeCollecte());
         demandes2.add(r3.getDemandeLivraison());
-        
-        AlgoTSP algo=new AlgoTSP(null,null);
-        
-        assert (algo.verifierPop(demandes1) == true);
-        assert (algo.verifierPop(demandes2) == false);
-        assert (algo.verifierPop(demandes3) == true);
+
+        AlgoTSP algo = new AlgoTSP(null, null);
+
+        assert (algo.verifierChromosome(demandes1) == true);
+        assert (algo.verifierChromosome(demandes2) == false);
+        assert (algo.verifierChromosome(demandes3) == true);
 
     }
 
     /**
-      * Méthode de test pour la vérification de l'espacement minimum des coûts pour une population
+     * Méthode de test pour la vérification de l'espacement minimum des coûts pour
+     * une population
      */
-     @Test
+    @Test
     public void testEspacePopulation() {
 
-     	List<Object> listIntersections1 = new ArrayList<Object>();
+        List<Object> listIntersections1 = new ArrayList<Object>();
         List<Object> listIntersections2 = new ArrayList<Object>();
         List<Object> listIntersections3 = new ArrayList<Object>();
 
         for (int i = 0; i < 10; i++) {
-            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i,"",(Integer)0,null));
-            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i*i,"",(Integer)0,null));
-            listIntersections1.add(new Demande(TypeIntersection.COLLECTE,(long)i*i*i,"",(Integer)0,null));
+            listIntersections1.add(new Demande(TypeDemande.COLLECTE, (long) i, "", (Integer) 0, null));
+            listIntersections1.add(new Demande(TypeDemande.COLLECTE, (long) i * i, "", (Integer) 0, null));
+            listIntersections1.add(new Demande(TypeDemande.COLLECTE, (long) i * i * i, "", (Integer) 0, null));
 
         }
 
@@ -258,80 +255,78 @@ public class PlanningTest {
 
         pop.add(new Pair<>(listIntersections3, 8.0));
 
-        AlgoTSP algo=new AlgoTSP(null,null);
-        
-       assert (algo.espacePopulation(pop, 10.0) == false);
-       assert (algo.espacePopulation(pop, 1.0) == true);
+        AlgoTSP algo = new AlgoTSP(null, null);
 
-     }
+        assert (algo.espacePopulation(pop, 10.0) == false);
+        assert (algo.espacePopulation(pop, 1.0) == true);
 
-     /**
-      * Méthode de test de la vérification de la génération d'un chromosome enfant
-      */
-     @Test
-     public void testCrossoverOX() {
+    }
 
-     	List<Object> P1 = new ArrayList<Object>();
-    	List<Object> P2 = new ArrayList<Object>();
+    /**
+     * Méthode de test de la vérification de la génération d'un chromosome enfant
+     */
+    @Test
+    public void testCrossoverOX() {
 
-    	Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
-    	Demande d2=new Demande(TypeIntersection.COLLECTE,(long)2,"",(Integer)0,null);
-    	Demande d3=new Demande(TypeIntersection.COLLECTE,(long)3,"",(Integer)0,null);
-    	Demande d4=new Demande(TypeIntersection.COLLECTE,(long)4,"",(Integer)0,null);
-    	Demande d5=new Demande(TypeIntersection.COLLECTE,(long)5,"",(Integer)0,null);
-    	Demande d6=new Demande(TypeIntersection.COLLECTE,(long)6,"",(Integer)0,null);
-    	Demande d7=new Demande(TypeIntersection.COLLECTE,(long)7,"",(Integer)0,null);
-    	Demande d8=new Demande(TypeIntersection.COLLECTE,(long)8,"",(Integer)0,null);
-    	Demande d9=new Demande(TypeIntersection.COLLECTE,(long)9,"",(Integer)0,null);
+        List<Object> P1 = new ArrayList<Object>();
+        List<Object> P2 = new ArrayList<Object>();
 
-    	P1.add(d1);
-    	P1.add(d3);
-    	P1.add(d2);
-    	P1.add(d6);
-    	P1.add(d4);
-    	P1.add(d5);
-    	P1.add(d9);
-    	P1.add(d7);
-    	P1.add(d8);
+        Demande d1 = new Demande(TypeDemande.COLLECTE, (long) 1, "", (Integer) 0, null);
+        Demande d2 = new Demande(TypeDemande.COLLECTE, (long) 2, "", (Integer) 0, null);
+        Demande d3 = new Demande(TypeDemande.COLLECTE, (long) 3, "", (Integer) 0, null);
+        Demande d4 = new Demande(TypeDemande.COLLECTE, (long) 4, "", (Integer) 0, null);
+        Demande d5 = new Demande(TypeDemande.COLLECTE, (long) 5, "", (Integer) 0, null);
+        Demande d6 = new Demande(TypeDemande.COLLECTE, (long) 6, "", (Integer) 0, null);
+        Demande d7 = new Demande(TypeDemande.COLLECTE, (long) 7, "", (Integer) 0, null);
+        Demande d8 = new Demande(TypeDemande.COLLECTE, (long) 8, "", (Integer) 0, null);
+        Demande d9 = new Demande(TypeDemande.COLLECTE, (long) 9, "", (Integer) 0, null);
 
-    	P2.add(d3);
-    	P2.add(d7);
-    	P2.add(d8);
-    	P2.add(d1);
-    	P2.add(d4);
-    	P2.add(d9);
-    	P2.add(d2);
-    	P2.add(d5);
-    	P2.add(d6);
+        P1.add(d1);
+        P1.add(d3);
+        P1.add(d2);
+        P1.add(d6);
+        P1.add(d4);
+        P1.add(d5);
+        P1.add(d9);
+        P1.add(d7);
+        P1.add(d8);
 
-    	AlgoTSP algo=new AlgoTSP(null,null);
-    	
-        List<Object> enfant=algo.crossoverOX(P1,P2,3,5);
+        P2.add(d3);
+        P2.add(d7);
+        P2.add(d8);
+        P2.add(d1);
+        P2.add(d4);
+        P2.add(d9);
+        P2.add(d2);
+        P2.add(d5);
+        P2.add(d6);
 
-        int[]res= {8,1,9,6,4,5,2,3,7};
+        AlgoTSP algo = new AlgoTSP(null, null);
 
-        for(int i=0;i<enfant.size();i++) {
-        	assert((long)res[i]==((Demande)enfant.get(i)).getIdIntersection());
+        List<Object> enfant = algo.crossoverOX(P1, P2, 3, 5);
+
+        int[] res = { 8, 1, 9, 6, 4, 5, 2, 3, 7 };
+
+        for (int i = 0; i < enfant.size(); i++) {
+            assert ((long) res[i] == ((Demande) enfant.get(i)).getIdIntersection());
         }
 
-     }
-
+    }
 
     /**
      * Méthode de test pour vérifier le calul du coup total d'une tournée
      *
-     * Préconditions :
-     *   - calculerLesCheminsLesPlusCourts
+     * Préconditions : - calculerLesCheminsLesPlusCourts
      */
     @Test
     public void testCoutSimple() {
 
-        //Création d'un graphe simple
+        // Création d'un graphe simple
         creerGrapheSimple();
 
-        //Création des requetes
+        // Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,5,"",3,5,""));
+        requetes.add(new Requete(1, 5, "", 3, 5, ""));
 
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
@@ -341,37 +336,35 @@ public class PlanningTest {
         intersections.add(carte.getIntersections().get(1L));
         intersections.add(carte.getIntersections().get(3L));
 
-
-        //Calcul des chemins les plus courts
+        // Calcul des chemins les plus courts
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
         List<Object> chromosome = new ArrayList<Object>();
-    	chromosome.add(requetes.get(0).getDemandeCollecte());
+        chromosome.add(requetes.get(0).getDemandeCollecte());
         chromosome.add(requetes.get(0).getDemandeLivraison());
-        
-        AlgoTSP algo=new AlgoTSP(0L,planning.getTrajetsLesPlusCourts());
+
+        AlgoTSP algo = new AlgoTSP(0L, planning.getTrajetsLesPlusCourts());
 
         Double cout = algo.cout(chromosome);
 
-        assert(cout == 5);
+        assert (cout == 5);
     }
 
-     /**
-     * Méthode de test pour vérifier le calul du coup total d'une tournée
-     * lorsque des intersections sont à l'infini
+    /**
+     * Méthode de test pour vérifier le calul du coup total d'une tournée lorsque
+     * des intersections sont à l'infini
      *
-     * Préconditions :
-     *   - calculerLesCheminsLesPlusCourts
+     * Préconditions : - calculerLesCheminsLesPlusCourts
      */
     @Test
     public void testCoutInfini() {
 
-        //Création d'un graphe simple
+        // Création d'un graphe simple
         creerGraphePonderer();
 
-        //Création des requetes
+        // Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,5,"",9,5,""));
+        requetes.add(new Requete(1, 5, "", 9, 5, ""));
 
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
@@ -381,89 +374,91 @@ public class PlanningTest {
         intersections.add(carte.getIntersections().get(1L));
         intersections.add(carte.getIntersections().get(9L));
 
-        //Calcul des chemins les plus courts
+        // Calcul des chemins les plus courts
         boolean test = planning.calculerLesTrajetsLesPlusCourts(intersections);
 
-        assert(test==false);
+        assert (test == false);
 
     }
 
     /**
-      * Méthode de test de la mutation avec recherche locale
-      *
-      * Préconditions :
-      *   - calculerLesCheminsLesPlusCourts
-      */
-     @Test
-     public void testMutationLocalSearch() {
+     * Méthode de test de la mutation avec recherche locale
+     *
+     * Préconditions : - calculerLesCheminsLesPlusCourts
+     */
+    @Test
+    public void testMutationLocalSearch() {
 
-     	//Création d'un graphe
+        // Création d'un graphe
 
-         //Création des requetes
-         List<Requete> requetes = new ArrayList<Requete>();
-         Requete requete = new Requete(1,5,"",3,5,"");
+        // Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
+        Requete requete = new Requete(1, 5, "", 3, 5, "");
+        requetes.add(requete);
 
-         Planning planning2 = new Planning(carte);
-         //Calcul des chemins les plus courts
-         planning2.calculerLesTrajetsLesPlusCourts(creerGraphe());
+        Planning planning2 = new Planning(carte);
+        // Calcul des chemins les plus courts
+        planning2.calculerLesTrajetsLesPlusCourts(creerGraphe());
 
-         planning2.setIdDepot(0L);
-         planning2.setRequetes(requetes);
+        planning2.setIdDepot(0L);
+        planning2.setRequetes(requetes);
 
-	     List<Object> P1 = new ArrayList<Object>();
+        List<Object> P1 = new ArrayList<Object>();
 
-     	 P1.add(new Demande(TypeIntersection.COLLECTE,(long)3,"",(Integer)0,null));
-     	 P1.add(new Demande(TypeIntersection.LIVRAISON,(long)5,"",(Integer)0,null));
-     	 
-    	 
-      	 AlgoTSP algo=new AlgoTSP(0L,planning2.getTrajetsLesPlusCourts());
+        P1.add(new Demande(TypeDemande.COLLECTE, (long) 3, "", (Integer) 0, null));
+        P1.add(new Demande(TypeDemande.LIVRAISON, (long) 5, "", (Integer) 0, null));
 
-     	 double cout1=algo.cout(P1);
-   
+        AlgoTSP algo = new AlgoTSP(0L, planning2.getTrajetsLesPlusCourts());
 
-	     List<Object> mutation=algo.mutationLocalSearch(P1,cout1);
+        double cout1 = algo.cout(P1);
 
-	     assert(algo.cout(mutation)<=cout1);
+        List<Object> mutation = algo.mutationLocalSearch(P1, cout1);
 
-     }
+        assert (algo.cout(mutation) <= cout1);
 
-     /**
-      * Méthode de test pour la vérification de la génération d'un chromosome aléatoire
-      *
-      * Préconditions :
-      *   - genererChromosomeAleatoire
-      *   - verifierPop
-      */
-     @Test
-     public void testGenererChromosome() {
+    }
 
-	     List<Object> demandes = new ArrayList<Object>();
+    /**
+     * Méthode de test pour la vérification de la génération d'un chromosome
+     * aléatoire
+     *
+     * Préconditions : - genererChromosomeAleatoire - verifierPop
+     */
+    @Test
+    public void testGenererChromosome() {
 
-	     Demande d1=new Demande(TypeIntersection.COLLECTE,(long)1,"",(Integer)0,null);
-	     Demande d2=new Demande(TypeIntersection.LIVRAISON,(long)3,"",(Integer)0,null);
-	     Demande d3=new Demande(TypeIntersection.COLLECTE,(long)4,"",(Integer)0,null);
-	     Demande d4=new Demande(TypeIntersection.LIVRAISON,(long)9,"",(Integer)0,null);
-	     Demande d5=new Demande(TypeIntersection.COLLECTE,(long)5,"",(Integer)0,null);
-	     Demande d6=new Demande(TypeIntersection.LIVRAISON,(long)7,"",(Integer)0,null);
+        List<Object> demandes = new ArrayList<Object>();
 
-	     AlgoTSP algo=new AlgoTSP(0L,null);
-	     
-         List<Object> chromosome=algo.genererChromosomeAleatoire(demandes) ;
+        Requete r12 = new Requete(1, 0, "", 3, 0, "");
+        Demande d1 = r12.getDemandeCollecte();
+        Demande d2 = r12.getDemandeLivraison();
+        Requete r34 = new Requete(4, 0, "", 9, 0, "");
+        Demande d3 = r34.getDemandeCollecte();
+        Demande d4 = r34.getDemandeLivraison();
+        Requete r56 = new Requete(5, 0, "", 7, 0, "");
+        Demande d5 = r56.getDemandeCollecte();
+        Demande d6 = r56.getDemandeLivraison();
 
-         assert (algo.verifierPop(demandes) == true);
+        demandes.add(d1);
+        demandes.add(d2);
+        demandes.add(d3);
+        demandes.add(d4);
+        demandes.add(d5);
+        demandes.add(d6);
 
-     }
+        AlgoTSP algo = new AlgoTSP(0L, null);
+
+        List<Object> chromosome = algo.genererChromosomeAleatoire(demandes);
+
+        assert (algo.verifierChromosome(chromosome) == true);
+
+    }
 
     /**
      * Méthode de test de la boucle principale de l'algorithme génétique
      *
-     * Précondition :
-     *   - calculerLesCheminsLesPlusCourts
-     *   - cout
-     *   - mutationLocalSearch
-     *   - genererChromosomeAleatoire
-     *   - verifierPop
-     *   - correctionCrossover
+     * Précondition : - calculerLesCheminsLesPlusCourts - cout - mutationLocalSearch
+     * - genererChromosomeAleatoire - verifierPop - correctionCrossover
      */
     @Test
     public void testTrouverMeilleureTourneeSimple() {
@@ -473,7 +468,7 @@ public class PlanningTest {
 
         // Création des requetes
         List<Requete> requetes = new ArrayList<Requete>();
-        Requete requete = new Requete(1,5,"",3,5,"");
+        Requete requete = new Requete(1, 5, "", 3, 5, "");
         requetes.add(requete);
 
         planning.setIdDepot(0L);
@@ -485,75 +480,64 @@ public class PlanningTest {
         intersections.add(carte.getIntersections().get(1L));
         intersections.add(carte.getIntersections().get(3L));
 
-        //Calcul des chemins les plus courts
+        // Calcul des chemins les plus courts
         planning.calculerLesTrajetsLesPlusCourts(intersections);
 
-
-        //recherche de la meilleur solution
+        // recherche de la meilleur solution
         planning.calculerMeilleurTournee();
 
         List<Demande> demandesOrdonnees = planning.getDemandesOrdonnees();
 
-        assert(demandesOrdonnees.size()==2);
+        assert (demandesOrdonnees.size() == 2);
 
-        assert(demandesOrdonnees.get(0) == requete.getDemandeCollecte());
-        assert(demandesOrdonnees.get(1) == requete.getDemandeLivraison());
-
+        assert (demandesOrdonnees.get(0) == requete.getDemandeCollecte());
+        assert (demandesOrdonnees.get(1) == requete.getDemandeLivraison());
 
     }
 
     /**
-      * Méthode de test de la boucle principale de l'algorithme génétique
-      *
-      * Précondition :
-      *   - calculerLesCheminsLesPlusCourts
-      *   - cout
-      *   - mutationLocalSearch
-      *   - genererChromosomeAleatoire
-      *   - verifierPop
-      *   - correctionCrossover
-      */
-     @Test
-     public void testTrouverMeilleureTourneeNormal() {
+     * Méthode de test de la boucle principale de l'algorithme génétique
+     *
+     * Précondition : - calculerLesCheminsLesPlusCourts - cout - mutationLocalSearch
+     * - genererChromosomeAleatoire - verifierPop - correctionCrossover
+     */
+    @Test
+    public void testTrouverMeilleureTourneeNormal() {
 
-         // Création d'un grap simple
+        // Création d'un grap simple
 
-         // Création des requetes
-     	List<Requete> requetes = new ArrayList<Requete>();
+        // Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
 
-     	Requete requete1 = new Requete(3,5,"",5,5,"");
-     	Requete requete2 = new Requete(6,5,"",8,5,"");
-     	Requete requete3 = new Requete(9,5,"",4,5,"");
+        Requete requete1 = new Requete(3, 5, "", 5, 5, "");
+        Requete requete2 = new Requete(6, 5, "", 8, 5, "");
+        Requete requete3 = new Requete(9, 5, "", 4, 5, "");
 
-     	requetes.add(requete1);
-     	requetes.add(requete2);
-     	requetes.add(requete3);
+        requetes.add(requete1);
+        requetes.add(requete2);
+        requetes.add(requete3);
 
-	    //Calcul des chemins les plus courts
-	    planning.calculerLesTrajetsLesPlusCourts(creerGraphe());
-	    planning.setIdDepot(0L);
-	    planning.setDateDebut(new Date(0));
-	    planning.setRequetes(requetes);
+        // Calcul des chemins les plus courts
+        planning.calculerLesTrajetsLesPlusCourts(creerGraphe());
+        planning.setIdDepot(0L);
+        planning.setDateDebut(new Date(0));
+        planning.setRequetes(requetes);
 
-	    //recherche de la meilleur solution
+        // recherche de la meilleur solution
         planning.calculerMeilleurTournee();
-        
-        int dureeTotal = (int)planning.getDureeTotale();
-	    
-	    assert(dureeTotal==49);
 
-     }
+        int dureeTotal = (int) planning.getDureeTotale();
+
+        assert (dureeTotal == 49);
+
+    }
 
     /**
      * Méthode de test pour vérifier les horraires de la tournée calculés
      *
-     * Préconditions :
-     *   - calculerLesCheminsLesPlusCourts
-     *   - cout
-     *   - mutationLocalSearch
-     *   - genererChromosomeAleatoire
-     *   - verifierPop
-     *   - correctionCrossover
+     * Préconditions : - calculerLesCheminsLesPlusCourts - cout -
+     * mutationLocalSearch - genererChromosomeAleatoire - verifierPop -
+     * correctionCrossover
      */
     @Test
     public void testCalculerTourneeSimple() {
@@ -561,7 +545,7 @@ public class PlanningTest {
         creerGrapheSimple();
 
         List<Requete> requetes = new ArrayList<Requete>();
-        requetes.add(new Requete(1,3,"",3,5,""));
+        requetes.add(new Requete(1, 3, "", 3, 5, ""));
 
         Planning planning = new Planning(carte);
 
@@ -577,113 +561,41 @@ public class PlanningTest {
 
         List<Demande> demandes = planning.getDemandesOrdonnees();
 
-        assert(demandes.size() == 2);
+        assert (demandes.size() == 2);
 
-        assert(planning.getDateDebut().getTime() == 0);
-        assert(planning.getDateFin().getTime() == (5*3600/15 + 8000));
-        assert(planning.getDureeTotale() == (5*3600/15 + 8000)/1000);
+        assert (planning.getDateDebut().getTime() == 0);
+        assert (planning.getDateFin().getTime() == (5 * 3600 / 15 + 8000));
+        assert (planning.getDureeTotale() == (5 * 3600 / 15 + 8000) / 1000);
 
         demande = demandes.get(0);
         d1 = demande.getDateArrivee().getTime();
         d2 = demande.getDateDepart().getTime();
-        assert(d1 == 1*3600/15);
-        assert(d2 == 1*3600/15 + 3000);
+        assert (d1 == 1 * 3600 / 15);
+        assert (d2 == 1 * 3600 / 15 + 3000);
 
         demande = demandes.get(1);
         d1 = demande.getDateArrivee().getTime();
         d2 = demande.getDateDepart().getTime();
-        assert(d1 == 3*3600/15 + 3000 );
-        assert(d2 == 3*3600/15 + 8000 );
+        assert (d1 == 3 * 3600 / 15 + 3000);
+        assert (d2 == 3 * 3600 / 15 + 8000);
     }
 
-
-
-    // /**
-    //  * Méthode pour tester la création des tournée avec des mêmes
-    //  * intersections dans les requêtes
-    //  */
-    // @Test
-    // public void test_calculerTournee_memeIntersection() {
-    // 	 // Création d'un grap simple
-    //     creerGraphe();
-
-    //     // Création des requetes
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(3,5,9,5));
-
-    //     Planning planning = new Planning(carte);
-
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
-
-    //     planning.calculerTournee();
-
-
-    //     /*System.out.println("size :" + planning.getListeTrajets().size());
-
-    //     for (Trajet t : planning.getListeTrajets()) {
-    //         if (t.getListeSegments().size()!=0) {
-    //             System.out.print(t.getListeSegments().get(0).getDepart() + " ");
-    //             System.out.println(t.getListeSegments().get(t.getListeSegments().size()-1).getArrivee());
-    //         } else System.out.println("?");
-    //     }
-    //     */
-
-    //     Map<Long,Date> datesPassages = planning.getDatesPassage();
-    //     Map<Long,Date> datesSorties = planning.getDatesSorties();
-
-    //     Long d1_depot = datesPassages.get(planning.getIdUniqueDepot()).getTime();
-    //     Long d2_depot = datesSorties.get(planning.getIdUniqueDepot()).getTime();
-    //     assert(d1_depot == 58*3600/15 + 20*1000);
-    //     assert(d2_depot == 0);
-
-    //     for (Requete r : requetes) {
-    //         Long d1 = datesPassages.get(r.getIdUniquePickup()).getTime();
-    //         Long d2 = datesSorties.get(r.getIdUniquePickup()).getTime();
-    //         Long d3 = datesPassages.get(r.getIdUniqueDelivery()).getTime();
-    //         Long d4 = datesSorties.get(r.getIdUniqueDelivery()).getTime();
-
-    //         switch (r.getIdPickup() + "|" +r.getIdDelivery() ) {
-    //             case "1|3":
-    //                 assert(d1 == 4*3600/15);
-    //                 assert(d2 == 4*3600/15 + 5*1000);
-    //                 assert( (d3 == 16*3600/15 + 5*1000) || (d3 == 16*3600/15 + 10*1000) );
-    //                 assert( (d4 == 16*3600/15 + 10*1000) || (d4 == 16*3600/15 + 15*1000) ) ;
-    //                 break;
-    //             case "3|9":
-    //                 assert( (d1 == 16*3600/15 + 5*1000) || (d1 == 16*3600/15 + 10*1000) );
-    //                 assert( (d2 == 16*3600/15 + 10*1000) || (d2 == 16*3600/15 + 15*1000) ) ;
-    //                 assert(d3 == 31*3600/15 + 15*1000);
-    //                 assert(d4 == 31*3600/15 + 20*1000);
-    //                 break;
-    //             default:
-    //                 assert(false);
-    //                 break;
-    //         }
-
-    //     }
-
-    // }
-
-     /**
-      * Méthode pour tester la modification d'une requête en remplaçant un point par un nouveau
-      */
+    /**
+     * Méthode pour tester la modification d'une requête en remplaçant un point par
+     * un nouveau
+     */
     @Test
     public void testModifierRequetesIntersection() {
-     	 // Création d'un graphe
+        // Création d'un graphe
         creerGraphe();
 
-         // Création des requetes
-     	List<Requete> requetes = new ArrayList<Requete>();
+        // Création des requetes
+        List<Requete> requetes = new ArrayList<Requete>();
 
-        Requete r1 = new Requete(1,5,"",3,5,"");
-     	requetes.add(r1);
-     	requetes.add(new Requete(4,5,"",9,5,""));
-     	requetes.add(new Requete(6,5,"",8,5,""));
+        Requete r1 = new Requete(1, 5, "", 3, 5, "");
+        requetes.add(r1);
+        requetes.add(new Requete(4, 5, "", 9, 5, ""));
+        requetes.add(new Requete(6, 5, "", 8, 5, ""));
 
         planning.setIdDepot(0L);
         planning.setRequetes(requetes);
@@ -692,108 +604,34 @@ public class PlanningTest {
 
         planning.calculerMeilleurTournee();
 
-        Integer dureeAvantChangement=planning.getDureeTotale();
+        Integer dureeAvantChangement = planning.getDureeTotale();
 
         r1.getDemandeLivraison().setIdIntersection(7L);
         planning.recalculerTournee();
 
-        //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
+        // on vérifie si la durée totale du nouveau planning est cohérente avec celle
+        // d'avant la modif
         Integer nouvelleDureeTotale = planning.getDureeTotale();
-        assert(dureeAvantChangement == 49);
-        assert(nouvelleDureeTotale == 49);
+        assert (dureeAvantChangement == 49);
+        assert (nouvelleDureeTotale == 49);
 
     }
 
-    // /**
-    //  * Méthode pour tester la modification d'une requête en changeant le durée de livraison
-    //  */
-    // @Test
-    // public void test_modifier_requetes_duree() {
-    // 	 // Création d'un graphe
-    //     creerGraphe();
-
-    //     // Création des requetes
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(4,5,9,5));
-    //     requetes.add(new Requete(6,5,8,5));
-
-    //     Planning planning = new Planning(carte);
-
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
-
-    //     planning.calculerTournee();
-
-    //     double dureeAvantChangement=planning.getDureeTotale();
-
-    //     //modfication de la durée de livraison
-    //     Requete r1=requetes.get(0);
-
-    //     r1.setDureePickup(15);
-
-    //     planning.setRequetes(requetes);
-
-    //     planning.calculTempsDePassage();
-
-    //     //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
-    //     assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement)==10.0);
-
-    // }
-
-    // /**
-    //  * Méthode pour tester la modification d'une requête en inversant 2 points de livraison ou collecte
-    //  */
-    // @Test
-    // public void test_modifier_requetes_ordre() {
-    // 	 // Création d'un graphe
-    //     creerGraphe();
-
-    //     // Création des requetes
-    // 	List<Requete> requetes = new ArrayList<Requete>();
-
-    // 	requetes.add(new Requete(1,5,3,5));
-    //     requetes.add(new Requete(4,5,9,5));
-    //     requetes.add(new Requete(6,5,8,5));
-
-    //     Planning planning = new Planning(carte);
-
-    //     planning.setIdDepot(0L);
-    //     planning.setRequetes(requetes);
-    //     Date d = new Date(0);
-    //     planning.setDateDebut(d);
-
-    //     planning.calculerTournee();
-
-    //     double dureeAvantChangement=planning.getDureeTotale();
-
-    //     //modfication de l'ordre de passage
-
-    //     planning.modifierOrdreRequetes(0,4);
-
-    //     //on vérifie si la durée totale du nouveau planning est cohérente avec celle d'avant la modif
-    //     assert(Math.abs(planning.getDureeTotale()-dureeAvantChangement-2.16)<0.01);
-
-    // }
-
-     /**
-      * Méthode pour tester l'ajout de requête après le calcul de la tournée
-      */
-     @Test
+    /**
+     * Méthode pour tester l'ajout de requête après le calcul de la tournée
+     */
+    @Test
     public void testAjouterRequetes() {
-     	 // Création d'un graphe
-    	 
-    	creerGraphe();
+        // Création d'un graphe
 
-         // Création des requetes de référence
-     	List<Requete> requetes = new ArrayList<Requete>();
-     	
-     	requetes.add(new Requete(1,5,"",3,5,""));
-     	requetes.add(new Requete(4,5,"",9,5,""));
-     	requetes.add(new Requete(6,5,"",8,5,""));
+        creerGraphe();
+
+        // Création des requetes de référence
+        List<Requete> requetes = new ArrayList<Requete>();
+
+        requetes.add(new Requete(1, 5, "", 3, 5, ""));
+        requetes.add(new Requete(4, 5, "", 9, 5, ""));
+        requetes.add(new Requete(6, 5, "", 8, 5, ""));
 
         Planning planning = new Planning(carte);
 
@@ -803,14 +641,14 @@ public class PlanningTest {
         planning.setDateDebut(d);
 
         planning.calculerMeilleurTournee();
-     
-        double dureeReference=planning.getDureeTotale();
 
-         // Création des requetes de test
-     	List<Requete> requetesTest = new ArrayList<Requete>();
-     	
-     	requetesTest.add(new Requete(1,5,"",3,5,""));
-     	requetesTest.add(new Requete(4,5,"",9,5,""));
+        double dureeReference = planning.getDureeTotale();
+
+        // Création des requetes de test
+        List<Requete> requetesTest = new ArrayList<Requete>();
+
+        requetesTest.add(new Requete(1, 5, "", 3, 5, ""));
+        requetesTest.add(new Requete(4, 5, "", 9, 5, ""));
 
         Planning planningTest = new Planning(carte);
 
@@ -820,17 +658,16 @@ public class PlanningTest {
         planningTest.setDateDebut(dTest);
 
         planningTest.calculerMeilleurTournee();
-        
-        //ajout d'une nouvelle requête
 
-        planningTest.ajouterRequete(new Requete(6,5,"",8,5,""));
+        // ajout d'une nouvelle requête
 
-        //on vérifie si la durée totale du nouveau planning est cohérente
+        planningTest.ajouterRequete(new Requete(6, 5, "", 8, 5, ""));
 
-        assert(Math.abs(planningTest.getDureeTotale()-dureeReference)<=1);
+        // on vérifie si la durée totale du nouveau planning est cohérente
 
-     }
+        assert (Math.abs(planningTest.getDureeTotale() - dureeReference) <= 1);
 
+    }
 
     /**
      * Méthode pour créer un graphe orienté simple avec 4 intersections
@@ -839,7 +676,7 @@ public class PlanningTest {
 
         planning.setIdDepot(0L);
 
-        ArrayList<Intersection> intersections=new ArrayList<Intersection>();
+        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
 
         Intersection i0 = new Intersection(0, 0, 0);
         Intersection i1 = new Intersection(1, 0, 0);
@@ -883,7 +720,6 @@ public class PlanningTest {
         carte.getIntersections().put(i2.getId(), i2);
         carte.getIntersections().put(i3.getId(), i3);
 
-
         intersections.add(i0);
         intersections.add(i1);
         intersections.add(i2);
@@ -891,15 +727,13 @@ public class PlanningTest {
 
         return intersections;
 
-
-
     }
 
     /**
      * Méthode pour créer un graphe non orienté avec 10 intersections
      */
     private List<Intersection> creerGraphe() {
-        //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
+        // http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
 
         planning.setIdDepot(0L);
 
@@ -913,7 +747,6 @@ public class PlanningTest {
         Intersection i7 = new Intersection(7, 0, 0);
         Intersection i8 = new Intersection(8, 0, 0);
         Intersection i9 = new Intersection(9, 0, 0);
-
 
         Segment s01 = new Segment(4, "nom", 0, 1);
         Segment s10 = new Segment(4, "nom", 1, 0);
@@ -1031,7 +864,6 @@ public class PlanningTest {
         set9.add(s93);
         set9.add(s97);
 
-
         i0.setSegmentsPartants(set0);
         i1.setSegmentsPartants(set1);
         i2.setSegmentsPartants(set2);
@@ -1042,7 +874,6 @@ public class PlanningTest {
         i7.setSegmentsPartants(set7);
         i8.setSegmentsPartants(set8);
         i9.setSegmentsPartants(set9);
-
 
         carte.getIntersections().put(i0.getId(), i0);
         carte.getIntersections().put(i1.getId(), i1);
@@ -1055,7 +886,7 @@ public class PlanningTest {
         carte.getIntersections().put(i8.getId(), i8);
         carte.getIntersections().put(i9.getId(), i9);
 
-        ArrayList<Intersection> intersections=new ArrayList<Intersection>();
+        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
 
         intersections.add(i0);
         intersections.add(i1);
@@ -1073,11 +904,11 @@ public class PlanningTest {
     }
 
     /**
-     * Méthode pour créer un graphe non orienté avec 10 intersections
-     * avec un cul de sac et un point inaccessible
+     * Méthode pour créer un graphe non orienté avec 10 intersections avec un cul de
+     * sac et un point inaccessible
      */
     private void creerGraphePonderer() {
-        //http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
+        // http://yallouz.arie.free.fr/terminale_cours/graphes/graphes.php?page=g3
 
         // Caractéristiques :
         // J est innacessible
@@ -1085,17 +916,16 @@ public class PlanningTest {
 
         planning.setIdDepot(0L);
 
-        Intersection i0 = new Intersection(0, 0, 0); //A
-        Intersection i1 = new Intersection(1, 0, 0); //B
-        Intersection i2 = new Intersection(2, 0, 0); //C
-        Intersection i3 = new Intersection(3, 0, 0); //D
-        Intersection i4 = new Intersection(4, 0, 0); //E
-        Intersection i5 = new Intersection(5, 0, 0); //F
-        Intersection i6 = new Intersection(6, 0, 0); //G
-        Intersection i7 = new Intersection(7, 0, 0); //H
-        Intersection i8 = new Intersection(8, 0, 0); //I
-        Intersection i9 = new Intersection(9, 0, 0); //J
-
+        Intersection i0 = new Intersection(0, 0, 0); // A
+        Intersection i1 = new Intersection(1, 0, 0); // B
+        Intersection i2 = new Intersection(2, 0, 0); // C
+        Intersection i3 = new Intersection(3, 0, 0); // D
+        Intersection i4 = new Intersection(4, 0, 0); // E
+        Intersection i5 = new Intersection(5, 0, 0); // F
+        Intersection i6 = new Intersection(6, 0, 0); // G
+        Intersection i7 = new Intersection(7, 0, 0); // H
+        Intersection i8 = new Intersection(8, 0, 0); // I
+        Intersection i9 = new Intersection(9, 0, 0); // J
 
         Segment s01 = new Segment(4, "nom", 0, 1);
         Segment s10 = new Segment(4, "nom", 1, 0);
@@ -1192,7 +1022,6 @@ public class PlanningTest {
         set8.add(s84);
         set8.add(s85);
 
-
         i0.setSegmentsPartants(set0);
         i1.setSegmentsPartants(set1);
         i2.setSegmentsPartants(set2);
@@ -1204,7 +1033,6 @@ public class PlanningTest {
         i8.setSegmentsPartants(set8);
         i9.setSegmentsPartants(set9);
 
-
         carte.getIntersections().put(i0.getId(), i0);
         carte.getIntersections().put(i1.getId(), i1);
         carte.getIntersections().put(i2.getId(), i2);
@@ -1215,7 +1043,6 @@ public class PlanningTest {
         carte.getIntersections().put(i7.getId(), i7);
         carte.getIntersections().put(i8.getId(), i8);
         carte.getIntersections().put(i9.getId(), i9);
-
 
     }
 

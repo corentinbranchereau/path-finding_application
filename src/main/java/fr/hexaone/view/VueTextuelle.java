@@ -28,7 +28,7 @@ import java.util.Set;
 public class VueTextuelle {
 
     /**
-     * Item de la fenêtre où s'affiche la vue textuelle
+     * La fenêtre de l'application
      */
     private Fenetre fenetre;
 
@@ -56,21 +56,23 @@ public class VueTextuelle {
 
     /**
      * constructeur
+     * 
+     * @param fenetre La fenêtre de l'application
      */
     public VueTextuelle(Fenetre fenetre) {
         this.fenetre = fenetre;
     }
 
     /**
-     * chargement du fichier fxml permettant d'afficher le tableau
+     * chargement du fichier FXML permettant d'afficher le tableau
      */
     public void chargerFXML() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this, "requetes.fxml");
-            AnchorPane TableauDemandeContainer = loader.load(inputFichierFxml);
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisChemin(this, "requetes.fxml");
+            AnchorPane conteneurTableauDemande = loader.load(inputFichierFxml);
 
-            this.fenetre.getFenetreControleur().getScrollPane().setContent(TableauDemandeContainer);
+            this.fenetre.getFenetreControleur().getScrollPaneTexte().setContent(conteneurTableauDemande);
             this.requetesControleur = loader.getController();
             this.requetesControleur.setFenetre(fenetre);
 
@@ -80,7 +82,11 @@ public class VueTextuelle {
     }
 
     /**
-     * Permet de réactualiser la vue textuelle après une modification du model
+     * Permet de réactualiser la vue textuelle après une modification du modèle
+     * 
+     * @param planning            Le planning actuel de l'application
+     * @param demandeSelectionnee La demande qui a été sélectionnée par
+     *                            l'utilisateur
      */
     public void rafraichir(Planning planning, Demande demandeSelectionnee) {
 
@@ -90,14 +96,14 @@ public class VueTextuelle {
         // Affichage des demandes (ordonnées) dans le tableau
         if (planning.getDemandesOrdonnees() != null) {
             enleverHighlightDemande();
-            AfficherPlanning(planning, planning.getCarte());
+            afficherPlanning(planning, planning.getCarte());
             if (demandeSelectionnee != null)
                 highlightDemande(demandeSelectionnee);
 
             // Affichage des requêtes si planning non calculé
         } else if (!planning.getRequetes().isEmpty()) {
             reinitialiser();
-            AfficherRequetes(planning, planning.getCarte());
+            afficherRequetes(planning, planning.getCarte());
             enleverHighlightDemande();
         } else {
             reinitialiser();
@@ -105,42 +111,43 @@ public class VueTextuelle {
     }
 
     /**
-     * méthode qui réinitialise la vue textuelle et le tableau comme au lancement de
+     * Méthode qui réinitialise la vue textuelle et le tableau comme au lancement de
      * l'application.
      */
     public void reinitialiser() {
-
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().clear();
-        fenetre.getFenetreControleur().getDepotTextInformation().getChildren().add(new Text(
+        fenetre.getFenetreControleur().getTexteInformationDepot().getChildren().clear();
+        fenetre.getFenetreControleur().getTexteInformationDepot().getChildren().add(new Text(
                 "Pour charger une Carte ou des Requêtes, rendez-vous dans 'Fichier', en haut à gauche de l'application. \r\n\r\n"));
         requetesControleur.getListeDemandes().removeAll(requetesControleur.getListeDemandes());
     }
 
     /**
-     * Méthode qui permet d'afficher les requetes dans la vue textuelle lors du
-     * chargement d'un fichier de requête (quand le planning n'est pas calculé)
+     * Méthode qui permet d'afficher les requêtes dans la vue textuelle lors du
+     * chargement d'un fichier de requêtes (quand le planning n'est pas encore
+     * calculé)
      * 
-     * @param planning La liste des segments à parcourir
-     * @param carte La carte
+     * @param planning Le planning actuel de l'application
+     * @param carte    La carte qui a été chargée
      */
-    public void AfficherRequetes(Planning planning, Carte carte) {
+    public void afficherRequetes(Planning planning, Carte carte) {
 
-        // paramétrage des colonnes tableau
-        requetesControleur.getDepartColumn().setCellValueFactory(cellData -> cellData.getValue().getDureeProperty());
-        requetesControleur.getDepartColumn().setText("Durée");
-        requetesControleur.getArriveeColumn().setVisible(false);
-        requetesControleur.getOrphelineColumn().setVisible(false);
+        // paramétrage des colonnes du tableau
+        requetesControleur.getColonneDepart().setCellValueFactory(cellData -> cellData.getValue().getProprieteDuree());
+        requetesControleur.getColonneDepart().setText("Durée");
+        requetesControleur.getColonneArrivee().setVisible(false);
+        requetesControleur.getColonneOrpheline().setVisible(false);
 
         // récupération du nom du dépot
         this.nomDepot = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
 
         // écriture du point et de l'heure de départ
         Text texteDepot = new Text(
-                " ★ Départ : " + nomDepot + " à " + getStringFromDate(planning.getDateDebut()) + "\r\n\r\n");
+                " ★ Départ : " + nomDepot + " à " + getStringAPartirDate(planning.getDateDebut()) + "\r\n\r\n");
         texteDepot.setFill(Color.RED);
-        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
-        f.remove(0, f.size());
-        f.add(texteDepot);
+        ObservableList<Node> noeudsInformationDepot = fenetre.getFenetreControleur().getTexteInformationDepot()
+                .getChildren();
+        noeudsInformationDepot.remove(0, noeudsInformationDepot.size());
+        noeudsInformationDepot.add(texteDepot);
 
         // parcours des requêtes
         for (Requete requete : planning.getRequetes()) {
@@ -157,41 +164,42 @@ public class VueTextuelle {
      * Méthode qui permet d'afficher le planning dans la vue textuelle quand
      * celui-ci est calculé
      * 
-     * @param planning le planning à afficher
-     * @param carte    la carte permettant de récupérer le nom des intersections
-     *                 (pour le dépot)
+     * @param planning Le planning à afficher
+     * @param carte    La carte permettant de récupérer le nom des intersections
+     *                 (pour le dépôt)
      */
-    public void AfficherPlanning(Planning planning, Carte carte) {
+    public void afficherPlanning(Planning planning, Carte carte) {
 
         // paramétrage des colonnes du tableau
-        requetesControleur.getDepartColumn()
-                .setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
-        requetesControleur.getDepartColumn().setText("Repart à");
-        requetesControleur.getArriveeColumn().setVisible(true);
-        requetesControleur.getOrphelineColumn().setVisible(true);
+        requetesControleur.getColonneDepart()
+                .setCellValueFactory(cellData -> cellData.getValue().getProprieteDateDepart());
+        requetesControleur.getColonneDepart().setText("Repart à");
+        requetesControleur.getColonneArrivee().setVisible(true);
+        requetesControleur.getColonneOrpheline().setVisible(true);
 
         ObservableList<Demande> listeDemandes = FXCollections.observableArrayList();
         listeDemandes.addAll(planning.getDemandesOrdonnees());
         requetesControleur.setListeDemandes(listeDemandes);
         this.requetesControleur.getTableauDemandes().setItems(listeDemandes);
 
-        String depotName = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
+        String nomDepot = getNomIntersection(planning, carte.getIntersections().get(planning.getIdDepot()));
         if (this.nomDepot.isEmpty()) {
-            this.nomDepot = depotName;
+            this.nomDepot = nomDepot;
         }
         String depotString = "★ Dépot : " + nomDepot + "\r\n";
         Text texteDepot = new Text(depotString);
         texteDepot.setFill(Color.RED);
-        String heureDepartString = "Heure de départ : " + getStringFromDate(planning.getDateDebut()) + "\r\n";
+        String heureDepartString = "Heure de départ : " + getStringAPartirDate(planning.getDateDebut()) + "\r\n";
         Text texteHeureDepart = new Text(heureDepartString);
-        String heureRetourString = "Heure de retour : " + getStringFromDate(planning.getDateFin());
+        String heureRetourString = "Heure de retour : " + getStringAPartirDate(planning.getDateFin());
         Text texteHeureRetour = new Text(heureRetourString);
 
-        ObservableList<Node> f = fenetre.getFenetreControleur().getDepotTextInformation().getChildren();
-        f.remove(0, f.size());
-        f.add(texteDepot);
-        f.add(texteHeureDepart);
-        f.add(texteHeureRetour);
+        ObservableList<Node> noeudsInformationDepot = fenetre.getFenetreControleur().getTexteInformationDepot()
+                .getChildren();
+        noeudsInformationDepot.remove(0, noeudsInformationDepot.size());
+        noeudsInformationDepot.add(texteDepot);
+        noeudsInformationDepot.add(texteHeureDepart);
+        noeudsInformationDepot.add(texteHeureRetour);
 
     }
 
@@ -199,9 +207,9 @@ public class VueTextuelle {
      * Méthode permettant d'associer un nom à une intersection à partir des noms de
      * rues qui lui sont adjacentes
      * 
-     * @param planning     le planning contenant le dépot
-     * @param intersection l'intersection dont on cherche le nom
-     * @return String: le nom de la rue du dépot
+     * @param planning     Le planning
+     * @param intersection L'intersection dont on cherche le nom
+     * @return Le nom de l'intersection
      */
     private String getNomIntersection(Planning planning, Intersection intersection) {
 
@@ -218,14 +226,13 @@ public class VueTextuelle {
     }
 
     /**
-     * Méthode permettant récupérer l'heure de sous forme de String au format
-     * Pair<Heure, Minute>
+     * Méthode permettant de récupérer l'heure sous forme de String au format
+     * "08h35"
      *
-     * @param horaire la date
-     * @return une pair contenant l'heure et les minutes sous forme de String
+     * @param horaire La date dans laquelle on récupère l'heure
+     * @return L'heure sous forme de String au format "08h35"
      */
-    private String getStringFromDate(Date horaire) {
-
+    private String getStringAPartirDate(Date horaire) {
         Calendar date = Calendar.getInstance();
         date.setTime(horaire);
         int heure = date.get(Calendar.HOUR_OF_DAY);
@@ -236,6 +243,9 @@ public class VueTextuelle {
         return heureString + "h" + minutesString;
     }
 
+    /**
+     * @return Le controleur requêtes FXML
+     */
     public RequetesControleurFXML getRequetesControleur() {
         return requetesControleur;
     }
@@ -258,9 +268,9 @@ public class VueTextuelle {
      */
     public void highlightDemande(Demande demande) {
         Demande demandeLiee = null;
-        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+        if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
             demandeLiee = demande.getRequete().getDemandeLivraison();
-        } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+        } else if (demande.getTypeDemande() == TypeDemande.LIVRAISON) {
             demandeLiee = demande.getRequete().getDemandeCollecte();
         }
 
@@ -285,28 +295,27 @@ public class VueTextuelle {
         if (this.fenetre.getControleur().getDemandeSelectionnee() != null) {
             enleverHighlightDemande();
             highlightDemande(this.fenetre.getControleur().getDemandeSelectionnee());
-
         }
     }
 
     /**
-     * Permet de réaliser le drag/drop dans le modèle
+     * Permet de réaliser le drag and drop dans le modèle
      * 
-     * @param draggIndex index de départ du dragg
-     * @param dropIndex  index d'arrivée du dragg
+     * @param indexDepart  Index de départ du drag
+     * @param indexArrivee Index d'arrivée du drag
      */
-    public void modifierPlanning(int draggIndex, int dropIndex) {
-        this.fenetre.getControleur().modifierPlanning(draggIndex, dropIndex);
-
+    public void modifierPlanning(int indexDepart, int indexArrivee) {
+        this.fenetre.getControleur().modifierPlanning(indexDepart, indexArrivee);
     }
 
     /**
-     * Affiche le menu du contextuel
-     * @param visible Afficher le menu contextuel
+     * Définit si le menu contextuel est visible ou non
+     * 
+     * @param visible Indique si le menu contextuel est visible ou non
      */
-    public void showContextualMenu(boolean visible) {
+    public void setMenuContextuelAffichable(boolean visible) {
         if (this.requetesControleur != null) {
-            this.requetesControleur.showContextualMenu(visible);
+            this.requetesControleur.setMenuContextuelAffichable(visible);
         }
     }
 }

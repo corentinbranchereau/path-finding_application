@@ -4,12 +4,12 @@ import fr.hexaone.model.Planning;
 import fr.hexaone.model.Requete;
 
 /**
- * Commande d'ajout de requête en suivant le design pattern COMMAND.
+ * Commande d'ajout de requête en suivant le design pattern Command.
  *
  * @author HexaOne
  * @version 1.0
  */
-public class AjouterRequeteCommand implements Command{
+public class AjouterRequeteCommand implements Command {
 
     /**
      * Le planning associé
@@ -23,10 +23,11 @@ public class AjouterRequeteCommand implements Command{
 
     /**
      * Constructeur de l'ajout de requête
+     * 
      * @param planning Le planning que l'on veut modifier
-     * @param requete La requete que l'on veut ajouter au planning
+     * @param requete  La requete que l'on veut ajouter au planning
      */
-    public AjouterRequeteCommand(Planning planning, Requete requete){
+    public AjouterRequeteCommand(Planning planning, Requete requete) {
         this.planning = planning;
         this.requete = requete;
     }

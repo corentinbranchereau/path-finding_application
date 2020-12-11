@@ -2,12 +2,12 @@ package fr.hexaone.controller.Command;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
-import fr.hexaone.model.TypeIntersection;
+import fr.hexaone.model.TypeDemande;
 
 import java.util.List;
 
 /**
- * Commande de suppression de demande en suivant le design pattern COMMAND.
+ * Commande de suppression de demande en suivant le design pattern Command.
  *
  * @author HexaOne
  * @version 1.0
@@ -27,18 +27,18 @@ public class SupprimerDemandeCommand implements Command {
     /**
      * La position de la demande dans la liste des demandes
      */
-    private int index;
+    private int indexDemande;
 
     /**
      * Constructeur de la suppression de demande
      * 
      * @param planning Le planning que l'on souhaite modifier.
-     * @param demande La demande que l'on souhaite supprimer.
+     * @param demande  La demande que l'on souhaite supprimer.
      */
     public SupprimerDemandeCommand(Planning planning, Demande demande) {
         this.planning = planning;
         this.demande = demande;
-        this.index = planning.getDemandesOrdonnees().indexOf(demande);
+        this.indexDemande = planning.getDemandesOrdonnees().indexOf(demande);
     }
 
     /**
@@ -49,9 +49,9 @@ public class SupprimerDemandeCommand implements Command {
         planning.supprimerDemande(demande);
 
         // On fait passer la valeur à null dans la requête associée
-        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+        if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
             demande.getRequete().setDemandeCollecte(null);
-        } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+        } else if (demande.getTypeDemande() == TypeDemande.LIVRAISON) {
             demande.getRequete().setDemandeLivraison(null);
         }
 
@@ -64,12 +64,12 @@ public class SupprimerDemandeCommand implements Command {
     @Override
     public void undoCommand() {
         List<Demande> demandes = planning.getDemandesOrdonnees();
-        demandes.add(index, demande);
+        demandes.add(indexDemande, demande);
 
         // On change la valeur dans la requête associée
-        if (demande.getTypeIntersection() == TypeIntersection.COLLECTE) {
+        if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
             demande.getRequete().setDemandeCollecte(demande);
-        } else if (demande.getTypeIntersection() == TypeIntersection.LIVRAISON) {
+        } else if (demande.getTypeDemande() == TypeDemande.LIVRAISON) {
             demande.getRequete().setDemandeLivraison(demande);
         }
 

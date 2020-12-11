@@ -4,12 +4,12 @@ import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 
 /**
- * Commande d'ajout de demande en suivant le design pattern COMMAND.
+ * Commande d'ajout de demande en suivant le design pattern Command.
  *
  * @author HexaOne
  * @version 1.0
  */
-public class AjouterDemandeCommand implements Command{
+public class AjouterDemandeCommand implements Command {
 
     /**
      * Le planning associé
@@ -23,10 +23,11 @@ public class AjouterDemandeCommand implements Command{
 
     /**
      * Constructeur de l'ajout de demande
+     * 
      * @param planning Le planning que l'on veut modifier
-     * @param demande La demande que l'on veut ajouter au planning
+     * @param demande  La demande que l'on veut ajouter au planning
      */
-    public AjouterDemandeCommand(Planning planning, Demande demande){
+    public AjouterDemandeCommand(Planning planning, Demande demande) {
         this.planning = planning;
         this.demande = demande;
     }

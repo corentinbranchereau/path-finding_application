@@ -2,7 +2,7 @@ package fr.hexaone.view;
 
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Requete;
-import fr.hexaone.model.TypeIntersection;
+import fr.hexaone.model.TypeDemande;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,39 +33,39 @@ public class RequetesControleurFXML {
     private TableView<Demande> tableauDemandes;
 
     /**
-     * La colonne de type
+     * La colonne de type de la demande
      */
     @FXML
-    private TableColumn<Demande, String> typeColumn;
+    private TableColumn<Demande, String> colonneType;
 
     /**
-     * La colonne d'arrivée
+     * La colonne de l'arrivée de la demande
      */
     @FXML
-    private TableColumn<Demande, String> arriveeColumn;
+    private TableColumn<Demande, String> colonneArrivee;
 
     /**
-     * La colonne de départ
+     * La colonne de départ de la demande
      */
     @FXML
-    private TableColumn<Demande, String> departColumn;
+    private TableColumn<Demande, String> colonneDepart;
 
     /**
-     * La colonne d'adresse
+     * La colonne d'adresse de la demande
      */
     @FXML
-    private TableColumn<Demande, String> adresseColumn;
+    private TableColumn<Demande, String> colonneAdresse;
 
     /**
      * La colonne de notation orpheline
      */
     @FXML
-    private TableColumn<Demande, String> orphelineColumn;
+    private TableColumn<Demande, String> colonneOrpheline;
 
     /**
-     * Menu contextuel
+     * Le menu contextuel
      */
-    private ContextMenu contextMenu;
+    private ContextMenu menuContextuel;
 
     /**
      * Indicateur de type
@@ -83,24 +83,24 @@ public class RequetesControleurFXML {
     private Map<Integer, TableRow<Demande>> mapIndexLignes = new HashMap<>();
 
     /**
-     * définit si les cases du tableau peuvent être déplacées ou non
+     * Définit si les cases du tableau peuvent être déplacées ou non
      */
     private Boolean draggable = false;
 
     /**
-     * définit si le menu contextuel peut être affiché ou non
+     * Définit si le menu contextuel peut être affiché ou non
      */
-    private Boolean showContextualMenu = false;
+    private Boolean menuContextuelAffichable = false;
 
     /**
-     * index demande de départ drag and drop
+     * Index de départ de la demande lors du drag and drop
      */
-    protected int indexDemandeDepart;
+    private int indexDepartDemande;
 
     /**
-     * index demande d'arrivée drag and drop
+     * Index d'arrivée de la demande lors du drag and drop
      */
-    protected int indexDemandeArrivee;
+    private int indexArriveeDemande;
 
     /**
      * Liste observable des demandes
@@ -109,32 +109,32 @@ public class RequetesControleurFXML {
 
     /**
      * Méthode qui se lance après le constructeur, une fois les éléments FXML
-     * chargés On définit les règles d'affichage du tableau, les éléments affiché
+     * chargés. On définit les règles d'affichage du tableau, les éléments affichés
      * dans les colonnes, et les évènements associés aux lignes
      */
     @FXML
     public void initialize() {
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getTypeProperty());
-        typeColumn.setSortable(false);
+        colonneType.setCellValueFactory(cellData -> cellData.getValue().getProprieteType());
+        colonneType.setSortable(false);
 
-        arriveeColumn.setCellValueFactory(cellData -> cellData.getValue().getDateArriveeProperty());
-        arriveeColumn.setSortable(false);
+        colonneArrivee.setCellValueFactory(cellData -> cellData.getValue().getProprieteDateArrivee());
+        colonneArrivee.setSortable(false);
 
-        departColumn.setCellValueFactory(cellData -> cellData.getValue().getDateDepartProperty());
-        departColumn.setSortable(false);
+        colonneDepart.setCellValueFactory(cellData -> cellData.getValue().getProprieteDateDepart());
+        colonneDepart.setSortable(false);
 
-        adresseColumn.setCellValueFactory(cellData -> cellData.getValue().getNomIntersectionProperty());
-        adresseColumn.setSortable(false);
+        colonneAdresse.setCellValueFactory(cellData -> cellData.getValue().getProprieteNomIntersection());
+        colonneAdresse.setSortable(false);
 
-        orphelineColumn.setCellValueFactory(cellData -> cellData.getValue().getOrphelineProperty());
-        orphelineColumn.setSortable(false);
+        colonneOrpheline.setCellValueFactory(cellData -> cellData.getValue().getProprieteOrpheline());
+        colonneOrpheline.setSortable(false);
 
         tableauDemandes.setItems(listeDemandes);
 
         tableauDemandes.getColumns().forEach(e -> e.setReorderable(false));
 
-        // Create ContextMenu
-        contextMenu = new ContextMenu();
+        // Crée le menu contextuel
+        menuContextuel = new ContextMenu();
 
         MenuItem itemSuppDemande = new MenuItem("Supprimer cette demande");
         itemSuppDemande.setOnAction(new EventHandler<ActionEvent>() {
@@ -159,34 +159,31 @@ public class RequetesControleurFXML {
             }
         });
 
-        contextMenu.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
+        menuContextuel.getItems().addAll(itemSuppDemande, itemSuppRequete, itemModifDemande);
 
-        // Création des tooltip d'erreur
-        Tooltip tooltipCollecteLivraisonReversed = new Tooltip(
+        // Création des tooltips d'erreur
+        Tooltip tooltipCollecteLivraisonInversee = new Tooltip(
                 "Cette Collecte est effectuée après sa livraison associée");
-        tooltipCollecteLivraisonReversed.setShowDelay(new Duration(0));
-        tooltipCollecteLivraisonReversed.setHideDelay(new Duration(0));
+        tooltipCollecteLivraisonInversee.setShowDelay(new Duration(0));
+        tooltipCollecteLivraisonInversee.setHideDelay(new Duration(0));
 
         Tooltip tooltipLivraisonSeule = new Tooltip("Cette Livraison n'est associée à aucune collecte");
         tooltipLivraisonSeule.setShowDelay(new Duration(0));
         tooltipLivraisonSeule.setHideDelay(new Duration(0));
 
-        Tooltip tooltipLivraisonCollecteReversed = new Tooltip(
+        Tooltip tooltipLivraisonCollecteInversee = new Tooltip(
                 "Cette Livraison est effectuée avant sa collecte associée");
-        tooltipLivraisonCollecteReversed.setShowDelay(new Duration(0));
-        tooltipLivraisonCollecteReversed.setHideDelay(new Duration(0));
+        tooltipLivraisonCollecteInversee.setShowDelay(new Duration(0));
+        tooltipLivraisonCollecteInversee.setHideDelay(new Duration(0));
 
         Tooltip tooltipCollecteSeule = new Tooltip("Cette Collecte n'est associée à aucune livraison");
         tooltipCollecteSeule.setShowDelay(new Duration(0));
         tooltipCollecteSeule.setHideDelay(new Duration(0));
 
-        /*
-         * définit le type de case affiché dans le tableau, et les évènements associés
-         * aux cases.
-         */
+        // Définit le type de case affiché dans le tableau, et les évènements associés
+        // aux cases
         tableauDemandes.setRowFactory(tv -> {
-
-            TableRow<Demande> row = new TableRow<Demande>() {
+            TableRow<Demande> ligne = new TableRow<Demande>() {
                 @Override
                 public void updateIndex(int i) {
                     super.updateIndex(i);
@@ -201,71 +198,71 @@ public class RequetesControleurFXML {
                 }
 
                 /**
-                 * méthode qui se lance à chaque fois qu'une ligne du tableau est mise à jour.
+                 * Méthode qui se lance à chaque fois qu'une ligne du tableau est mise à jour.
                  * On y définit la couleur des cases, et les tooltip d'erreur à afficher si
                  * nécessaire
                  * 
-                 * @param item l'objet demande associé à la ligne mise à jour
+                 * @param demande L'objet demande associé à la ligne mise à jour
                  */
-                protected void doUpdateItem(Demande item) {
-                    if (item != null) {
+                protected void doUpdateItem(Demande demande) {
+                    if (demande != null) {
                         Map<Requete, Color> mapCouleur = fenetre.getMapCouleurRequete();
-                        Color couleur = mapCouleur.get(item.getRequete());
+                        Color couleur = mapCouleur.get(demande.getRequete());
                         if (getChildren().size() > 0) {
                             ((Cell) getChildren().get(0)).setTextFill(couleur);
 
                             if (getChildren().size() > 3) {
-                                Cell textCell = (Cell) getChildren().get(4);
-                                textCell.setTextFill(Color.RED);
-                                Boolean reversed = false;
+                                Cell texteCase = (Cell) getChildren().get(4);
+                                texteCase.setTextFill(Color.RED);
+                                Boolean inversee = false;
 
-                                Demande itemAssocie;
-                                if (item.getTypeIntersection() == TypeIntersection.COLLECTE) {
-                                    itemAssocie = item.getRequete().getDemandeLivraison();
+                                Demande demandeAssociee;
+                                if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
+                                    demandeAssociee = demande.getRequete().getDemandeLivraison();
                                 } else {
-                                    itemAssocie = item.getRequete().getDemandeCollecte();
+                                    demandeAssociee = demande.getRequete().getDemandeCollecte();
                                 }
-                                if (itemAssocie != null) {
-                                    int indexItemAssocie = tableauDemandes.getItems().indexOf(itemAssocie);
+                                if (demandeAssociee != null) {
+                                    int indexDemandeAssociee = tableauDemandes.getItems().indexOf(demandeAssociee);
 
-                                    if ((item.getTypeIntersection() == TypeIntersection.COLLECTE
-                                            && this.getIndex() > indexItemAssocie)
-                                            || (item.getTypeIntersection() == TypeIntersection.LIVRAISON
-                                                    && this.getIndex() < indexItemAssocie)) {
-                                        reversed = true;
+                                    if ((demande.getTypeDemande() == TypeDemande.COLLECTE
+                                            && this.getIndex() > indexDemandeAssociee)
+                                            || (demande.getTypeDemande() == TypeDemande.LIVRAISON
+                                                    && this.getIndex() < indexDemandeAssociee)) {
+                                        inversee = true;
 
                                     }
                                 }
-                                if (item.getTypeIntersection() == TypeIntersection.COLLECTE) {
-                                    if (reversed) {
-                                        textCell.setText(" ! ");
-                                        Tooltip.install(textCell, tooltipCollecteLivraisonReversed);
+                                if (demande.getTypeDemande() == TypeDemande.COLLECTE) {
+                                    if (inversee) {
+                                        texteCase.setText(" ! ");
+                                        Tooltip.install(texteCase, tooltipCollecteLivraisonInversee);
 
                                     } else {
-                                        textCell.setText(item.getOrphelineProperty().get());
-                                        if (item.getOrphelineProperty().get() != null) {
+                                        texteCase.setText(demande.getProprieteOrpheline().get());
+                                        if (demande.getProprieteOrpheline().get() != null) {
 
-                                            Tooltip.install(textCell, tooltipCollecteSeule);
+                                            Tooltip.install(texteCase, tooltipCollecteSeule);
                                         } else {
-                                            Tooltip.uninstall(textCell, tooltipCollecteSeule);
-                                            Tooltip.uninstall(textCell, tooltipCollecteLivraisonReversed);
+                                            Tooltip.uninstall(texteCase, tooltipCollecteSeule);
+                                            Tooltip.uninstall(texteCase, tooltipCollecteLivraisonInversee);
                                         }
                                     }
 
-                                } else if (item.getTypeIntersection() == TypeIntersection.LIVRAISON) {
-                                    if (reversed) {
-                                        textCell.setText(" ! ");
+                                } else if (demande.getTypeDemande() == TypeDemande.LIVRAISON) {
+                                    if (inversee) {
+                                        texteCase.setText(" ! ");
 
-                                        Tooltip.install(textCell, tooltipLivraisonCollecteReversed);
+                                        Tooltip.install(texteCase, tooltipLivraisonCollecteInversee);
 
                                     } else {
-                                        textCell.setText(item.getOrphelineProperty().get());
-                                        if (item.getOrphelineProperty().get() != null) {
+                                        texteCase.setText(demande.getProprieteOrpheline().get());
+                                        if (demande.getProprieteOrpheline().get() != null) {
 
-                                            Tooltip.install(textCell, tooltipLivraisonSeule);
+                                            Tooltip.install(texteCase, tooltipLivraisonSeule);
                                         } else {
-                                            Tooltip.uninstall(textCell, tooltipLivraisonSeule);
-                                            Tooltip.uninstall(textCell, tooltipLivraisonCollecteReversed);
+                                            Tooltip.uninstall(texteCase, tooltipLivraisonSeule);
+                                            Tooltip.uninstall(texteCase, tooltipLivraisonCollecteInversee);
                                         }
                                     }
                                 }
@@ -274,63 +271,59 @@ public class RequetesControleurFXML {
 
                             // On met à jour la date d'arrivée, la date de départ et le nom
 
-                            if (item.getDateArriveeProperty() != null && getChildren().size() == 5) {
-                                Cell dateArriveeCell = (Cell) getChildren().get(1);
-                                dateArriveeCell.setText(item.getDateArriveeProperty().get());
+                            if (demande.getProprieteDateArrivee() != null && getChildren().size() == 5) {
+                                Cell caseDateArrivee = (Cell) getChildren().get(1);
+                                caseDateArrivee.setText(demande.getProprieteDateArrivee().get());
                             }
-                            if (item.getDateDepartProperty() != null && getChildren().size() == 5) {
-                                Cell dateDepartCell = (Cell) getChildren().get(2);
-                                dateDepartCell.setText(item.getDateDepartProperty().get());
+                            if (demande.getProprieteDateDepart() != null && getChildren().size() == 5) {
+                                Cell caseDateDepart = (Cell) getChildren().get(2);
+                                caseDateDepart.setText(demande.getProprieteDateDepart().get());
                             }
-                            if (item.getNomIntersectionProperty() != null && getChildren().size() == 5) {
-                                Cell nomCell = (Cell) getChildren().get(3);
-                                nomCell.setText(item.getNomIntersectionProperty().get());
+                            if (demande.getProprieteNomIntersection() != null && getChildren().size() == 5) {
+                                Cell caseNom = (Cell) getChildren().get(3);
+                                caseNom.setText(demande.getProprieteNomIntersection().get());
                             }
 
                         }
                     } else {
                         if (getChildren().size() > 3) {
-                            Cell textCell = (Cell) getChildren().get(4);
-                            textCell.setText("");
-                            Tooltip.uninstall(textCell, tooltipLivraisonSeule);
-                            Tooltip.uninstall(textCell, tooltipLivraisonCollecteReversed);
+                            Cell texteCase = (Cell) getChildren().get(4);
+                            texteCase.setText("");
+                            Tooltip.uninstall(texteCase, tooltipLivraisonSeule);
+                            Tooltip.uninstall(texteCase, tooltipLivraisonCollecteInversee);
                         }
                     }
                 }
             };
 
-            // On ajoute l'entrée <indx, ligne> dans la map
-            this.mapIndexLignes.put(row.getIndex(), row);
+            // On ajoute l'entrée <index, ligne> dans la map
+            this.mapIndexLignes.put(ligne.getIndex(), ligne);
 
-            /*
-             * évènement click droit sur une case du tableau appelant le menu contextuel
-             */
-            row.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            // Evènement clic droit sur une case du tableau appelant le menu contextuel
+            ligne.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent event) {
-                    if (row.getItem() == null || !showContextualMenu) {
+                    if (ligne.getItem() == null || !menuContextuelAffichable) {
                         return;
                     }
-                    if (fenetre.getControleur().getDemandeSelectionnee() != row.getItem()) {
-                        fenetre.getControleur().selectionnerDemande(row.getItem());
-                        contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                    if (fenetre.getControleur().getDemandeSelectionnee() != ligne.getItem()) {
+                        fenetre.getControleur().selectionnerDemande(ligne.getItem());
+                        menuContextuel.show(ligne, event.getScreenX(), event.getScreenY());
                     } else {
-                        contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                        menuContextuel.show(ligne, event.getScreenX(), event.getScreenY());
                     }
                 }
             });
 
-            /*
-             * évènement d'une ligne du tableau cliquée et déplacée
-             */
-            row.setOnDragDetected(event -> {
-                if (!row.isEmpty() && draggable) {
-                    Integer index = row.getIndex();
+            // Evènement d'une ligne du tableau cliquée et déplacée
+            ligne.setOnDragDetected(event -> {
+                if (!ligne.isEmpty() && draggable) {
+                    Integer index = ligne.getIndex();
 
-                    indexDemandeDepart = index;
+                    indexDepartDemande = index;
 
-                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                    db.setDragView(row.snapshot(null, null));
+                    Dragboard db = ligne.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(ligne.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
 
                     cc.put(SERIALIZED_MIME_TYPE, index);
@@ -340,182 +333,167 @@ public class RequetesControleurFXML {
                 }
             });
 
-            /*
-             * évènement d'une ligne du tableau déplacée dessus une autre
-             */
-            row.setOnDragOver(event -> {
+            // Evènement d'une ligne du tableau déplacée dessus une autre
+            ligne.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (ligne.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         this.fenetre.getVueTextuelle().rechargerHighlight();
-                        row.setStyle("-fx-background-color:GREY");
+                        ligne.setStyle("-fx-background-color:GREY");
                         event.consume();
                     }
                 }
             });
 
-            row.setOnDragExited(event -> {
+            ligne.setOnDragExited(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (ligne.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         this.tableauDemandes.getSelectionModel().clearSelection();
-                        row.setStyle("-fx-background-color:WHITE");
-                        row.setStyle("-fx-text-fill:black");
+                        ligne.setStyle("-fx-background-color:WHITE");
+                        ligne.setStyle("-fx-text-fill:black");
                         this.fenetre.getVueTextuelle().rechargerHighlight();
 
-                        row.setTextFill(Color.BLACK);
+                        ligne.setTextFill(Color.BLACK);
                         event.consume();
                     }
                 }
             });
 
-            /*
-             * evenement d'une ligne du tableau lachée sur une autre
-             */
-            row.setOnDragDropped(event -> {
+            // Evènement d'une ligne du tableau lachée sur une autre
+            ligne.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE) && draggable) {
-                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    Demande draggedItem = tableauDemandes.getItems().remove(draggedIndex);
-                    int dropIndex;
+                    int indexDragged = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+                    Demande demandeDragged = tableauDemandes.getItems().remove(indexDragged);
+                    int indexDrop;
 
-                    if (row.isEmpty())
-                        dropIndex = tableauDemandes.getItems().size();
+                    if (ligne.isEmpty())
+                        indexDrop = tableauDemandes.getItems().size();
                     else
-                        dropIndex = row.getIndex();
+                        indexDrop = ligne.getIndex();
 
-                    indexDemandeArrivee = dropIndex;
-                    tableauDemandes.getItems().add(dropIndex, draggedItem);
+                    indexArriveeDemande = indexDrop;
+                    tableauDemandes.getItems().add(indexDrop, demandeDragged);
                     event.setDropCompleted(true);
                     this.tableauDemandes.getSelectionModel().clearSelection();
-                    row.setStyle("-fx-background-color:WHITE");
-                    row.setStyle("-fx-text-fill:black");
-                    tableauDemandes.getSelectionModel().select(dropIndex);
-                    this.fenetre.getVueTextuelle().modifierPlanning(indexDemandeDepart, indexDemandeArrivee);
+                    ligne.setStyle("-fx-background-color:WHITE");
+                    ligne.setStyle("-fx-text-fill:black");
+                    tableauDemandes.getSelectionModel().select(indexDrop);
+                    this.fenetre.getVueTextuelle().modifierPlanning(indexDepartDemande, indexArriveeDemande);
                     this.fenetre.getVueTextuelle().rechargerHighlight();
                     event.consume();
 
                 }
             });
 
-            /*
-             * Evenement du click de souris
-             */
-            row.setOnMouseClicked(event -> {
+            // Evènement du click de souris
+            ligne.setOnMouseClicked(event -> {
                 if (event.getButton() != MouseButton.SECONDARY) {
-                    if (row.getItem() != null)
-                        fenetre.getControleur().selectionnerDemande(row.getItem());
+                    if (ligne.getItem() != null)
+                        fenetre.getControleur().selectionnerDemande(ligne.getItem());
                 }
                 this.tableauDemandes.getSelectionModel().clearSelection();
             });
 
-            return row;
+            return ligne;
         });
 
-        typeColumn.setPrefWidth(typeColumn.getPrefWidth() + 1);
-
+        colonneType.setPrefWidth(colonneType.getPrefWidth() + 1);
     }
 
     /**
-     * getteur tableau
-     * 
-     * @return TableView(Demande) retourne le tableau tableauDemandes
+     * @return Le tableau tableauDemandes
      */
     public TableView<Demande> getTableauDemandes() {
         return tableauDemandes;
     }
 
     /**
-     * setteur tableau
+     * Change la valeur du tableau de demandes
      * 
-     * @param tableauDemandes the tableauDemandes to set
+     * @param tableauDemandes Le nouveau tableau de demandes
      */
     public void setTableauDemandes(TableView<Demande> tableauDemandes) {
         this.tableauDemandes = tableauDemandes;
     }
 
     /**
-     * getteur colonne type
-     * 
-     * @return the typeColumn
+     * @return La colonne du type
      */
-    public TableColumn<Demande, String> getTypeColumn() {
-        return typeColumn;
+    public TableColumn<Demande, String> getColonneType() {
+        return colonneType;
     }
 
     /**
-     * setteur colonne type
+     * Change la valeur de la colonne du type
      * 
-     * @param typeColumn the typeColumn to set
+     * @param colonneType La nouvelle colonne du type
      */
-    public void setTypeColumn(TableColumn<Demande, String> typeColumn) {
-        this.typeColumn = typeColumn;
+    public void setColonneType(TableColumn<Demande, String> colonneType) {
+        this.colonneType = colonneType;
     }
 
     /**
-     * getteur colonne horaire arrivée
-     * 
-     * @return the arriveeColumn
+     * @return La colonne de l'arrivée
      */
-    public TableColumn<Demande, String> getArriveeColumn() {
-        return arriveeColumn;
+    public TableColumn<Demande, String> getColonneArrivee() {
+        return colonneArrivee;
     }
 
     /**
-     * setteur de la colonne d'horaire arrivée
+     * Change la valeur de la colonne de l'arrivée
      * 
-     * @param arriveeColumn set l'arriveeColumn
+     * @param colonneArrivee La nouvelle colonne de l'arrivée
      */
-    public void setArriveeColumn(TableColumn<Demande, String> arriveeColumn) {
-        this.arriveeColumn = arriveeColumn;
+    public void setArriveeColumn(TableColumn<Demande, String> colonneArrivee) {
+        this.colonneArrivee = colonneArrivee;
     }
 
     /**
-     * getteur colonne départ
-     * 
-     * @return the departColumn
+     * @return La colonne de départ
      */
-    public TableColumn<Demande, String> getDepartColumn() {
-        return departColumn;
+    public TableColumn<Demande, String> getColonneDepart() {
+        return colonneDepart;
     }
 
     /**
-     * setteur de la colonne horaire départ
+     * Change la valeur de la colonne de départ
      * 
-     * @param departColumn définit departColumn
+     * @param colonneDepart La nouvelle colonne de départ
      */
-    public void setDepartColumn(TableColumn<Demande, String> departColumn) {
-        this.departColumn = departColumn;
+    public void setColonneDepart(TableColumn<Demande, String> colonneDepart) {
+        this.colonneDepart = colonneDepart;
     }
 
     /**
-     * getteur de la colonne adresse
-     * 
-     * @return the adresseColumn
+     * @return La colonne de l'adresse
      */
-    public TableColumn<Demande, String> getAdresseColumn() {
-        return adresseColumn;
+    public TableColumn<Demande, String> getColonneAdresse() {
+        return colonneAdresse;
     }
 
     /**
-     * @param adresseColumn the adresseColumn to set
+     * Change la valeur de la colonne de l'adresse
+     * 
+     * @param colonneAdresse La nouvelle colonne de l'adresse
      */
-    public void setAdresseColumn(TableColumn<Demande, String> adresseColumn) {
-        this.adresseColumn = adresseColumn;
+    public void setColonneAdresse(TableColumn<Demande, String> colonneAdresse) {
+        this.colonneAdresse = colonneAdresse;
     }
 
     /**
-     * définit la fenetre
+     * Change la valeur de la fenêtre
      * 
-     * @param fenetre the fenetre to set
+     * @param fenetre La nouvelle fenêtre
      */
     public void setFenetre(Fenetre fenetre) {
         this.fenetre = fenetre;
     }
 
     /**
-     * Définit si les colonnes peuvent être glissées déposées.
+     * Définit si les colonnes peuvent être glissées/déposées.
      * 
      * @param draggable
      */
@@ -524,50 +502,47 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * retourne le boolean draggable
-     * 
-     * @return boolean
+     * @return True si les colonnes peuvent être glissées/déposées, false sinon.
      */
     public Boolean getDraggable() {
         return draggable;
     }
 
     /**
-     * Menu contextuel qui apparait au clic droit sur une demande
-     * 
-     * @return le menu contextuel
+     * @return Le menu contextuel
      */
-    public ContextMenu getContextMenu() {
-        return contextMenu;
+    public ContextMenu getMenuContextuel() {
+        return menuContextuel;
     }
 
     /**
-     * Renvoie la map faisant le lien entre les lignes du tableau et leur index
-     * 
      * @return La map faisant le lien entre les lignes du tableau et leur index
      */
     public Map<Integer, TableRow<Demande>> getMapIndexLignes() {
         return mapIndexLignes;
     }
 
-    public TableColumn<Demande, String> getOrphelineColumn() {
-        return orphelineColumn;
+    /**
+     * @return La colonne de la propriété orpheline
+     */
+    public TableColumn<Demande, String> getColonneOrpheline() {
+        return colonneOrpheline;
     }
 
     /**
-     * @return ObservableList(Demande) retourne la liste observable listeDemandes
+     * @return La liste observable listeDemandes
      */
     public ObservableList<Demande> getListeDemandes() {
         return listeDemandes;
     }
 
     /**
-     * setter de liste observable
+     * Change la valeur de la liste observable listeDemandes
      *
-     * @param list la liste observable
+     * @param listeDemandes La nouvelle liste
      */
-    public void setListeDemandes(ObservableList<Demande> list) {
-        this.listeDemandes = list;
+    public void setListeDemandes(ObservableList<Demande> listeDemandes) {
+        this.listeDemandes = listeDemandes;
     }
 
     /**
@@ -580,21 +555,18 @@ public class RequetesControleurFXML {
     }
 
     /**
-     * setter du boolean contextualMenu
+     * Définit si le menu contextuel peut s'afficher ou non
      * 
-     * @param visible
+     * @param visible Booléen définissant si le menu contextuel peut s'afficher
      */
-    public void showContextualMenu(boolean visible) {
-        this.showContextualMenu = visible;
+    public void setMenuContextuelAffichable(boolean visible) {
+        this.menuContextuelAffichable = visible;
     }
 
     /**
-     * getter boolean contextualMenu
-     * 
-     * @return boolean
+     * @return True si le menu contextuel peut s'afficher, false sinon
      */
-    public boolean getContextualMenuVisibility() {
-        return this.showContextualMenu;
+    public boolean getMenuContextuelAffichable() {
+        return this.menuContextuelAffichable;
     }
-
 }

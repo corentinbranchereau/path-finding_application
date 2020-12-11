@@ -142,8 +142,8 @@ public class Fenetre {
         try {
             // Chargement du fichier FXML
             FXMLLoader loader = new FXMLLoader();
-            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisPath(this, "fenetre.fxml");
-            Parent root = loader.load(inputFichierFxml);
+            InputStream inputFichierFxml = Utils.obtenirInputStreamDepuisChemin(this, "fenetre.fxml");
+            Parent racine = loader.load(inputFichierFxml);
 
             // Récupération du controleur FXML
             fenetreControleur = loader.getController();
@@ -165,17 +165,18 @@ public class Fenetre {
             lierVisibleEtManaged();
 
             // Affichage de la scène
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(racine);
             this.stage.setScene(scene);
             this.stage.setResizable(false);
             this.stage.setTitle("いちONE - Application développée par l'HexaOne");
-            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
+            stage.getIcons().add(new Image(Utils.obtenirInputStreamDepuisChemin(this, "logo-hexa.png")));
             this.stage.show();
 
             this.largeurInitialeStage = this.stage.getWidth();
             this.hauteurInitialeStage = this.stage.getHeight();
 
-            // On met un clip sur le anchor pane pour ne pas que le contenu dépasse
+            // On met un clip sur le anchor pane pour ne pas que le contenu dépasse de ce
+            // dernier
             this.fenetreControleur.getAnchorPaneGraphique()
                     .setClip(new Rectangle(this.fenetreControleur.getAnchorPaneGraphique().getWidth(),
                             this.fenetreControleur.getAnchorPaneGraphique().getHeight()));
@@ -184,9 +185,9 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setViewOrder(-1);
 
             // Ajoute une fonctionnalité de zoom sur la carte
-            this.fenetreControleur.getPaneDessin().setOnScroll(event -> { // scrollEvent linux
+            this.fenetreControleur.getPaneDessin().setOnScroll(event -> {
                 event.consume();
-                double facteurZoom = 1.;
+                double facteurZoom = 1D;
                 double scrollAmout = event.getDeltaY();
                 if (scrollAmout > 0) {
                     // Zoom
@@ -245,7 +246,7 @@ public class Fenetre {
             this.fenetreControleur.getPaneDessin().setOnMousePressed(event -> {
                 // Lorsque la souris est pressée, on retient les coordonnées initiales et la
                 // translation initiale de la carte pour ensuite la déplacer dans le cas d'un
-                // "drag"
+                // drag
                 origineDragSceneX = event.getSceneX();
                 origineDragSceneY = event.getSceneY();
                 origineDragTranslateX = ((Pane) (event.getSource())).getTranslateX();
@@ -253,7 +254,7 @@ public class Fenetre {
             });
 
             this.fenetreControleur.getPaneDessin().setOnMouseDragged(event -> {
-                // On calcule la translation à appliquer pour bouger la carte lors du "drag"
+                // On calcule la translation à appliquer pour bouger la carte lors du drag
                 double offsetX = event.getSceneX() - origineDragSceneX;
                 double offsetY = event.getSceneY() - origineDragSceneY;
                 double nouvelleTranslationX = origineDragTranslateX + offsetX;
@@ -314,11 +315,11 @@ public class Fenetre {
             fenetreControleur.getBoutonNouvelleRequete().setOnAction(event -> controleur.ajouterNouvelleRequete());
 
             fenetreControleur.getBoutonValider()
-                    .setOnAction(event -> controleur.valider(fenetreControleur.getPickUpDurationField().getText(),
-                            fenetreControleur.getDeliveryDurationField().getText()));
+                    .setOnAction(event -> controleur.valider(fenetreControleur.getChampDureeCollecte().getText(),
+                            fenetreControleur.getChampDureeLivraison().getText()));
 
             fenetreControleur.getBoutonValiderModificationDemande()
-                    .setOnAction(event -> controleur.valider(fenetreControleur.getDurationField().getText()));
+                    .setOnAction(event -> controleur.valider(fenetreControleur.getChampDuree().getText()));
 
             fenetreControleur.getAide().setOnAction(event -> controleur.aide());
 
@@ -364,8 +365,6 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie le controleur JavaFX de la fenêtre
-     *
      * @return Le controleur JavaFX de la fenêtre
      */
     public FenetreControleurFXML getFenetreControleur() {
@@ -373,8 +372,6 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie le conteneur principal des éléments graphiques de la fenêtre
-     *
      * @return Le conteneur graphique principal
      */
     public Stage getStage() {
@@ -382,8 +379,6 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie la vue graphique de l'application.
-     *
      * @return La vue graphique
      */
     public VueGraphique getVueGraphique() {
@@ -391,8 +386,6 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie la vue textuelle de l'application.
-     *
      * @return La vue textuelle
      */
     public VueTextuelle getVueTextuelle() {
@@ -400,8 +393,6 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie la map d'association entre les requêtes et les couleurs
-     *
      * @return La map d'association entre les requêtes et les couleurs
      */
     public Map<Requete, Color> getMapCouleurRequete() {
@@ -424,11 +415,11 @@ public class Fenetre {
      * de la carte affichée
      */
     public void adapterTailleFenetre() {
-        Point2D coordMin = this.vueGraphique.adapterCoordonnees(this.vueGraphique.getMinX(),
-                this.vueGraphique.getMinY());
+        Point2D coordMin = this.vueGraphique.adapterCoordonnees(this.vueGraphique.getXMin(),
+                this.vueGraphique.getYMin());
         Point2D coordMax = this.vueGraphique.adapterCoordonnees(
-                (this.vueGraphique.getMaxX() + this.vueGraphique.getMinX()),
-                (this.vueGraphique.getMaxY() + this.vueGraphique.getMinY()));
+                (this.vueGraphique.getXMax() + this.vueGraphique.getXMin()),
+                (this.vueGraphique.getYMax() + this.vueGraphique.getYMin()));
 
         double largeur = Math.abs(coordMax.getX() - coordMin.getX()) + this.vueGraphique.getPADDING_CARTE();
         double hauteur = Math.abs(coordMax.getY() - coordMin.getY()) + this.vueGraphique.getPADDING_CARTE();
@@ -464,9 +455,7 @@ public class Fenetre {
     }
 
     /**
-     * Renvoie le controleur de l'application
-     *
-     * @return Le controleur
+     * @return Le controleur MVC
      */
     public Controleur getControleur() {
         return controleur;
@@ -478,7 +467,7 @@ public class Fenetre {
     public void afficherAide() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons()
-                .add(new Image(Utils.obtenirInputStreamDepuisPath(this, "logo-hexa.png")));
+                .add(new Image(Utils.obtenirInputStreamDepuisChemin(this, "logo-hexa.png")));
         alert.getDialogPane().setMaxWidth(600D);
         alert.getDialogPane().setMaxHeight(700D);
         alert.setHeight(700D);
@@ -593,35 +582,35 @@ public class Fenetre {
                 .bind(this.fenetreControleur.getBoutonLancer().visibleProperty());
         this.fenetreControleur.getBoutonValider().managedProperty()
                 .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
-        this.fenetreControleur.getDurationField().managedProperty()
-                .bind(this.fenetreControleur.getDurationField().visibleProperty());
-        this.fenetreControleur.getDurationLabel().managedProperty()
-                .bind(this.fenetreControleur.getDurationLabel().visibleProperty());
+        this.fenetreControleur.getChampDuree().managedProperty()
+                .bind(this.fenetreControleur.getChampDuree().visibleProperty());
+        this.fenetreControleur.getLabelDuree().managedProperty()
+                .bind(this.fenetreControleur.getLabelDuree().visibleProperty());
         this.fenetreControleur.getBoutonValiderModificationDemande().managedProperty()
                 .bind(this.fenetreControleur.getBoutonValiderModificationDemande().visibleProperty());
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().managedProperty()
                 .bind(this.fenetreControleur.getBoxBoutonsValiderAnnuler().visibleProperty());
         this.fenetreControleur.getBoutonAnnuler().managedProperty()
                 .bind(this.fenetreControleur.getBoutonAnnuler().visibleProperty());
-        this.fenetreControleur.getDeliveryDurationField().managedProperty()
-                .bind(this.fenetreControleur.getDeliveryDurationField().visibleProperty());
-        this.fenetreControleur.getDeliveryDurationLabel().managedProperty()
-                .bind(this.fenetreControleur.getDeliveryDurationLabel().visibleProperty());
-        this.fenetreControleur.getPickUpDurationField().managedProperty()
-                .bind(this.fenetreControleur.getPickUpDurationField().visibleProperty());
-        this.fenetreControleur.getPickUpDurationLabel().managedProperty()
+        this.fenetreControleur.getChampDureeLivraison().managedProperty()
+                .bind(this.fenetreControleur.getChampDureeLivraison().visibleProperty());
+        this.fenetreControleur.getLabelDureeLivraison().managedProperty()
+                .bind(this.fenetreControleur.getLabelDureeLivraison().visibleProperty());
+        this.fenetreControleur.getChampDureeCollecte().managedProperty()
+                .bind(this.fenetreControleur.getChampDureeCollecte().visibleProperty());
+        this.fenetreControleur.getLabelDureeCollecte().managedProperty()
                 .bind(this.fenetreControleur.getBoutonValider().visibleProperty());
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatAjoutNouvelleRequete
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatAjoutNouvelleRequete
      */
     public void initFenetreAjoutNouvelleRequete() {
-        this.fenetreControleur.getPickUpDurationField().clear();
-        this.fenetreControleur.getDeliveryDurationField().clear();
-        this.fenetreControleur.getDurationField().setVisible(false);
-        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().clear();
+        this.fenetreControleur.getChampDureeLivraison().clear();
+        this.fenetreControleur.getChampDuree().setVisible(false);
+        this.fenetreControleur.getLabelDuree().setVisible(false);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
         this.fenetreControleur.getBoutonAnnuler().setVisible(true);
@@ -630,75 +619,75 @@ public class Fenetre {
         this.fenetreControleur.getBoutonValider().setDisable(false);
         this.fenetreControleur.getBoutonLancer().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(true);
-        this.fenetreControleur.getPickUpDurationField().setVisible(true);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(true);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(true);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(true);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(true);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(true);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(true);
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
-        this.vueTextuelle.showContextualMenu(false);
+        this.vueTextuelle.setMenuContextuelAffichable(false);
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatCarteChargee
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatCarteChargee
      */
     public void initFenetreCarteChargee() {
-        this.fenetreControleur.getDurationField().setVisible(false);
-        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDuree().setVisible(false);
+        this.fenetreControleur.getLabelDuree().setVisible(false);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
         this.fenetreControleur.getBoutonAnnuler().setVisible(false);
         this.fenetreControleur.getBoutonLancer().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
         this.fenetreControleur.getBoutonValider().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().clear();
-        this.fenetreControleur.getDeliveryDurationField().clear();
-        this.fenetreControleur.getScrollPane().setContent(null);
-        this.vueTextuelle.showContextualMenu(false);
+        this.fenetreControleur.getChampDureeCollecte().clear();
+        this.fenetreControleur.getChampDureeLivraison().clear();
+        this.fenetreControleur.getScrollPaneTexte().setContent(null);
+        this.vueTextuelle.setMenuContextuelAffichable(false);
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatInitial
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatInitial
      */
     public void initFenetreInitial() {
-        this.fenetreControleur.getDurationField().setVisible(false);
-        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDuree().setVisible(false);
+        this.fenetreControleur.getLabelDuree().setVisible(false);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
         this.fenetreControleur.getBoutonAnnuler().setVisible(false);
         this.fenetreControleur.getBoutonLancer().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
         this.fenetreControleur.getBoutonValider().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setDisable(false);
-        this.fenetreControleur.getDeliveryDurationField().setDisable(false);
-        this.fenetreControleur.getPickUpDurationField().setDisable(false);
-        this.vueTextuelle.showContextualMenu(false);
+        this.fenetreControleur.getChampDureeLivraison().setDisable(false);
+        this.fenetreControleur.getChampDureeCollecte().setDisable(false);
+        this.vueTextuelle.setMenuContextuelAffichable(false);
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatModifierDemande
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatModifierDemande
      * 
-     * @param duree La durée à mettre par défaut dans le champs dédié à la durée de
+     * @param duree La durée à mettre par défaut dans le champ dédié à la durée de
      *              la demande
      */
     public void initFenetreModifierDemande(int duree) {
-        this.fenetreControleur.getDurationField().clear();
-        this.fenetreControleur.getDurationField().setText(String.valueOf(duree));
-        this.fenetreControleur.getDurationField().setVisible(true);
-        this.fenetreControleur.getDurationLabel().setVisible(true);
+        this.fenetreControleur.getChampDuree().clear();
+        this.fenetreControleur.getChampDuree().setText(String.valueOf(duree));
+        this.fenetreControleur.getChampDuree().setVisible(true);
+        this.fenetreControleur.getLabelDuree().setVisible(true);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(true);
         this.fenetreControleur.getBoutonValiderModificationDemande().setDisable(false);
-        this.fenetreControleur.getDurationField().setDisable(false);
+        this.fenetreControleur.getChampDuree().setDisable(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
         this.fenetreControleur.getBoutonAnnuler().setVisible(true);
         this.fenetreControleur.getBoutonAnnuler().setDisable(false);
@@ -706,54 +695,54 @@ public class Fenetre {
         this.fenetreControleur.getBoutonValider().setDisable(true);
         this.fenetreControleur.getBoutonLancer().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(false);
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
-        this.vueTextuelle.showContextualMenu(false);
+        this.vueTextuelle.setMenuContextuelAffichable(false);
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatRequetesChargees
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatRequetesChargees
      */
     public void initFenetreRequetesChargees() {
-        this.fenetreControleur.getDurationField().setVisible(false);
-        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDuree().setVisible(false);
+        this.fenetreControleur.getLabelDuree().setVisible(false);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
         this.fenetreControleur.getBoutonAnnuler().setVisible(false);
         this.fenetreControleur.getBoutonLancer().setVisible(true);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(false);
         this.fenetreControleur.getBoutonValider().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(false);
         this.vueTextuelle.chargerFXML();
         this.vueTextuelle.getRequetesControleur().setDraggable(false);
-        this.vueTextuelle.showContextualMenu(false);
+        this.vueTextuelle.setMenuContextuelAffichable(false);
     }
 
     /**
-     * Méthode qui permet d'adapter les éléments de la fenêtre pour l'état
-     * EtatTourneeCalcule
+     * Méthode qui permet d'adapter les éléments de la fenêtre lors de
+     * l'initialisation de l'état EtatTourneeCalcule
      */
     public void initFenetreTourneeCalcule() {
-        this.fenetreControleur.getDurationField().setVisible(false);
-        this.fenetreControleur.getDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDuree().setVisible(false);
+        this.fenetreControleur.getLabelDuree().setVisible(false);
         this.fenetreControleur.getBoutonValiderModificationDemande().setVisible(false);
         this.fenetreControleur.getBoutonAnnuler().setVisible(false);
         this.fenetreControleur.getBoutonLancer().setVisible(false);
         this.fenetreControleur.getBoutonNouvelleRequete().setVisible(true);
         this.fenetreControleur.getBoutonValider().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationField().setVisible(false);
-        this.fenetreControleur.getPickUpDurationLabel().setVisible(false);
-        this.fenetreControleur.getDeliveryDurationLabel().setVisible(false);
+        this.fenetreControleur.getChampDureeLivraison().setVisible(false);
+        this.fenetreControleur.getChampDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeCollecte().setVisible(false);
+        this.fenetreControleur.getLabelDureeLivraison().setVisible(false);
         this.fenetreControleur.getBoxBoutonsValiderAnnuler().setVisible(true);
         this.vueTextuelle.getRequetesControleur().setDraggable(true);
-        this.vueTextuelle.showContextualMenu(true);
+        this.vueTextuelle.setMenuContextuelAffichable(true);
     }
 }

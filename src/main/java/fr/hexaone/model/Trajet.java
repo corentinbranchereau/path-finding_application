@@ -3,27 +3,28 @@ package fr.hexaone.model;
 import java.util.List;
 
 /**
- * Objet modélisant un trajet
+ * Objet modélisant un trajet (suite de segments)
  *
  * @author HexaOne
  * @version 1.0
  */
 public class Trajet {
+
     /**
-     * liste de toutes les intersections représenant les chemins les plus courts
+     * Liste de tous les segments constituant le trajet
      */
     private List<Segment> listeSegments;
 
     /**
-     * pPids temporel total du trajet
+     * Poids temporel total du trajet
      */
     private Double poids;
 
     /**
-     * constructeur de Trajet
+     * Constructeur de Trajet
      *
-     * @param listeSegments La liste de segments
-     * @param poids Le poids du trajet
+     * @param listeSegments La liste des segments du trajet
+     * @param poids         Le poids du trajet
      */
     public Trajet(List<Segment> listeSegments, Double poids) {
         this.listeSegments = listeSegments;
@@ -31,22 +32,16 @@ public class Trajet {
     }
 
     /**
-     * Getter
-     * 
-     * @return la liste des segments
+     * @return La liste des segments du trajet
      */
     public List<Segment> getListeSegments() {
         return listeSegments;
     }
 
     /**
-     * Getter
-     * 
-     * @return le poid total du trajet
+     * @return Le poids total du trajet
      */
     public Double getPoids() {
         return poids;
     }
-
-
 }

@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Commande de modification du planning avec le drag n drop
- * en suivant le design pattern COMMAND.
+ * Commande de modification du planning avec le drag and drop en suivant le
+ * design pattern Command.
  *
  * @author HexaOne
  * @version 1.0
@@ -21,27 +21,29 @@ public class ModifierPlanningCommand implements Command {
     private Planning planning;
 
     /**
-     * L'index dans la liste de demandes au départ du drag n drop
+     * L'index dans la liste de demandes au départ du drag and drop
      */
-    private int i;
+    private int indexDepart;
 
     /**
-     * L'index dans la liste de demandes à l'arrivée du drag n drop
+     * L'index dans la liste de demandes à l'arrivée du drag and drop
      */
-    private int j;
+    private int indexArrivee;
 
-   /**
-    * Constructeur de la modificationn de planning
-    * @param planning Le planning que l'on souhaite modifier
-    * @param i index dans la liste de demandes du départ du drag/drop
-    * @param j nouvel index dans la liste de demandes à l'arrivée du drag/drop
-    */
-    public ModifierPlanningCommand(Planning planning, int i, int j){
+    /**
+     * Constructeur de la modificationn de planning
+     * 
+     * @param planning     Le planning que l'on souhaite modifier
+     * @param indexDepart  index dans la liste de demandes du départ du drag and
+     *                     drop
+     * @param indexArrivee nouvel index dans la liste de demandes à l'arrivée du
+     *                     drag and drop
+     */
+    public ModifierPlanningCommand(Planning planning, int indexDepart, int indexArrivee) {
         this.planning = planning;
-        this.i = i;
-        this.j = j;
+        this.indexDepart = indexDepart;
+        this.indexArrivee = indexArrivee;
     }
-
 
     /**
      * {@inheritDoc}
@@ -49,18 +51,18 @@ public class ModifierPlanningCommand implements Command {
     @Override
     public boolean doCommand() {
 
-    	List<Demande> demandes = planning.getDemandesOrdonnees();
-    	
-    	if(i <= j) {
-    		for(int k=i;k<j;k++)
-        		Collections.swap(demandes, k, k + 1);
-    	} else {
-    		for(int k = i; k > j; k--)
-        		Collections.swap(demandes, k, k - 1);	
+        List<Demande> demandes = planning.getDemandesOrdonnees();
+
+        if (indexDepart <= indexArrivee) {
+            for (int k = indexDepart; k < indexArrivee; k++)
+                Collections.swap(demandes, k, k + 1);
+        } else {
+            for (int k = indexDepart; k > indexArrivee; k--)
+                Collections.swap(demandes, k, k - 1);
         }
-        
+
         planning.ordonnerLesTrajetsEtLesDates();
-        
+
         return true;
     }
 
@@ -69,15 +71,14 @@ public class ModifierPlanningCommand implements Command {
      */
     @Override
     public void undoCommand() {
-    	List<Demande> demandes=planning.getDemandesOrdonnees();
-    	if(i <= j) {
-        	for(int k = j; k > i; k--)
-        		Collections.swap(demandes, k, k - 1);
-    	}
-    	else {
-    		for(int k = j; k < i; k++)
-        		Collections.swap(demandes, k, k + 1);
-    	}
-    	planning.ordonnerLesTrajetsEtLesDates();
+        List<Demande> demandes = planning.getDemandesOrdonnees();
+        if (indexDepart <= indexArrivee) {
+            for (int k = indexArrivee; k > indexDepart; k--)
+                Collections.swap(demandes, k, k - 1);
+        } else {
+            for (int k = indexArrivee; k < indexDepart; k++)
+                Collections.swap(demandes, k, k + 1);
+        }
+        planning.ordonnerLesTrajetsEtLesDates();
     }
 }

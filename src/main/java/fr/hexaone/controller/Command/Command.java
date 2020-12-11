@@ -1,8 +1,8 @@
 package fr.hexaone.controller.Command;
 
 /**
- * Interface implémentant le design pattern Command pour la gestion
- * du undo/redo dans le controleur.
+ * Interface implémentant le design pattern Command pour la gestion du undo/redo
+ * dans le controleur.
  *
  * @author HexaOne
  * @version 1.0
@@ -10,13 +10,14 @@ package fr.hexaone.controller.Command;
 public interface Command {
 
     /**
-     * Exécuter la commande.
-     * @return True si la commande a été exécutée.
+     * Permet d'exécuter la commande.
+     * 
+     * @return True si la commande a été exécutée, false sinon.
      */
     boolean doCommand();
 
     /**
-     * Annuler la commande.
+     * Annule la commande.
      */
     void undoCommand();
 }

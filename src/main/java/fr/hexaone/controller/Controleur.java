@@ -2,7 +2,6 @@ package fr.hexaone.controller;
 
 import fr.hexaone.controller.Command.ListOfCommands;
 import fr.hexaone.controller.State.*;
-import fr.hexaone.model.Carte;
 import fr.hexaone.model.Demande;
 import fr.hexaone.model.Planning;
 import fr.hexaone.view.Fenetre;
@@ -10,7 +9,7 @@ import javafx.stage.Stage;
 
 /**
  * Controleur du modèle MVC, centralisant les différents éléments d'interactions
- * avec vue et modèle. Inclue le design pattern STATE et COMMAND.
+ * avec la vue et le modèle. Inclut le design pattern State et Command.
  * 
  * @author HexaOne
  * @version 1.0
@@ -18,10 +17,10 @@ import javafx.stage.Stage;
 public class Controleur {
 
     /**
-     * Liste de commandes conforme au design pattern COMMAND pour l'implémentation
+     * Liste de commandes conforme au design pattern Command pour l'implémentation
      * de l'undo/redo
      */
-    private ListOfCommands l;
+    private ListOfCommands listeCommandes;
 
     /**
      * Gère l'affichage de l'application (Vue du MVC)
@@ -29,61 +28,56 @@ public class Controleur {
     private Fenetre fenetre;
 
     /**
-     * Carte actuelle de l'application
-     */
-    private Carte carte;
-
-    /**
      * Planning actuel de l'application
      */
     private Planning planning;
 
     /**
-     * Demande selectionnée par l'utilisateur après un clic sur la vue graphique ou
+     * Demande sélectionnée par l'utilisateur après un clic sur la vue graphique ou
      * textuelle
      */
     private Demande demandeSelectionnee;
 
     /**
-     * Etat courant du design pattern STATE
+     * Etat (design pattern State) courant
      */
     private State etatCourant;
 
     /**
-     * Etat initial de l'application du design pattern STATE
+     * Etat (design pattern State) initial de l'application
      */
     private EtatInitial etatInitial;
 
     /**
-     * Etat carte chargée du design pattern STATE
+     * Etat (design pattern State) carte chargée
      */
     private EtatCarteChargee etatCarteChargee;
 
     /**
-     * Etat requête chargées du design pattern STATE
+     * Etat (design pattern State) requête chargées
      */
     private EtatRequetesChargees etatRequetesChargees;
 
     /**
-     * Etat tournée calculée du design pattern STATE
+     * Etat (design pattern State) tournée calculée
      */
     private EtatTourneeCalcule etatTourneeCalcule;
 
     /**
-     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
-     * requête du design pattern STATE
+     * Etat (design pattern State) sélection de nouveaux points et des durées pour
+     * ajouter une nouvelle requête
      */
     private EtatAjoutNouvelleRequete etatAjoutNouvelleRequete;
 
     /**
-     * Etat sélection de nouveaux points et des durées pour une ajouter une nouvelle
-     * requête du design pattern STATE
+     * Etat (design pattern State) sélection d'un nouveau point et d'une durée pour
+     * modifier une demande du design pattern State
      */
     private EtatModifierDemande etatModifierDemande;
 
     /**
      * Constructeur de Controleur. Instancie la fenêtre de l'application, l'affiche
-     * à l'écran et met l'application à son état initial
+     * à l'écran et met l'application dans son état initial
      * 
      * @param stage Conteneur principal des éléments graphiques de la fenêtre
      */
@@ -96,23 +90,23 @@ public class Controleur {
         this.etatTourneeCalcule = new EtatTourneeCalcule();
         this.etatAjoutNouvelleRequete = new EtatAjoutNouvelleRequete();
         this.etatModifierDemande = new EtatModifierDemande();
-        this.l = new ListOfCommands();
+        this.listeCommandes = new ListOfCommands();
         setEtatInitial();
     }
 
     /**
-     * Annuler la dernière commande (design pattern COMMAND) via un undo
+     * Annule la dernière commande (design pattern Command) via un undo
      */
     public void undo() {
-        etatCourant.undo(l);
+        etatCourant.undo(listeCommandes);
         rafraichirVues(false);
     }
 
     /**
-     * Rétablir la dernière commande (design pattern COMMAND) via un redo
+     * Rétablit la dernière commande (design pattern Command) via un redo
      */
     public void redo() {
-        etatCourant.redo(l);
+        etatCourant.redo(listeCommandes);
         rafraichirVues(false);
     }
 
@@ -180,7 +174,7 @@ public class Controleur {
     }
 
     /**
-     * Méthode gérant le clic sur le bouton permettant de supprimer une requete
+     * Méthode gérant le clic sur le bouton permettant de supprimer une requête
      */
     public void supprimerRequete() {
         etatCourant.supprimerRequete(this, demandeSelectionnee.getRequete());
@@ -198,7 +192,8 @@ public class Controleur {
 
     /**
      * Méthode permettant la sélection d'une intersection
-     * @param idIntersection l'id de l'intersection selectionnée.
+     * 
+     * @param idIntersection L'id de l'intersection selectionnée
      */
     public void selectionnerIntersection(Long idIntersection) {
         etatCourant.selectionnerIntersection(this, idIntersection);
@@ -213,26 +208,26 @@ public class Controleur {
     }
 
     /**
-     * Valider l'action en cours
-     * @param durations Le/les nouvelle(s) durée(s).
+     * Valide l'action en cours
+     * 
+     * @param durees Le/les nouvelle(s) durée(s).
      */
-    public void valider(String... durations) {
+    public void valider(String... durees) {
 
-        int taille = durations.length;
+        int taille = durees.length;
 
         if (taille == 2) {
-            etatCourant.valider(this, durations[0], durations[1]);
-
+            etatCourant.valider(this, durees[0], durees[1]);
         }
         if (taille == 1) {
-            etatCourant.valider(this, durations[0]);
+            etatCourant.valider(this, durees[0]);
         }
 
         rafraichirVues(false);
     }
 
     /**
-     * Annuler l'action en cours
+     * Annule l'action en cours
      */
     public void annuler() {
         etatCourant.annuler(this);
@@ -240,12 +235,12 @@ public class Controleur {
     }
 
     /***
-     * Modifier le planning
+     * Modifie le planning en modifiant la position d'une demande
      * 
-     * @param i correspondant à l'index dans la liste des demandes avant la
-     *          modification
-     * @param j correspondant à l'index dans la liste des demandes après la
-     *          modification
+     * @param i Correspond à l'index de la demande dans la liste des demandes avant
+     *          la modification
+     * @param j Correspond à l'index de la demande dans la liste des demandes après
+     *          la modification
      */
     public void modifierPlanning(int i, int j) {
         etatCourant.modifierPlanning(this, i, j);
@@ -264,11 +259,11 @@ public class Controleur {
      * Réinitialise les commandes actuellement en mémoire.
      */
     public void reinitialiserCommandes() {
-        l.reinitialiser();
+        listeCommandes.reinitialiserCommandes();
     }
 
     /**
-     * Sélectionne une demande dans la vue textuelle de l'application.
+     * Sélectionne une demande
      * 
      * @param demandeSelectionnee La demande sélectionnée par l'utilisateur
      */
@@ -304,24 +299,6 @@ public class Controleur {
     }
 
     /**
-     * Renvoie la carte.
-     * 
-     * @return La carte
-     */
-    public Carte getCarte() {
-        return carte;
-    }
-
-    /**
-     * Change la valeur de la carte actuelle.
-     * 
-     * @param carte La nouvelle carte
-     */
-    public void setCarte(Carte carte) {
-        this.carte = carte;
-    }
-
-    /**
      * Renvoie la demande actuellement sélectionnée
      * 
      * @return La demande qui est sélectionnée
@@ -331,16 +308,16 @@ public class Controleur {
     }
 
     /**
-     * Renvoie la liste des commandes du design pattern COMMAND.
+     * Renvoie la liste des commandes du design pattern Command.
      * 
      * @return La liste des commandes
      */
     public ListOfCommands getListOfCommands() {
-        return l;
+        return listeCommandes;
     }
 
     /**
-     * Setter de l'état initial du design pattern STATE
+     * Passe l'application dans l'état initial (design pattern State)
      */
     public void setEtatInitial() {
         etatInitial.init(this);
@@ -348,7 +325,7 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état carte chargée du design pattern STATE
+     * Passe l'application dans l'état carte chargée (design pattern State)
      */
     public void setEtatCarteChargee() {
         etatCarteChargee.init(this);
@@ -356,7 +333,7 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état requêtes chargées du design pattern STATE
+     * Passe l'application dans l'état requêtes chargées (design pattern State)
      */
     public void setEtatRequetesChargees() {
         etatRequetesChargees.init(this);
@@ -364,7 +341,7 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état tournée calculée du design pattern STATE
+     * Passe l'application dans l'état tournée calculée (design pattern State)
      */
     public void setEtatTourneeCalcule() {
         etatTourneeCalcule.init(this);
@@ -372,7 +349,8 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état ajout une nouvelle requête du design pattern STATE
+     * Passe l'application dans l'état ajout d'une nouvelle requête (design pattern
+     * State)
      */
     public void setEtatAjoutNouvelleRequete() {
         etatAjoutNouvelleRequete.init(this);
@@ -380,7 +358,7 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état modifier une demande du design pattern STATE
+     * Passe l'application dans l'état modifier une demande (design pattern State)
      * 
      * @param duree La durée de la demande à modifier
      */
@@ -391,9 +369,9 @@ public class Controleur {
     }
 
     /**
-     * Setter de l'état d'une demande sélectionée du design pattern STATE
+     * Change la valeur de la demande sélectionnée
      * 
-     * @param demandeSelectionnee La demande à été sélectionné
+     * @param demandeSelectionnee La demande qui a été sélectionnée
      */
     public void setDemandeSelectionnee(Demande demandeSelectionnee) {
         this.demandeSelectionnee = demandeSelectionnee;
