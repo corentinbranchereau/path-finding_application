@@ -55,10 +55,12 @@ public class XMLFileOpener implements FileFilter {
      * @throws IOException               Lorsque le fichier spécifié n'existe pas
      * @throws FileBadExtensionException Lorsque l'extension du fichier n'est pas
      *                                   XML
-     * @throws SAXException              Lors que le fichier possède des erreurs de
+     * @throws SAXException              Lorsque le fichier possède des erreurs de
      *                                   formatage
      * @throws DTDValidationException    Lorsque le fichier XML ne valide pas son
      *                                   DTD
+     * @throws URISyntaxException        Lorsque il y a une erreur de syntaxe dans
+     *                                   l'URI
      * @return Le document XML correspondant au format org.w3c.dom.Document
      */
     public Document ouvrirXml(String chemin, TypeDTD typeDtd)

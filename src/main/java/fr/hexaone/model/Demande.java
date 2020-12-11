@@ -6,6 +6,13 @@ import javafx.beans.property.StringProperty;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Classe qui représente une demande (collecte ou livraison) d'un client au sein
+ * d'une requête (combinaison de 2 demandes)
+ * 
+ * @author HexaOne
+ * @version 1.0
+ */
 public class Demande {
 
     /**

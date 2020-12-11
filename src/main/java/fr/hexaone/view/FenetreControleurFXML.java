@@ -266,7 +266,7 @@ public class FenetreControleurFXML {
     /**
      * Change la valeur du label de durée
      * 
-     * @param labelDuree
+     * @param labelDuree La nouvelle valeur du label de durée
      */
     public void setLabelDuree(Label labelDuree) {
         this.labelDuree = labelDuree;

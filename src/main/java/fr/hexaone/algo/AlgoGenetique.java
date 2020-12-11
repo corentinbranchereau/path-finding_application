@@ -279,7 +279,7 @@ public abstract class AlgoGenetique {
 	/**
 	 * Renvoie un chromosome aléatoire
 	 *
-	 * @param objet Chromosome servant à générer le nouveau chromosome aléatoire
+	 * @param objets Chromosome servant à générer le nouveau chromosome aléatoire
 	 * @return Un chromosome aléatoire
 	 */
 	public abstract List<Object> genererChromosomeAleatoire(List<Object> objets);

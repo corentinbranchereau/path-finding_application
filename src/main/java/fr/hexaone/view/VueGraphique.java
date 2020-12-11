@@ -303,7 +303,7 @@ public class VueGraphique {
      * Méthode permettant de calculer les paramètres servant à adapter l'affichage
      * de la carte dans la fenêtre et la taille de la fenêtre
      * 
-     * @param carte
+     * @param carte La carte qui a été chargée
      */
     public void calculAdaptationCarte(Carte carte) {
         // On va chercher les coordonnées (x, y) minimales et maximales
@@ -910,7 +910,9 @@ public class VueGraphique {
     /**
      * Méthode permettant de sélectionner (highlight) une demande sur la carte
      * 
-     * @param demande La demande à sélectionner
+     * @param demande     La demande à sélectionner
+     * @param attenuation Indique si l'highlight doit être atténué (légèrement
+     *                    transparent) ou non
      */
     private void highlightDemande(Demande demande, boolean attenuation) {
         Node n = this.mapDemandeNoeud.get(demande);

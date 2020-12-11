@@ -495,7 +495,7 @@ public class RequetesControleurFXML {
     /**
      * Définit si les colonnes peuvent être glissées/déposées.
      * 
-     * @param draggable
+     * @param draggable Indique si les colonnes peuvent être glissées/déposées
      */
     public void setDraggable(boolean draggable) {
         this.draggable = draggable;
