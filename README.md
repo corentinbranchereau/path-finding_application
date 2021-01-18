@@ -4,7 +4,7 @@ Group project of 6 persons
 
 [Site internet contenant la JavaDoc](http://agile.hexaone.fr/)
 
-[image de l'application](./app.png)
+![image de l'application](./app.png)
 
 ## Fonctionnalités
 
